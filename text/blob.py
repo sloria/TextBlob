@@ -150,8 +150,10 @@ class TextBlob(BaseBlob):
         - `blob`: a string
         '''
         super(TextBlob, self).__init__(blob)
-        # List of Sentence objects
-        self.sentences = self._create_sentence_objects(blob)
+
+    @cached_property
+    def sentences(self):
+        return self._create_sentence_objects(self.raw)
 
     @property
     def raw_sentences(self):

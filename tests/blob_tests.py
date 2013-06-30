@@ -220,3 +220,12 @@ Namespaces are one honking great idea -- let's do more of those!"""
         # Or both
         assert_equal(blob1 + blob2 + " Goodbye!",
              TextBlob("Hello, world! Hola mundo! Goodbye!"))
+
+    def test_sentences_after_concatenation(self):
+        blob1 = TextBlob("Beautiful is better than ugly. ")
+        blob2 = TextBlob("Explicit is better than implicit.")
+
+        concatenated = blob1 + blob2
+        print(concatenated)
+        assert_equal(len(concatenated.sentences), 2)
+

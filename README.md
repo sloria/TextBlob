@@ -21,7 +21,6 @@ Also simple.
 ```python
 from text.blob import TextBlob
 
-# Extract info from text
 text = """Beautiful is better than ugly.
 Explicit is better than implicit.
 Simple is better than complex.
@@ -44,10 +43,10 @@ Namespaces are one honking great idea -- let's do more of those!
 """
 
 zen = TextBlob(text) # Create a new TextBlob
-
+# Get the part-of-speech tags
 zen.pos_tags         # [('beautiful', 'JJ'), ('is', 'VBZ'), ('better', 'RBR'),
                      # ('than', 'IN'), ('ugly', 'RB'), ...]
-
+# Get the noun_phrases
 zen.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
                      # 'sparse', 'readability', 'special cases',
                      # 'practicality beats purity', 'errors', 'unless',
