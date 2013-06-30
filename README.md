@@ -1,4 +1,4 @@
-# text.blob
+# TextBlob
 
 ## Requirements
 * Python >= 2.7
