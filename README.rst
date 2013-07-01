@@ -54,7 +54,7 @@ Simple.
     zen.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
                          # 'sparse', 'readability', 'special cases',
                          # 'practicality beats purity', 'errors', 'unless',
-                         # 'obvious way','dutch', '*right* now', 'bad idea',
+                         # 'obvious way','dutch', 'right now', 'bad idea',
                          # 'good idea', 'namespaces', 'great idea']
 
     # Get word and noun phrase frequencies

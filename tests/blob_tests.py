@@ -14,7 +14,7 @@ class SentenceTest(TestCase):
         self.sentence = Sentence(self.raw_sentence)
 
     def test_stripped_sentence(self):
-        assert_equal(self.sentence.stripped, 
+        assert_equal(self.sentence.stripped,
                         "any place with frites and belgian beer has my vote")
 
     def test_len(self):
@@ -22,7 +22,7 @@ class SentenceTest(TestCase):
 
     def test_dict(self):
         sentence_dict = self.sentence.dict
-        assert_equal(sentence_dict, 
+        assert_equal(sentence_dict,
                     {
                         "raw_sentence": self.raw_sentence,
                         "start_index": 0,
@@ -47,10 +47,10 @@ class SentenceTest(TestCase):
         assert_true(t2 < t1)
 
         print(tagged)
-        assert_equal(tagged, 
-                    [('any', 'DT'), ('place', 'NN'), ('with', 'IN'), 
-                    ('frites', 'NNS'), ('and', 'CC'), ('belgian', 'JJ'), 
-                    ('beer', 'NN'), ('has', 'VBZ'), ('my', 'PRP$'), 
+        assert_equal(tagged,
+                    [('any', 'DT'), ('place', 'NN'), ('with', 'IN'),
+                    ('frites', 'NNS'), ('and', 'CC'), ('belgian', 'JJ'),
+                    ('beer', 'NN'), ('has', 'VBZ'), ('my', 'PRP$'),
                     ('vote', 'NN')])
 
     def test_noun_phrases(self):
@@ -113,7 +113,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
         assert_equal(repr(blob1), "TextBlob('lorem ipsum')")
         big_blob = TextBlob(self.text)
         print(repr(big_blob))
-        assert_equal(repr(big_blob), 
+        assert_equal(repr(big_blob),
                     "TextBlob('Beautiful is better than ugly.\nExplicit ...'s"
                     " do more of those!')")
 
@@ -124,21 +124,21 @@ Namespaces are one honking great idea -- let's do more of those!"""
 
         assert_true(blob1 == blob2) # test ==
         assert_true(blob1 > blob3)  # test >
-        assert_true(blob3 < blob2)  # test <    
+        assert_true(blob3 < blob2)  # test <
 
     def test_words(self):
         blob = TextBlob("Beautiful is better than ugly. Explicit is better "
                         "than implicit.")
-        assert_equal(blob.words, ['Beautiful', 'is', 'better', 'than', 'ugly.', 
-                        'Explicit', 'is', 'better', 'than', 'implicit', '.'])
+        assert_equal(blob.words, ['Beautiful', 'is', 'better', 'than', 'ugly',
+                        'Explicit', 'is', 'better', 'than', 'implicit'])
 
     def test_pos_tags(self):
         blob = TextBlob("Simple is better than complex. Complex is better "
                         "than complicated.")
-        
+
         assert_equal(blob.pos_tags,
             [('simple', 'NN'), ('is', 'VBZ'), ('better', 'RBR'), ('than', 'IN'),
-             ('complex', 'JJ'), ('complex', 'NN'), ('is', 'VBZ'), 
+             ('complex', 'JJ'), ('complex', 'NN'), ('is', 'VBZ'),
              ('better', 'RBR'), ('than', 'IN'), ('complicated', 'VBN')])
 
     def test_getitem(self):
@@ -189,10 +189,10 @@ Namespaces are one honking great idea -- let's do more of those!"""
     def test_blob_noun_phrases(self):
         blob = TextBlob(self.text)
         assert_equal(blob.noun_phrases,
-                    ['beautiful', 'explicit', 'simple', 
-                    'complex', 'flat', 'sparse', 'readability', 
-                    'special cases', 'practicality beats purity', 'errors', 
-                    'unless', 'obvious way', 'dutch', '*right* now', 
+                    ['beautiful', 'explicit', 'simple',
+                    'complex', 'flat', 'sparse', 'readability',
+                    'special cases', 'practicality beats purity', 'errors',
+                    'unless', 'obvious way', 'dutch', 'right now',
                     'bad idea', 'good idea', 'namespaces', 'great idea'])
 
     def test_word_counts(self):
@@ -215,7 +215,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
         # Can add two text blobs
         assert_equal(blob1 + blob2, TextBlob("Hello, world! Hola mundo!"))
         # Can also add a string to a TextBlob
-        assert_equal(blob1 + 'Hola mundo!', 
+        assert_equal(blob1 + 'Hola mundo!',
                     TextBlob("Hello, world! Hola mundo!"))
         # Or both
         assert_equal(blob1 + blob2 + " Goodbye!",

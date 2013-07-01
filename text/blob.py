@@ -8,39 +8,37 @@ import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from .np_extractor import NPExtractor
 from .decorators import cached_property
+from .utils import lowerstrip, strip_punc
 
 
 class BaseBlob(object):
     '''An abstract base class that all text.blob classes will inherit from.
-    Includes words, POS tag, NP, and word count properties. Also includes 
+    Includes words, POS tag, NP, and word count properties. Also includes
     basic dunder and string methods for making objects like Python strings.
     '''
-    
-    _REPLACE_REGEX = '(\n|\!|\?|\(|\)|\-|\,|\.|\;|\t|\r)'
-
     def __init__(self, text):
         self.raw = text
-        self.stripped = self._lowerstrip(text)
+        self.stripped = lowerstrip(text)
 
-    @cached_property 
+    @cached_property
     def words(self):
         '''Returns list of word tokens. These are extracted only once, when
-        this property is first accessed, then it is stored in an instance 
+        this property is first accessed, then it is stored in an instance
         variable.
         '''
-        return word_tokenize(self.raw)
+        return [strip_punc(word) for word in word_tokenize(self.raw)
+                if strip_punc(word)]  # Excludes "words" that are just punctuation
 
     @cached_property
     def noun_phrases(self):
         extractor = NPExtractor(self.raw)
-        return [self._lowerstrip(phrase)
-                                for phrase in extractor.extract()
-                                if len(phrase) > 1]
+        return [lowerstrip(phrase) for phrase in extractor.extract()
+                if len(phrase) > 1]
 
     @cached_property
     def pos_tags(self):
         '''Returns an array of tuples of the form (word, POS tag).
-        
+
         Example:
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
@@ -53,7 +51,7 @@ class BaseBlob(object):
         '''Dictionary of word frequencies in this text. Internally
         uses collections.Counter.
         '''
-        stripped_words = [self._lowerstrip(word) for word in self.words]
+        stripped_words = [lowerstrip(word) for word in self.words]
         return Counter(stripped_words)
 
     @cached_property
@@ -99,12 +97,12 @@ class BaseBlob(object):
         '''
         if isinstance(index, int):
             return self.raw[index]  # Just return a single character
-        else: 
+        else:
             # Return a new blob object
             return self.__class__(self.raw[index])
 
     def __add__(self, other):
-        '''Concatenates two text objects the same way Python strings are 
+        '''Concatenates two text objects the same way Python strings are
         concatenated.
 
         Arguments:
@@ -130,11 +128,6 @@ class BaseBlob(object):
 
     def lower(self):
         return self.__class__(self.raw.lower())
-
-    def _lowerstrip(self, text):
-        '''Makes text all lowercase and strips punctuation.'''
-        return re.sub(BaseBlob._REPLACE_REGEX, '', 
-                        text.lower()).strip()
 
 
 class TextBlob(BaseBlob):
@@ -165,7 +158,7 @@ class TextBlob(BaseBlob):
         return [sentence.dict for sentence in self.sentences]
 
     def _create_sentence_objects(self, blob):
-        '''Returns a list of Sentence objects given 
+        '''Returns a list of Sentence objects given
         a list of sentence strings. Attempts to handle sentences that
         have more than one puntuation mark at the end of the sentence.
         Examples: "An ellipses is no problem..." or "This is awesome!!!"
@@ -175,19 +168,19 @@ class TextBlob(BaseBlob):
         # if there is only one sentence or string of text
         if len(sentences) <= 1:
             sentence_objects.append(
-                Sentence(sentences[0], start_index=0, 
+                Sentence(sentences[0], start_index=0,
                             end_index=len(sentences[0]) - 1)
             )
-        # If there are many sentences 
-        else:     
+        # If there are many sentences
+        else:
             char_index = 0  # Keeps track of character index within the blob
             for i, raw_sentence in enumerate(sentences):
-                # Compute the start and end indices of the sentence 
+                # Compute the start and end indices of the sentence
                 # within the blob
                 start_index = char_index
                 char_index += len(raw_sentence)
 
-                # Sometimes the NLTK tokenizer misses some punctuation when 
+                # Sometimes the NLTK tokenizer misses some punctuation when
                 # there are multiple punctuations, e.g. with ellipses ("...")
                 # or multiple exclamation points ("!!!")
                 try:
@@ -198,12 +191,12 @@ class TextBlob(BaseBlob):
                         continue
                     pass
                 # If the next token has a length of 1, assume it's a punctuation
-                if len(next) == 1: 
+                if len(next) == 1:
                     raw_sentence += next  # append the extra punctuation
                     char_index +=1  # also correct the char_index
                 # Create a Sentence object and add it the the list
                 sentence_objects.append(
-                    Sentence(raw_sentence, start_index=start_index, 
+                    Sentence(raw_sentence, start_index=start_index,
                                             end_index=char_index))
         return sentence_objects
 
@@ -217,7 +210,7 @@ class Sentence(BaseBlob):
         - `sentence`: A string, the raw sentence.
         - `start_index`: An int, the index where this sentence begins
                             in a TextBlob. If not given, defaults to 0.
-        - `end_index`: An int, the index where this sentence ends in 
+        - `end_index`: An int, the index where this sentence ends in
                             a TextBlob. If not given, defaults to the
                             length of the sentence - 1.
         '''

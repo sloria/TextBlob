@@ -26,7 +26,7 @@ setup(
     name='textblob',
     version=text.__version__,
     description='Simple, Pythonic text processing',
-    long_description=(open('README.rst').read()),
+    long_description=open('README.rst').read(),
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
