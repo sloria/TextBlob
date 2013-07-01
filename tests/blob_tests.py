@@ -5,13 +5,53 @@ Tests for the text processor.
 from unittest import TestCase
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
-from text.blob import TextBlob, Sentence
+from text.blob import TextBlob, Sentence, WordList
+
+class WordListTest(TestCase):
+    def setUp(self):
+        self.words = "Beautiful is better than ugly".split()
+        self.mixed = ["dog", "dogs", "blob", "Blobs", "text"]
+
+    def test_len(self):
+        wl = WordList(['Beautiful', 'is', 'better'])
+        assert_equal(len(wl), 3)
+
+    def test_slicing(self):
+        wl = WordList(self.words)
+        # Test just
+        first = wl[0]
+        assert_true(isinstance(first, str))
+        assert_equal(first, 'Beautiful')
+
+        dogs = wl[0:2]
+        assert_true(isinstance(dogs, WordList))
+        assert_equal(dogs, WordList(['Beautiful', 'is']))
+
+    def test_repr(self):
+        wl = WordList(["Beautiful", "is", "better"])
+        assert_equal(repr(wl),
+            "WordList(['Beautiful', 'is', 'better'])")
+
+    def test_singularize(self):
+        wl = WordList(['dogs', 'cats', 'buffaloes', 'men', 'mice'])
+        assert_equal(wl.singularize(),
+            ['dog', 'cat', 'buffalo', 'man', 'mouse'])
+
+    def test_pluralize(self):
+        wl = WordList(["dog", "cat", "buffalo"])
+        assert_equal(wl.pluralize(),
+            ["dogs", "cats", "buffaloes"])
 
 
 class SentenceTest(TestCase):
     def setUp(self):
         self.raw_sentence = "Any place with frites and Belgian beer has my vote."
         self.sentence = Sentence(self.raw_sentence)
+
+    def test_repr(self):
+        assert_equal(repr(self.sentence),
+            "Sentence('{0}')".format(self.raw_sentence))
+
 
     def test_stripped_sentence(self):
         assert_equal(self.sentence.stripped,
@@ -129,17 +169,18 @@ Namespaces are one honking great idea -- let's do more of those!"""
     def test_words(self):
         blob = TextBlob("Beautiful is better than ugly. Explicit is better "
                         "than implicit.")
-        assert_equal(blob.words, ['Beautiful', 'is', 'better', 'than', 'ugly',
-                        'Explicit', 'is', 'better', 'than', 'implicit'])
+        assert_true(isinstance(blob.words, WordList))
+        assert_equal(blob.words, WordList(['Beautiful', 'is', 'better',
+            'than', 'ugly', 'Explicit', 'is', 'better', 'than', 'implicit']))
 
     def test_pos_tags(self):
         blob = TextBlob("Simple is better than complex. Complex is better "
                         "than complicated.")
 
         assert_equal(blob.pos_tags,
-            [('simple', 'NN'), ('is', 'VBZ'), ('better', 'RBR'), ('than', 'IN'),
+            WordList([('simple', 'NN'), ('is', 'VBZ'), ('better', 'RBR'), ('than', 'IN'),
              ('complex', 'JJ'), ('complex', 'NN'), ('is', 'VBZ'),
-             ('better', 'RBR'), ('than', 'IN'), ('complicated', 'VBN')])
+             ('better', 'RBR'), ('than', 'IN'), ('complicated', 'VBN')]))
 
     def test_getitem(self):
         blob = TextBlob('lorem ipsum')
@@ -188,12 +229,13 @@ Namespaces are one honking great idea -- let's do more of those!"""
 
     def test_blob_noun_phrases(self):
         blob = TextBlob(self.text)
+        assert_true(isinstance(blob.noun_phrases, WordList))
         assert_equal(blob.noun_phrases,
-                    ['beautiful', 'explicit', 'simple',
+                    WordList(['beautiful', 'explicit', 'simple',
                     'complex', 'flat', 'sparse', 'readability',
                     'special cases', 'practicality beats purity', 'errors',
                     'unless', 'obvious way', 'dutch', 'right now',
-                    'bad idea', 'good idea', 'namespaces', 'great idea'])
+                    'bad idea', 'good idea', 'namespaces', 'great idea']))
 
     def test_word_counts(self):
         blob = TextBlob("Buffalo buffalo ate my blue buffalo.")

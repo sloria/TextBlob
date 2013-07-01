@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import re
 import string
+
+VERB, NOUN, ADJECTIVE, ADVERB = "VB", "NN", "JJ", "RB"
 
 def strip_punc(s):
     '''Removes punctuation from a string.'''

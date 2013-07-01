@@ -9,6 +9,33 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from .np_extractor import NPExtractor
 from .decorators import cached_property
 from .utils import lowerstrip, strip_punc
+from .inflect import singularize, pluralize
+
+
+class WordList(list):
+    '''A list-like collection of words.'''
+    def __init__(self, collection):
+        super(WordList, self).__init__(collection)
+        self._collection = collection
+
+    def __repr__(self):
+        return "WordList({0})".format(repr(self._collection))
+
+    def __getitem__(self, index):
+        '''Returns a string at the given index.'''
+        return self._collection[index]  # Just return a string
+
+    def __getslice__(self, i, j):
+        '''Returns a new WordList with items i:j.'''
+        return self.__class__(list.__getslice__(self, i, j))
+
+    def singularize(self):
+        '''Return the single version of each word in this WordList.'''
+        return [singularize(word) for word in self]
+
+    def pluralize(self):
+        '''Return the plural version of each word in this WordList.'''
+        return [pluralize(word) for word in self]
 
 
 class BaseBlob(object):
@@ -26,14 +53,14 @@ class BaseBlob(object):
         this property is first accessed, then it is stored in an instance
         variable.
         '''
-        return [strip_punc(word) for word in word_tokenize(self.raw)
-                if strip_punc(word)]  # Excludes "words" that are just punctuation
+        return WordList([strip_punc(word) for word in word_tokenize(self.raw)
+            if strip_punc(word)])  # Excludes "words" that are just punctuation
 
     @cached_property
     def noun_phrases(self):
         extractor = NPExtractor(self.raw)
-        return [lowerstrip(phrase) for phrase in extractor.extract()
-                if len(phrase) > 1]
+        return WordList([lowerstrip(phrase) for phrase in extractor.extract()
+                if len(phrase) > 1])
 
     @cached_property
     def pos_tags(self):

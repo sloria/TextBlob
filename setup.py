@@ -22,11 +22,14 @@ if sys.argv[-1] == 'test':
     os.system('nosetests --verbosity 2')
     sys.exit()
 
+with open('README.rst') as fp:
+    long_desc = fp.read()
+
 setup(
     name='textblob',
     version=text.__version__,
     description='Simple, Pythonic text processing',
-    long_description=open('README.rst').read(),
+    long_description=long_desc,
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
