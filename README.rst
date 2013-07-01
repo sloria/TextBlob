@@ -3,10 +3,12 @@ TextBlob
 
 Requirements
 ------------
+
 - Python >= 2.7, but not Python 3 (yet)
 
 Installation
 ------------
+
 Just run: ::
 
     $ pip install textblob && python download_corpora.py
@@ -19,8 +21,8 @@ Best to see that everything is working by running: ::
 
 Usage
 -----
-Simple.
 
+Simple.
 
 Create a TextBlob
 +++++++++++++++++
@@ -58,16 +60,17 @@ Part-of-speech and noun phrase tagging
 .. code-block:: python
 
     blob.pos_tags         # [('beautiful', 'JJ'), ('is', 'VBZ'), ('better', 'RBR'),
-                         # ('than', 'IN'), ('ugly', 'RB'), ...]
+                          # ('than', 'IN'), ('ugly', 'RB'), ...]
 
     blob.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
-                         # 'sparse', 'readability', 'special cases',
-                         # 'practicality beats purity', 'errors', 'unless',
-                         # 'obvious way','dutch', 'right now', 'bad idea',
-                         # 'good idea', 'namespaces', 'great idea']
+                          # 'sparse', 'readability', 'special cases',
+                          # 'practicality beats purity', 'errors', 'unless',
+                          # 'obvious way','dutch', 'right now', 'bad idea',
+                          # 'good idea', 'namespaces', 'great idea']
 
 Sentiment analysis
 ++++++++++++++++++
+
 The :code:`sentiment` property returns a tuple of the form :code:`(polarity, subjectivity)` where :code:`polarity` ranges from -1.0 to 1.0 and
 :code:`subjectivity` ranges from 0.0 to 1.0.
 
@@ -80,13 +83,15 @@ Get word and noun phrase frequencies
 
 .. code-block:: python
 
-    blob.word_counts['better']    # 10
-    blob.word_counts['idea']      # 3
-    blob.np_counts['great idea']  # 1
+    blob.word_counts['special']   # 2 (not case-sensitive by default)
+    blob.words.count('special')   # Same thing
+    blob.words.count('special', case_sensitive=True)  # 1
 
+    blob.noun_phrases.count('great idea')  # 1
 
 TextBlobs are like Python strings!
 ++++++++++++++++++++++++++++++++++
+
 .. code-block:: python
 
     blob[0:19]            # TextBlob("Beautiful is better")
@@ -100,6 +105,7 @@ TextBlobs are like Python strings!
 
 Get start and end indices of sentences
 ++++++++++++++++++++++++++++++++++++++
+
 This can be useful for sentence highlighting, for example.
 
 .. code-block:: python

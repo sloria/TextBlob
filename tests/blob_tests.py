@@ -43,6 +43,16 @@ class WordListTest(TestCase):
         assert_equal(wl.pluralize(),
             ["dogs", "cats", "buffaloes"])
 
+    def test_lower(self):
+        wl = WordList(["Zen", "oF", "PYTHON"])
+        assert_equal(wl.lower(),
+            WordList(['zen', 'of', 'python']))
+
+    def test_count(self):
+        wl = WordList(["monty", "python", "Python", 'Monty'])
+        assert_equal(wl.count('monty'), 2)
+        assert_equal(wl.count('monty', case_sensitive=True), 1)
+
 
 class SentenceTest(TestCase):
     def setUp(self):
@@ -242,16 +252,25 @@ Namespaces are one honking great idea -- let's do more of those!"""
     def test_word_counts(self):
         blob = TextBlob("Buffalo buffalo ate my blue buffalo.")
         assert_equal(blob.word_counts['buffalo'], 3)
+        assert_equal(blob.words.count('buffalo'), 3)
+        assert_equal(blob.words.count('buffalo', case_sensitive=True), 2)
         assert_equal(blob.word_counts['blue'], 1)
+        assert_equal(blob.words.count('blue'), 1)
         assert_equal(blob.word_counts['ate'], 1)
+        assert_equal(blob.words.count('ate'), 1)
         assert_equal(blob.word_counts['buff'], 0)
+        assert_equal(blob.words.count('buff'), 0)
+
+        blob2 = TextBlob(self.text)
+        assert_equal(blob2.words.count('special'), 2)
+        assert_equal(blob2.words.count('special', case_sensitive=True), 1)
 
     def test_np_counts(self):
         # Add some text so that we have a noun phrase that
         # has a frequency greater than 1
         blob = TextBlob(self.text + "That's a great idea.")
-        assert_equal(blob.np_counts['namespaces'], 1)
-        assert_equal(blob.np_counts['great idea'], 2)
+        assert_equal(blob.noun_phrases.count('namespaces'), 1)
+        assert_equal(blob.noun_phrases.count('great idea'), 2)
 
     def test_add(self):
         blob1 = TextBlob("Hello, world! ")

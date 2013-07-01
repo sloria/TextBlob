@@ -29,6 +29,26 @@ class WordList(list):
         '''Returns a new WordList with items i:j.'''
         return self.__class__(list.__getslice__(self, i, j))
 
+    def count(self, s, case_sensitive=False, *args, **kwargs):
+        """Get the count of a word or phrase `s` within this WordList.
+
+        Arguments:
+        - `s`: The string to count.
+        - `case_sensitive`: A boolean, whether or not the search is
+                             case sensitive.
+        """
+        if not case_sensitive:
+            return [word.lower() for word in self].count(s.lower(), *args, **kwargs)
+        return self._collection.count(s, *args, **kwargs)
+
+    def upper(self):
+        '''Return a new WordList with each word upper-cased.'''
+        return self.__class__([word.upper() for word in self])
+
+    def lower(self):
+        '''Return a new WordList with each word lower-cased.'''
+        return self.__class__([word.lower() for word in self])
+
     def singularize(self):
         '''Return the single version of each word in this WordList.'''
         return [singularize(word) for word in self]

@@ -28,7 +28,8 @@ with open('README.rst') as fp:
 setup(
     name='textblob',
     version=text.__version__,
-    description='Simple, Pythonic text processing',
+    description='Simple, Pythonic text processing. Sentiment analysis, '
+                'POS tagging, noun phrase parsing, and more.',
     long_description=long_desc,
     author='Steven Loria',
     author_email='sloria1@gmail.com',
