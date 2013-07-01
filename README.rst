@@ -9,7 +9,9 @@ Installation
 ------------
 Just run: ::
 
-    $ pip install textblob && download_corpora.py
+    $ pip install textblob && python download_corpora.py
+
+This installs textblob and downloads the necessary NLTK models.
 
 Best to see that everything is working by running: ::
 
