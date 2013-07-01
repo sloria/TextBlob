@@ -120,7 +120,7 @@ Get a serialized version of the blob (a list of dicts)
 
 .. code-block:: python
 
-    blob.serialized       # [{'end_index': 30,
+    blob.serialized      # [{'end_index': 30,
                          # 'noun_phrases': ['beautiful'],
                          # 'raw_sentence': 'Beautiful is better than ugly.',
                          # 'start_index': 0,
@@ -128,4 +128,8 @@ Get a serialized version of the blob (a list of dicts)
 
 Testing
 -------
-Run :code:`$ nosetests` to run all tests.
+Run ::
+
+    $ nosetests
+
+to run all tests.

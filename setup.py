@@ -22,8 +22,16 @@ if sys.argv[-1] == 'test':
     os.system('nosetests --verbosity 2')
     sys.exit()
 
+def cheeseshopify(rst):
+    '''Since PyPI doesn't support the `code-block` or directive, this replaces
+    all `code-block` directives with `::`.
+    '''
+    ret = rst.replace(".. code-block:: python", "::")
+    ret = ret.replace(":code:", "")
+    return ret
+
 with open('README.rst') as fp:
-    long_desc = unicode(fp.read())
+    long_desc = cheeseshopify(fp.read())
 
 setup(
     name='textblob',
@@ -38,6 +46,9 @@ setup(
     packages=[
         'text'
     ],
+    package_data = {
+        "text": ["*.txt", "*.xml"],
+    },
     license='MIT',
     classifiers=(
         'Development Status :: 3 - Alpha',

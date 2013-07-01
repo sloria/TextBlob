@@ -74,7 +74,7 @@ class BaseBlob(object):
         return WordList([strip_punc(word) for word in word_tokenize(self.raw)
             if strip_punc(word)])  # Excludes "words" that are just punctuation
 
-    @cached_property
+    @property
     def sentiment(self):
         '''Returns sentiment scores as a tuple of the form
         `(polarity, subjectivity)` where polarity is in the range [-1.0, 1.0]
