@@ -141,10 +141,8 @@ class TextBlob(BaseBlob):
     """A general text block, meant for larger bodies of text (esp. those
     containing sentences.
     """
-
     def __init__(self, blob):
-        '''Initialize a textblob, tokenizing its sentences and creating
-        Sentence objects from it.
+        '''Initialize a textblob.
 
         Arguments:
         - `blob`: a string
@@ -153,6 +151,7 @@ class TextBlob(BaseBlob):
 
     @cached_property
     def sentences(self):
+        '''List of Sentence objects.'''
         return self._create_sentence_objects(self.raw)
 
     @property

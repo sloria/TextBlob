@@ -226,6 +226,5 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob2 = TextBlob("Explicit is better than implicit.")
 
         concatenated = blob1 + blob2
-        print(concatenated)
         assert_equal(len(concatenated.sentences), 2)
 
