@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 '''Wrappers for various units of text.'''
-import re
 import sys
 from collections import Counter
 
@@ -10,6 +9,7 @@ from .np_extractor import NPExtractor
 from .decorators import cached_property
 from .utils import lowerstrip, strip_punc
 from .inflect import singularize, pluralize
+from .sentiment import sentiment as _sentiment
 
 
 class WordList(list):
@@ -49,12 +49,18 @@ class BaseBlob(object):
 
     @cached_property
     def words(self):
-        '''Returns list of word tokens. These are extracted only once, when
-        this property is first accessed, then it is stored in an instance
-        variable.
+        '''Returns list of word tokens.
         '''
         return WordList([strip_punc(word) for word in word_tokenize(self.raw)
             if strip_punc(word)])  # Excludes "words" that are just punctuation
+
+    @cached_property
+    def sentiment(self):
+        '''Returns sentiment scores as a tuple of the form
+        `(polarity, subjectivity)` where polarity is in the range [-1.0, 1.0]
+        and subjectivity is in the range [0.0, 1.0].
+        '''
+        return _sentiment(self.raw)
 
     @cached_property
     def noun_phrases(self):
@@ -217,10 +223,10 @@ class TextBlob(BaseBlob):
                     if len(raw_sentence) <= 1:
                         continue
                     pass
-                # If the next token has a length of 1, assume it's a punctuation
+                # If the next token is 1 character, assume it's a punctuation
                 if len(next) == 1:
                     raw_sentence += next  # append the extra punctuation
-                    char_index +=1  # also correct the char_index
+                    char_index += 1  # also correct the char_index
                 # Create a Sentence object and add it the the list
                 sentence_objects.append(
                     Sentence(raw_sentence, start_index=start_index,
@@ -253,6 +259,6 @@ class Sentence(BaseBlob):
             "start_index": self.start_index,
             "end_index": self.end_index,
             "stripped_sentence": self.stripped,
-            "noun_phrases": self.noun_phrases
+            "noun_phrases": self.noun_phrases,
+            "sentiment": self.sentiment
         }
-

@@ -21,6 +21,10 @@ Usage
 -----
 Simple.
 
+
+Create a TextBlob
++++++++++++++++++
+
 .. code-block:: python
 
     from text.blob import TextBlob
@@ -47,29 +51,44 @@ Simple.
     """
 
     zen = TextBlob(text) # Create a new TextBlob
-    # Get the part-of-speech tags
+
+Part-of-speech and noun phrase tagging
+++++++++++++++++++++++++++++++++++++++
+
+.. code-block:: python
+
     zen.pos_tags         # [('beautiful', 'JJ'), ('is', 'VBZ'), ('better', 'RBR'),
                          # ('than', 'IN'), ('ugly', 'RB'), ...]
-    # Get the noun_phrases
+
     zen.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
                          # 'sparse', 'readability', 'special cases',
                          # 'practicality beats purity', 'errors', 'unless',
                          # 'obvious way','dutch', 'right now', 'bad idea',
                          # 'good idea', 'namespaces', 'great idea']
 
-    # Get word and noun phrase frequencies
+Sentiment analysis
+++++++++++++++++++
+The :code:`sentiment` property returns a tuple of the form :code:`(polarity, subjectivity)` where :code:`polarity` ranges from -1.0 to 1.0 and
+:code:`subjectivity` ranges from 0.0 to 1.0.
+
+.. code-block:: python
+
+    zen.sentiment        # (0.20, 0.58)
+
+Get word and noun phrase frequencies
+++++++++++++++++++++++++++++++++++++
+
+.. code-block:: python
+
     zen.word_counts['better']    # 10
     zen.word_counts['idea']      # 3
     zen.np_counts['great idea']  # 1
 
-    # Get the start and end indices of sentences within a blob
-    # This is useful for text highlighting, for example
-    for sentence in blob.sentences:
-        print(sentence)  # Beautiful is better than ugly
-        print("---- Starts at index {}, Ends at index {}"\
-                    .format(sentence.start_index, sentence.end_index))  # 0, 30
 
-    # TextBlobs are like Python strings!
+TextBlobs are like Python strings!
+++++++++++++++++++++++++++++++++++
+.. code-block:: python
+
     zen[0:19]            # TextBlob("Beautiful is better")
     zen.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
     zen.find("purity")   # 293
@@ -79,7 +98,22 @@ Simple.
     blob1 < blob2            # True
     blob1 + ' and ' + blob2  # TextBlob('apples and bananas')
 
-    # Get a serialized version of the blob (a list of dicts)
+Get start and end indices of sentences
+++++++++++++++++++++++++++++++++++++++
+This can be useful for sentence highlighting, for example.
+
+.. code-block:: python
+
+    for sentence in blob.sentences:
+        print(sentence)  # Beautiful is better than ugly
+        print("---- Starts at index {}, Ends at index {}"\
+                    .format(sentence.start_index, sentence.end_index))  # 0, 30
+
+Get a serialized version of the blob (a list of dicts)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. code-block:: python
+
     zen.serialized       # [{'end_index': 30,
                          # 'noun_phrases': ['beautiful'],
                          # 'raw_sentence': 'Beautiful is better than ugly.',

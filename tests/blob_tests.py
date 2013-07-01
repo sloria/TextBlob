@@ -7,6 +7,7 @@ from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from text.blob import TextBlob, Sentence, WordList
 
+
 class WordListTest(TestCase):
     def setUp(self):
         self.words = "Beautiful is better than ugly".split()
@@ -66,6 +67,7 @@ class SentenceTest(TestCase):
                     {
                         "raw_sentence": self.raw_sentence,
                         "start_index": 0,
+                        'sentiment': (0.0, 0.0),
                         "end_index": len(self.raw_sentence) - 1,
                         "stripped_sentence": "any place with frites and belgian beer has my vote",
                         "noun_phrases": self.sentence.noun_phrases
@@ -162,7 +164,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob2 = TextBlob('lorem ipsum')
         blob3 = TextBlob('dolor sit amet')
 
-        assert_true(blob1 == blob2) # test ==
+        assert_true(blob1 == blob2)  # test ==
         assert_true(blob1 > blob3)  # test >
         assert_true(blob3 < blob2)  # test <
 
@@ -270,3 +272,12 @@ Namespaces are one honking great idea -- let's do more of those!"""
         concatenated = blob1 + blob2
         assert_equal(len(concatenated.sentences), 2)
 
+    def test_sentiment(self):
+        positive = TextBlob("This is the best, most amazing text-processing"
+                            " library ever!")
+        assert_true(positive.sentiment[0] > 0.0)
+        negative = TextBlob("bad bad bitches that's my muthufuckin problem.")
+        assert_true(negative.sentiment[0] < 0.0)
+        zen = TextBlob(self.text)
+        assert_equal(round(zen.sentiment[0], 2), 0.20)
+        assert_equal(round(zen.sentiment[1], 2), 0.58)
