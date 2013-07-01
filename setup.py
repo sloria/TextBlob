@@ -42,7 +42,7 @@ setup(
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
-    install_requires=['nltk'],
+    install_requires=['nltk', 'numpy'],
     packages=[
         'text'
     ],

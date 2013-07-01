@@ -11,13 +11,15 @@ Installation
 
 Just run: ::
 
-    $ pip install textblob && python download_corpora.py
+    $ pip install textblob
 
-This installs textblob and downloads the necessary NLTK models.
+**IMPORTANT**: TextBlob depends on some NLTK models to work. The easiest way
+to get these is to run the :code:`download_corpora.py` script included with
+this distribution. You can get it `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_ .
+Then run: ::
 
-Best to see that everything is working by running: ::
+    $ python download_corpora.py
 
-    $ nosetests
 
 Usage
 -----
