@@ -9,7 +9,7 @@ Installation
 ------------
 Just run: ::
 
-    $ python setup.py install && download_corpora.py
+    $ pip install textblob && download_corpora.py
 
 Best to see that everything is working by running: ::
 
@@ -19,7 +19,7 @@ Usage
 -----
 Simple.
 
-.. code-block::
+.. code-block:: python
 
     from text.blob import TextBlob
 
