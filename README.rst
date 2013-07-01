@@ -29,7 +29,7 @@ Create a TextBlob
 
     from text.blob import TextBlob
 
-    text = """Beautiful is better than ugly.
+    zen = """Beautiful is better than ugly.
     Explicit is better than implicit.
     Simple is better than complex.
     Complex is better than complicated.
@@ -50,17 +50,17 @@ Create a TextBlob
     Namespaces are one honking great idea -- let's do more of those!
     """
 
-    zen = TextBlob(text) # Create a new TextBlob
+    blob = TextBlob(zen) # Create a new TextBlob
 
 Part-of-speech and noun phrase tagging
 ++++++++++++++++++++++++++++++++++++++
 
 .. code-block:: python
 
-    zen.pos_tags         # [('beautiful', 'JJ'), ('is', 'VBZ'), ('better', 'RBR'),
+    blob.pos_tags         # [('beautiful', 'JJ'), ('is', 'VBZ'), ('better', 'RBR'),
                          # ('than', 'IN'), ('ugly', 'RB'), ...]
 
-    zen.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
+    blob.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
                          # 'sparse', 'readability', 'special cases',
                          # 'practicality beats purity', 'errors', 'unless',
                          # 'obvious way','dutch', 'right now', 'bad idea',
@@ -73,25 +73,25 @@ The :code:`sentiment` property returns a tuple of the form :code:`(polarity, sub
 
 .. code-block:: python
 
-    zen.sentiment        # (0.20, 0.58)
+    blob.sentiment        # (0.20, 0.58)
 
 Get word and noun phrase frequencies
 ++++++++++++++++++++++++++++++++++++
 
 .. code-block:: python
 
-    zen.word_counts['better']    # 10
-    zen.word_counts['idea']      # 3
-    zen.np_counts['great idea']  # 1
+    blob.word_counts['better']    # 10
+    blob.word_counts['idea']      # 3
+    blob.np_counts['great idea']  # 1
 
 
 TextBlobs are like Python strings!
 ++++++++++++++++++++++++++++++++++
 .. code-block:: python
 
-    zen[0:19]            # TextBlob("Beautiful is better")
-    zen.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
-    zen.find("purity")   # 293
+    blob[0:19]            # TextBlob("Beautiful is better")
+    blob.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
+    blob.find("purity")   # 293
 
     blob1 = TextBlob('apples')
     blob2 = TextBlob('bananas')
@@ -114,7 +114,7 @@ Get a serialized version of the blob (a list of dicts)
 
 .. code-block:: python
 
-    zen.serialized       # [{'end_index': 30,
+    blob.serialized       # [{'end_index': 30,
                          # 'noun_phrases': ['beautiful'],
                          # 'raw_sentence': 'Beautiful is better than ugly.',
                          # 'start_index': 0,

@@ -23,7 +23,7 @@ if sys.argv[-1] == 'test':
     sys.exit()
 
 with open('README.rst') as fp:
-    long_desc = fp.read()
+    long_desc = unicode(fp.read())
 
 setup(
     name='textblob',
