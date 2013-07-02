@@ -6,20 +6,6 @@ Requirements
 
 - Python >= 2.7, but not Python 3 (yet)
 
-Installation
-------------
-
-Just run: ::
-
-    $ pip install textblob
-
-**IMPORTANT**: TextBlob depends on some NLTK models to work. The easiest way
-to get these is to run the :code:`download_corpora.py` script included with
-this distribution. You can get it `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_ .
-Then run: ::
-
-    $ python download_corpora.py
-
 
 Usage
 -----
@@ -56,8 +42,10 @@ Create a TextBlob
 
     blob = TextBlob(zen) # Create a new TextBlob
 
-Part-of-speech and noun phrase tagging
-++++++++++++++++++++++++++++++++++++++
+Part-of-speech tags and noun phrases...
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\...are just properties.
 
 .. code-block:: python
 
@@ -100,10 +88,12 @@ TextBlobs are like Python strings!
     blob.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
     blob.find("purity")   # 293
 
-    blob1 = TextBlob('apples')
-    blob2 = TextBlob('bananas')
-    blob1 < blob2            # True
-    blob1 + ' and ' + blob2  # TextBlob('apples and bananas')
+    apple_blob = TextBlob('apples')
+    banana_blob = TextBlob('bananas')
+    apple_blob < banana_blob           # True
+    apple_blob + ' and ' + banana_blob # TextBlob('apples and bananas')
+    "{0} and {1}".format(apple_blob, banana_blob)  # 'apples and bananas'
+
 
 Get start and end indices of sentences
 ++++++++++++++++++++++++++++++++++++++
@@ -117,16 +107,35 @@ This can be useful for sentence highlighting, for example.
         print("---- Starts at index {}, Ends at index {}"\
                     .format(sentence.start_index, sentence.end_index))  # 0, 30
 
-Get a serialized version of the blob (a list of dicts)
-++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Get a JSON-serialized version of the blob
++++++++++++++++++++++++++++++++++++++++++
 
 .. code-block:: python
 
-    blob.serialized      # [{'end_index': 30,
-                         # 'noun_phrases': ['beautiful'],
-                         # 'raw_sentence': 'Beautiful is better than ugly.',
-                         # 'start_index': 0,
-                         # 'stripped_sentence': 'beautiful is better than ugly'},
+    blob.json   # '[{"sentiment": [0.2166666666666667, ' '0.8333333333333334],
+                # "stripped": "beautiful is better than ugly", '
+                # '"noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly. ", '
+                # '"end_index": 30, "start_index": 0}]'
+
+
+Installation
+------------
+
+If you have :code:`pip`: ::
+
+    $ pip install textblob
+
+Or (if you must): ::
+
+    $ easy_install textblob
+
+**IMPORTANT**: TextBlob depends on some NLTK models to work. The easiest way
+to get these is to run the :code:`download_corpora.py` script included with
+this distribution. You can get it `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_ .
+Then run: ::
+
+    $ python download_corpora.py
+
 
 Testing
 -------

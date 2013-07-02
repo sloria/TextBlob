@@ -8,8 +8,12 @@ try:
 except ImportError:
     from distutils.core import setup
 
+
+PUBLISH = "python setup.py register sdist upload"
+TEST = 'nosetests --verbosity 2'
+
 if sys.argv[-1] == 'publish':
-    os.system("python setup.py register sdist upload")
+    os.system(PUBLISH)
     sys.exit()
 
 if sys.argv[-1] == 'test':
@@ -19,8 +23,9 @@ if sys.argv[-1] == 'test':
         print('nose required.')
         sys.exit(1)
 
-    os.system('nosetests --verbosity 2')
+    os.system(TEST)
     sys.exit()
+
 
 def cheeseshopify(rst):
     '''Since PyPI doesn't support the `code-block` or directive, this replaces
@@ -46,7 +51,7 @@ setup(
     packages=[
         'text'
     ],
-    package_data = {
+    package_data={
         "text": ["*.txt", "*.xml"],
     },
     license='MIT',

@@ -1,25 +1,29 @@
 # -*- coding: utf-8 -*-
+
 '''Wrappers for various units of text.'''
 import sys
+import json
 from collections import Counter
 
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
-from .np_extractor import NPExtractor
-from .decorators import cached_property
-from .utils import lowerstrip, strip_punc
-from .inflect import singularize, pluralize
-from .sentiment import sentiment as _sentiment
+from np_extractor import NPExtractor
+from decorators import cached_property
+from utils import lowerstrip, strip_punc
+from inflect import singularize, pluralize
+from sentiment import sentiment as _sentiment
 
 
 class WordList(list):
+
     '''A list-like collection of words.'''
+
     def __init__(self, collection):
         super(WordList, self).__init__(collection)
         self._collection = collection
 
     def __repr__(self):
-        return "WordList({0})".format(repr(self._collection))
+        return 'WordList({0})'.format(repr(self._collection))
 
     def __getitem__(self, index):
         '''Returns a string at the given index.'''
@@ -33,12 +37,13 @@ class WordList(list):
         """Get the count of a word or phrase `s` within this WordList.
 
         Arguments:
-        - `s`: The string to count.
-        - `case_sensitive`: A boolean, whether or not the search is
+        - s: The string to count.
+        - case_sensitive: A boolean, whether or not the search is
                              case sensitive.
         """
         if not case_sensitive:
-            return [word.lower() for word in self].count(s.lower(), *args, **kwargs)
+            return [word.lower() for word in self].count(s.lower(), *args,
+                    **kwargs)
         return self._collection.count(s, *args, **kwargs)
 
     def upper(self):
@@ -59,11 +64,21 @@ class WordList(list):
 
 
 class BaseBlob(object):
+
     '''An abstract base class that all text.blob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
     basic dunder and string methods for making objects like Python strings.
     '''
+
     def __init__(self, text):
+        '''Create a blob-like object.
+
+        Arguments:
+        - text: A string, the text.
+        '''
+        if not isinstance(text, basestring):
+            raise TypeError('The `text` argument passed to `__init__(text)` '
+                'must be a string.')
         self.raw = text
         self.stripped = lowerstrip(text)
 
@@ -72,7 +87,7 @@ class BaseBlob(object):
         '''Returns list of word tokens.
         '''
         return WordList([strip_punc(word) for word in word_tokenize(self.raw)
-            if strip_punc(word)])  # Excludes "words" that are just punctuation
+                        if strip_punc(word)])  # Excludes punctuation
 
     @property
     def sentiment(self):
@@ -86,7 +101,7 @@ class BaseBlob(object):
     def noun_phrases(self):
         extractor = NPExtractor(self.raw)
         return WordList([lowerstrip(phrase) for phrase in extractor.extract()
-                if len(phrase) > 1])
+                        if len(phrase) > 1])
 
     @cached_property
     def pos_tags(self):
@@ -118,9 +133,8 @@ class BaseBlob(object):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
         if len(self) > 60:
-            return "{cls}('{beginning}...{end}')"\
-                        .format(cls=class_name,
-                                beginning=self.raw[:40], end=self.raw[-20:])
+            return "{cls}('{beginning}...{end}')".format(cls=class_name,
+                    beginning=self.raw[:40], end=self.raw[-20:])
         else:
             return "{cls}('{text}')".format(cls=class_name, text=self.raw)
 
@@ -166,27 +180,97 @@ class BaseBlob(object):
         elif isinstance(other, BaseBlob):
             return TextBlob(str(self) + str(other))
         else:
-            raise ValueError('Operands must be either strings or {0} objects'
-                                .format(self.__class__.__name__))
+            raise ValueError('Operands must be either strings or {0} objects'.format(self.__class__.__name__))
+
+    def __contains__(self, sub):
+        '''Implements the `in` keyword like a Python string.'''
+        return sub in str(self)
 
     def find(self, sub, start=0, end=sys.maxint):
         '''Behaves like the built-in str.find() method. Returns an integer,
         the index of the first occurrence of the substring argument sub in the
-        sub-string given by [start:end]
+        sub-string given by [start:end].
         '''
         return str(self).find(sub, start, end)
 
+    def rfind(self, sub, start=0, end=sys.maxint):
+        '''Behaves like the built-in str.rfind() method. Returns an integer,
+        the index of he last (right-most) occurence of the substring argument
+        sub in the sub-sequence given by [start:end].
+        '''
+        return str(self).rfind(sub, start, end)
+
+    def index(self, sub, start=0, end=sys.maxint):
+        '''Like blob.find() but raise ValueError when the substring is not found.
+        '''
+        return str(self).index(sub, start, end)
+
+    def startswith(self, prefix, start=0, end=sys.maxint):
+        """Returns True if the blob starts with the given prefix."""
+        return str(self).startswith(prefix, start, end)
+
+    def endswith(self, suffix, start=0, end=sys.maxint):
+        """Returns True if the blob ends with the given suffix."""
+        return str(self).endswith(suffix, start, end)
+
+    # PEP8 aliases
+    starts_with = startswith
+    ends_with = endswith
+
+    def title(self):
+        """Returns a blob object with the text in title-case."""
+        return TextBlob(str(self).title())
+
+    def format(self, *args, **kwargs):
+        """Perform a string formatting operation, like the built-in
+        `str.format(*args, **kwargs)`. Returns a blob object.
+        """
+        return TextBlob(str(self).format(*args, **kwargs))
+
+    def split(self, sep=None, maxsplit=sys.maxint):
+        """Behaves like the built-in str.split() except returns a
+        WordList.
+        """
+        return WordList(str(self).split(sep, maxsplit))
+
+    def strip(self, chars=None):
+        """Behaves like the built-in str.strip([chars]) method. Returns
+        an object with leading and trailing whitespace removed.
+        """
+        return self.__class__(str(self).strip(chars))
+
     def upper(self):
-        return self.__class__(self.raw.upper())
+        """Like str.upper(), returns new object with all upper-cased characters.
+        """
+        return self.__class__(str(self).upper())
 
     def lower(self):
-        return self.__class__(self.raw.lower())
+        """Like str.lower(), returns new object with all lower-cased characters.
+        """
+        return self.__class__(str(self).lower())
+
+    def join(self, iterable):
+        """Behaves like the built-in `str.join(iterable)` method, except
+        returns a blob object.
+
+        Returns a blob which is the concatenation of the strings or blobs
+        in the iterable.
+        """
+        return self.__class__(str(self).join(iterable))
+
+    def replace(self, old, new, count=sys.maxint):
+        """Return a new blob object with all the occurence of `old` replaced
+        by `new`.
+        """
+        return self.__class__(str(self).replace(old, new, count))
 
 
 class TextBlob(BaseBlob):
+
     """A general text block, meant for larger bodies of text (esp. those
     containing sentences.
     """
+
     def __init__(self, blob):
         '''Initialize a textblob.
 
@@ -210,6 +294,12 @@ class TextBlob(BaseBlob):
         '''Returns a list of each sentences dict representation.'''
         return [sentence.dict for sentence in self.sentences]
 
+    @property
+    def json(self):
+        '''Returns a json representation of this blob.'''
+        return json.dumps(self.serialized)
+
+
     def _create_sentence_objects(self, blob):
         '''Returns a list of Sentence objects given
         a list of sentence strings. Attempts to handle sentences that
@@ -220,12 +310,10 @@ class TextBlob(BaseBlob):
         sentences = sent_tokenize(blob)  # List of raw sentences
         # if there is only one sentence or string of text
         if len(sentences) <= 1:
-            sentence_objects.append(
-                Sentence(sentences[0], start_index=0,
-                            end_index=len(sentences[0]) - 1)
-            )
-        # If there are many sentences
+            sentence_objects.append(Sentence(sentences[0], start_index=0,
+                                    end_index=len(sentences[0]) - 1))
         else:
+        # If there are many sentences
             char_index = 0  # Keeps track of character index within the blob
             for i, raw_sentence in enumerate(sentences):
                 # Compute the start and end indices of the sentence
@@ -248,37 +336,38 @@ class TextBlob(BaseBlob):
                     raw_sentence += next  # append the extra punctuation
                     char_index += 1  # also correct the char_index
                 # Create a Sentence object and add it the the list
-                sentence_objects.append(
-                    Sentence(raw_sentence, start_index=start_index,
-                                            end_index=char_index))
+                sentence_objects.append(Sentence(raw_sentence,
+                        start_index=start_index, end_index=char_index))
         return sentence_objects
 
 
 class Sentence(BaseBlob):
+
     '''A sentence within a TextBlob.'''
+
     def __init__(self, sentence, start_index=0, end_index=None):
         '''Initialize a Sentence.
 
         Arguments:
-        - `sentence`: A string, the raw sentence.
-        - `start_index`: An int, the index where this sentence begins
+        - sentence: A string, the raw sentence.
+        - start_index: An int, the index where this sentence begins
                             in a TextBlob. If not given, defaults to 0.
-        - `end_index`: An int, the index where this sentence ends in
+        - end_index: An int, the index where this sentence ends in
                             a TextBlob. If not given, defaults to the
                             length of the sentence - 1.
         '''
         super(Sentence, self).__init__(sentence)
         self.start_index = start_index
-        self.end_index = end_index if end_index else len(sentence) - 1
+        self.end_index = (end_index if end_index else len(sentence) - 1)
 
     @property
     def dict(self):
         '''The dict representation of this sentence.'''
         return {
-            "raw_sentence": self.raw,
-            "start_index": self.start_index,
-            "end_index": self.end_index,
-            "stripped_sentence": self.stripped,
-            "noun_phrases": self.noun_phrases,
-            "sentiment": self.sentiment
-        }
+            'raw': self.raw,
+            'start_index': self.start_index,
+            'end_index': self.end_index,
+            'stripped': self.stripped,
+            'noun_phrases': self.noun_phrases,
+            'sentiment': self.sentiment,
+            }
