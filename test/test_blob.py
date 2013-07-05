@@ -3,7 +3,7 @@
 """
 Tests for the text processor.
 """
-from unittest import TestCase
+from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from text.blob import TextBlob, Sentence, WordList
@@ -96,8 +96,6 @@ class SentenceTest(TestCase):
         # Getting the pos tags the second time should be faster
         # because they were stored as an attribute the first time
         assert_true(t2 < t1)
-
-        print tagged
         assert_equal(tagged, [
             ('any', 'DT'),
             ('place', 'NN'),
@@ -171,7 +169,6 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob1 = TextBlob('lorem ipsum')
         assert_equal(repr(blob1), "TextBlob('lorem ipsum')")
         big_blob = TextBlob(self.text)
-        print repr(big_blob)
         assert_equal(repr(big_blob),
                      "TextBlob('Beautiful is better than ugly.\nExplicit ...'s do more of those!')"
                      )
@@ -433,3 +430,6 @@ Namespaces are one honking great idea -- let's do more of those!"""
 
 def is_blob(obj):
     return isinstance(obj, TextBlob)
+
+if __name__ == '__main__':
+    main()

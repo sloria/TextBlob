@@ -164,4 +164,4 @@ to run all tests.
 License
 -------
 
-TextBlob is licenced under the MIT license. See the bundled [LICENSE](https://github.com/sloria/TextBlob/blob/master/LICENSE) file for details.
+TextBlob is licenced under the MIT license. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
