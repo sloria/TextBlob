@@ -289,6 +289,12 @@ Namespaces are one honking great idea -- let's do more of those!"""
         assert_equal(last_sentence.start_index, 740)
         assert_equal(last_sentence.end_index, 804)
 
+    def test_indices_short_names(self):
+        blob = TextBlob(self.text)
+        last_sentence = blob.sentences[len(blob.sentences) - 1]
+        assert_equal(last_sentence.start, 740)
+        assert_equal(last_sentence.end, 804)
+
     def test_replace(self):
         blob = TextBlob('textblob is a blobby blob')
         assert_equal(blob.replace('blob', 'bro'),

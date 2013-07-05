@@ -1,0 +1,8 @@
+language: python
+python:
+    - "2.7"
+# Install dependencies
+install:
+    - "pip install -U . --use-mirrors"
+# Run tests
+script: nosetests

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+'''This file is adapted from the pattern library.
+
+URL: http://www.clips.ua.ac.be/pages/pattern-web
+Licence: BSD
+'''
 import types
 import os
 import re

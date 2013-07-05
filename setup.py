@@ -31,8 +31,7 @@ def cheeseshopify(rst):
     '''Since PyPI doesn't support the `code-block` or directive, this replaces
     all `code-block` directives with `::`.
     '''
-    ret = rst.replace(".. code-block:: python", "::")
-    ret = ret.replace(":code:", "")
+    ret = rst.replace(".. code-block:: python", "::").replace(":code:", "")
     return ret
 
 with open('README.rst') as fp:

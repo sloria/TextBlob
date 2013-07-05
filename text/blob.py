@@ -7,6 +7,7 @@ from collections import Counter
 
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
+
 from np_extractor import NPExtractor
 from decorators import cached_property
 from utils import lowerstrip, strip_punc
@@ -23,7 +24,14 @@ class WordList(list):
         self._collection = collection
 
     def __repr__(self):
-        return 'WordList({0})'.format(repr(self._collection))
+        '''Returns a string representation for debugging.'''
+        class_name = self.__class__.__name__
+        if len(self) > 60:
+            return '{cls}({beginning}...{end})'.format(cls=class_name,
+                    beginning=str(self._collection[:3])[:-1],
+                    end=str(self._collection[-3:])[1:])
+        else:
+            return '{cls}({lst})'.format(cls=class_name, lst=self._collection)
 
     def __getitem__(self, index):
         '''Returns a string at the given index.'''
@@ -77,16 +85,19 @@ class BaseBlob(object):
         - text: A string, the text.
         '''
         if not isinstance(text, basestring):
-            raise TypeError('The `text` argument passed to `__init__(text)` '
-                'must be a string.')
+            raise TypeError('The `text` argument passed to `__init__(text)` must be a string.'
+                            )
         self.raw = text
         self.stripped = lowerstrip(text)
+
+    def _tokenize(self):
+        return word_tokenize(self.raw)
 
     @cached_property
     def words(self):
         '''Returns list of word tokens.
         '''
-        return WordList([strip_punc(word) for word in word_tokenize(self.raw)
+        return WordList([strip_punc(word) for word in self._tokenize()
                         if strip_punc(word)])  # Excludes punctuation
 
     @property
@@ -282,7 +293,7 @@ class TextBlob(BaseBlob):
     @cached_property
     def sentences(self):
         '''List of Sentence objects.'''
-        return self._create_sentence_objects(self.raw)
+        return TextBlob.create_sentence_objects(self.raw)
 
     @property
     def raw_sentences(self):
@@ -299,8 +310,8 @@ class TextBlob(BaseBlob):
         '''Returns a json representation of this blob.'''
         return json.dumps(self.serialized)
 
-
-    def _create_sentence_objects(self, blob):
+    @staticmethod
+    def create_sentence_objects(blob):
         '''Returns a list of Sentence objects given
         a list of sentence strings. Attempts to handle sentences that
         have more than one puntuation mark at the end of the sentence.
@@ -357,8 +368,9 @@ class Sentence(BaseBlob):
                             length of the sentence - 1.
         '''
         super(Sentence, self).__init__(sentence)
-        self.start_index = start_index
-        self.end_index = (end_index if end_index else len(sentence) - 1)
+        self.start = self.start_index = start_index
+        self.end = self.end_index = (end_index if end_index else len(sentence)
+                                     - 1)
 
     @property
     def dict(self):
