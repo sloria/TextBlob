@@ -97,18 +97,12 @@ class SentenceTest(TestCase):
         # Getting the pos tags the second time should be faster
         # because they were stored as an attribute the first time
         assert_true(t2 < t1)
-        assert_equal(tagged, [
-            ('any', 'DT'),
-            ('place', 'NN'),
-            ('with', 'IN'),
-            ('frites', 'NNS'),
-            ('and', 'CC'),
-            ('belgian', 'JJ'),
-            ('beer', 'NN'),
-            ('has', 'VBZ'),
-            ('my', 'PRP$'),
-            ('vote', 'NN'),
-            ])
+        assert_list_equal(tagged,
+                [(u'Any', u'DT'), (u'place', u'NN'), (u'with', u'IN'),
+                (u'frites', u'NNS'), (u'and', u'CC'), (u'Belgian', u'JJ'),
+                (u'beer', u'NN'), (u'has', u'VBZ'), (u'my', u'PRP$'),
+                (u'vote', u'NN')]
+        )
 
     def test_noun_phrases(self):
         nps = self.sentence.noun_phrases
@@ -205,18 +199,18 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob = \
             TextBlob('Simple is better than complex. Complex is better than complicated.'
                      )
-
-        assert_equal(blob.pos_tags, WordList([
-            ('simple', 'NN'),
-            ('is', 'VBZ'),
-            ('better', 'RBR'),
-            ('than', 'IN'),
-            ('complex', 'JJ'),
-            ('complex', 'NN'),
-            ('is', 'VBZ'),
-            ('better', 'RBR'),
-            ('than', 'IN'),
-            ('complicated', 'VBN'),
+        print(blob.pos_tags)
+        assert_list_equal(blob.pos_tags, WordList([
+            (u'Simple', u'NN'),
+            (u'is', u'NNS'),
+            (u'better', u'JJR'),
+            (u'than', u'IN'),
+            (u'complex', u'NN'),
+            (u'Complex', u'NNP'),
+            (u'is', u'VBZ'),
+            (u'better', u'RBR'),
+            (u'than', u'IN'),
+            (u'complicated', u'VBN'),
             ]))
 
     def test_getitem(self):
@@ -423,16 +417,17 @@ Namespaces are one honking great idea -- let's do more of those!"""
     def test_json(self):
         blob = TextBlob('Beautiful is better than ugly. ')
         blob_dict = json.loads(blob.json)[0]
-        assert_equal(blob_dict['stripped'], "beautiful is better than ugly")
+        assert_equal(blob_dict['stripped'], 'beautiful is better than ugly')
         assert_equal(blob_dict['noun_phrases'], blob.sentences[0].noun_phrases)
         assert_equal(blob_dict['start_index'], blob.sentences[0].start)
         assert_equal(blob_dict['end_index'], blob.sentences[0].end)
         assert_almost_equal(blob_dict['sentiment'][0],
-            blob.sentences[0].sentiment[0], places=4)
+                            blob.sentences[0].sentiment[0], places=4)
 
 
 def is_blob(obj):
     return isinstance(obj, TextBlob)
+
 
 if __name__ == '__main__':
     main()

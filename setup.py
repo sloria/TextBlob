@@ -8,6 +8,11 @@ try:
 except ImportError:
     from distutils.core import setup
 
+IS_PY3 = (sys.version_info[0] == 3)
+try:
+    MODULE = os.path.dirname(os.path.abspath(__file__))
+except:
+    MODULE = ""
 
 PUBLISH = "python setup.py register sdist upload"
 TEST = 'nosetests --verbosity 2'
@@ -26,6 +31,11 @@ if sys.argv[-1] == 'test':
     os.system(TEST)
     sys.exit()
 
+# Install nltk 3.0 alpha
+if IS_PY3:
+    os.chdir(os.path.join(MODULE, 'nltk'))
+    os.system('python setup.py install')
+    os.chdir('..')
 
 def cheeseshopify(rst):
     '''Since PyPI doesn't support the `code-block` or directive, this replaces
@@ -46,9 +56,10 @@ setup(
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
-    install_requires=['nltk', 'numpy'],
+    install_requires=['nltk'],
     packages=[
-        'text'
+        'text',
+        'nltk'
     ],
     package_data={
         "text": ["*.txt", "*.xml"],

@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
 '''Wrappers for various units of text.'''
+from __future__ import unicode_literals
 import sys
 import json
 from collections import Counter
 
 import nltk
-from nltk.tokenize import sent_tokenize, word_tokenize
-
+from nltk.tokenize import word_tokenize, sent_tokenize
 from .np_extractor import NPExtractor
 from .decorators import cached_property
-from .utils import lowerstrip, strip_punc
+from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize, pluralize
-from .sentiment import sentiment as _sentiment
+from .en import sentiment as _sentiment, tag
 from .mixins import ComparableMixin
 
 
@@ -126,8 +126,9 @@ class BaseBlob(ComparableMixin):
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
         '''
-        tokens = word_tokenize(self.stripped)
-        return nltk.pos_tag(tokens)
+        tags = [t for t in tag(self.raw, tokenize=True)
+            if not len(t[0]) == 1 and not PUNCTUATION_REGEX.match(t[0])]
+        return WordList(tags)
 
     @cached_property
     def word_counts(self):

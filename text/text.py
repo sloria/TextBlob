@@ -14,6 +14,40 @@ try:
 except:
     MODULE = ""
 
+SLASH, WORD, POS, CHUNK, PNP, REL, ANCHOR, LEMMA = \
+        "&slash;", "word", "part-of-speech", "chunk", "preposition", "relation", "anchor", "lemma"
+
+
+# String functions
+def decode_string(v, encoding="utf-8"):
+    """ Returns the given value as a Unicode string (if possible).
+    """
+    if isinstance(encoding, str):
+        encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
+    if isinstance(v, str):
+        for e in encoding:
+            try: return v.decode(*e)
+            except:
+                pass
+        return v
+    return str(v)
+
+def encode_string(v, encoding="utf-8"):
+    """ Returns the given value as a Python byte string (if possible).
+    """
+    if isinstance(encoding, str):
+        encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
+    if isinstance(v, str):
+        for e in encoding:
+            try: return v.encode(*e)
+            except:
+                pass
+        return v
+    return str(v)
+
+decode_utf8 = decode_string
+encode_utf8 = encode_string
+
 #--- LAZY DICTIONARY -------------------------------------------------------------------------------
 # A lazy dictionary is empty until one of its methods is called.
 # This way many instances (e.g., lexicons) can be created without using memory until used.
@@ -720,6 +754,69 @@ class Sentiment(lazydict):
             a[i] = (w, p * -0.5 if n < 0 else p, s)
         return a
 
+#--- PART-OF-SPEECH TAGGER -------------------------------------------------------------------------
+
+# Unknown words are recognized as numbers if they contain only digits and -,.:/%$
+CD = re.compile(r"^[0-9\-\,\.\:\/\%\$]+$")
+
+def _suffix_rules(token, **kwargs):
+    """ Default morphological tagging rules for English, based on word suffixes.
+    """
+    word, pos = token
+    if word.endswith("ing"):
+        pos = "VBG"
+    if word.endswith("ly"):
+        pos = "RB"
+    if word.endswith("s") and not word.endswith(("is", "ous", "ss")):
+        pos = "NNS"
+    if word.endswith(("able", "al", "ful", "ible", "ient", "ish", "ive", "less", "tic", "ous")) or "-" in word:
+        pos = "JJ"
+    if word.endswith("ed"):
+        pos = "VBN"
+    if word.endswith(("ate", "ify", "ise", "ize")):
+        pos = "VBP"
+    return [word, pos]
+
+def find_tags(tokens, lexicon={}, default=("NN", "NNP", "CD"), language="en", map=None, **kwargs):
+    """ Returns a list of [token, tag]-items for the given list of tokens:
+        ["The", "cat", "purs"] => [["The", "DT"], ["cat", "NN"], ["purs", "VB"]]
+        Words are tagged using the given lexicon of (word, tag)-items.
+        Unknown words are tagged NN by default.
+        Unknown words that start with a capital letter are tagged NNP (unless language="de").
+        Unknown words that consist only of digits and punctuation marks are tagged CD.
+        Unknown words are then improved with morphological rules.
+        All words are improved with contextual rules.
+        If map is a function, it is applied to each tag after applying all rules.
+    """
+    tagged = []
+    if isinstance(lexicon, Lexicon):
+        f = lexicon.morphology.apply
+    elif language == "en":
+        f = _suffix_rules
+    else:
+        f = lambda token, **kwargs: token
+    for i, token in enumerate(tokens):
+        tagged.append([token, lexicon.get(token, i==0 and lexicon.get(token.lower()) or None)])
+    for i, (token, tag) in enumerate(tagged):
+        if tag is None:
+            if len(token) > 0 \
+            and token[0].isupper() \
+            and token[0].isalpha() \
+            and language != "de":
+                tagged[i] = [token, default[1]] # NNP
+            elif CD.match(token) is not None:
+                tagged[i] = [token, default[2]] # CD
+            else:
+                tagged[i] = [token, default[0]] # NN
+                tagged[i] = f(tagged[i],
+                    previous = i > 0 and tagged[i-1] or (None, None),
+                        next = i < len(tagged)-1 and tagged[i+1] or (None, None))
+    if isinstance(lexicon, Lexicon):
+        tagged = lexicon.context.apply(tagged)
+        tagged = lexicon.entities.apply(tagged)
+    if map is not None:
+        tagged = [[token, list(map(tag)) or default[0]] for token, tag in tagged]
+    return tagged
 
 #### PARSER ########################################################################################
 
@@ -753,7 +850,7 @@ class Sentiment(lazydict):
 # - the phrase start is marked: B (begin), I (inside), O (outside),
 # - the past tense "sat" is lemmatized => "sit".
 
-class _Parser:
+class Parser:
 
     def __init__(self, lexicon={}, default=("NN", "NNP", "CD"), language=None):
         """ A simple shallow parser using a Brill-based part-of-speech tagger.
@@ -882,47 +979,40 @@ class _Parser:
         return s
 
 
-#--- ENGLISH PARSER --------------------------------------------------------------------------------
+#--- TAGGED STRING ---------------------------------------------------------------------------------
+# Pattern.parse() returns a TaggedString: a Unicode string with "tags" and "language" attributes.
+# The pattern.text.tree.Text class uses this attribute to determine the token format and
+# transform the tagged string to a parse tree of nested Sentence, Chunk and Word objects.
 
-def find_lemmata(tokens):
-    """ Annotates the tokens with lemmata for plural nouns and conjugated verbs,
-        where each token is a [word, part-of-speech] list.
-    """
-    for token in tokens:
-        word, pos, lemma = token[0], token[1], token[0]
-        # cats => cat
-        if pos == "NNS":
-            lemma = singularize(word)
-        # sat => sit
-        if pos.startswith(("VB", "MD")):
-            lemma = conjugate(word, INFINITIVE) or word
-        token.append(lemma.lower())
-    return tokens
+TOKENS = "tokens"
 
-class Parser(_Parser):
+class TaggedString(str):
 
-    def find_lemmata(self, tokens, **kwargs):
-        return find_lemmata(tokens)
+    def __new__(self, string, tags=["word"], language=None):
+        """ Unicode string with tags and language attributes.
+            For example: TaggedString("cat/NN/NP", tags=["word", "pos", "chunk"]).
+        """
+        # From a TaggedString:
+        if isinstance(string, str) and hasattr(string, "tags"):
+            tags, language = string.tags, string.language
+        # From a TaggedString.split(TOKENS) list:
+        if isinstance(string, list):
+            string = [[[x.replace("/", "&slash;") for x in token] for token in s] for s in string]
+            string = "\n".join(" ".join("/".join(token) for token in s) for s in string)
+        s = str.__new__(self, string)
+        s.tags = list(tags)
+        s.language = language
+        return s
 
-lexicon = Lexicon(
-        path = os.path.join(MODULE, "en-lexicon.txt"),
-  morphology = os.path.join(MODULE, "en-morphology.txt"),
-     context = os.path.join(MODULE, "en-context.txt"),
-    entities = os.path.join(MODULE, "en-entities.txt"),
-    language = "en"
-)
-parser = Parser(
-     lexicon = lexicon,
-     default = ("NN", "NNP", "CD"),
-    language = "en"
-)
+    def split(self, sep=TOKENS):
+        """ Returns a list of sentences, where each sentence is a list of tokens,
+            where each token is a list of word + tags.
+        """
+        if sep != TOKENS:
+            return str.split(self, sep)
+        if len(self) == 0:
+            return []
+        return [[[x.replace("&slash;", "/") for x in token.split("/")]
+            for token in sentence.split(" ")]
+                for sentence in str.split(self, "\n")]
 
-sentiment = Sentiment(
-        path = os.path.join(MODULE, "en-sentiment.xml"),
-      synset = "wordnet_id",
-   negations = ("no", "not", "n't", "never"),
-   modifiers = ("RB",),
-   modifier  = lambda w: w.endswith("ly"),
-   tokenizer = parser.find_tokens,
-    language = "en"
-)

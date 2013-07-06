@@ -4,15 +4,14 @@
 from nltk import download
 
 REQUIRED_CORPORA = [
-    'maxent_treebank_pos_tagger',
-    'punkt',
     'brown',
+    'punkt',
 ]
 
 def main():
     for each in REQUIRED_CORPORA:
         print(('Downloading "{0}"'.format(each)))
-        download(each) 
+        download(each)
     print("Finished.")
 
 if __name__ == '__main__':
