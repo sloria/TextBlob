@@ -31,11 +31,6 @@ if sys.argv[-1] == 'test':
     os.system(TEST)
     sys.exit()
 
-# Install nltk 3.0 alpha
-if IS_PY3:
-    os.chdir(os.path.join(MODULE, 'nltk'))
-    os.system('python setup.py install')
-    os.chdir('..')
 
 def cheeseshopify(rst):
     '''Since PyPI doesn't support the `code-block` or directive, this replaces
@@ -56,7 +51,7 @@ setup(
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
-    install_requires=['nltk'],
+    install_requires=['PyYAML'],
     packages=[
         'text',
         'nltk'

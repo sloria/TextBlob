@@ -3,10 +3,11 @@
 '''Wrappers for various units of text.'''
 from __future__ import unicode_literals
 import sys
+
+
 import json
 from collections import Counter
 
-import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
 from .np_extractor import NPExtractor
 from .decorators import cached_property
@@ -14,6 +15,7 @@ from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize, pluralize
 from .en import sentiment as _sentiment, tag
 from .mixins import ComparableMixin
+
 
 
 class WordList(list):
