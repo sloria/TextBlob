@@ -3,6 +3,7 @@
 """
 Tests for the text processor.
 """
+import json
 from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
@@ -23,11 +24,11 @@ class WordListTest(TestCase):
         wl = WordList(self.words)
         # Test just
         first = wl[0]
-        assert_true(isinstance(first, str))
+        assert_is_instance(first, str)
         assert_equal(first, 'Beautiful')
 
         dogs = wl[0:2]
-        assert_true(isinstance(dogs, WordList))
+        assert_is_instance(dogs, WordList)
         assert_equal(dogs, WordList(['Beautiful', 'is']))
 
     def test_repr(self):
@@ -376,7 +377,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
 
     def test_unicode(self):
         blob = TextBlob(self.text)
-        assert_equal(unicode(blob), unicode(self.text))
+        assert_equal(str(blob), str(self.text))
 
     def test_strip(self):
         text = 'Beautiful is better than ugly. '
@@ -421,11 +422,13 @@ Namespaces are one honking great idea -- let's do more of those!"""
 
     def test_json(self):
         blob = TextBlob('Beautiful is better than ugly. ')
-        assert_equal(blob.json, '[{"sentiment": [0.2166666666666667, '
-            '0.8333333333333334], "stripped": "beautiful is better than ugly", '
-            '"noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly. ", '
-            '"end_index": 30, "start_index": 0}]'
-                     )
+        blob_dict = json.loads(blob.json)[0]
+        assert_equal(blob_dict['stripped'], "beautiful is better than ugly")
+        assert_equal(blob_dict['noun_phrases'], blob.sentences[0].noun_phrases)
+        assert_equal(blob_dict['start_index'], blob.sentences[0].start)
+        assert_equal(blob_dict['end_index'], blob.sentences[0].end)
+        assert_almost_equal(blob_dict['sentiment'][0],
+            blob.sentences[0].sentiment[0], places=4)
 
 
 def is_blob(obj):

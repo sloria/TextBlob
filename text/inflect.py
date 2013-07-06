@@ -268,7 +268,7 @@ def pluralize(word, pos=NOUN, custom={}, classical=True):
             return word.replace(words[-1], pluralize(words[-1], pos, custom, classical))
 
     # Only a very few number of adjectives inflect.
-    n = range(len(plural_rules))
+    n = list(range(len(plural_rules)))
     if pos.startswith(ADJECTIVE):
         n = [0, 1]
 
@@ -426,7 +426,7 @@ singular_irregular = {
 
 def singularize(word, pos=NOUN, custom={}):
 
-    if word in custom.keys():
+    if word in list(custom.keys()):
         return custom[word]
 
     # Recursion of compound words (e.g. mothers-in-law).
@@ -448,7 +448,7 @@ def singularize(word, pos=NOUN, custom={}):
     for w in singular_ie:
         if lower.endswith(w+"s"):
             return w
-    for w in singular_irregular.keys():
+    for w in list(singular_irregular.keys()):
         if lower.endswith(w):
             return re.sub('(?i)'+w+'$', singular_irregular[w], word)
 

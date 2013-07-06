@@ -8,11 +8,12 @@ from collections import Counter
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from np_extractor import NPExtractor
-from decorators import cached_property
-from utils import lowerstrip, strip_punc
-from inflect import singularize, pluralize
-from sentiment import sentiment as _sentiment
+from .np_extractor import NPExtractor
+from .decorators import cached_property
+from .utils import lowerstrip, strip_punc
+from .inflect import singularize, pluralize
+from .sentiment import sentiment as _sentiment
+from .mixins import ComparableMixin
 
 
 class WordList(list):
@@ -33,13 +34,16 @@ class WordList(list):
         else:
             return '{cls}({lst})'.format(cls=class_name, lst=self._collection)
 
-    def __getitem__(self, index):
+    def __getitem__(self, key):
         '''Returns a string at the given index.'''
-        return self._collection[index]  # Just return a string
+        if isinstance(key, slice):
+            return self.__class__(self._collection[key])
+        else:
+            return self._collection[key]
 
     def __getslice__(self, i, j):
-        '''Returns a new WordList with items i:j.'''
-        return self.__class__(list.__getslice__(self, i, j))
+        # This is included for Python 2.* compatibility
+        return self.__class__(self._collection[i:j])
 
     def count(self, s, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
@@ -71,7 +75,7 @@ class WordList(list):
         return [pluralize(word) for word in self]
 
 
-class BaseBlob(object):
+class BaseBlob(ComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
@@ -84,7 +88,7 @@ class BaseBlob(object):
         Arguments:
         - text: A string, the text.
         '''
-        if not isinstance(text, basestring):
+        if not isinstance(text, str):
             raise TypeError('The `text` argument passed to `__init__(text)` must be a string.'
                             )
         self.raw = text
@@ -164,9 +168,14 @@ class BaseBlob(object):
         '''
         return iter(self.raw)
 
-    def __cmp__(self, other):
-        '''Compare to another object. Indirectly supports '==', '<', etc.'''
-        return cmp(str(self), str(other))
+    def _cmpkey(self):
+        '''Key used by ComparableMixin to implement all rich comparison
+        operators.
+        '''
+        return self.raw
+
+    def __hash__(self):
+        return hash(self._cmpkey())
 
     def __getitem__(self, index):
         '''Returns a  substring. If index is an integer, returns a Python
@@ -186,7 +195,7 @@ class BaseBlob(object):
         Arguments:
         - `other`: a string or a text object
         '''
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             return TextBlob(str(self) + other)
         elif isinstance(other, BaseBlob):
             return TextBlob(str(self) + str(other))
@@ -197,30 +206,30 @@ class BaseBlob(object):
         '''Implements the `in` keyword like a Python string.'''
         return sub in str(self)
 
-    def find(self, sub, start=0, end=sys.maxint):
+    def find(self, sub, start=0, end=sys.maxsize):
         '''Behaves like the built-in str.find() method. Returns an integer,
         the index of the first occurrence of the substring argument sub in the
         sub-string given by [start:end].
         '''
         return str(self).find(sub, start, end)
 
-    def rfind(self, sub, start=0, end=sys.maxint):
+    def rfind(self, sub, start=0, end=sys.maxsize):
         '''Behaves like the built-in str.rfind() method. Returns an integer,
         the index of he last (right-most) occurence of the substring argument
         sub in the sub-sequence given by [start:end].
         '''
         return str(self).rfind(sub, start, end)
 
-    def index(self, sub, start=0, end=sys.maxint):
+    def index(self, sub, start=0, end=sys.maxsize):
         '''Like blob.find() but raise ValueError when the substring is not found.
         '''
         return str(self).index(sub, start, end)
 
-    def startswith(self, prefix, start=0, end=sys.maxint):
+    def startswith(self, prefix, start=0, end=sys.maxsize):
         """Returns True if the blob starts with the given prefix."""
         return str(self).startswith(prefix, start, end)
 
-    def endswith(self, suffix, start=0, end=sys.maxint):
+    def endswith(self, suffix, start=0, end=sys.maxsize):
         """Returns True if the blob ends with the given suffix."""
         return str(self).endswith(suffix, start, end)
 
@@ -238,7 +247,7 @@ class BaseBlob(object):
         """
         return TextBlob(str(self).format(*args, **kwargs))
 
-    def split(self, sep=None, maxsplit=sys.maxint):
+    def split(self, sep=None, maxsplit=sys.maxsize):
         """Behaves like the built-in str.split() except returns a
         WordList.
         """
@@ -269,7 +278,7 @@ class BaseBlob(object):
         """
         return self.__class__(str(self).join(iterable))
 
-    def replace(self, old, new, count=sys.maxint):
+    def replace(self, old, new, count=sys.maxsize):
         """Return a new blob object with all the occurence of `old` replaced
         by `new`.
         """

@@ -145,14 +145,14 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
     # Handle periods separately.
     punctuation = tuple(punctuation.replace(".", ""))
     # Handle replacements (contractions).
-    for a, b in replace.items():
+    for a, b in list(replace.items()):
         string = re.sub(a, b, string)
     # Handle Unicode quotes.
-    if isinstance(string, unicode):
-        string = string.replace(u"“", u" “ ")
-        string = string.replace(u"”", u" ” ")
-        string = string.replace(u"‘", u" ‘ ")
-        string = string.replace(u"’", u" ’ ")
+    if isinstance(string, str):
+        string = string.replace("“", " “ ")
+        string = string.replace("”", " ” ")
+        string = string.replace("‘", " ‘ ")
+        string = string.replace("’", " ’ ")
     # Collapse whitespace.
     string = re.sub("\r\n", "\n", string)
     string = re.sub(linebreak, " %s " % EOS, string)
@@ -191,7 +191,7 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
         if tokens[j] in ("...", ".", "!", "?", EOS):
             # There may be a trailing parenthesis.
             while j < len(tokens) \
-              and tokens[j] in ("...", ".", "!", "?", ")", "'", "\"", u"”", u"’", EOS):
+              and tokens[j] in ("...", ".", "!", "?", ")", "'", "\"", "”", "’", EOS):
                 j += 1
             sentences[-1].extend(t for t in tokens[i:j] if t != EOS)
             sentences.append([])
@@ -217,10 +217,10 @@ def _read(path, encoding="utf-8", comment=";;;"):
         strippping comments and decoding each line to Unicode.
     """
     if path:
-        if isinstance(path, basestring) and os.path.exists(path):
+        if isinstance(path, str) and os.path.exists(path):
             # From file path.
             f = open(path)
-        elif isinstance(path, basestring):
+        elif isinstance(path, str):
             # From string.
             f = path.splitlines()
         elif hasattr(path, "read"):
@@ -291,7 +291,7 @@ class Morphology(lazylist, Rules):
           "goodright", # Word followed by word x.
         )
         cmd = dict.fromkeys(cmd, True)
-        cmd.update(("f" + k, v) for k, v in cmd.items())
+        cmd.update(("f" + k, v) for k, v in list(cmd.items()))
         Rules.__init__(self, lexicon, cmd)
         self._path = path
 
@@ -568,13 +568,13 @@ class Sentiment(lazydict):
         self._language = xml.attrib.get("language", self._language)
         # Average scores of all word senses per part-of-speech tag.
         for w in words:
-            words[w] = dict((pos, map(avg, zip(*psi))) for pos, psi in words[w].items())
+            words[w] = dict((pos, list(map(avg, list(zip(*psi))))) for pos, psi in list(words[w].items()))
         # Average scores of all part-of-speech tags.
-        for w, pos in words.items():
-            words[w][None] = map(avg, zip(*pos.values()))
+        for w, pos in list(words.items()):
+            words[w][None] = list(map(avg, list(zip(*list(pos.values())))))
         # Average scores of all synonyms per synset.
-        for id, psi in synsets.items():
-            synsets[id] = map(avg, zip(*psi))
+        for id, psi in list(synsets.items()):
+            synsets[id] = list(map(avg, list(zip(*psi))))
         dict.update(self, words)
         dict.update(self._synsets, synsets)
 
@@ -618,11 +618,11 @@ class Sentiment(lazydict):
         # A synset id.
         # Sentiment("a-00193480") => horrible => (-0.6, 1.0)   (English WordNet)
         # Sentiment("c_267") => verschrikkelijk => (-0.9, 1.0) (Dutch Cornetto)
-        elif isinstance(s, basestring) and RE_SYNSET.match(s):
+        elif isinstance(s, str) and RE_SYNSET.match(s):
             a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos)]
         # A string of words.
         # Sentiment("a horrible movie") => (-0.6, 1.0)
-        elif isinstance(s, basestring):
+        elif isinstance(s, str):
             a = self.assessments(((w.lower(), None) for w in " ".join(self.tokenizer(s)).split()), negation)
         # A pattern.en.Text.
         elif hasattr(s, "sentences"):
@@ -648,8 +648,8 @@ class Sentiment(lazydict):
         else:
             a = []
         weight = kwargs.get("weight", lambda w: 1)
-        return Score(polarity = avg(map(lambda (w, p, s): (w, p), a), weight),
-                 subjectivity = avg(map(lambda (w, p, s): (w, s), a), weight),
+        return Score(polarity = avg([(w_p_s[0], w_p_s[1]) for w_p_s in a], weight),
+                 subjectivity = avg([(w_p_s1[0], w_p_s1[2]) for w_p_s1 in a], weight),
                   assessments = a)
 
     def assessments(self, words=[], negation=True):
@@ -706,7 +706,7 @@ class Sentiment(lazydict):
                 if w == "!" and len(a) > 0:
                     for x in a[-3:]: x["p"] = min(x["p"] * 1.25, 1.0)
                 # Emoticon (happy).
-                if w in (":)", ":-)", ":-d", "<3", u"♥"):
+                if w in (":)", ":-)", ":-d", "<3", "♥"):
                     a.append(dict(w=[w], p=+1.0, s=1.0, i=1.0, n=1))
                 # Emoticon (sad).
                 if w in (":(", ":-(", ":-s"):
@@ -830,8 +830,8 @@ class _Parser:
         if tokenize is True:
             s = self.find_tokens(s)
         if isinstance(s, (list, tuple)):
-            s = [isinstance(s, basestring) and s.split(" ") or s for s in s]
-        if isinstance(s, basestring):
+            s = [isinstance(s, str) and s.split(" ") or s for s in s]
+        if isinstance(s, str):
             s = [s.split(" ") for s in s.split("\n")]
         # Unicode.
         for i in range(len(s)):
