@@ -43,6 +43,10 @@ class WordListTest(TestCase):
         wl = WordList(['dog', 'cat', 'buffalo'])
         assert_equal(wl.pluralize(), ['dogs', 'cats', 'buffaloes'])
 
+    def test_upper(self):
+        wl = WordList(self.words)
+        assert_equal(wl.upper(), WordList([w.upper() for w in self.words]))
+
     def test_lower(self):
         wl = WordList(['Zen', 'oF', 'PYTHON'])
         assert_equal(wl.lower(), WordList(['zen', 'of', 'python']))
@@ -132,6 +136,10 @@ Although never is often better than *right* now.
 If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!"""
+        self.blob = TextBlob(self.text)
+
+        self.short = "Beautiful is better than ugly. "
+        self.short_blob = TextBlob(self.short)
 
     def tearDown(self):
         pass
@@ -141,11 +149,22 @@ Namespaces are one honking great idea -- let's do more of those!"""
         assert_equal(len(blob.sentences), 2)
         assert_equal(blob.sentences[1].stripped, 'it really rocks my socks')
 
-    def test_sentences(self):
-        blob = TextBlob(self.text)
-        assert_equal(len(blob.sentences), 19)
+        # Must initialize with a string
+        assert_raises(TypeError, TextBlob.__init__, ['invalid'])
 
+    def test_sentences(self):
+        blob = self.blob
+        assert_equal(len(blob.sentences), 19)
         assert_true(isinstance(blob.sentences[0], Sentence))
+
+    def test_iter(self):
+        for i, letter in enumerate(self.short_blob):
+            assert_equal(letter, self.short[i])
+
+    def test_raw_sentences(self):
+        blob = TextBlob(self.text)
+        assert_equal(len(blob.raw_sentences), 19)
+        assert_equal(blob.raw_sentences[0], "Beautiful is better than ugly.")
 
     def test_blob_with_no_sentences(self):
         text = "this isn't really a sentence it's just a long string of words"
@@ -370,6 +389,9 @@ Namespaces are one honking great idea -- let's do more of those!"""
         # Or both
         assert_equal(blob1 + blob2 + ' Goodbye!',
                      TextBlob('Hello, world! Hola mundo! Goodbye!'))
+
+        # operands must be strings
+        assert_raises(TypeError, blob1.__add__, ['hello'])
 
     def test_unicode(self):
         blob = TextBlob(self.text)

@@ -204,7 +204,7 @@ class BaseBlob(ComparableMixin):
         elif isinstance(other, BaseBlob):
             return TextBlob(str(self) + str(other))
         else:
-            raise ValueError('Operands must be either strings or {0} objects'.format(self.__class__.__name__))
+            raise TypeError('Operands must be either strings or {0} objects'.format(self.__class__.__name__))
 
     def __contains__(self, sub):
         '''Implements the `in` keyword like a Python string.'''
