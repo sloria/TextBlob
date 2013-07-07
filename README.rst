@@ -3,11 +3,13 @@ TextBlob
 
 .. image:: https://travis-ci.org/sloria/TextBlob.png
 
+Simplified text processing for Python 2 and 3.
+
 
 Requirements
 ------------
 
-- Python >= 2.7, but not Python 3 (yet)
+- Python 2.7 or 3.3
 
 
 Usage
