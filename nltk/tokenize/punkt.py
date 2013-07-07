@@ -15,7 +15,7 @@ Punkt Sentence Tokenizer
 This tokenizer divides a text into a list of sentences,
 by using an unsupervised algorithm to build a model for abbreviation
 words, collocations, and words that start sentences.  It must be
-trained on a large collection of plaintext in the taret language
+trained on a large collection of plaintext in the target language
 before it can be used.
 
 The NLTK data package includes a pre-trained Punkt tokenizer for
@@ -870,8 +870,8 @@ class PunktTrainer(PunktBaseClass):
             if aug_tok.parastart and context != 'unknown':
                 context = 'initial'
 
-            # If we're at the beginning of a line, then err on the
-            # side of calling our context 'initial'.
+            # If we're at the beginning of a line, then we can't decide
+            # between 'internal' and 'initial'.
             if aug_tok.linestart and context == 'internal':
                 context = 'unknown'
 

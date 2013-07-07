@@ -48,22 +48,22 @@ except ImportError:
 
 from nltk.compat import xrange
 
-def windowdiff(seg1, seg2, k, boundary="1"):
+def windowdiff(seg1, seg2, k, boundary="1", weighted=False):
     """
     Compute the windowdiff score for a pair of segmentations.  A
     segmentation is any sequence over a vocabulary of two items
     (e.g. "0", "1"), where the specified boundary value is used to
     mark the edge of a segmentation.
 
-    >>> s1 = "00000010000000001000000"
-    >>> s2 = "00000001000000010000000"
-    >>> s3 = "00010000000000000001000"
-    >>> windowdiff(s1, s1, 3)
-    0
-    >>> windowdiff(s1, s2, 3)
-    4
-    >>> windowdiff(s2, s3, 3)
-    16
+        >>> s1 = "000100000010"
+        >>> s2 = "000010000100"
+        >>> s3 = "100000010000"
+        >>> windowdiff(s1, s1, 3)
+        0.0
+        >>> windowdiff(s1, s2, 3)
+        0.3
+        >>> windowdiff(s2, s3, 3)
+        0.8
 
     :param seg1: a segmentation
     :type seg1: str or list
@@ -73,15 +73,23 @@ def windowdiff(seg1, seg2, k, boundary="1"):
     :type k: int
     :param boundary: boundary value
     :type boundary: str or int or bool
-    :rtype: int
+    :param weighted: use the weighted variant of windowdiff
+    :type weighted: boolean
+    :rtype: float
     """
 
     if len(seg1) != len(seg2):
         raise ValueError("Segmentations have unequal length")
+    if k > len(seg1):
+        raise ValueError("Window width k should be smaller or equal than segmentation lengths")
     wd = 0
-    for i in range(len(seg1) - k):
-        wd += abs(seg1[i:i+k+1].count(boundary) - seg2[i:i+k+1].count(boundary))
-    return wd
+    for i in range(len(seg1) - k + 1):
+        ndiff = abs(seg1[i:i+k].count(boundary) - seg2[i:i+k].count(boundary))
+        if weighted:
+            wd += ndiff
+        else:
+            wd += min(1, ndiff)
+    return wd / (len(seg1) - k + 1.)
 
 
 
@@ -125,19 +133,19 @@ def ghd(ref, hyp, ins_cost=2.0, del_cost=2.0, shift_cost_coeff=1.0, boundary='1'
     Associated with a ins_cost, and del_cost equal to the mean segment
     length in the reference segmentation.
 
-    >>> # Same examples as Kulyukin C++ implementation
-    >>> ghd('1100100000', '1100010000', 1.0, 1.0, 0.5)
-    0.5
-    >>> ghd('1100100000', '1100000001', 1.0, 1.0, 0.5)
-    2.0
-    >>> ghd('011', '110', 1.0, 1.0, 0.5)
-    1.0
-    >>> ghd('1', '0', 1.0, 1.0, 0.5)
-    1.0
-    >>> ghd('111', '000', 1.0, 1.0, 0.5)
-    3.0
-    >>> ghd('000', '111', 1.0, 2.0, 0.5)
-    6.0
+        >>> # Same examples as Kulyukin C++ implementation
+        >>> ghd('1100100000', '1100010000', 1.0, 1.0, 0.5)
+        0.5
+        >>> ghd('1100100000', '1100000001', 1.0, 1.0, 0.5)
+        2.0
+        >>> ghd('011', '110', 1.0, 1.0, 0.5)
+        1.0
+        >>> ghd('1', '0', 1.0, 1.0, 0.5)
+        1.0
+        >>> ghd('111', '000', 1.0, 1.0, 0.5)
+        3.0
+        >>> ghd('000', '111', 1.0, 2.0, 0.5)
+        6.0
 
     :param ref: the reference segmentation
     :type ref: str or list
@@ -183,15 +191,12 @@ def pk(ref, hyp, k=None, boundary='1'):
     where the specified boundary value is used to mark the edge of a
     segmentation.
 
-    >>> s1 = "00000010000000001000000"
-    >>> s2 = "00000001000000010000000"
-    >>> s3 = "00010000000000000001000"
-    >>> pk(s1, s1, 3)
-    0.0
-    >>> pk(s1, s2, 3)
-    0.095238...
-    >>> pk(s2, s3, 3)
-    0.190476...
+    >>> '%.2f' % pk('0100'*100, '1'*400, 2)
+    '0.50'
+    >>> '%.2f' % pk('0100'*100, '0'*400, 2)
+    '0.50'
+    >>> '%.2f' % pk('0100'*100, '0100'*100, 2)
+    '0.00'
 
     :param ref: the reference segmentation
     :type ref: str or list
@@ -206,33 +211,14 @@ def pk(ref, hyp, k=None, boundary='1'):
 
     if k is None:
         k = int(round(len(ref) / (ref.count(boundary) * 2.)))
-
-    n_considered_seg = len(ref) - k + 1
-    n_same_ref = 0.0
-    n_false_alarm = 0.0
-    n_miss = 0.0
-
-    for i in xrange(n_considered_seg):
-        bsame_ref_seg = False
-        bsame_hyp_seg = False
-
-        if boundary not in ref[(i+1):(i+k)]:
-            n_same_ref += 1.0
-            bsame_ref_seg = True
-        if boundary not in hyp[(i+1):(i+k)]:
-            bsame_hyp_seg = True
-
-        if bsame_hyp_seg and not bsame_ref_seg:
-            n_miss += 1
-        if bsame_ref_seg and not bsame_hyp_seg:
-            n_false_alarm += 1
-
-    prob_same_ref = n_same_ref / n_considered_seg
-    prob_diff_ref = 1 - prob_same_ref
-    prob_miss = n_miss / n_considered_seg
-    prob_false_alarm = n_false_alarm / n_considered_seg
-
-    return prob_miss * prob_diff_ref + prob_false_alarm * prob_same_ref
+    
+    err = 0
+    for i in xrange(len(ref)-k +1):
+        r = ref[i:i+k].count(boundary) > 0
+        h = hyp[i:i+k].count(boundary) > 0
+        if r != h:
+           err += 1
+    return err / (len(ref)-k +1.)
 
 
 # skip doctests if numpy is not installed

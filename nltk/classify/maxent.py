@@ -1361,11 +1361,12 @@ def train_maxent_classifier_with_megam(train_toks, trace=3, encoding=None,
 
     # Write a training file for megam.
     try:
-        fd, trainfile_name = tempfile.mkstemp(prefix='nltk-', suffix='.gz')
-        trainfile = gzip.open(trainfile_name, 'wb')
+        fd, trainfile_name = tempfile.mkstemp(prefix='nltk-')
+        trainfile = open(trainfile_name, 'w')
         write_megam_file(train_toks, encoding, trainfile, \
                             explicit=explicit, bernoulli=bernoulli)
         trainfile.close()
+        os.close(fd)
     except (OSError, IOError, ValueError) as e:
         raise ValueError('Error while creating megam training file: %s' % e)
 
@@ -1379,7 +1380,7 @@ def train_maxent_classifier_with_megam(train_toks, trace=3, encoding=None,
     if gaussian_prior_sigma:
         # Lambda is just the precision of the Gaussian prior, i.e. it's the
         # inverse variance, so the parameter conversion is 1.0/sigma**2.
-        # See http://www.cs.utah.edu/~hal/docs/daume04cg-bfgs.pdf.
+        # See http://www.umiacs.umd.edu/~hal/docs/daume04cg-bfgs.pdf.
         inv_variance = 1.0 / gaussian_prior_sigma**2
     else:
         inv_variance = 0

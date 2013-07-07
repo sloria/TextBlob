@@ -170,9 +170,9 @@ class XMLCorpusView(StreamBackedCorpusView):
             return 'utf-32-le'
         if s.startswith(codecs.BOM_UTF8):
             return 'utf-8'
-        m = re.match(br'\s*<?xml\b.*\bencoding="([^"]+)"', s)
+        m = re.match(br'\s*<\?xml\b.*\bencoding="([^"]+)"', s)
         if m: return m.group(1)
-        m = re.match(br"\s*<?xml\b.*\bencoding='([^']+)'", s)
+        m = re.match(br"\s*<\?xml\b.*\bencoding='([^']+)'", s)
         if m: return m.group(1)
         # No encoding found -- what should the default be?
         return 'utf-8'
@@ -225,7 +225,7 @@ class XMLCorpusView(StreamBackedCorpusView):
         (?P<COMMENT>        <!--.*?-->                          )|
         (?P<CDATA>          <![CDATA[.*?]]>                     )|
         (?P<PI>             <\?.*?\?>                           )|
-        (?P<DOCTYPE>        <!DOCTYPE\s+[^\[]*(\[[^\]]*])?\s*>  )|
+        (?P<DOCTYPE>        <!DOCTYPE\s+[^\[^>]*(\[[^\]]*])?\s*>)|
         # These are the ones we actually care about:
         (?P<EMPTY_ELT_TAG>  <\s*[^>/\?!\s][^>]*/\s*>            )|
         (?P<START_TAG>      <\s*[^>/\?!\s][^>]*>                )|

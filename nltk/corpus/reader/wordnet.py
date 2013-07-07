@@ -450,8 +450,32 @@ class Synset(_WordNetObject):
                            for other_synset in other_synsets)
         return list(self_synsets.intersection(other_synsets))
 
-    def lowest_common_hypernyms(self, other, simulate_root=False):
-        """Get the lowest synset that both synsets have as a hypernym."""
+    def lowest_common_hypernyms(self, other, simulate_root=False, use_max_depth=False):
+        """Get a list of absolute lowest synset(s) that both synsets have as a hypernym.
+
+        By default this is calculated by finding the shortest paths for all synsets that 
+        are hypernyms of both words, and returning that with the longest path.
+
+        By setting the use_max_depth flag to True, lower hypernyms can be found by searching for the 
+        longest paths of each hypernym.
+
+        :type other: Synset
+        :param other: other input synset
+        :type simulate_root: bool
+        :param simulate_root: The various verb taxonomies do not
+            share a single root which disallows this metric from working for
+            synsets that are not connected. This flag (False by default)
+            creates a fake root that connects all the taxonomies. Set it
+            to True to enable this behavior. For the noun taxonomy,
+            there is usually a default root except for WordNet version 1.6.
+            If you are using wordnet 1.6, a fake root will need to be added 
+            for nouns as well.
+        :type use_max_depth: bool
+        :param use_max_depth: If True, will use the max_depth function to 
+            calculate the lowest common hypernyms giving results that should
+            be lower in the tree than when using the default settings.
+        :return: The synsets that are the lowest common hypernyms of both synsets
+        """
 
         fake_synset = Synset(None)
         fake_synset.name = '*ROOT*'
@@ -470,8 +494,12 @@ class Synset(_WordNetObject):
         synsets.intersection_update(others)
 
         try:
-            max_depth = max(s.min_depth() for s in synsets)
-            return [s for s in synsets if s.min_depth() == max_depth]
+            if use_max_depth:
+                max_depth = max(s.max_depth() for s in synsets)
+                return [s for s in synsets if s.max_depth() == max_depth]
+            else:
+                max_depth = max(s.min_depth() for s in synsets)
+                return [s for s in synsets if s.min_depth() == max_depth]
         except ValueError:
             return []
 
@@ -659,7 +687,7 @@ class Synset(_WordNetObject):
 
         distance = self.shortest_path_distance(other, simulate_root=simulate_root and need_root)
 
-        if distance is None or distance < 0:
+        if distance is None or distance < 0 or depth == 0:
             return None
         return -math.log((distance + 1) / (2.0 * depth))
 
@@ -1573,65 +1601,6 @@ jcn_similarity.__doc__ = Synset.jcn_similarity.__doc__
 def lin_similarity(synset1, synset2, ic, verbose=False):
     return synset1.lin_similarity(synset2, verbose)
 lin_similarity.__doc__ = Synset.lin_similarity.__doc__
-
-
-def _lcs_by_depth(synset1, synset2, verbose=False):
-    """
-    Finds the least common subsumer of two synsets in a WordNet taxonomy,
-    where the least common subsumer is defined as the ancestor node common
-    to both input synsets whose shortest path to the root node is the longest.
-
-    :type synset1: Synset
-    :param synset1: First input synset.
-    :type synset2: Synset
-    :param synset2: Second input synset.
-    :return: The ancestor synset common to both input synsets which is also the
-    LCS.
-    """
-    subsumer = None
-    max_min_path_length = -1
-
-    subsumers = synset1.common_hypernyms(synset2)
-
-    if verbose:
-        print("> Subsumers1:", subsumers)
-
-    # Eliminate those synsets which are ancestors of other synsets in the
-    # set of subsumers.
-
-    eliminated = set()
-    hypernym_relation = lambda s: s.hypernyms() + s.instance_hypernyms()
-    for s1 in subsumers:
-        for s2 in subsumers:
-            if s2 in s1.closure(hypernym_relation):
-                eliminated.add(s2)
-    if verbose:
-        print("> Eliminated:", eliminated)
-
-    subsumers = [s for s in subsumers if s not in eliminated]
-
-    if verbose:
-        print("> Subsumers2:", subsumers)
-
-    # Calculate the length of the shortest path to the root for each
-    # subsumer. Select the subsumer with the longest of these.
-
-    for candidate in subsumers:
-
-        paths_to_root = candidate.hypernym_paths()
-        min_path_length = -1
-
-        for path in paths_to_root:
-            if min_path_length < 0 or len(path) < min_path_length:
-                min_path_length = len(path)
-
-        if min_path_length > max_min_path_length:
-            max_min_path_length = min_path_length
-            subsumer = candidate
-
-    if verbose:
-        print("> LCS Subsumer by depth:", subsumer)
-    return subsumer
 
 
 def _lcs_ic(synset1, synset2, ic, verbose=False):

@@ -8,6 +8,7 @@
 #         Peter Ljunglöf <peter.ljunglof@heatherleaf.se> (additions)
 #         Liang Dong <ldong@clemson.edu> (additions)
 #         Geoffrey Sampson <sampson@cantab.net> (additions)
+#         Ilia Kurenkov <ilia.kurenkov@gmail.com> (additions)
 #
 # URL: <http://www.nltk.org/>
 # For license information, see LICENSE.TXT
@@ -88,6 +89,9 @@ class FreqDist(dict):
         >>> fdist = FreqDist(word.lower() for word in word_tokenize(sent))
 
     """
+
+    _N = 0
+
     def __init__(self, samples=None):
         """
         Construct a new frequency distribution.  If ``samples`` is
@@ -105,7 +109,6 @@ class FreqDist(dict):
         :type samples: Sequence
         """
         dict.__init__(self)
-        self._N = 0
         self._reset_caches()
         if samples:
             self.update(samples)
@@ -131,8 +134,8 @@ class FreqDist(dict):
 
         :param sample: The sample whose count should be incremented.
         :type sample: any hashable object
-        :param count: The new value for the sample's count
-        :type count: int
+        :param value: The new value for the sample's count
+        :type value: int
         :rtype: None
         :raise TypeError: If ``sample`` is not a supported sample type.
         """
@@ -167,9 +170,9 @@ class FreqDist(dict):
 
     def samples(self):
         """
-        Return a list of all samples that have been recorded as
-        outcomes by this frequency distribution.  Use ``fd[sample]``
-        to determine the count for each sample.
+        Return a list (or an iterator under Python 3.x) of all samples
+        that have been recorded as outcomes by this frequency distribution.
+        Use ``fd[sample]`` to determine the count for each sample.
 
         :rtype: list
         """
@@ -208,14 +211,22 @@ class FreqDist(dict):
         if self._Nr_cache is None:
             self._cache_Nr_values()
 
-        return (self._Nr_cache[r] if r < len(self._Nr_cache) else 0)
+        return self._Nr_cache.get(r, 0)
+
+    def _Nr_nonzero(self):
+        """
+        Return (r, Nr(r)) tuples for all r such as Nr(r) > 0 (sorted by r).
+        """
+        if self._Nr_cache is None:
+            self._cache_Nr_values()
+        return sorted(self._Nr_cache.items())
 
     def _cache_Nr_values(self):
-        Nr = [0]
+        Nr = defaultdict(int)
         for sample in self:
             c = self.get(sample, 0)
-            if c >= len(Nr):
-                Nr += [0]*(c+1-len(Nr))
+            if c == 0 and c not in Nr:
+                continue
             Nr[c] += 1
         self._Nr_cache = Nr
 
@@ -358,21 +369,17 @@ class FreqDist(dict):
     def keys(self):
         """
         Return the samples sorted in decreasing order of frequency.
-
-        :rtype: list(any)
+        Returns a list in Python 2.x, and an iterator in Python 3.x.
         """
         self._sort_keys_by_value()
-        # this will return iterator under python 3
         return map(itemgetter(0), self._item_cache)
 
     def values(self):
         """
         Return the samples sorted in decreasing order of frequency.
-
-        :rtype: list(any)
+        Returns a list in Python 2.x, and an iterator in Python 3.x.
         """
         self._sort_keys_by_value()
-        # this will return iterator under python 3
         return map(itemgetter(1), self._item_cache)
 
     def items(self):
@@ -635,6 +642,51 @@ class UniformProbDist(ProbDistI):
 
 
 @compat.python_2_unicode_compatible
+class RandomProbDist(ProbDistI):
+    """
+    Generates a random probability distribution whereby each sample
+    will be between 0 and 1 with equal probability (uniform random distribution.
+    Also called a continuous uniform distribution).
+    """
+    def __init__(self, samples):
+        if len(samples) == 0:
+            raise ValueError('A probability distribution must '+
+                             'have at least one sample.')
+        self._probs = self.unirand(samples)
+        self._samples = list(self._probs.keys())
+
+    @classmethod
+    def unirand(cls, samples):
+        """
+        The key function that creates a randomized initial distribution
+        that still sums to 1. Set as a dictionary of prob values so that
+        it can still be passed to MutableProbDist and called with identical
+        syntax to UniformProbDist
+        """
+        randrow = [random.random() for i in range(len(samples))]
+        total = sum(randrow)
+        for i, x in enumerate(randrow):
+            randrow[i] = x/total
+
+        total = sum(randrow)
+        if total != 1:
+            #this difference, if present, is so small (near NINF) that it
+            #can be subtracted from any element without risking probs not (0 1)
+            randrow[-1] -= total - 1
+
+        return dict((s, randrow[i]) for i, s in enumerate(samples))
+
+    def prob(self, sample):
+        return self._probs.get(sample, 0)
+
+    def samples(self):
+        return self._samples
+
+    def __repr__(self):
+        return '<RandomUniformProbDist with %d samples>' %len(self._probs)
+
+
+@compat.python_2_unicode_compatible
 class DictionaryProbDist(ProbDistI):
     """
     A probability distribution whose probabilities are directly
@@ -650,7 +702,7 @@ class DictionaryProbDist(ProbDistI):
         factor such that they sum to 1.
 
         If called without arguments, the resulting probability
-        distribution assigns zero probabiliy to all values.
+        distribution assigns zero probability to all values.
         """
 
         self._prob_dict = (prob_dict.copy() if prob_dict is not None else {})
@@ -658,6 +710,9 @@ class DictionaryProbDist(ProbDistI):
 
         # Normalize the distribution, if requested.
         if normalize:
+            if len(prob_dict) == 0:
+                raise ValueError('A DictionaryProbDist must have at least one sample ' +
+                             'before it can be normalized.')
             if log:
                 value_sum = sum_logs(list(self._prob_dict.values()))
                 if value_sum <= _NINF:
@@ -753,11 +808,11 @@ class LidstoneProbDist(ProbDistI):
     """
     The Lidstone estimate for the probability distribution of the
     experiment used to generate a frequency distribution.  The
-    "Lidstone estimate" is paramaterized by a real number *gamma*,
+    "Lidstone estimate" is parameterized by a real number *gamma*,
     which typically ranges from 0 to 1.  The Lidstone estimate
     approximates the probability of a sample with count *c* from an
     experiment with *N* outcomes and *B* bins as
-    ``c+gamma)/(N+B*gamma)``.  This is equivalant to adding
+    ``c+gamma)/(N+B*gamma)``.  This is equivalent to adding
     *gamma* to the count for each bin, and taking the maximum
     likelihood estimate of the resulting frequency distribution.
     """
@@ -771,8 +826,8 @@ class LidstoneProbDist(ProbDistI):
         :param freqdist: The frequency distribution that the
             probability estimates should be based on.
         :type gamma: float
-        :param gamma: A real number used to paramaterize the
-            estimate.  The Lidstone estimate is equivalant to adding
+        :param gamma: A real number used to parameterize the
+            estimate.  The Lidstone estimate is equivalent to adding
             *gamma* to the count for each bin, and taking the
             maximum likelihood estimate of the resulting frequency
             distribution.
@@ -792,13 +847,14 @@ class LidstoneProbDist(ProbDistI):
             raise ValueError('\nThe number of bins in a %s distribution ' % name +
                              '(%d) must be greater than or equal to\n' % bins +
                              'the number of bins in the FreqDist used ' +
-                             'to create it (%d).' % freqdist.N())
+                             'to create it (%d).' % freqdist.B())
 
         self._freqdist = freqdist
         self._gamma = float(gamma)
         self._N = self._freqdist.N()
 
-        if bins is None: bins = freqdist.B()
+        if bins is None:
+            bins = freqdist.B()
         self._bins = bins
 
         self._divisor = self._N + bins * gamma
@@ -850,7 +906,7 @@ class LaplaceProbDist(LidstoneProbDist):
     experiment used to generate a frequency distribution.  The
     "Laplace estimate" approximates the probability of a sample with
     count *c* from an experiment with *N* outcomes and *B* bins as
-    *(c+1)/(N+B)*.  This is equivalant to adding one to the count for
+    *(c+1)/(N+B)*.  This is equivalent to adding one to the count for
     each bin, and taking the maximum likelihood estimate of the
     resulting frequency distribution.
     """
@@ -886,7 +942,7 @@ class ELEProbDist(LidstoneProbDist):
     of the experiment used to generate a frequency distribution.  The
     "expected likelihood estimate" approximates the probability of a
     sample with count *c* from an experiment with *N* outcomes and
-    *B* bins as *(c+0.5)/(N+B/2)*.  This is equivalant to adding 0.5
+    *B* bins as *(c+0.5)/(N+B/2)*.  This is equivalent to adding 0.5
     to the count for each bin, and taking the maximum likelihood
     estimate of the resulting frequency distribution.
     """
@@ -1177,7 +1233,7 @@ class WittenBellProbDist(ProbDistI):
             - *p = c / (N + T)*, otherwise
 
         The parameters *T* and *N* are taken from the ``freqdist`` parameter
-        (the ``B()`` and ``N()`` values). The normalising factor *Z* is
+        (the ``B()`` and ``N()`` values). The normalizing factor *Z* is
         calculated using these values along with the ``bins`` parameter.
 
         :param freqdist: The frequency counts upon which to base the
@@ -1230,7 +1286,7 @@ class WittenBellProbDist(ProbDistI):
 
 
 ##//////////////////////////////////////////////////////
-##  Good-Turing Probablity Distributions
+##  Good-Turing Probability Distributions
 ##//////////////////////////////////////////////////////
 
 # Good-Turing frequency estimation was contributed by Alan Turing and
@@ -1242,13 +1298,26 @@ class WittenBellProbDist(ProbDistI):
 # and the 'species' would be the distinct colors of the balls (finite
 # but unknown in number).
 #
-# The situation frequency zero is quite common in the original
-# Good-Turing estimation.  Bill Gale and Geoffrey Sampson present a
-# simple and effective approach, Simple Good-Turing.  As a smoothing
-# curve they simply use a power curve:
+# Good-Turing method calculates the probability mass to assign to
+# events with zero or low counts based on the number of events with
+# higher counts. It does so by using the adjusted count *c\**:
+#
+#     - *c\* = (c + 1) N(c + 1) / N(c)*   for c >= 1
+#     - *things with frequency zero in training* = N(1)  for c == 0
+#
+# where *c* is the original count, *N(i)* is the number of event types
+# observed with count *i*. We can think the count of unseen as the count
+# of frequency one (see Jurafsky & Martin 2nd Edition, p101).
+#
+# This method is problematic because the situation ``N(c+1) == 0``
+# is quite common in the original Good-Turing estimation; smoothing or
+# interpolation of *N(i)* values is essential in practice.
+#
+# Bill Gale and Geoffrey Sampson present a simple and effective approach,
+# Simple Good-Turing.  As a smoothing curve they simply use a power curve:
 #
 #     Nr = a*r^b (with b < -1 to give the appropriate hyperbolic
-#     relationsihp)
+#     relationship)
 #
 # They estimate a and b by simple linear regression technique on the
 # logarithmic form of the equation:
@@ -1260,7 +1329,7 @@ class WittenBellProbDist(ProbDistI):
 # measured Nr directly.  (see M&S, p.213)
 #
 # Gale and Sampson propose to use r while the difference between r and
-# r* is 1.96 greather than the standar deviation, and switch to r* if
+# r* is 1.96 greater than the standard deviation, and switch to r* if
 # it is less or equal:
 #
 #     |r - r*| > 1.96 * sqrt((r + 1)^2 (Nr+1 / Nr^2) (1 + Nr+1 / Nr))
@@ -1270,85 +1339,6 @@ class WittenBellProbDist(ProbDistI):
 # significance criterion.
 #
 
-@compat.python_2_unicode_compatible
-class GoodTuringProbDist(ProbDistI):
-    """
-    The Good-Turing estimate of a probability distribution. This method
-    calculates the probability mass to assign to events with zero or low
-    counts based on the number of events with higher counts. It does so by
-    using the smoothed count *c\**:
-
-        - *c\* = (c + 1) N(c + 1) / N(c)*   for c >= 1
-        - *things with frequency zero in training* = N(1)  for c == 0
-
-    where *c* is the original count, *N(i)* is the number of event types
-    observed with count *i*. We can think the count of unseen as the count
-    of frequency one (see Jurafsky & Martin 2nd Edition, p101).
-    """
-
-    def __init__(self, freqdist, bins=None):
-        """
-        :param freqdist: The frequency counts upon which to base the
-            estimation.
-        :type freqdist: FreqDist
-        :param bins: The number of possible event types. This must be at least
-            as large as the number of bins in the ``freqdist``. If None, then
-            it's assumed to be equal to that of the ``freqdist``
-        :type bins: int
-        """
-        assert bins is None or bins >= freqdist.B(),\
-               'Bins parameter must not be less than freqdist.B()'
-        if bins is None:
-            bins = freqdist.B()
-        self._freqdist = freqdist
-        self._bins = bins
-
-    def prob(self, sample):
-        count = self._freqdist[sample]
-
-        # unseen sample's frequency (count zero) uses frequency one's
-        if count == 0 and self._freqdist.N() != 0:
-            p0 = 1.0 * self._freqdist.Nr(1) / self._freqdist.N()
-            if self._bins == self._freqdist.B():
-                p0 = 0.0
-            else:
-                p0 = p0 / (1.0 * self._bins - self._freqdist.B())
-
-        nc = self._freqdist.Nr(count)
-        ncn = self._freqdist.Nr(count + 1)
-
-        # avoid divide-by-zero errors for sparse datasets
-        if nc == 0 or self._freqdist.N() == 0:
-            return 0
-
-        return 1.0 * (count + 1) * ncn / (nc * self._freqdist.N())
-
-    def max(self):
-        return self._freqdist.max()
-
-    def samples(self):
-        return self._freqdist.keys()
-
-    def discount(self):
-        """
-        :return: The probability mass transferred from the
-            seen samples to the unseen samples.
-        :rtype: float
-        """
-        return 1.0 * self._freqdist.Nr(1) / self._freqdist.N()
-
-    def freqdist(self):
-        return self._freqdist
-
-    def __repr__(self):
-        """
-        Return a string representation of this ``ProbDist``.
-
-        :rtype: str
-        """
-        return '<GoodTuringProbDist based on %d samples>' % self._freqdist.N()
-
-
 ##//////////////////////////////////////////////////////
 ##  Simple Good-Turing Probablity Distributions
 ##//////////////////////////////////////////////////////
@@ -1356,7 +1346,7 @@ class GoodTuringProbDist(ProbDistI):
 @compat.python_2_unicode_compatible
 class SimpleGoodTuringProbDist(ProbDistI):
     """
-    SimpleGoodTuring ProbDist approximates from frequency to freqency of
+    SimpleGoodTuring ProbDist approximates from frequency to frequency of
     frequency into a linear line under log space by linear regression.
     Details of Simple Good-Turing algorithm can be found in:
 
@@ -1366,8 +1356,8 @@ class SimpleGoodTuringProbDist(ProbDistI):
       2nd Edition, Chapter 4.5 p103 (log(Nc) =  a + b*log(c))
     - http://www.grsampson.net/RGoodTur.html
 
-    Given a set of pair (xi, yi),  where the xi denotes the freqency and
-    yi denotes the freqency of freqency, we want to minimize their
+    Given a set of pair (xi, yi),  where the xi denotes the frequency and
+    yi denotes the frequency of frequency, we want to minimize their
     square variation. E(x) and E(y) represent the mean of xi and yi.
 
     - slope: b = sigma ((xi-E(x)(yi-E(y))) / sigma ((xi-E(x))(xi-E(x)))
@@ -1398,16 +1388,10 @@ class SimpleGoodTuringProbDist(ProbDistI):
         """
         Split the frequency distribution in two list (r, Nr), where Nr(r) > 0
         """
-        r, nr = [], []
-        b, i = 0, 0
-        while b != self._freqdist.B():
-            nr_i = self._freqdist.Nr(i)
-            if nr_i > 0:
-                b += nr_i
-                r.append(i)
-                nr.append(nr_i)
-            i += 1
-        return (r, nr)
+        nonzero = self._freqdist._Nr_nonzero()
+        if not nonzero:
+            return [], []
+        return zip(*nonzero)
 
     def find_best_fit(self, r, nr):
         """
@@ -1487,7 +1471,7 @@ class SimpleGoodTuringProbDist(ProbDistI):
         """
         Return the number of samples with count r.
 
-        :param r: The amount of freqency.
+        :param r: The amount of frequency.
         :type r: int
         :rtype: float
         """
@@ -1638,6 +1622,154 @@ class MutableProbDist(ProbDistI):
         else:
             self._data[i] = (2**(prob) if log else prob)
 
+##/////////////////////////////////////////////////////
+##  Kneser-Ney Probability Distribution
+##//////////////////////////////////////////////////////
+
+# This method for calculating probabilities was introduced in 1995 by Reinhard
+# Kneser and Hermann Ney. It was meant to improve the accuracy of language
+# models that use backing-off to deal with sparse data. The authors propose two
+# ways of doing so: a marginal distribution constraint on the back-off
+# distribution and a leave-one-out distribution. For a start, the first one is
+# implemented as a class below.
+#
+# The idea behind a back-off n-gram model is that we have a series of
+# frequency distributions for our n-grams so that in case we have not seen a
+# given n-gram during training (and as a result have a 0 probability for it) we
+# can 'back off' (hence the name!) and try testing whether we've seen the
+# n-1-gram part of the n-gram in training.
+#
+# The novelty of Kneser and Ney's approach was that they decided to fiddle
+# around with the way this latter, backed off probability was being calculated
+# whereas their peers seemed to focus on the primary probability.
+#
+# The implementation below uses one of the techniques described in their paper
+# titled "Improved backing-off for n-gram language modeling." In the same paper
+# another technique is introduced to attempt to smooth the back-off
+# distribution as well as the primary one. There is also a much-cited
+# modification of this method proposed by Chen and Goodman.
+#
+# In order for the implementation of Kneser-Ney to be more efficient, some
+# changes have been made to the original algorithm. Namely, the calculation of
+# the normalizing function gamma has been significantly simplified and
+# combined slightly differently with beta. None of these changes affect the
+# nature of the algorithm, but instead aim to cut out unnecessary calculations
+# and take advantage of storing and retrieving information in dictionaries
+# where possible.
+
+@compat.python_2_unicode_compatible
+class KneserNeyProbDist(ProbDistI):
+    """
+    Kneser-Ney estimate of a probability distribution. This is a version of
+    back-off that counts how likely an n-gram is provided the n-1-gram had
+    been seen in training. Extends the ProbDistI interface, requires a trigram
+    FreqDist instance to train on. Optionally, a different from default discount
+    value can be specified. The default discount is set to 0.75.
+
+    """
+    def __init__(self, freqdist, bins=None, discount=0.75):
+        """
+        :param trigrams: The trigram frequency distribution upon which to base
+            the estimation
+        :type trigrams: FreqDist
+        :param bins: Included for compatibility with nltk.tag.hmm
+        :type bins: int or float
+        :param discount: The discount applied when retrieving counts of
+            trigrams
+        :type discount: float (preferred, but can be set to int)
+        """
+
+        if not bins:
+            self._bins = freqdist.B()
+        else:
+            self._bins = bins
+        self._D = discount
+
+        # cache for probability calculation
+        self._cache = {}
+
+        # internal bigram and trigram frequency distributions
+        self._bigrams = defaultdict(int)
+        self._trigrams = freqdist
+
+        # helper dictionaries used to calculate probabilities
+        self._wordtypes_after = defaultdict(float)
+        self._trigrams_contain = defaultdict(float)
+        self._wordtypes_before = defaultdict(float)
+        for w0, w1, w2 in freqdist:
+            self._bigrams[(w0,w1)] += freqdist[(w0, w1, w2)]
+            self._wordtypes_after[(w0,w1)] += 1
+            self._trigrams_contain[w1] += 1
+            self._wordtypes_before[(w1,w2)] += 1
+
+    def prob(self, trigram):
+        # sample must be a triple
+        if len(trigram) != 3:
+            raise ValueError('Expected an iterable with 3 members.')
+        trigram = tuple(trigram)
+        w0, w1, w2 = trigram
+
+        if trigram in self._cache:
+            return self._cache[trigram]
+        else:
+            # if the sample trigram was seen during training
+            if trigram in self._trigrams:
+                prob = (self._trigrams[trigram]
+                        - self.discount())/self._bigrams[(w0, w1)]
+
+            # else if the 'rougher' environment was seen during training
+            elif (w0,w1) in self._bigrams and (w1,w2) in self._wordtypes_before:
+                aftr = self._wordtypes_after[(w0, w1)]
+                bfr = self._wordtypes_before[(w1, w2)]
+
+                # the probability left over from alphas
+                leftover_prob = ((aftr * self.discount())
+                                 / self._bigrams[(w0, w1)])
+
+                # the beta (including normalization)
+                beta = bfr /(self._trigrams_contain[w1] - aftr)
+
+                prob = leftover_prob * beta
+
+            # else the sample was completely unseen during training
+            else:
+                prob = 0.0
+
+            self._cache[trigram] = prob
+            return prob
+
+    def discount(self):
+        """
+        Return the value by which counts are discounted. By default set to 0.75.
+
+        :rtype: float
+        """
+        return self._D
+
+    def set_discount(self, discount):
+        """
+        Set the value by which counts are discounted to the value of discount.
+
+        :param discount: the new value to discount counts by
+        :type discount: float (preferred, but int possible)
+        :rtype: None
+        """
+        self._D = discount
+
+    def samples(self):
+        return self._trigrams.keys()
+
+    def max(self):
+        return self._trigrams.max()
+
+    def __repr__(self):
+        '''
+        Return a string representation of this ProbDist
+
+        :rtype: str
+        '''
+        return '<KneserNeyProbDist based on {0} trigrams'.format(self._trigrams.N())
+
 ##//////////////////////////////////////////////////////
 ##  Probability Distribution Operations
 ##//////////////////////////////////////////////////////
@@ -1720,6 +1852,10 @@ class ConditionalFreqDist(defaultdict):
         if cond_samples:
             for (cond, sample) in cond_samples:
                 self[cond].inc(sample)
+
+    def __reduce__(self):
+        kv_pairs = ((cond, self[cond]) for cond in self.conditions())
+        return (self.__class__, (), None, None, kv_pairs)
 
     def conditions(self):
         """
@@ -1853,7 +1989,7 @@ class ConditionalFreqDist(defaultdict):
 
 
 @compat.python_2_unicode_compatible
-class ConditionalProbDistI(defaultdict):
+class ConditionalProbDistI(dict):
     """
     A collection of probability distributions for a single experiment
     run under different conditions.  Conditional probability
@@ -1890,7 +2026,7 @@ class ConditionalProbDistI(defaultdict):
 
 class ConditionalProbDist(ConditionalProbDistI):
     """
-    A conditional probability distribution modelling the experiments
+    A conditional probability distribution modeling the experiments
     that were used to generate a conditional frequency distribution.
     A ConditionalProbDist is constructed from a
     ``ConditionalFreqDist`` and a ``ProbDist`` factory:
@@ -1946,18 +2082,19 @@ class ConditionalProbDist(ConditionalProbDistI):
         :type factory_kw_args: (any)
         :param factory_kw_args: Extra keyword arguments for ``probdist_factory``.
         """
-        # self._probdist_factory = probdist_factory
-        # self._cfdist = cfdist
-        # self._factory_args = factory_args
-        # self._factory_kw_args = factory_kw_args
+        self._probdist_factory = probdist_factory
+        self._factory_args = factory_args
+        self._factory_kw_args = factory_kw_args
 
-        factory = lambda: probdist_factory(FreqDist(),
-                                           *factory_args, **factory_kw_args)
-        defaultdict.__init__(self, factory)
         for condition in cfdist:
             self[condition] = probdist_factory(cfdist[condition],
                                                *factory_args, **factory_kw_args)
 
+    def __missing__(self, key):
+        self[key] = self._probdist_factory(FreqDist(),
+                                           *self._factory_args,
+                                           **self._factory_kw_args)
+        return self[key]
 
 class DictionaryConditionalProbDist(ConditionalProbDistI):
     """
@@ -1971,8 +2108,11 @@ class DictionaryConditionalProbDist(ConditionalProbDistI):
             by the conditions
         :type probdist_dict: dict any -> probdist
         """
-        defaultdict.__init__(self, DictionaryProbDist)
         self.update(probdist_dict)
+
+    def __missing__(self, key):
+        self[key] = DictionaryProbDist()
+        return self[key]
 
 ##//////////////////////////////////////////////////////
 ## Adding in log-space.
@@ -2173,7 +2313,6 @@ def demo(numsamples=6, numoutcomes=500):
         HeldoutProbDist(fdist1, fdist2, numsamples),
         HeldoutProbDist(fdist2, fdist1, numsamples),
         CrossValidationProbDist([fdist1, fdist2, fdist3], numsamples),
-        GoodTuringProbDist(fdist1),
         SimpleGoodTuringProbDist(fdist1),
         SimpleGoodTuringProbDist(fdist1, 7),
         _create_sum_pdist(numsamples),
@@ -2221,14 +2360,13 @@ def gt_demo():
     from nltk import corpus
     emma_words = corpus.gutenberg.words('austen-emma.txt')
     fd = FreqDist(emma_words)
-    gt = GoodTuringProbDist(fd)
     sgt = SimpleGoodTuringProbDist(fd)
     katz = SimpleGoodTuringProbDist(fd, 7)
-    print('%18s %8s  %12s %14s  %12s' \
-        % ("word", "freqency", "GoodTuring", "SimpleGoodTuring", "Katz-cutoff" ))
+    print('%18s %8s  %14s  %12s' \
+        % ("word", "freqency", "SimpleGoodTuring", "Katz-cutoff" ))
     for key in fd:
         print('%18s %8d  %12e   %14e   %12e' \
-            % (key, fd[key], gt.prob(key), sgt.prob(key), katz.prob(key)))
+            % (key, fd[key], sgt.prob(key), katz.prob(key)))
 
 if __name__ == '__main__':
     demo(6, 10)
@@ -2238,8 +2376,8 @@ if __name__ == '__main__':
 __all__ = ['ConditionalFreqDist', 'ConditionalProbDist',
            'ConditionalProbDistI', 'CrossValidationProbDist',
            'DictionaryConditionalProbDist', 'DictionaryProbDist', 'ELEProbDist',
-           'FreqDist', 'GoodTuringProbDist', 'SimpleGoodTuringProbDist', 'HeldoutProbDist',
+           'FreqDist', 'SimpleGoodTuringProbDist', 'HeldoutProbDist',
            'ImmutableProbabilisticMixIn', 'LaplaceProbDist', 'LidstoneProbDist',
-           'MLEProbDist', 'MutableProbDist', 'ProbDistI', 'ProbabilisticMixIn',
+           'MLEProbDist', 'MutableProbDist', 'KneserNeyProbDist', 'ProbDistI', 'ProbabilisticMixIn',
            'UniformProbDist', 'WittenBellProbDist', 'add_logs',
            'log_likelihood', 'sum_logs', 'entropy']

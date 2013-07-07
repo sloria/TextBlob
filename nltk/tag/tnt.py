@@ -13,6 +13,7 @@ by Thorsten Brants
 http://acl.ldc.upenn.edu/A/A00/A00-1031.pdf
 '''
 from __future__ import print_function
+from math import log
 
 from operator import itemgetter
 
@@ -57,6 +58,12 @@ class TnT(TaggerI):
     The set of possible tags for a given word is derived
     from the training data. It is the set of all tags
     that exact word has been assigned.
+
+    To speed up and get more precision, we can use log addition
+    to instead multiplication, specifically:
+
+      argmax [Sigma(log(P(t_i|t_i-1,t_i-2))+log(P(w_i|t_i)))] +
+             log(P(t_T+1|t_T))
 
     The probability of a tag for a given word is the linear
     interpolation of 3 markov models; a zero-order, first-order,
@@ -140,7 +147,7 @@ class TnT(TaggerI):
             self._unk.train(data)
 
         for sent in data:
-            history = ['BOS', 'BOS']
+            history = [('BOS',False), ('BOS',False)]
             for w, t in sent:
 
                 # if capitalization is requested,
@@ -300,7 +307,7 @@ class TnT(TaggerI):
         returns a list of (word, tag) tuples
         '''
 
-        current_state = [(['BOS', 'BOS'], 1.0)]
+        current_state = [(['BOS', 'BOS'], 0.0)]
 
         sent = list(data)
 
@@ -320,9 +327,9 @@ class TnT(TaggerI):
         :param sent : List of words remaining in the sentence
         :type sent  : [word,]
         :param current_states : List of possible tag combinations for
-                                the sentence so far, and the probability
+                                the sentence so far, and the log probability
                                 associated with each tag combination
-        :type current_states  : [([tag, ],prob), ]
+        :type current_states  : [([tag, ], logprob), ]
 
         Tags the first word in the sentence and
         recursively tags the reminder of sentence
@@ -334,7 +341,7 @@ class TnT(TaggerI):
         # if this word marks the end of the sentance,
         # return the most probable tag
         if sent == []:
-            (h,p) = current_states[0]
+            (h, logp) = current_states[0]
             return h
 
         # otherwise there are more words to be tagged
@@ -349,12 +356,12 @@ class TnT(TaggerI):
 
         # if word is known
         # compute the set of possible tags
-        # and their associated probabilities
+        # and their associated log probabilities
         if word in self._wd.conditions():
             self.known += 1
 
-            for (history, curr_sent_prob) in current_states:
-                probs = []
+            for (history, curr_sent_logprob) in current_states:
+                logprobs = []
 
                 for t in self._wd[word].samples():
                     p_uni = self._uni.freq((t,C))
@@ -362,14 +369,15 @@ class TnT(TaggerI):
                     p_tri = self._tri[tuple(history[-2:])].freq((t,C))
                     p_wd = float(self._wd[word][t])/float(self._uni[(t,C)])
                     p = self._l1 *p_uni + self._l2 *p_bi + self._l3 *p_tri
-                    p2 = p * p_wd
+                    p2 = log(p, 2) + log(p_wd, 2)
 
-                    probs.append(((t,C), p2))
+                    logprobs.append(((t,C), p2))
 
 
                 # compute the result of appending each tag to this history
-                for (tag, prob) in probs:
-                    new_states.append((history + [tag], curr_sent_prob*prob))
+                for (tag, logprob) in logprobs:
+                    new_states.append((history + [tag],
+                                       curr_sent_logprob + logprob))
 
 
 
@@ -394,7 +402,7 @@ class TnT(TaggerI):
                 [(_w, t)] = list(self._unk.tag([word]))
                 tag = (t,C)
 
-            for (history, prob) in current_states:
+            for (history, logprob) in current_states:
                 history.append(tag)
 
             new_states = current_states
@@ -403,8 +411,8 @@ class TnT(TaggerI):
 
         # now have computed a set of possible new_states
 
-        # sort states by prob
-        # set is now ordered greatest to least probability
+        # sort states by log prob
+        # set is now ordered greatest to least log probability
         new_states.sort(reverse=True, key=itemgetter(1))
 
         # del everything after N (threshold)
@@ -474,13 +482,12 @@ def basic_sent_chop(data, raw=True):
 
 
 def demo():
-    from nltk.tag import tnt
     from nltk.corpus import brown
     sents = list(brown.tagged_sents())
     test = list(brown.sents())
 
     # create and train the tagger
-    tagger = tnt.TnT()
+    tagger = TnT()
     tagger.train(sents[200:1000])
 
     # tag some data
@@ -496,19 +503,17 @@ def demo():
 
 
 def demo2():
-    from nltk import tag
-    from nltk.tag import tnt
     from nltk.corpus import treebank
 
     d = list(treebank.tagged_sents())
 
-    t = tnt.TnT(N=1000, C=False)
-    s = tnt.TnT(N=1000, C=True)
+    t = TnT(N=1000, C=False)
+    s = TnT(N=1000, C=True)
     t.train(d[(11)*100:])
     s.train(d[(11)*100:])
 
     for i in range(10):
-        tacc = tag.accuracy(t, d[i*100:((i+1)*100)])
+        tacc = t.evaluate(d[i*100:((i+1)*100)])
         tp_un = float(t.unknown) / float(t.known +t.unknown)
         tp_kn = float(t.known) / float(t.known + t.unknown)
         t.unknown = 0
@@ -520,7 +525,7 @@ def demo2():
         print('Percentage unknown:', tp_un)
         print('Accuracy over known words:', (tacc / tp_kn))
 
-        sacc = tag.accuracy(s, d[i*100:((i+1)*100)])
+        sacc = s.evaluate(d[i*100:((i+1)*100)])
         sp_un = float(s.unknown) / float(s.known +s.unknown)
         sp_kn = float(s.known) / float(s.known + s.unknown)
         s.unknown = 0
@@ -533,9 +538,7 @@ def demo2():
         print('Accuracy over known words:', (sacc / sp_kn))
 
 def demo3():
-    from nltk import tag
     from nltk.corpus import treebank, brown
-    from nltk.tag import tnt
 
     d = list(treebank.tagged_sents())
     e = list(brown.tagged_sents())
@@ -555,8 +558,8 @@ def demo3():
 
     for i in range(10):
 
-        t = tnt.TnT(N=1000, C=False)
-        s = tnt.TnT(N=1000, C=False)
+        t = TnT(N=1000, C=False)
+        s = TnT(N=1000, C=False)
 
         dtest = d[(i*d10):((i+1)*d10)]
         etest = e[(i*e10):((i+1)*e10)]
@@ -567,14 +570,14 @@ def demo3():
         t.train(dtrain)
         s.train(etrain)
 
-        tacc = tag.accuracy(t, dtest)
+        tacc = t.evaluate(dtest)
         tp_un = float(t.unknown) / float(t.known +t.unknown)
         tp_kn = float(t.known) / float(t.known + t.unknown)
         tknown += tp_kn
         t.unknown = 0
         t.known = 0
 
-        sacc = tag.accuracy(s, etest)
+        sacc = s.evaluate(etest)
         sp_un = float(s.unknown) / float(s.known + s.unknown)
         sp_kn = float(s.known) / float(s.known + s.unknown)
         sknown += sp_kn
