@@ -15,3 +15,4 @@ if IS_PY3:
     basestring = str
 else:
     unicode = unicode
+

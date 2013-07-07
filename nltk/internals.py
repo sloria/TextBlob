@@ -24,7 +24,7 @@ try:
 except ImportError:
     from xml.etree import ElementTree
 
-from nltk import __file__
+# from nltk import __file__
 from nltk import compat
 ######################################################################
 # Regular Expression Processing

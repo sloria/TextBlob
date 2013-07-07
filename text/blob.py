@@ -17,7 +17,6 @@ from .en import sentiment as _sentiment, tag
 from .mixins import ComparableMixin
 
 
-
 class WordList(list):
 
     '''A list-like collection of words.'''
