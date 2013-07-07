@@ -3,10 +3,8 @@
 '''Wrappers for various units of text.'''
 from __future__ import unicode_literals
 import sys
-
-
 import json
-from collections import Counter
+from collections import defaultdict
 
 from nltk.tokenize import word_tokenize, sent_tokenize
 from .np_extractor import NPExtractor
@@ -133,18 +131,22 @@ class BaseBlob(ComparableMixin):
 
     @cached_property
     def word_counts(self):
-        '''Dictionary of word frequencies in this text. Internally
-        uses collections.Counter.
+        '''Dictionary of word frequencies in this text.
         '''
+        counts = defaultdict(int)
         stripped_words = [lowerstrip(word) for word in self.words]
-        return Counter(stripped_words)
+        for word in stripped_words:
+            counts[word] += 1
+        return counts
 
     @cached_property
     def np_counts(self):
-        '''Dictionary of noun phrase frequencies in this text. Internally
-        uses collections.Counter.
+        '''Dictionary of noun phrase frequencies in this text.
         '''
-        return Counter(self.noun_phrases)
+        counts = defaultdict(int)
+        for np in self.noun_phrases:
+            counts[np] += 1
+        return counts
 
     def __repr__(self):
         '''Returns a string representation for debugging.'''

@@ -22,13 +22,12 @@ class WordListTest(TestCase):
 
     def test_slicing(self):
         wl = WordList(self.words)
-        # Test just
         first = wl[0]
-        assert_is_instance(first, str)
+        assert_true(isinstance(first, str))
         assert_equal(first, 'Beautiful')
 
         dogs = wl[0:2]
-        assert_is_instance(dogs, WordList)
+        assert_true(isinstance(dogs, WordList))
         assert_equal(dogs, WordList(['Beautiful', 'is']))
 
     def test_repr(self):
@@ -52,6 +51,7 @@ class WordListTest(TestCase):
         wl = WordList(['monty', 'python', 'Python', 'Monty'])
         assert_equal(wl.count('monty'), 2)
         assert_equal(wl.count('monty', case_sensitive=True), 1)
+        assert_equal(wl.count('mon'), 0)
 
 
 class SentenceTest(TestCase):
@@ -97,7 +97,7 @@ class SentenceTest(TestCase):
         # Getting the pos tags the second time should be faster
         # because they were stored as an attribute the first time
         assert_true(t2 < t1)
-        assert_list_equal(tagged,
+        assert_equal(tagged,
                 [(u'Any', u'DT'), (u'place', u'NN'), (u'with', u'IN'),
                 (u'frites', u'NNS'), (u'and', u'CC'), (u'Belgian', u'JJ'),
                 (u'beer', u'NN'), (u'has', u'VBZ'), (u'my', u'PRP$'),
@@ -200,7 +200,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
             TextBlob('Simple is better than complex. Complex is better than complicated.'
                      )
         print(blob.pos_tags)
-        assert_list_equal(blob.pos_tags, WordList([
+        assert_equal(blob.pos_tags, WordList([
             (u'Simple', u'NN'),
             (u'is', u'NNS'),
             (u'better', u'JJR'),
@@ -356,6 +356,8 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob = TextBlob(self.text + "That's a great idea.")
         assert_equal(blob.noun_phrases.count('namespaces'), 1)
         assert_equal(blob.noun_phrases.count('great idea'), 2)
+        assert_equal(blob.np_counts['not_found'], 0)
+        assert_equal(blob.noun_phrases.count('not found'), 0)
 
     def test_add(self):
         blob1 = TextBlob('Hello, world! ')
