@@ -37,7 +37,7 @@ except ImportError:
 
 
 PUBLISH = "python setup.py register sdist upload"
-TEST = 'nosetests --verbosity 2'
+TEST = 'tox'
 
 if sys.argv[-1] == 'publish':
     os.system(PUBLISH)
@@ -45,9 +45,9 @@ if sys.argv[-1] == 'publish':
 
 if sys.argv[-1] == 'test':
     try:
-        __import__('nose')
+        __import__('tox')
     except ImportError:
-        print('nose required.')
+        print('tox required.')
         sys.exit(1)
 
     os.system(TEST)
