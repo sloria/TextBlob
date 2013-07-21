@@ -44,7 +44,7 @@ class WordList(list):
         # This is included for Python 2.* compatibility
         return self.__class__(self._collection[i:j])
 
-    def count(self, s, case_sensitive=False, *args, **kwargs):
+    def count(self, strg, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
 
         Arguments:
@@ -53,9 +53,9 @@ class WordList(list):
                              case sensitive.
         """
         if not case_sensitive:
-            return [word.lower() for word in self].count(s.lower(), *args,
+            return [word.lower() for word in self].count(strg.lower(), *args,
                     **kwargs)
-        return self._collection.count(s, *args, **kwargs)
+        return self._collection.count(strg, *args, **kwargs)
 
     def upper(self):
         '''Return a new WordList with each word upper-cased.'''
@@ -88,12 +88,13 @@ class BaseBlob(ComparableMixin):
         - text: A string, the text.
         '''
         if not isinstance(text, str):
-            raise TypeError('The `text` argument passed to `__init__(text)` must be a string.'
-                            )
+            raise TypeError('The `text` argument passed to `__init__(text)` '
+                            'must be a string.')
         self.raw = text
         self.stripped = lowerstrip(text)
 
     def _tokenize(self):
+        '''Tokenizes the blob into words.'''
         return word_tokenize(self.raw)
 
     @cached_property
@@ -113,6 +114,7 @@ class BaseBlob(ComparableMixin):
 
     @cached_property
     def noun_phrases(self):
+        '''Returns a list of noun phrases for this blob.'''
         extractor = NPExtractor(self.raw)
         return WordList([lowerstrip(phrase) for phrase in extractor.extract()
                         if len(phrase) > 1])
@@ -144,8 +146,8 @@ class BaseBlob(ComparableMixin):
         '''Dictionary of noun phrase frequencies in this text.
         '''
         counts = defaultdict(int)
-        for np in self.noun_phrases:
-            counts[np] += 1
+        for phrase in self.noun_phrases:
+            counts[phrase] += 1
         return counts
 
     def __repr__(self):
@@ -204,7 +206,8 @@ class BaseBlob(ComparableMixin):
         elif isinstance(other, BaseBlob):
             return TextBlob(str(self) + str(other))
         else:
-            raise TypeError('Operands must be either strings or {0} objects'.format(self.__class__.__name__))
+            raise TypeError('Operands must be either strings or {0} objects'
+                .format(self.__class__.__name__))
 
     def __contains__(self, sub):
         '''Implements the `in` keyword like a Python string.'''
@@ -225,7 +228,8 @@ class BaseBlob(ComparableMixin):
         return str(self).rfind(sub, start, end)
 
     def index(self, sub, start=0, end=sys.maxsize):
-        '''Like blob.find() but raise ValueError when the substring is not found.
+        '''Like blob.find() but raise ValueError when the substring
+        is not found.
         '''
         return str(self).index(sub, start, end)
 
@@ -349,15 +353,14 @@ class TextBlob(BaseBlob):
                 # there are multiple punctuations, e.g. with ellipses ("...")
                 # or multiple exclamation points ("!!!")
                 try:
-                    next = sentences[i + 1]  # the next token
+                    next_token = sentences[i + 1]
                 except IndexError:
                     # Continue if the last token is a punctuation
                     if len(raw_sentence) <= 1:
                         continue
-                    pass
                 # If the next token is 1 character, assume it's a punctuation
-                if len(next) == 1:
-                    raw_sentence += next  # append the extra punctuation
+                if len(next_token) == 1:
+                    raw_sentence += next_token  # append the extra punctuation
                     char_index += 1  # also correct the char_index
                 # Create a Sentence object and add it the the list
                 sentence_objects.append(Sentence(raw_sentence,
