@@ -1,13 +1,11 @@
 import sys
 import os
 
-import text
-from distutils.util import convert_path
-
 try:
     from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
+    from distutils.util import convert_path
 
     def _find_packages(where='.', exclude=()):
         """Return a list all Python packages found within directory 'where'
@@ -35,28 +33,28 @@ except ImportError:
 
     find_packages = _find_packages
 
+PUBLISH_CMD = "python setup.py register sdist upload"
+TEST_CMD = 'nosetests'
 
-PUBLISH = "python setup.py register sdist upload"
-TEST = 'tox'
-
-if sys.argv[-1] == 'publish':
-    os.system(PUBLISH)
-    sys.exit()
-
-if sys.argv[-1] == 'test':
+if 'test' in sys.argv:
     try:
-        __import__('tox')
+        __import__('nose')
     except ImportError:
-        print('tox required.')
+        print('nose required.')
         sys.exit(1)
 
-    os.system(TEST)
+    os.system(TEST_CMD)
+    sys.exit()
+
+if 'publish' in sys.argv:
+    os.system(PUBLISH_CMD)
     sys.exit()
 
 
 def cheeseshopify(rst):
-    '''Since PyPI doesn't support the `code-block` or directive, this replaces
-    all `code-block` directives with `::`.
+    '''Since PyPI doesn't support the RST `code-block` directive or the
+    :code: role, replace all `code-block` directives with `::` and
+    `:code:` with "".
     '''
     ret = rst.replace(".. code-block:: python", "::").replace(":code:", "")
     return ret
@@ -64,21 +62,24 @@ def cheeseshopify(rst):
 with open('README.rst') as fp:
     long_desc = cheeseshopify(fp.read())
 
+with open('LICENSE') as fp:
+    license = fp.read()
+
 setup(
     name='textblob',
-    version=text.__version__,
+    version='0.3.5',
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
     long_description=long_desc,
+    license=license,
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
     install_requires=['PyYAML'],
-    packages=find_packages(),
+    packages=find_packages(exclude=('test',)),
     package_data={
         "text": ["*.txt", "*.xml"],
     },
-    license='MIT',
     classifiers=(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
