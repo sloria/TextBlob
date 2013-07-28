@@ -67,7 +67,7 @@ with open('LICENSE') as fp:
 
 setup(
     name='textblob',
-    version='0.3.6',
+    version='0.3.7',
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
     long_description=long_desc,

@@ -18,153 +18,6 @@ Requirements
 - Python >= 2.6 or >= 3.1
 
 
-Usage
------
-
-Simple.
-
-Create a TextBlob
-+++++++++++++++++
-
-.. code-block:: python
-
-    from text.blob import TextBlob
-
-    zen = """Beautiful is better than ugly.
-    Explicit is better than implicit.
-    Simple is better than complex.
-    Complex is better than complicated.
-    Flat is better than nested.
-    Sparse is better than dense.
-    Readability counts.
-    Special cases aren't special enough to break the rules.
-    Although practicality beats purity.
-    Errors should never pass silently.
-    Unless explicitly silenced.
-    In the face of ambiguity, refuse the temptation to guess.
-    There should be one-- and preferably only one --obvious way to do it.
-    Although that way may not be obvious at first unless you're Dutch.
-    Now is better than never.
-    Although never is often better than *right* now.
-    If the implementation is hard to explain, it's a bad idea.
-    If the implementation is easy to explain, it may be a good idea.
-    Namespaces are one honking great idea -- let's do more of those!
-    """
-
-    blob = TextBlob(zen) # Create a new TextBlob
-
-Part-of-speech tags and noun phrases...
-+++++++++++++++++++++++++++++++++++++++
-
-\...are just properties.
-
-.. code-block:: python
-
-    blob.pos_tags         # [('beautiful', 'JJ'), ('is', 'VBZ'), ('better', 'RBR'),
-                          # ('than', 'IN'), ('ugly', 'RB'), ...]
-
-    blob.noun_phrases     # ['beautiful', 'explicit', 'simple', 'complex', 'flat',
-                          # 'sparse', 'readability', 'special cases',
-                          # 'practicality beats purity', 'errors', 'unless',
-                          # 'obvious way','dutch', 'right now', 'bad idea',
-                          # 'good idea', 'namespaces', 'great idea']
-
-Sentiment analysis
-++++++++++++++++++
-
-The :code:`sentiment` property returns a tuple of the form :code:`(polarity, subjectivity)` where :code:`polarity` ranges from -1.0 to 1.0 and
-:code:`subjectivity` ranges from 0.0 to 1.0.
-
-.. code-block:: python
-
-    blob.sentiment        # (0.20, 0.58)
-
-Tokenization
-++++++++++++
-
-.. code-block:: python
-
-    blob.words            # WordList(['Beautiful', 'is', 'better'...'more',
-                          #           'of', 'those'])
-
-    blob.sentences        # [Sentence('Beautiful is better than ugly.'),
-                          #  Sentence('Explicit is better than implicit.'),
-                          #  ...]
-
-Words and inflection
-++++++++++++++++++++
-
-Each word in :code:`TextBlob.words` or :code:`Sentence.words` is a :code:`Word`
-object (a subclass of :code:`unicode`) with useful methods, e.g. for word inflection.
-
-Get word and noun phrase frequencies
-++++++++++++++++++++++++++++++++++++
-
-.. code-block:: python
-
-    blob.word_counts['special']   # 2 (not case-sensitive by default)
-    blob.words.count('special')   # Same thing
-    blob.words.count('special', case_sensitive=True)  # 1
-
-    blob.noun_phrases.count('great idea')  # 1
-
-TextBlobs are like Python strings!
-++++++++++++++++++++++++++++++++++
-
-.. code-block:: python
-
-    blob[0:19]            # TextBlob("Beautiful is better")
-    blob.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
-    blob.find("purity")   # 293
-
-    apple_blob = TextBlob('apples')
-    banana_blob = TextBlob('bananas')
-    apple_blob < banana_blob           # True
-    apple_blob + ' and ' + banana_blob # TextBlob('apples and bananas')
-    "{0} and {1}".format(apple_blob, banana_blob)  # 'apples and bananas'
-
-
-Get start and end indices of sentences
-++++++++++++++++++++++++++++++++++++++
-
-Use :code:`sentence.start` and :code:`sentence.end`. This can be useful for sentence highlighting, for example.
-
-.. code-block:: python
-
-    for sentence in blob.sentences:
-        print(sentence)  # Beautiful is better than ugly
-        print("---- Starts at index {}, Ends at index {}"\
-                    .format(sentence.start, sentence.end))  # 0, 30
-
-Get a JSON-serialized version of the blob
-+++++++++++++++++++++++++++++++++++++++++
-
-.. code-block:: python
-
-    blob.json   # '[{"sentiment": [0.2166666666666667, ' '0.8333333333333334],
-                # "stripped": "beautiful is better than ugly", '
-                # '"noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly. ", '
-                # '"end_index": 30, "start_index": 0}
-                #  ...]'
-
-Overriding the noun phrase extractor
-++++++++++++++++++++++++++++++++++++
-
-TextBlob currently has two noun phrases chunker implementations,
-:code:`text.np_extractor.FastNPExtractor` (default, based on Shlomi Babluki's implementation
-`here <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
-and :code:`text.np_extractor.ConllExtractor` (currently working on Python 2 only).
-
-You can change the chunker implementation (or even use your own) by overriding :code:`TextBlob.np_extractor`
-
-.. code-block:: python
-
-    from text.np_extractor import NPExtractor
-    extractor = NPExtractor()
-    blob = TextBlob("Python is a widely used general-purpose, high-level programming language.")
-    blob.np_extractor = extractor
-    blob.noun_phrases  # This will use the fast noun phrase extractor
-
 Installation
 ------------
 
@@ -189,6 +42,150 @@ Then run: ::
     python download_corpora.py
 
 
+
+Usage
+-----
+
+Simple.
+
+Create a TextBlob
++++++++++++++++++
+
+.. code-block:: python
+
+    from text.blob import TextBlob
+
+    wikitext = '''
+    Python is a widely used general-purpose, high-level programming language.
+    Its design philosophy emphasizes code readability, and its syntax allows
+    programmers to express concepts in fewer lines of code than would be
+    possible in languages such as C.
+    '''
+
+    wiki = TextBlob(wikitext)
+
+Part-of-speech tags and noun phrases...
++++++++++++++++++++++++++++++++++++++++
+
+\...are just properties.
+
+.. code-block:: python
+
+    wiki.pos_tags       # [(Word('Python'), 'NNP'), (Word('is'), 'VBZ'),
+                        #  (Word('widely'), 'RB')...]
+
+    wiki.noun_phrases   # WordList(['python', 'design philosophy',  'code readability'])
+
+Sentiment analysis
+++++++++++++++++++
+
+The :code:`sentiment` property returns a tuple of the form :code:`(polarity, subjectivity)` where :code:`polarity` ranges from -1.0 to 1.0 and
+:code:`subjectivity` ranges from 0.0 to 1.0.
+
+.. code-block:: python
+
+    blob.sentiment        # (0.20, 0.58)
+
+Tokenization
+++++++++++++
+
+.. code-block:: python
+
+    zen = TextBlob("Beautiful is better than ugly. "
+                    "Explicit is better than implicit. "
+                    "Simple is better than complex.")
+
+    zen.words            # WordList(['Beautiful', 'is', 'better'...])
+
+    zen.sentences        # [Sentence('Beautiful is better than ugly.'),
+                          #  Sentence('Explicit is better than implicit.'),
+                          #  ...]
+
+Words and inflection
+++++++++++++++++++++
+
+Each word in :code:`TextBlob.words` or :code:`Sentence.words` is a :code:`Word`
+object (a subclass of :code:`unicode`) with useful methods, e.g. for word inflection.
+
+.. code-block:: python
+
+    sentence = TextBlob('Use 4 spaces per indentation level.')
+    sentence.words
+    # OUT: WordList(['Use', '4', 'spaces', 'per', 'indentation', 'level'])
+    sentence.words[2].singularize()
+    # OUT: 'space'
+    sentence.words[-1].pluralize()
+    # OUT: 'levels'
+
+Get word and noun phrase frequencies
+++++++++++++++++++++++++++++++++++++
+
+.. code-block:: python
+
+    wiki.word_counts['its']   # 2 (not case-sensitive by default)
+    wiki.words.count('its')   # Same thing
+    wiki.words.count('its', case_sensitive=True)  # 1
+
+    wiki.noun_phrases.count('code readability')  # 1
+
+TextBlobs are like Python strings!
+++++++++++++++++++++++++++++++++++
+
+.. code-block:: python
+
+    zen[0:19]            # TextBlob("Beautiful is better")
+    zen.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
+    zen.find("Simple")   # 65
+
+    apple_blob = TextBlob('apples')
+    banana_blob = TextBlob('bananas')
+    apple_blob < banana_blob           # True
+    apple_blob + ' and ' + banana_blob # TextBlob('apples and bananas')
+    "{0} and {1}".format(apple_blob, banana_blob)  # 'apples and bananas'
+
+
+Get start and end indices of sentences
+++++++++++++++++++++++++++++++++++++++
+
+Use :code:`sentence.start` and :code:`sentence.end`. This can be useful for sentence highlighting, for example.
+
+.. code-block:: python
+
+    for sentence in zen.sentences:
+        print(sentence)  # Beautiful is better than ugly
+        print("---- Starts at index {}, Ends at index {}"\
+                    .format(sentence.start, sentence.end))  # 0, 30
+
+Get a JSON-serialized version of the blob
++++++++++++++++++++++++++++++++++++++++++
+
+.. code-block:: python
+
+    zen.json   # '[{"sentiment": [0.2166666666666667, ' '0.8333333333333334],
+                # "stripped": "beautiful is better than ugly", '
+                # '"noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly. ", '
+                # '"end_index": 30, "start_index": 0}
+                #  ...]'
+
+Overriding the noun phrase extractor
+++++++++++++++++++++++++++++++++++++
+
+TextBlob currently has two noun phrases chunker implementations,
+:code:`text.np_extractor.FastNPExtractor` (default, based on Shlomi Babluki's implementation from
+`this blog post <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
+and :code:`text.np_extractor.ConllExtractor` (currently working on Python 2 only).
+
+You can change the chunker implementation (or even use your own) by overriding :code:`TextBlob.np_extractor`
+
+.. code-block:: python
+
+    from text.np_extractor import ConllExtractor
+    extractor = ConllExtractor()
+    blob = TextBlob("Python is a widely used general-purpose, high-level programming language.")
+    blob.np_extractor = extractor
+    blob.noun_phrases  # This will use the fast noun phrase extractor
+
+
 Testing
 -------
 Run ::
@@ -201,3 +198,5 @@ License
 -------
 
 TextBlob is licenced under the MIT license. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
+
+.. _download_corpora.py:
