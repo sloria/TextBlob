@@ -147,6 +147,23 @@ Get a JSON-serialized version of the blob
                 # '"end_index": 30, "start_index": 0}
                 #  ...]'
 
+Overriding the noun phrase extractor
+++++++++++++++++++++++++++++++++++++
+
+TextBlob currently has two noun phrases chunker implementations,
+:code:`text.np_extractor.FastNPExtractor` (default, based on Shlomi Babluki's implementation
+`here <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
+and :code:`text.np_extractor.ConllExtractor` (currently working on Python 2 only).
+
+You can change the chunker implementation (or even use your own) by overriding :code:`TextBlob.np_extractor`
+
+.. code-block:: python
+
+    from text.np_extractor import NPExtractor
+    extractor = NPExtractor()
+    blob = TextBlob("Python is a widely used general-purpose, high-level programming language.")
+    blob.np_extractor = extractor
+    blob.noun_phrases  # This will use the fast noun phrase extractor
 
 Installation
 ------------

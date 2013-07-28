@@ -37,6 +37,7 @@ class Parser(_Parser):
     def find_lemmata(self, tokens, **kwargs):
         return find_lemmata(tokens)
 
+
 lexicon = Lexicon(
         path = os.path.join(MODULE, "en-lexicon.txt"),
   morphology = os.path.join(MODULE, "en-morphology.txt"),

@@ -6,6 +6,7 @@ from nltk import download
 REQUIRED_CORPORA = [
     'brown',
     'punkt',
+    'conll2000',
 ]
 
 def main():

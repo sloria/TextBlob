@@ -10,6 +10,7 @@ from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from text.compat import PY2, text_type, unicode
 import text.blob as tb
+from text.np_extractor import ConllExtractor, FastNPExtractor
 
 
 class WordListTest(TestCase):
@@ -148,6 +149,23 @@ If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!"""
         self.blob = tb.TextBlob(self.text)
 
+        self.np_test_text = '''
+Python is a widely used general-purpose, high-level programming language.
+Its design philosophy emphasizes code readability, and its syntax allows
+programmers to express concepts in fewer
+lines of code than would be possible in languages such as C.
+The language provides constructs intended to enable clear programs on both a small and large scale.
+Python supports multiple programming paradigms, including object-oriented,
+imperative and functional programming or procedural styles.
+It features a dynamic type system and automatic memory management and
+has a large and comprehensive standard library. Like other dynamic languages, Python is often used as a scripting language,
+but is also used in a wide range of non-scripting contexts.
+Using third-party tools, Python code can be packaged into standalone executable
+programs. Python interpreters are available for many operating systems. CPython, the reference implementation of Python, is free and open source software and h
+as a community-based development model, as do nearly all of its alternative implementations. CPython
+is managed by the non-profit Python Software Foundation.'''
+        self.np_test_blob = tb.TextBlob(self.np_test_text)
+
         self.short = "Beautiful is better than ugly. "
         self.short_blob = tb.TextBlob(self.short)
 
@@ -158,6 +176,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob = tb.TextBlob('Wow I love this place. It really rocks my socks!!!')
         assert_equal(len(blob.sentences), 2)
         assert_equal(blob.sentences[1].stripped, 'it really rocks my socks')
+        assert_equal(blob.string, blob.raw)
 
         # Must initialize with a string
         assert_raises(TypeError, tb.TextBlob.__init__, ['invalid'])
@@ -239,6 +258,25 @@ Namespaces are one honking great idea -- let's do more of those!"""
             ('than', 'IN'),
             ('complicated', 'VBN'),
             ])
+
+    def test_np_extractor_defaults_to_conll2000(self):
+        text = "Python is a high-level scripting language."
+        blob1 = tb.TextBlob(text)
+        print(blob1.noun_phrases)  # Lazy loads the extractor
+        assert_true(isinstance(blob1.np_extractor, FastNPExtractor))
+
+    def test_np_extractor_is_shared_among_instances(self):
+        blob1 = tb.TextBlob("This is one sentence")
+        blob2 = tb.TextBlob("This is another sentence")
+        assert_true(blob1.np_extractor is blob2.np_extractor)
+
+    def test_can_use_different_np_extractors(self):
+        e = ConllExtractor()
+        text = "Python is a high-level scripting language."
+        blob = tb.TextBlob(text)
+        blob.np_extractor = e
+        print(blob.noun_phrases)
+        assert_true(isinstance(blob.np_extractor, ConllExtractor))
 
     def test_getitem(self):
         blob = tb.TextBlob('lorem ipsum')
@@ -338,28 +376,9 @@ Namespaces are one honking great idea -- let's do more of those!"""
         assert_equal(blob2.sentences[1].raw, 'I am soooo LOL!!!')
 
     def test_blob_noun_phrases(self):
-        blob = tb.TextBlob(self.text)
-        assert_true(isinstance(blob.noun_phrases, tb.WordList))
-        assert_equal(blob.noun_phrases, tb.WordList([
-            'beautiful',
-            'explicit',
-            'simple',
-            'complex',
-            'flat',
-            'sparse',
-            'readability',
-            'special cases',
-            'practicality beats purity',
-            'errors',
-            'unless',
-            'obvious way',
-            'dutch',
-            'right now',
-            'bad idea',
-            'good idea',
-            'namespaces',
-            'great idea',
-            ]))
+        noun_phrases = self.np_test_blob.noun_phrases
+        assert_true('python' in noun_phrases)
+        assert_true('design philosophy' in noun_phrases)
 
     def test_word_counts(self):
         blob = tb.TextBlob('Buffalo buffalo ate my blue buffalo.')
@@ -380,11 +399,10 @@ Namespaces are one honking great idea -- let's do more of those!"""
     def test_np_counts(self):
         # Add some text so that we have a noun phrase that
         # has a frequency greater than 1
-        blob = tb.TextBlob(self.text + "That's a great idea.")
-        assert_equal(blob.noun_phrases.count('namespaces'), 1)
-        assert_equal(blob.noun_phrases.count('great idea'), 2)
-        assert_equal(blob.np_counts['not_found'], 0)
-        assert_equal(blob.noun_phrases.count('not found'), 0)
+        noun_phrases = self.np_test_blob.noun_phrases
+        assert_equal(noun_phrases.count('python'), 6)
+        assert_equal(noun_phrases.count('cpython'), 2)
+        assert_equal(noun_phrases.count('not found'), 0)
 
     def test_add(self):
         blob1 = tb.TextBlob('Hello, world! ')

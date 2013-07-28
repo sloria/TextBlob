@@ -7,13 +7,13 @@ import json
 from collections import defaultdict
 
 from nltk.tokenize import word_tokenize, sent_tokenize
-from .np_extractor import NPExtractor
 from .decorators import cached_property
 from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .en import sentiment as _sentiment, tag
 from .mixins import ComparableMixin
 from .compat import text_type, string_types, unicode
+from .np_extractor import FastNPExtractor
 
 
 class Word(unicode):
@@ -117,21 +117,29 @@ class BaseBlob(ComparableMixin):
     basic dunder and string methods for making objects like Python strings.
     '''
 
+    np_extractor = FastNPExtractor()
+
     def __init__(self, text):
         '''Create a blob-like object.
 
         Arguments:
         - text: A string, the text.
-        '''
+         '''
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
         self.raw = text
+        self.string = text
         self.stripped = lowerstrip(text)
 
     def _tokenize(self):
         '''Tokenizes the blob into words.'''
         return word_tokenize(self.raw)
+
+    # @cached_property
+    # def np_extractor(self):
+    #     from .np_extractor import NPExtractor
+    #     return NPExtractor()
 
     @cached_property
     def words(self):
@@ -151,8 +159,8 @@ class BaseBlob(ComparableMixin):
     @cached_property
     def noun_phrases(self):
         '''Returns a list of noun phrases for this blob.'''
-        extractor = NPExtractor(self.raw)
-        return WordList([lowerstrip(phrase) for phrase in extractor.extract()
+        return WordList([phrase.strip().lower()
+                        for phrase in self.np_extractor.extract(self.raw)
                         if len(phrase) > 1])
 
     @cached_property
@@ -337,13 +345,13 @@ class TextBlob(BaseBlob):
     containing sentences.
     """
 
-    def __init__(self, blob):
+    def __init__(self, text, *args, **kwargs):
         '''Initialize a textblob.
 
         Arguments:
-        - `blob`: a string
+        - `text`: a string
         '''
-        super(TextBlob, self).__init__(blob)
+        super(TextBlob, self).__init__(text, *args, **kwargs)
 
     @cached_property
     def sentences(self):
