@@ -10,10 +10,40 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from .np_extractor import NPExtractor
 from .decorators import cached_property
 from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
-from .inflect import singularize, pluralize
+from .inflect import singularize as _singularize, pluralize as _pluralize
 from .en import sentiment as _sentiment, tag
 from .mixins import ComparableMixin
-from .compat import text_type, string_types
+from .compat import text_type, string_types, unicode
+
+
+class Word(unicode):
+
+    '''A simple word representation.'''
+
+    def __new__(cls, string, pos_tag=None):
+        '''Return a new instance of the class. It is necessary to override
+        this method in order to handle the extra pos_tag argument in the
+        constructor.
+        '''
+        return super(Word, cls).__new__(cls, string)
+
+    def __init__(self, string, pos_tag=None):
+        self.string = string
+        self.pos_tag = pos_tag
+
+    def __repr__(self):
+        return "Word('{0}')".format(self.string)
+
+    def __str__(self):
+        return self.string
+
+    def singularize(self):
+        '''Return the singular version of the word as a string.'''
+        return _singularize(self.string)
+
+    def pluralize(self):
+        '''Return the plural version of the word as a string.'''
+        return _pluralize(self.string)
 
 
 class WordList(list):
@@ -21,18 +51,23 @@ class WordList(list):
     '''A list-like collection of words.'''
 
     def __init__(self, collection):
-        super(WordList, self).__init__(collection)
-        self._collection = collection
+        '''Initialize a WordList. Takes a collection of strings as
+        its only argument.
+        '''
+        self._collection = [Word(w) for w in collection]
+        super(WordList, self).__init__(self._collection)
 
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
+        # String representation of words
+        strings = [text_type(w) for w in self._collection]
         if len(self) > 60:
             return '{cls}({beginning}...{end})'.format(cls=class_name,
-                    beginning=str(self._collection[:3])[:-1],
-                    end=str(self._collection[-3:])[1:])
+                    beginning=strings[:3],
+                    end=strings[-3:])
         else:
-            return '{cls}({lst})'.format(cls=class_name, lst=self._collection)
+            return '{cls}({lst})'.format(cls=class_name, lst=strings)
 
     def __getitem__(self, key):
         '''Returns a string at the given index.'''
@@ -68,11 +103,11 @@ class WordList(list):
 
     def singularize(self):
         '''Return the single version of each word in this WordList.'''
-        return [singularize(word) for word in self]
+        return [word.singularize() for word in self]
 
     def pluralize(self):
         '''Return the plural version of each word in this WordList.'''
-        return [pluralize(word) for word in self]
+        return [word.pluralize() for word in self]
 
 
 class BaseBlob(ComparableMixin):
@@ -128,9 +163,11 @@ class BaseBlob(ComparableMixin):
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
         '''
-        tags = [t for t in tag(self.raw, tokenize=True)
-            if not len(t[0]) == 1 and not PUNCTUATION_REGEX.match(t[0])]
-        return WordList(tags)
+        return [(Word(word, pos_tag=t), text_type(t))
+                for word, t in tag(self.raw, tokenize=True)
+                if not len(word) == 1
+                    and not PUNCTUATION_REGEX.match(text_type(t))]
+
 
     @cached_property
     def word_counts(self):

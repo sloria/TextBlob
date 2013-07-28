@@ -91,6 +91,12 @@ Tokenization
                           #  Sentence('Explicit is better than implicit.'),
                           #  ...]
 
+Words and inflection
+++++++++++++++++++++
+
+Each word in :code:`TextBlob.words` or :code:`Sentence.words` is a :code:`Word`
+object (a subclass of :code:`unicode`) with useful methods, e.g. for word inflection.
+
 Get word and noun phrase frequencies
 ++++++++++++++++++++++++++++++++++++
 
@@ -155,9 +161,12 @@ Or (if you must): ::
 
     easy_install textblob
 
-**IMPORTANT**: TextBlob depends on some NLTK models to work. The easiest way
-to get these is to run the :code:`download_corpora.py` script included with
-this distribution. You can get it `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_ .
+**IMPORTANT**: TextBlob depends on some NLTK corpora to work. The easiest way
+to get these is to run this command: ::
+
+    curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
+
+You can also download the script `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_ .
 Then run: ::
 
     python download_corpora.py

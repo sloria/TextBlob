@@ -8,7 +8,7 @@ import json
 from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
-from text.compat import PY2, text_type
+from text.compat import PY2, text_type, unicode
 import text.blob as tb
 
 
@@ -25,7 +25,7 @@ class WordListTest(TestCase):
     def test_slicing(self):
         wl = tb.WordList(self.words)
         first = wl[0]
-        assert_true(isinstance(first, text_type))
+        assert_true(isinstance(first, tb.Word))
         assert_equal(first, 'Beautiful')
 
         dogs = wl[0:2]
@@ -116,6 +116,11 @@ class SentenceTest(TestCase):
     def test_noun_phrases(self):
         nps = self.sentence.noun_phrases
         assert_equal(nps, ['belgian beer'])
+
+    def test_words_are_word_objects(self):
+        words = self.sentence.words
+        assert_true(isinstance(words[0], tb.Word))
+        assert_equal(words[1].pluralize(), 'places')
 
 
 class TextBlobTest(TestCase):
@@ -220,10 +225,9 @@ Namespaces are one honking great idea -- let's do more of those!"""
             ]))
 
     def test_pos_tags(self):
-        blob = \
-            tb.TextBlob('Simple is better than complex. Complex is better than complicated.'
-                     )
-        assert_equal(blob.pos_tags, tb.WordList([
+        blob = tb.TextBlob('Simple is better than complex. '
+                            'Complex is better than complicated.')
+        assert_equal(blob.pos_tags, [
             ('Simple', 'NN'),
             ('is', 'NNS'),
             ('better', 'JJR'),
@@ -234,7 +238,7 @@ Namespaces are one honking great idea -- let's do more of those!"""
             ('better', 'RBR'),
             ('than', 'IN'),
             ('complicated', 'VBN'),
-            ]))
+            ])
 
     def test_getitem(self):
         blob = tb.TextBlob('lorem ipsum')
@@ -450,6 +454,52 @@ Namespaces are one honking great idea -- let's do more of those!"""
         assert_equal(blob_dict['end_index'], blob.sentences[0].end)
         assert_almost_equal(blob_dict['sentiment'][0],
                             blob.sentences[0].sentiment[0], places=4)
+
+    def test_words_are_word_objects(self):
+        words = self.blob.words
+        assert_true(isinstance(words[0], tb.Word))
+
+    def test_words_have_pos_tags(self):
+        blob = tb.TextBlob('Simple is better than complex. '
+                            'Complex is better than complicated.')
+        first_word, first_tag = blob.pos_tags[0]
+        assert_true(isinstance(first_word, tb.Word))
+        assert_equal(first_word.pos_tag, first_tag)
+
+
+class WordTest(TestCase):
+
+    def setUp(self):
+        self.cat = tb.Word('cat')
+        self.cats = tb.Word('cats')
+
+    def test_init(self):
+        tb.Word("cat")
+        assert_true(isinstance(self.cat, tb.Word))
+        word = tb.Word('cat', 'NN')
+        assert_equal(word.pos_tag, 'NN')
+
+    def test_singularize(self):
+        singular = self.cats.singularize()
+        assert_equal(singular, 'cat')
+        assert_true(isinstance(singular, unicode))
+        assert_equal(self.cat.singularize(), 'cat')
+
+    def test_pluralize(self):
+        plural = self.cat.pluralize()
+        assert_equal(self.cat.pluralize(), 'cats')
+        assert_true(isinstance(plural, unicode))
+
+    def test_repr(self):
+        assert_equal(repr(self.cat), "Word('cat')")
+
+    def test_str(self):
+        assert_equal(str(self.cat), 'cat')
+
+    def test_has_str_methods(self):
+        assert_equal(self.cat.upper(), "CAT")
+        assert_equal(self.cat.lower(), "cat")
+        assert_equal(self.cat[0:2], 'ca')
 
 
 def is_blob(obj):
