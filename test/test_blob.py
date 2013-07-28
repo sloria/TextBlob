@@ -3,11 +3,13 @@
 """
 Tests for the text processor.
 """
+from __future__ import unicode_literals
 import json
 from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from text.blob import TextBlob, Sentence, WordList
+from text.compat import PY2, text_type
 
 
 class WordListTest(TestCase):
@@ -23,7 +25,7 @@ class WordListTest(TestCase):
     def test_slicing(self):
         wl = WordList(self.words)
         first = wl[0]
-        assert_true(isinstance(first, str))
+        assert_true(isinstance(first, text_type))
         assert_equal(first, 'Beautiful')
 
         dogs = wl[0:2]
@@ -32,7 +34,10 @@ class WordListTest(TestCase):
 
     def test_repr(self):
         wl = WordList(['Beautiful', 'is', 'better'])
-        assert_equal(repr(wl), "WordList(['Beautiful', 'is', 'better'])")
+        if PY2:
+            assert_equal(repr(wl), "WordList([u'Beautiful', u'is', u'better'])")
+        else:
+            assert_equal(repr(wl), "WordList(['Beautiful', 'is', 'better'])")
 
     def test_singularize(self):
         wl = WordList(['dogs', 'cats', 'buffaloes', 'men', 'mice'])
@@ -102,10 +107,10 @@ class SentenceTest(TestCase):
         # because they were stored as an attribute the first time
         assert_true(t2 < t1)
         assert_equal(tagged,
-                [(u'Any', u'DT'), (u'place', u'NN'), (u'with', u'IN'),
-                (u'frites', u'NNS'), (u'and', u'CC'), (u'Belgian', u'JJ'),
-                (u'beer', u'NN'), (u'has', u'VBZ'), (u'my', u'PRP$'),
-                (u'vote', u'NN')]
+                [('Any', 'DT'), ('place', 'NN'), ('with', 'IN'),
+                ('frites', 'NNS'), ('and', 'CC'), ('Belgian', 'JJ'),
+                ('beer', 'NN'), ('has', 'VBZ'), ('my', 'PRP$'),
+                ('vote', 'NN')]
         )
 
     def test_noun_phrases(self):
@@ -218,18 +223,17 @@ Namespaces are one honking great idea -- let's do more of those!"""
         blob = \
             TextBlob('Simple is better than complex. Complex is better than complicated.'
                      )
-        print(blob.pos_tags)
         assert_equal(blob.pos_tags, WordList([
-            (u'Simple', u'NN'),
-            (u'is', u'NNS'),
-            (u'better', u'JJR'),
-            (u'than', u'IN'),
-            (u'complex', u'NN'),
-            (u'Complex', u'NNP'),
-            (u'is', u'VBZ'),
-            (u'better', u'RBR'),
-            (u'than', u'IN'),
-            (u'complicated', u'VBN'),
+            ('Simple', 'NN'),
+            ('is', 'NNS'),
+            ('better', 'JJR'),
+            ('than', 'IN'),
+            ('complex', 'NN'),
+            ('Complex', 'NNP'),
+            ('is', 'VBZ'),
+            ('better', 'RBR'),
+            ('than', 'IN'),
+            ('complicated', 'VBN'),
             ]))
 
     def test_getitem(self):
@@ -420,14 +424,13 @@ Namespaces are one honking great idea -- let's do more of those!"""
         assert_equal(len(concatenated.sentences), 2)
 
     def test_sentiment(self):
-        positive = \
-            TextBlob('This is the best, most amazing text-processing library ever!'
-                     )
+        positive = TextBlob('This is the best, most amazing '
+                            'text-processing library ever!')
         assert_true(positive.sentiment[0] > 0.0)
         negative = TextBlob("bad bad bitches that's my muthufuckin problem.")
         assert_true(negative.sentiment[0] < 0.0)
         zen = TextBlob(self.text)
-        assert_equal(round(zen.sentiment[0], 2), 0.20)
+        assert_equal(round(zen.sentiment[0], 2), 0.22)
         assert_equal(round(zen.sentiment[1], 2), 0.58)
 
     def test_bad_init(self):

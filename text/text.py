@@ -9,6 +9,8 @@ import os
 import re
 from xml.etree import cElementTree
 
+from .compat import text_type, string_types, PY2
+
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
 except:
@@ -22,9 +24,9 @@ SLASH, WORD, POS, CHUNK, PNP, REL, ANCHOR, LEMMA = \
 def decode_string(v, encoding="utf-8"):
     """ Returns the given value as a Unicode string (if possible).
     """
-    if isinstance(encoding, str):
+    if type(encoding) in string_types:
         encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
-    if isinstance(v, str):
+    if type(v) in string_types:
         for e in encoding:
             try: return v.decode(*e)
             except:
@@ -35,9 +37,9 @@ def decode_string(v, encoding="utf-8"):
 def encode_string(v, encoding="utf-8"):
     """ Returns the given value as a Python byte string (if possible).
     """
-    if isinstance(encoding, str):
+    if type(encoding) in string_types:
         encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
-    if isinstance(v, str):
+    if type(v) in string_types:
         for e in encoding:
             try: return v.encode(*e)
             except:
@@ -182,11 +184,21 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
     for a, b in list(replace.items()):
         string = re.sub(a, b, string)
     # Handle Unicode quotes.
-    if isinstance(string, str):
-        string = string.replace("“", " “ ")
-        string = string.replace("”", " ” ")
-        string = string.replace("‘", " ‘ ")
-        string = string.replace("’", " ’ ")
+    if type(string) in string_types:
+        if PY2:
+            string = string.encode('utf-8').replace("“", " “ ")
+            string = string.encode('utf-8').replace("”", " ” ")
+            string = string.encode('utf-8').replace("‘", " ‘ ")
+            string = string.encode('utf-8').replace("’", " ’ ")
+            string = string.encode('utf-8').replace("'", " ' ")
+            string = string.encode('utf-8').replace('"', ' " ')
+        else:
+            string = string.replace("“", " “ ")
+            string = string.replace("”", " ” ")
+            string = string.replace("‘", " ‘ ")
+            string = string.replace("’", " ’ ")
+            string = string.replace("'", " ' ")
+            string = string.replace('"', ' " ')
     # Collapse whitespace.
     string = re.sub("\r\n", "\n", string)
     string = re.sub(linebreak, " %s " % EOS, string)
@@ -251,10 +263,10 @@ def _read(path, encoding="utf-8", comment=";;;"):
         strippping comments and decoding each line to Unicode.
     """
     if path:
-        if isinstance(path, str) and os.path.exists(path):
+        if type(path) in string_types and os.path.exists(path):
             # From file path.
             f = open(path)
-        elif isinstance(path, str):
+        elif type(path) in string_types:
             # From string.
             f = path.splitlines()
         elif hasattr(path, "read"):
@@ -652,11 +664,11 @@ class Sentiment(lazydict):
         # A synset id.
         # Sentiment("a-00193480") => horrible => (-0.6, 1.0)   (English WordNet)
         # Sentiment("c_267") => verschrikkelijk => (-0.9, 1.0) (Dutch Cornetto)
-        elif isinstance(s, str) and RE_SYNSET.match(s):
+        elif type(s) in string_types and RE_SYNSET.match(s):
             a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos)]
         # A string of words.
         # Sentiment("a horrible movie") => (-0.6, 1.0)
-        elif isinstance(s, str):
+        elif type(s) in string_types:
             a = self.assessments(((w.lower(), None) for w in " ".join(self.tokenizer(s)).split()), negation)
         # A pattern.en.Text.
         elif hasattr(s, "sentences"):
@@ -870,7 +882,7 @@ class Parser:
             Punctuation marks are separated from each word by a space.
         """
         # "The cat purs." => ["The cat purs ."]
-        return find_tokens(string,
+        return find_tokens(text_type(string),
                 punctuation = kwargs.get(  "punctuation", PUNCTUATION),
               abbreviations = kwargs.get("abbreviations", ABBREVIATIONS),
                     replace = kwargs.get(      "replace", replacements),
@@ -927,13 +939,13 @@ class Parser:
         if tokenize is True:
             s = self.find_tokens(s)
         if isinstance(s, (list, tuple)):
-            s = [isinstance(s, str) and s.split(" ") or s for s in s]
-        if isinstance(s, str):
+            s = [type(s) in string_types and s.split(" ") or s for s in s]
+        if type(s) in string_types:
             s = [s.split(" ") for s in s.split("\n")]
         # Unicode.
         for i in range(len(s)):
             for j in range(len(s[i])):
-                if isinstance(s[i][j], str):
+                if type(s[i][j]) in string_types:
                     s[i][j] = decode_string(s[i][j], encoding)
             # Tagger (required by chunker, labeler & lemmatizer).
             if tags or chunks or relations or lemmata:
@@ -993,7 +1005,7 @@ class TaggedString(str):
             For example: TaggedString("cat/NN/NP", tags=["word", "pos", "chunk"]).
         """
         # From a TaggedString:
-        if isinstance(string, str) and hasattr(string, "tags"):
+        if type(string) in string_types and hasattr(string, "tags"):
             tags, language = string.tags, string.language
         # From a TaggedString.split(TOKENS) list:
         if isinstance(string, list):

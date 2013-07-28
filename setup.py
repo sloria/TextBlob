@@ -67,7 +67,7 @@ with open('LICENSE') as fp:
 
 setup(
     name='textblob',
-    version='0.3.5',
+    version='0.3.6',
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
     long_description=long_desc,
@@ -88,6 +88,8 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
     ),
     tests_require=['nose'],

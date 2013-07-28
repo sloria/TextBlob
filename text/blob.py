@@ -13,6 +13,7 @@ from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize, pluralize
 from .en import sentiment as _sentiment, tag
 from .mixins import ComparableMixin
+from .compat import text_type, string_types
 
 
 class WordList(list):
@@ -87,9 +88,9 @@ class BaseBlob(ComparableMixin):
         Arguments:
         - text: A string, the text.
         '''
-        if not isinstance(text, str):
+        if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
-                            'must be a string.')
+                            'must be a string, not {0}'.format(type(text)))
         self.raw = text
         self.stripped = lowerstrip(text)
 
@@ -201,7 +202,7 @@ class BaseBlob(ComparableMixin):
         Arguments:
         - `other`: a string or a text object
         '''
-        if isinstance(other, str):
+        if isinstance(other, text_type):
             return TextBlob(str(self) + other)
         elif isinstance(other, BaseBlob):
             return TextBlob(str(self) + str(other))

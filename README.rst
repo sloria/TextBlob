@@ -2,6 +2,12 @@ TextBlob
 ========
 
 .. image:: https://travis-ci.org/sloria/TextBlob.png
+    :target: https://travis-ci.org/sloria/TextBlob
+    :alt: Travis-CI
+
+.. image:: https://pypip.in/d/textblob/badge.png
+    :target: https://crate.io/packages/textblob/
+    :alt: Number of PyPI downloads
 
 Simplified text processing for Python 2 and 3.
 
@@ -138,6 +144,8 @@ Get a JSON-serialized version of the blob
 
 Installation
 ------------
+
+TextBlob's only external dependency is PyYAML. A vendorized version of NLTK is bundled internally.
 
 If you have :code:`pip`: ::
 
