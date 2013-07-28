@@ -434,8 +434,8 @@ Namespaces are one honking great idea -- let's do more of those!"""
         negative = tb.TextBlob("bad bad bitches that's my muthufuckin problem.")
         assert_true(negative.sentiment[0] < 0.0)
         zen = tb.TextBlob(self.text)
-        assert_equal(round(zen.sentiment[0], 2), 0.22)
-        assert_equal(round(zen.sentiment[1], 2), 0.58)
+        assert_equal(round(zen.sentiment[0], 1), 0.2)
+        assert_equal(round(zen.sentiment[1], 1), 0.6)
 
     def test_bad_init(self):
         assert_raises(TypeError, tb.TextBlob.__init__, ['bad'])

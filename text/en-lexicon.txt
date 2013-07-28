@@ -184,6 +184,7 @@ $ $
 've VBP
 'way RB
 'we'd MD
+(!) SYM
 ( (
 (3/26 1991)
 (9/9 1991)
@@ -63991,6 +63992,10 @@ ionizing VBG
 ionosphere NN
 ions NNS
 iota NN
+iMac NNP
+iPad NNP
+iPod NNP
+iPhone NNP
 ip NN
 ipso FW
 irate JJ
