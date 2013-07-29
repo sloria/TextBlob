@@ -1,5 +1,6 @@
 import sys
 import os
+import text
 
 try:
     from setuptools import setup, find_packages
@@ -33,10 +34,19 @@ except ImportError:
 
     find_packages = _find_packages
 
-PUBLISH_CMD = "python setup.py register sdist upload"
+PUBLISH_CMD = "python setup.py register sdist bdist_wheel upload"
+TEST_PUBLISH_CMD = 'python setup.py register -r test sdist bdist_wheel upload -r test'
 TEST_CMD = 'nosetests'
 
-if 'test' in sys.argv:
+if 'publish' in sys.argv:
+    os.system(PUBLISH_CMD)
+    sys.exit()
+
+if 'publish_test' in sys.argv:
+    os.system(TEST_PUBLISH_CMD)
+    sys.exit()
+
+if 'run_tests' in sys.argv:
     try:
         __import__('nose')
     except ImportError:
@@ -46,32 +56,14 @@ if 'test' in sys.argv:
     os.system(TEST_CMD)
     sys.exit()
 
-if 'publish' in sys.argv:
-    os.system(PUBLISH_CMD)
-    sys.exit()
-
-
-def cheeseshopify(rst):
-    '''Since PyPI doesn't support the RST `code-block` directive or the
-    :code: role, replace all `code-block` directives with `::` and
-    `:code:` with "".
-    '''
-    ret = rst.replace(".. code-block:: python", "::").replace(":code:", "")
-    return ret
-
-with open('README.rst') as fp:
-    long_desc = cheeseshopify(fp.read())
-
-with open('LICENSE') as fp:
-    license = fp.read()
-
 setup(
     name='textblob',
-    version='0.3.7',
+    version=text.__version__,
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
-    long_description=long_desc,
-    license=license,
+    long_description=(open("README.rst").read() + '\n\n' +
+                        open("HISTORY.rst").read()),
+    license=open("LICENSE").read(),
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',

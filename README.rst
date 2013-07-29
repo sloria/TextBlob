@@ -23,7 +23,7 @@ Installation
 
 TextBlob's only external dependency is PyYAML. A vendorized version of NLTK is bundled internally.
 
-If you have :code:`pip`: ::
+If you have ``pip``: ::
 
     pip install textblob
 
@@ -79,8 +79,8 @@ Part-of-speech tags and noun phrases...
 Sentiment analysis
 ++++++++++++++++++
 
-The :code:`sentiment` property returns a tuple of the form :code:`(polarity, subjectivity)` where :code:`polarity` ranges from -1.0 to 1.0 and
-:code:`subjectivity` ranges from 0.0 to 1.0.
+The ``sentiment`` property returns a tuple of the form ``(polarity, subjectivity)`` where ``polarity`` ranges from -1.0 to 1.0 and
+``subjectivity`` ranges from 0.0 to 1.0.
 
 .. code-block:: python
 
@@ -104,8 +104,8 @@ Tokenization
 Words and inflection
 ++++++++++++++++++++
 
-Each word in :code:`TextBlob.words` or :code:`Sentence.words` is a :code:`Word`
-object (a subclass of :code:`unicode`) with useful methods, e.g. for word inflection.
+Each word in ``TextBlob.words`` or ``Sentence.words`` is a ``Word``
+object (a subclass of ``unicode``) with useful methods, e.g. for word inflection.
 
 .. code-block:: python
 
@@ -147,7 +147,7 @@ TextBlobs are like Python strings!
 Get start and end indices of sentences
 ++++++++++++++++++++++++++++++++++++++
 
-Use :code:`sentence.start` and :code:`sentence.end`. This can be useful for sentence highlighting, for example.
+Use ``sentence.start`` and ``sentence.end``. This can be useful for sentence highlighting, for example.
 
 .. code-block:: python
 
@@ -171,11 +171,11 @@ Overriding the noun phrase extractor
 ++++++++++++++++++++++++++++++++++++
 
 TextBlob currently has two noun phrases chunker implementations,
-:code:`text.np_extractor.FastNPExtractor` (default, based on Shlomi Babluki's implementation from
+``text.np_extractor.FastNPExtractor`` (default, based on Shlomi Babluki's implementation from
 `this blog post <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
-and :code:`text.np_extractor.ConllExtractor` (currently working on Python 2 only).
+and ``text.np_extractor.ConllExtractor`` (currently working on Python 2 only).
 
-You can change the chunker implementation (or even use your own) by overriding :code:`TextBlob.np_extractor`
+You can change the chunker implementation (or even use your own) by overriding ``TextBlob.np_extractor``
 
 .. code-block:: python
 
@@ -183,7 +183,7 @@ You can change the chunker implementation (or even use your own) by overriding :
     extractor = ConllExtractor()
     blob = TextBlob("Python is a widely used general-purpose, high-level programming language.")
     blob.np_extractor = extractor
-    blob.noun_phrases  # This will use the fast noun phrase extractor
+    blob.noun_phrases  # This will use the Conll2000 noun phrase extractor
 
 
 Testing
