@@ -13,7 +13,7 @@ from .inflect import singularize as _singularize, pluralize as _pluralize
 from .en import sentiment as _sentiment
 from .mixins import ComparableMixin
 from .compat import text_type, string_types, unicode
-from .np_extractor import BaseNPExtractor, FastNPExtractor
+from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 
 

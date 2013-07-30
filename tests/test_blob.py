@@ -11,7 +11,7 @@ from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 from text.compat import PY2, text_type, unicode
 import text.blob as tb
-from text.np_extractor import ConllExtractor, FastNPExtractor
+from text.np_extractors import ConllExtractor, FastNPExtractor
 from text.taggers import NLTKTagger, PatternTagger
 
 

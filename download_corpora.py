@@ -7,6 +7,7 @@ REQUIRED_CORPORA = [
     'brown',
     'punkt',
     'conll2000',
+    'maxent_treebank_pos_tagger',
 ]
 
 def main():

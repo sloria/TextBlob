@@ -76,7 +76,7 @@ Part-of-speech tags and noun phrases...
 
     wiki.noun_phrases   # WordList(['python', 'design philosophy',  'code readability'])
 
-Note: The first time you access ``noun_phrases`` might take a few seconds because the noun phrase chunker needs to be trained. Subsequent calls to `noun_phrases` will be quick, however, since all TextBlobs share the same instance of a noun phrase chunker.
+Note: The first time you access ``noun_phrases`` might take a few seconds because the noun phrase chunker needs to be trained. Subsequent calls to ``noun_phrases`` will be quick, however, since all TextBlobs share the same instance of a noun phrase chunker.
 
 Sentiment analysis
 ++++++++++++++++++
@@ -177,16 +177,16 @@ Noun Phrase Chunkers
 ++++++++++++++++++++
 
 TextBlob currently has two noun phrases chunker implementations,
-``text.np_extractor.FastNPExtractor`` (default, based on Shlomi Babluki's implementation from
+``text.np_extractors.FastNPExtractor`` (default, based on Shlomi Babluki's implementation from
 `this blog post <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
-and ``text.np_extractor.ConllExtractor``, which uses the CoNLL 2000 corpus to train a tagger (*currently working on Python 2 only*).
+and ``text.np_extractors.ConllExtractor``, which uses the CoNLL 2000 corpus to train a tagger (*currently working on Python 2 only*).
 
 You can change the chunker implementation (or even use your own) by explicitly passing an instance of a noun phrase extractor to a TextBlob's constructor.
 
 .. code-block:: python
 
     from text.blob import TextBlob
-    from text.np_extractor import ConllExtractor
+    from text.np_extractors import ConllExtractor
 
     extractor = ConllExtractor()
     blob = TextBlob("Extract my noun phrases.", np_extractor=extractor)
