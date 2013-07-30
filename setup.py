@@ -68,7 +68,7 @@ setup(
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
     install_requires=['PyYAML'],
-    packages=find_packages(exclude=('test',)),
+    packages=find_packages(exclude=('test*',)),
     package_data={
         "text": ["*.txt", "*.xml"],
     },

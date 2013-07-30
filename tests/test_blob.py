@@ -8,6 +8,7 @@ import json
 from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
+from nose.plugins.attrib import attr
 from text.compat import PY2, text_type, unicode
 import text.blob as tb
 from text.np_extractor import ConllExtractor, FastNPExtractor
@@ -262,6 +263,7 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob("This is a sentence.")
         assert_equal(blob.pos_tags[2][0], 'a')
 
+    @attr('slow')
     def test_np_extractor_defaults_to_conll2000(self):
         text = "Python is a high-level scripting language."
         blob1 = tb.TextBlob(text)
@@ -272,11 +274,18 @@ is managed by the non-profit Python Software Foundation.'''
         blob2 = tb.TextBlob("This is another sentence")
         assert_true(blob1.np_extractor is blob2.np_extractor)
 
+    @attr('slow')
     def test_can_use_different_np_extractors(self):
         e = ConllExtractor()
         text = "Python is a high-level scripting language."
         blob = tb.TextBlob(text)
         blob.np_extractor = e
+        assert_true(isinstance(blob.np_extractor, ConllExtractor))
+
+    @attr('slow')
+    def test_can_pass_np_extractor_to_constructor(self):
+        e = ConllExtractor()
+        blob = tb.TextBlob('Hello world!', np_extractor=e)
         assert_true(isinstance(blob.np_extractor, ConllExtractor))
 
     def test_getitem(self):

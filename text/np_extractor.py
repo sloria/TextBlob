@@ -25,7 +25,7 @@ class BaseNPExtractor(object):
 
     def extract(self, text):
         '''Return a list of noun phrases (strings) for a body of text.'''
-        raise (NotImplementedError, 'must implement an extract(text) method')
+        raise(NotImplementedError, 'must implement an extract(text) method')
 
 
 class ChunkParser(nltk.ChunkParserI):

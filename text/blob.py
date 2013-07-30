@@ -119,7 +119,7 @@ class BaseBlob(ComparableMixin):
 
     np_extractor = FastNPExtractor()
 
-    def __init__(self, text):
+    def __init__(self, text, np_extractor=None):
         '''Create a blob-like object.
 
         Arguments:
@@ -131,6 +131,7 @@ class BaseBlob(ComparableMixin):
         self.raw = text
         self.string = text
         self.stripped = lowerstrip(text)
+        self.np_extractor = np_extractor if np_extractor else BaseBlob.np_extractor
 
     def _tokenize(self):
         '''Tokenizes the blob into words.'''

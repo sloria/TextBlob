@@ -9,4 +9,4 @@ install:
     - "pip install -U . --use-mirrors"
     - "python download_corpora.py"
 # Run tests
-script: nosetests
+script: "python run_tests.py"

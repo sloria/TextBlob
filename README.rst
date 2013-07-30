@@ -191,7 +191,7 @@ Testing
 -------
 Run ::
 
-    nosetests
+    python run_tests.py
 
 to run all tests.
 
