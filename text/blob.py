@@ -10,10 +10,11 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from .decorators import cached_property
 from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
-from .en import sentiment as _sentiment, tag
+from .en import sentiment as _sentiment
 from .mixins import ComparableMixin
 from .compat import text_type, string_types, unicode
-from .np_extractor import FastNPExtractor
+from .np_extractor import BaseNPExtractor, FastNPExtractor
+from .taggers import BaseTagger, PatternTagger
 
 
 class Word(unicode):
@@ -118,12 +119,17 @@ class BaseBlob(ComparableMixin):
     '''
 
     np_extractor = FastNPExtractor()
+    pos_tagger = PatternTagger()
 
-    def __init__(self, text, np_extractor=None):
+    def __init__(self, text, np_extractor=None, pos_tagger=None):
         '''Create a blob-like object.
 
         Arguments:
         - text: A string, the text.
+        - np_extractor: An instance of an noun phrase extractor class found in
+            text.np_extractor. Defaults to the FastNPExtractor.
+        - pos_tagger: An instance of a POS tagger found in text.taggers.
+            Defaults to the PatternTagger.
          '''
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
@@ -131,7 +137,14 @@ class BaseBlob(ComparableMixin):
         self.raw = text
         self.string = text
         self.stripped = lowerstrip(text)
+        if (np_extractor is not None and
+                not isinstance(np_extractor, BaseNPExtractor)):
+            raise ValueError("np_extractor must be an instance of BaseNPExtractor")
         self.np_extractor = np_extractor if np_extractor else BaseBlob.np_extractor
+        if (pos_tagger is not None and
+                not isinstance(pos_tagger, BaseTagger)):
+            raise ValueError("pos_tagger must be an instance of BaseTagger")
+        self.pos_tagger = pos_tagger if pos_tagger else BaseBlob.pos_tagger
 
     def _tokenize(self):
         '''Tokenizes the blob into words.'''
@@ -172,11 +185,8 @@ class BaseBlob(ComparableMixin):
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
         '''
-        print("In pos_tags...")
-        print(self.words)
-        print(type(self.words))
         return [(Word(word, pos_tag=t), text_type(t))
-                for word, t in tag(self.raw)
+                for word, t in self.pos_tagger.tag(self.raw)
                 if not PUNCTUATION_REGEX.match(text_type(t))]
 
     @cached_property

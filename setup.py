@@ -36,7 +36,7 @@ except ImportError:
 
 PUBLISH_CMD = "python setup.py register sdist bdist_wheel upload"
 TEST_PUBLISH_CMD = 'python setup.py register -r test sdist bdist_wheel upload -r test'
-TEST_CMD = 'nosetests'
+TEST_CMD = 'python run_tests.py'
 
 if 'publish' in sys.argv:
     os.system(PUBLISH_CMD)

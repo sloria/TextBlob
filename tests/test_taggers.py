@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
@@ -26,8 +26,8 @@ class TestPatternTagger(unittest.TestCase):
             ('Complex', 'NNP'), ('is', 'VBZ'), ('better', 'RBR'),
             ('than', 'IN'), ('complicated', 'VBN'), ('.', '.')])
 
-@attr("py2_only")
-@attr("requires_numpy")
+@attr("slow")
+@attr(requires_numpy=True)
 class TestNLTKTagger(unittest.TestCase):
 
     def setUp(self):

@@ -168,24 +168,45 @@ Get a JSON-serialized version of the blob
                 # '"end_index": 30, "start_index": 0}
                 #  ...]'
 
-Overriding the noun phrase extractor
-++++++++++++++++++++++++++++++++++++
+Advanced usage
+--------------
+
+Noun Phrase Chunkers
+++++++++++++++++++++
 
 TextBlob currently has two noun phrases chunker implementations,
 ``text.np_extractor.FastNPExtractor`` (default, based on Shlomi Babluki's implementation from
 `this blog post <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
-and ``text.np_extractor.ConllExtractor`` (currently working on Python 2 only).
+and ``text.np_extractor.ConllExtractor``, which uses the CoNLL 2000 corpus to train a tagger (*currently working on Python 2 only*).
 
-You can change the chunker implementation (or even use your own) by overriding ``TextBlob.np_extractor``
+You can change the chunker implementation (or even use your own) by explicitly passing an instance of a noun phrase extractor to a TextBlob's constructor.
 
 .. code-block:: python
 
+    from text.blob import TextBlob
     from text.np_extractor import ConllExtractor
+
     extractor = ConllExtractor()
-    blob = TextBlob("Python is a widely used general-purpose, high-level programming language.")
-    blob.np_extractor = extractor
+    blob = TextBlob("Extract my noun phrases.", np_extractor=extractor)
     blob.noun_phrases  # This will use the Conll2000 noun phrase extractor
 
+POS Taggers
++++++++++++
+
+TextBlob currently has two POS tagger implementations, located in ``text.taggers``. The default is the ``PatternTagger`` which uses the same implementation as the excellent pattern_ library.
+
+The second implementation is ``NLTKTagger`` which uses NLTK_'s TreeBank tagger. *It requires numpy and only works on Python 2*.
+
+Similar to the noun phrase chunkers, you can explicitly specify which POS tagger to use by passing a tagger instance to the constructor.
+
+.. code-block:: python
+
+    from text.blob import TextBlob
+    from text.taggers import NLTKTagger
+
+    nltk_tagger = NLTKTagger()
+    blob = TextBlob("Tag! You're It!", pos_tagger=nltk_tagger)
+    blob.pos_tags
 
 Testing
 -------
@@ -200,4 +221,5 @@ License
 
 TextBlob is licenced under the MIT license. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
 
-.. _download_corpora.py:
+.. _pattern: http://www.clips.ua.ac.be/pattern
+.. _NLTK: http://nltk.org/

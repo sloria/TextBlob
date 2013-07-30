@@ -9,8 +9,6 @@ from text.np_extractor import ConllExtractor, filter_insignificant
 @attr('py2_only')
 class TestConllExtractor(unittest.TestCase):
 
-    '''An example unit test case.'''
-
     def setUp(self):
         self.extractor = ConllExtractor()
         self.text = '''
@@ -29,6 +27,7 @@ constructs intended to enable clear programs on both a small and large scale.
         assert_true("design philosophy" in noun_phrases)
         assert_true("code readability" in noun_phrases)
 
+    @attr('slow')
     def test_parse_sentence(self):
         parsed = self.extractor.parse_sentence(self.sentence)
         assert_true(isinstance(parsed, nltk.tree.Tree))

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import re
 import nltk
 
-from .en import tag
+from .taggers import PatternTagger
 
 
 class BaseNPExtractor(object):
@@ -56,6 +56,8 @@ class ConllExtractor(BaseNPExtractor):
     ConLL-2000 training corpus.
     '''
 
+    POS_TAGGER = PatternTagger()
+
     # The context-free grammar with which to filter the noun phrases
     CFG = {
         ('NNP', 'NNP'): 'NNP',
@@ -92,7 +94,7 @@ class ConllExtractor(BaseNPExtractor):
 
     def parse_sentence(self, sentence):
         '''Tag and parse a sentence (a plain, untagged string).'''
-        tagged = tag(sentence)
+        tagged = self.POS_TAGGER.tag(sentence)
         return self.parser.parse(tagged)
 
 

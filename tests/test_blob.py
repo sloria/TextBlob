@@ -12,6 +12,7 @@ from nose.plugins.attrib import attr
 from text.compat import PY2, text_type, unicode
 import text.blob as tb
 from text.np_extractor import ConllExtractor, FastNPExtractor
+from text.taggers import NLTKTagger, PatternTagger
 
 
 class WordListTest(TestCase):
@@ -264,7 +265,7 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob.pos_tags[2][0], 'a')
 
     @attr('slow')
-    def test_np_extractor_defaults_to_conll2000(self):
+    def test_np_extractor_defaults_to_fast_tagger(self):
         text = "Python is a high-level scripting language."
         blob1 = tb.TextBlob(text)
         assert_true(isinstance(blob1.np_extractor, FastNPExtractor))
@@ -281,6 +282,21 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob(text)
         blob.np_extractor = e
         assert_true(isinstance(blob.np_extractor, ConllExtractor))
+
+    def test_pos_tagger_defaults_to_pattern(self):
+        blob = tb.TextBlob("some text")
+        assert_true(isinstance(blob.pos_tagger, PatternTagger))
+
+    def test_pos_tagger_is_shared_among_instances(self):
+        blob1 = tb.TextBlob("This is one sentence")
+        blob2 = tb.TextBlob("This is another sentence.")
+        assert_true(blob1.pos_tagger is blob2.pos_tagger)
+
+
+    def test_can_use_different_pos_tagger(self):
+        tagger = NLTKTagger()
+        blob = tb.TextBlob("this is some text", pos_tagger=tagger)
+        assert_true(isinstance(blob.pos_tagger, NLTKTagger))
 
     @attr('slow')
     def test_can_pass_np_extractor_to_constructor(self):
@@ -465,8 +481,16 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(round(zen.sentiment[0], 1), 0.2)
         assert_equal(round(zen.sentiment[1], 1), 0.6)
 
+    @attr('py27_only')
     def test_bad_init(self):
-        assert_raises(TypeError, tb.TextBlob.__init__, ['bad'])
+        with assert_raises(TypeError):
+            tb.TextBlob(['bad'])
+        with assert_raises(ValueError):
+            tb.TextBlob("this is fine",
+                        np_extractor="this is not fine")
+        with assert_raises(ValueError):
+            tb.TextBlob("this is fine",
+                        pos_tagger="this is not fine")
 
     def test_in(self):
         blob = tb.TextBlob('Beautiful is better than ugly. ')

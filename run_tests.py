@@ -9,27 +9,47 @@ Usage:
     # To skip slow tests
     python run_tests.py fast
 '''
-
-import os
+from __future__ import unicode_literals
+import subprocess
 import sys
 from text.compat import PY2
 
-BASE_CMD = 'nosetests'
+BASE_CMD = 'nosetests '
+PY26 = PY2 and int(sys.version_info[1]) < 7
 
-def get_command():
-    command = BASE_CMD
+
+def main():
+    args = get_args()
+    command = BASE_CMD + ' '.join(args)
+    print("Test command: {0}".format(command))
+    status_code = subprocess.call(command, shell=True)
+    sys.exit(status_code)
+
+
+def get_args():
+    args = []
+    attr_conditions = []  # Use nose's attribselect plugin to filter tests
+    if "force-all" in sys.argv:
+        # Don't exclude any tests
+        return args
+    if PY26:
+        # Exclude tests that don't work on python2.6
+        attr_conditions.append("not py27_only")
     try:
         __import__('numpy')
     except ImportError:
         # Exclude tests that require numpy
-        command += " -a '!requires_numpy'"
+        attr_conditions.append("not requires_numpy")
     if not PY2:
         # Exclude tests that only work on python2
-        command += " -a !py2_only"
+        attr_conditions.append("not py2_only")
     if "fast" in sys.argv:
-        command += " -a !slow"
-    return command
+        attr_conditions.append("not slow")
 
+    attr_expression = " and ".join(attr_conditions)
+    if attr_expression:
+        args.extend(["-A", '"{0}"'.format(attr_expression)])
+    return args
 
 if __name__ == '__main__':
-    os.system(get_command())
+    main()
