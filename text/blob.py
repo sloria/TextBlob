@@ -64,8 +64,8 @@ class WordList(list):
         strings = [text_type(w) for w in self._collection]
         if len(self) > 60:
             return '{cls}({beginning}...{end})'.format(cls=class_name,
-                    beginning=strings[:3],
-                    end=strings[-3:])
+                                                beginning=strings[:3],
+                                                end=strings[-3:])
         else:
             return '{cls}({lst})'.format(cls=class_name, lst=strings)
 
@@ -171,11 +171,12 @@ class BaseBlob(ComparableMixin):
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
         '''
+        print("In pos_tags...")
+        print(self.words)
+        print(type(self.words))
         return [(Word(word, pos_tag=t), text_type(t))
-                for word, t in tag(self.raw, tokenize=True)
-                if not len(word) == 1
-                    and not PUNCTUATION_REGEX.match(text_type(t))]
-
+                for word, t in tag(self.raw)
+                if not PUNCTUATION_REGEX.match(text_type(t))]
 
     @cached_property
     def word_counts(self):
@@ -213,6 +214,10 @@ class BaseBlob(ComparableMixin):
         '''Returns a string representation used in print statements
         or str(my_blob).'''
         return self.raw
+
+    def __unicode__(self):
+        '''Returns the unicode representation of the blob.'''
+        return unicode(self.raw)
 
     def __iter__(self):
         '''Makes the object iterable as if it were a string,
@@ -444,4 +449,4 @@ class Sentence(BaseBlob):
             'stripped': self.stripped,
             'noun_phrases': self.noun_phrases,
             'sentiment': self.sentiment,
-            }
+        }

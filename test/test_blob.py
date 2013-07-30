@@ -226,9 +226,8 @@ is managed by the non-profit Python Software Foundation.'''
         assert_true(blob3 < blob2)  # test <
 
     def test_words(self):
-        blob = \
-            tb.TextBlob('Beautiful is better than ugly. Explicit is better than implicit.'
-                     )
+        blob = tb.TextBlob('Beautiful is better than ugly. '
+                            'Explicit is better than implicit.')
         assert_true(isinstance(blob.words, tb.WordList))
         assert_equal(blob.words, tb.WordList([
             'Beautiful',
@@ -259,10 +258,13 @@ is managed by the non-profit Python Software Foundation.'''
             ('complicated', 'VBN'),
             ])
 
+    def test_pos_tags_includes_one_letter_articles(self):
+        blob = tb.TextBlob("This is a sentence.")
+        assert_equal(blob.pos_tags[2][0], 'a')
+
     def test_np_extractor_defaults_to_conll2000(self):
         text = "Python is a high-level scripting language."
         blob1 = tb.TextBlob(text)
-        print(blob1.noun_phrases)  # Lazy loads the extractor
         assert_true(isinstance(blob1.np_extractor, FastNPExtractor))
 
     def test_np_extractor_is_shared_among_instances(self):
@@ -275,7 +277,6 @@ is managed by the non-profit Python Software Foundation.'''
         text = "Python is a high-level scripting language."
         blob = tb.TextBlob(text)
         blob.np_extractor = e
-        print(blob.noun_phrases)
         assert_true(isinstance(blob.np_extractor, ConllExtractor))
 
     def test_getitem(self):

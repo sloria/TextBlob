@@ -72,7 +72,7 @@ Part-of-speech tags and noun phrases...
 .. code-block:: python
 
     wiki.pos_tags       # [(Word('Python'), 'NNP'), (Word('is'), 'VBZ'),
-                        #  (Word('widely'), 'RB')...]
+                        #  (Word('a'), u'DT'), (Word('widely'), 'RB')...]
 
     wiki.noun_phrases   # WordList(['python', 'design philosophy',  'code readability'])
 
@@ -84,7 +84,8 @@ The ``sentiment`` property returns a tuple of the form ``(polarity, subjectivity
 
 .. code-block:: python
 
-    blob.sentiment        # (0.20, 0.58)
+    testimonial = TextBlob("Textblob is amazingly simple to use. What great fun!")
+    testimonial.sentiment        # (0.4583333333333333, 0.4357142857142857)
 
 Tokenization
 ++++++++++++

@@ -7,7 +7,7 @@ import sys
 
 from .text import Parser as _Parser, Sentiment, Lexicon, WORD, POS, CHUNK, PNP
 
-from .compat import text_type
+from .compat import text_type, unicode
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -70,12 +70,12 @@ def tokenize(s, *args, **kwargs):
 def parse(s, *args, **kwargs):
     """ Returns a tagged Unicode string.
     """
-    return parser.parse(str(s), *args, **kwargs)
+    return parser.parse(unicode(s), *args, **kwargs)
 
 def parsetree(s, *args, **kwargs):
     """ Returns a parsed Text from the given string.
     """
-    return Text(parse(str(s), *args, **kwargs))
+    return Text(parse(unicode(s), *args, **kwargs))
 
 def split(s, token=[WORD, POS, CHUNK, PNP]):
     """ Returns a parsed Text from the given parsed string.
@@ -86,9 +86,9 @@ def tag(s, tokenize=True, encoding="utf-8"):
     """ Returns a list of (token, tag)-tuples from the given string.
     """
     tags = []
-    for sentence in parse(text_type(s).encode('utf-8'), tokenize, True, False, False, False, encoding).split():
+    for sentence in parse(s, tokenize, True, False, False, False, encoding).split():
         for token in sentence:
-            tags.append((text_type(token[0]), text_type(token[1])))
+            tags.append((token[0], token[1]))
     return tags
 
 def suggest(w):
@@ -99,14 +99,14 @@ def suggest(w):
 def polarity(s, **kwargs):
     """ Returns the sentence polarity (positive/negative) between -1.0 and 1.0.
     """
-    return sentiment(str(s), **kwargs)[0]
+    return sentiment(unicode(s), **kwargs)[0]
 
 def subjectivity(s, **kwargs):
     """ Returns the sentence subjectivity (objective/subjective) between 0.0 and 1.0.
     """
-    return sentiment(str(s), **kwargs)[1]
+    return sentiment(unicode(s), **kwargs)[1]
 
 def positive(s, threshold=0.1, **kwargs):
     """ Returns True if the given sentence has a positive sentiment (polarity >= threshold).
     """
-    return polarity(str(s), **kwargs) >= threshold
+    return polarity(unicode(s), **kwargs) >= threshold
