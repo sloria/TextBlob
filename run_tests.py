@@ -24,7 +24,7 @@ def main():
 
 
 def get_argv():
-    args = [sys.argv[0]]
+    args = [sys.argv[0], '--exclude', 'nltk']
     attr_conditions = []  # Use nose's attribselect plugin to filter tests
     if "force-all" in sys.argv:
         # Don't exclude any tests

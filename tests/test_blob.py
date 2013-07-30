@@ -65,6 +65,10 @@ class WordListTest(TestCase):
         assert_equal(wl.count('monty', case_sensitive=True), 1)
         assert_equal(wl.count('mon'), 0)
 
+    def test_convert_to_list(self):
+        wl = tb.WordList(self.words)
+        assert_equal(list(wl), self.words)
+
 
 class SentenceTest(TestCase):
 
@@ -84,6 +88,7 @@ class SentenceTest(TestCase):
     def test_len(self):
         assert_equal(len(self.sentence), len(self.raw_sentence))
 
+    @attr('slow')
     def test_dict(self):
         sentence_dict = self.sentence.dict
         assert_equal(sentence_dict, {

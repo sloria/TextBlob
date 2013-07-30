@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.9 (unreleased)
+------------------
+- Updated nltk.
+- ConllExtractor is now Python 3-compatible.
+
 0.3.8 (2013-07-30)
 ------------------
 - Importing TextBlob is now **much faster**. This is because the noun phrase parsers are trained only on the first call to ``noun_phrases`` (instead of training them every time you import TextBlob).

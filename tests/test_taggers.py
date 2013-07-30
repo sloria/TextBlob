@@ -27,7 +27,8 @@ class TestPatternTagger(unittest.TestCase):
             ('than', 'IN'), ('complicated', 'VBN'), ('.', '.')])
 
 @attr("slow")
-@attr(requires_numpy=True)
+@attr("requires_numpy")
+@attr("py2_only")
 class TestNLTKTagger(unittest.TestCase):
 
     def setUp(self):

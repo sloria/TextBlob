@@ -23,24 +23,18 @@ Installation
 
 TextBlob's only external dependency is PyYAML. A vendorized version of NLTK is bundled internally.
 
-If you have ``pip``: ::
+If you have ``pip`` (you should): ::
 
     pip install textblob
 
-Or (if you must): ::
-
-    easy_install textblob
+If you don't have ``pip``, run this first: ``curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python``
 
 **IMPORTANT**: TextBlob depends on some NLTK corpora to work. The easiest way
 to get these is to run this command: ::
 
     curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
-You can also download the script `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_ .
-Then run: ::
-
-    python download_corpora.py
-
+You can also download the script `here <https://raw.github.com/sloria/TextBlob/master/download_corpora.py>`_  then run it.
 
 
 Usage
@@ -182,7 +176,7 @@ Noun Phrase Chunkers
 TextBlob currently has two noun phrases chunker implementations,
 ``text.np_extractors.FastNPExtractor`` (default, based on Shlomi Babluki's implementation from
 `this blog post <http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/>`_)
-and ``text.np_extractors.ConllExtractor``, which uses the CoNLL 2000 corpus to train a tagger (*currently working on Python 2 only*).
+and ``text.np_extractors.ConllExtractor``, which uses the CoNLL 2000 corpus to train a tagger.
 
 You can change the chunker implementation (or even use your own) by explicitly passing an instance of a noun phrase extractor to a TextBlob's constructor.
 

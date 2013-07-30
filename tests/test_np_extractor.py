@@ -6,7 +6,7 @@ from nose.plugins.attrib import attr
 import nltk
 from text.np_extractors import ConllExtractor, filter_insignificant
 
-@attr('py2_only')
+
 class TestConllExtractor(unittest.TestCase):
 
     def setUp(self):
