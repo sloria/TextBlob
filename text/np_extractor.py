@@ -30,18 +30,20 @@ class BaseNPExtractor(object):
 
 class ChunkParser(nltk.ChunkParserI):
 
-    __shared_state = {
-        'train':[[(t, c) for (w, t, c) in nltk.chunk.tree2conlltags(sent)]
-                      for sent in
-                      nltk.corpus.conll2000.chunked_sents('train.txt', chunk_types=['NP'])],
-    }
-
     def __init__(self):
-        self.__dict__ = self.__shared_state
-        unigram_tagger = nltk.UnigramTagger(self.train)
-        self.tagger = nltk.BigramTagger(self.train, backoff=unigram_tagger)
+        self.trained = False
+
+    def train(self):
+        train_data = [[(t, c) for (w, t, c) in nltk.chunk.tree2conlltags(sent)]
+                      for sent in
+                      nltk.corpus.conll2000.chunked_sents('train.txt', chunk_types=['NP'])]
+        unigram_tagger = nltk.UnigramTagger(train_data)
+        self.tagger = nltk.BigramTagger(train_data, backoff=unigram_tagger)
+        self.trained = True
 
     def parse(self, sentence):
+        if not self.trained:
+            self.train()
         pos_tags = [pos for (word, pos) in sentence]
         tagged_pos_tags = self.tagger.tag(pos_tags)
         chunktags = [chunktag for (pos, chunktag) in tagged_pos_tags]
@@ -107,7 +109,6 @@ class FastNPExtractor(BaseNPExtractor):
         http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/
     '''
 
-
     CFG = {
         ('NNP', 'NNP'): 'NNP',
         ('NN', 'NN'): 'NNI',
@@ -116,12 +117,11 @@ class FastNPExtractor(BaseNPExtractor):
         ('JJ', 'NN'): 'NNI',
         }
 
-    __shared_state = {
-        'train': nltk.corpus.brown.tagged_sents(categories='news')
-    }
-
     def __init__(self):
-        self.__dict__ = self.__shared_state
+        self.trained = False
+
+    def train(self):
+        train_data = nltk.corpus.brown.tagged_sents(categories='news')
         REGEXP_TAGGER = nltk.RegexpTagger([
             (r'^-?[0-9]+(.[0-9]+)?$', 'CD'),
             (r'(-|:|;)$', ':'),
@@ -136,16 +136,19 @@ class FastNPExtractor(BaseNPExtractor):
             (r'.*ed$', 'VBD'),
             (r'.*', 'NN'),
             ])
-        UNIGRAM_TAGGER = nltk.UnigramTagger(self.train, backoff=REGEXP_TAGGER)
-        self.TAGGER = nltk.BigramTagger(self.train, backoff=UNIGRAM_TAGGER)
+        UNIGRAM_TAGGER = nltk.UnigramTagger(train_data, backoff=REGEXP_TAGGER)
+        self.TAGGER = nltk.BigramTagger(train_data, backoff=UNIGRAM_TAGGER)
+        self.trained = True
+        return None
 
-    # Split the sentence into singlw words/tokens
+
     def tokenize_sentence(self, sentence):
+        '''Split the sentence into singlw words/tokens'''
         tokens = nltk.word_tokenize(sentence)
         return tokens
 
-    # Normalize brown corpus' tags ("NN", "NN-PL", "NNS" > "NN")
     def normalize_tags(self, tagged):
+        '''Normalize brown corpus' tags ("NN", "NN-PL", "NNS" > "NN")'''
         n_tagged = []
         for t in tagged:
             if t[1] == 'NP-TL' or t[1] == 'NP':
@@ -160,8 +163,9 @@ class FastNPExtractor(BaseNPExtractor):
             n_tagged.append((t[0], t[1]))
         return n_tagged
 
-    # Extract the main topics from the sentence
     def extract(self, sentence):
+        if not self.trained:
+            self.train()
         tokens = self.tokenize_sentence(sentence)
         tagged = self.TAGGER.tag(tokens)
         tags = self.normalize_tags(tagged)

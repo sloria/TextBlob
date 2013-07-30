@@ -76,6 +76,8 @@ Part-of-speech tags and noun phrases...
 
     wiki.noun_phrases   # WordList(['python', 'design philosophy',  'code readability'])
 
+Note: The first time you access ``noun_phrases`` might take a few seconds because the noun phrase chunker needs to be trained. Subsequent calls to `noun_phrases` will be quick, however, since all TextBlobs share the same instance of a noun phrase chunker.
+
 Sentiment analysis
 ++++++++++++++++++
 

@@ -3,6 +3,7 @@ Changelog
 
 0.3.8 (2013-07-29)
 ------------------
+- Importing TextBlob is now **much faster**. This is because the noun phrase parsers are trained only on the first call to `noun_phrases` (instead of training them every time you import TextBlob).
 - Add text.taggers module which allows user to change which POS tagger implementation to use. Currently supports PatternTagger and NLTKTagger (NLTKTagger only works with Python 2).
 - NPExtractor and Tagger objects can be passed to TextBlob's constructor.
 - Fix bug with POS-tagger not tagging one-letter words.
