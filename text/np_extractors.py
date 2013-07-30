@@ -88,8 +88,6 @@ class ConllExtractor(BaseNPExtractor):
                        if isinstance(each, nltk.tree.Tree) and each.node
                        == 'NP' and len(filter_insignificant(each)) >= 1
                        and is_match(each, cfg=self.CFG)]
-            print("PHRASES")
-            print(phrases)
             nps = [tree2str(phrase) for phrase in phrases]
             noun_phrases.extend(nps)
         return noun_phrases

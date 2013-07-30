@@ -104,6 +104,9 @@ Tokenization
                           #  Sentence('Explicit is better than implicit.'),
                           #  ...]
 
+    for sentence in zen.sentences:
+        print(sentence.sentiment)
+
 Words and inflection
 ++++++++++++++++++++
 

@@ -10,24 +10,21 @@ Usage:
     python run_tests.py fast
 '''
 from __future__ import unicode_literals
-import subprocess
+import nose
 import sys
 from text.compat import PY2
 
-BASE_CMD = 'nosetests '
 PY26 = PY2 and int(sys.version_info[1]) < 7
 
 
 def main():
-    args = get_args()
-    command = BASE_CMD + ' '.join(args)
-    print("Test command: {0}".format(command))
-    status_code = subprocess.call(command, shell=True)
-    sys.exit(status_code)
+    args = get_argv()
+    success = nose.run(argv=args)
+    sys.exit(0) if success else sys.exit(1)
 
 
-def get_args():
-    args = []
+def get_argv():
+    args = [sys.argv[0]]
     attr_conditions = []  # Use nose's attribselect plugin to filter tests
     if "force-all" in sys.argv:
         # Don't exclude any tests
@@ -48,7 +45,7 @@ def get_args():
 
     attr_expression = " and ".join(attr_conditions)
     if attr_expression:
-        args.extend(["-A", '"{0}"'.format(attr_expression)])
+        args.extend(["-A", attr_expression])
     return args
 
 if __name__ == '__main__':

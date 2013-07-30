@@ -37,3 +37,4 @@ nosetests.xml
 .pydevproject
 
 *.bak
+.bumpversion.cfg

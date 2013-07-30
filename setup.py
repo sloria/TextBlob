@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 import text
 
 try:
@@ -39,11 +40,11 @@ TEST_PUBLISH_CMD = 'python setup.py register -r test sdist bdist_wheel upload -r
 TEST_CMD = 'python run_tests.py'
 
 if 'publish' in sys.argv:
-    os.system(PUBLISH_CMD)
-    sys.exit()
+    status = subprocess.call(PUBLISH_CMD, shell=True)
+    sys.exit(status)
 
 if 'publish_test' in sys.argv:
-    os.system(TEST_PUBLISH_CMD)
+    status = subprocess.call(TEST_PUBLISH_CMD, shell=True)
     sys.exit()
 
 if 'run_tests' in sys.argv:
@@ -53,17 +54,22 @@ if 'run_tests' in sys.argv:
         print('nose required.')
         sys.exit(1)
 
-    os.system(TEST_CMD)
-    sys.exit()
+    status = subprocess.call(TEST_CMD, shell=True)
+    sys.exit(status)
+
+def read(fname):
+    with open(fname) as fp:
+        content = fp.read()
+    return content
 
 setup(
     name='textblob',
     version=text.__version__,
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
-    long_description=(open("README.rst").read() + '\n\n' +
-                        open("HISTORY.rst").read()),
-    license=open("LICENSE").read(),
+    long_description=(read("README.rst") + '\n\n' +
+                        read("HISTORY.rst")),
+    license=read("LICENSE"),
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
