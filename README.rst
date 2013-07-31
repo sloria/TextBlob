@@ -45,7 +45,7 @@ Option 2: Install textblob and NLTK separately
 
 ::
 
-    pip install https://github.com/nltk/nltk
+    pip install git+https://github.com/nltk/nltk
     pip install git+https://github.com/sloria/TextBlob.git@no-bundle
     curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 

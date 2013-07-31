@@ -7,6 +7,7 @@ Changelog
 - ConllExtractor is now Python 3-compatible.
 - Improved sentiment analysis.
 - Blobs are equal (with `==`) to their string counterparts.
+- Added instructions to install textblob without nltk bundled.
 
 0.3.8 (2013-07-30)
 ------------------
