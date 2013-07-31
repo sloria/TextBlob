@@ -40,10 +40,20 @@ TEST_PUBLISH_CMD = 'python setup.py register -r test sdist bdist_wheel upload -r
 TEST_CMD = 'python run_tests.py'
 
 if 'publish' in sys.argv:
+    try:
+        __import__('wheel')
+    except ImportError:
+        print("wheel required. Run `pip install wheel`.")
+        sys.exit(1)
     status = subprocess.call(PUBLISH_CMD, shell=True)
     sys.exit(status)
 
 if 'publish_test' in sys.argv:
+    try:
+        __import__('wheel')
+    except ImportError:
+        print("wheel required. Run `pip install wheel`.")
+        sys.exit(1)
     status = subprocess.call(TEST_PUBLISH_CMD, shell=True)
     sys.exit()
 
@@ -51,7 +61,7 @@ if 'run_tests' in sys.argv:
     try:
         __import__('nose')
     except ImportError:
-        print('nose required.')
+        print('nose required. Run `pip install wheel.')
         sys.exit(1)
 
     status = subprocess.call(TEST_CMD, shell=True)

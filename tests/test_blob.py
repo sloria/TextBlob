@@ -130,6 +130,9 @@ class SentenceTest(TestCase):
         assert_true(isinstance(words[0], tb.Word))
         assert_equal(words[1].pluralize(), 'places')
 
+    def test_string_equality(self):
+        assert_equal(self.sentence, 'Any place with frites and Belgian beer has my vote.')
+
 
 class TextBlobTest(TestCase):
 
@@ -187,6 +190,10 @@ is managed by the non-profit Python Software Foundation.'''
 
         # Must initialize with a string
         assert_raises(TypeError, tb.TextBlob.__init__, ['invalid'])
+
+    def test_string_equality(self):
+        blob = tb.TextBlob("Textblobs should be equal to strings.")
+        assert_equal(blob, "Textblobs should be equal to strings.")
 
     def test_sentences(self):
         blob = self.blob

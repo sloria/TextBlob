@@ -242,6 +242,15 @@ class BaseBlob(ComparableMixin):
         '''
         return self.raw
 
+    def __eq__(self, other):
+        '''Equality comparator. Blobs are be equal to blobs with the same
+        text and also to their string counterparts.
+        '''
+        if type(other) in string_types:
+            return self.raw == other
+        else:
+            return super(BaseBlob, self).__eq__(other)
+
     def __hash__(self):
         return hash(self._cmpkey())
 

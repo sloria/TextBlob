@@ -5,6 +5,7 @@ Changelog
 ------------------
 - Updated nltk.
 - ConllExtractor is now Python 3-compatible.
+- Blobs are equal (with `==`) to their string counterparts.
 
 0.3.8 (2013-07-30)
 ------------------
