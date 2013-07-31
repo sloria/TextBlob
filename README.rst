@@ -21,35 +21,38 @@ Requirements
 Installation
 ------------
 
-There are two options for installing textblob:
-
-- Option 1 includes the a bundled version of NLTK (the latest from the Github master branch). Though this option is quicker, this will override your local NLTK installation if you have one. If this concerns you, then prefer Option 2, or use textblob in a virtualenv.
-- Option 2 does not include NLTK, so you will have to install the latest version manually.
-
-Instructions for both options are below.
-
 If you don't have ``pip`` (you should), run this first: ``curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python``
 
-Option 1: With bundled NLTK
-+++++++++++++++++++++++++++
+Option 1
+++++++++
+
+Choose this option if you:
+
+- Want a quick install.
+- Don't have nltk currently installed, or don't mind if your current installation is overriden by the latest version on the `master branch <https://github.com/nltk/nltk>`_. NOTE: You can also prevent the effects of this if you use textblob in a virtualenv.
 
 ::
 
-    pip install textblob
+    pip install -U textblob
     curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
 This will install textblob and download the necessary NLTK corpora.
 
-Option 2: Install textblob and NLTK separately
-++++++++++++++++++++++++++++++++++++++++++++++
+Option 2
+++++++++
+
+Choose this option if you:
+
+- Don't want your local nltk installation to be overridden.
+- Want to keep your nltk on the bleeding edge of development.
 
 ::
 
-    pip install git+https://github.com/nltk/nltk
-    pip install git+https://github.com/sloria/TextBlob.git@no-bundle
+    pip install -U git+https://github.com/nltk/nltk
+    pip install -U git+https://github.com/sloria/TextBlob.git@no-bundle
     curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
-This will install the latest NLTK from the master branch, as well as the latest version of textblob from the ``no-bundle`` branch.
+This will install the latest NLTK from the master branch, install textblob from the ``no-bundle`` branch, and download the necessary corpora.
 
 Usage
 -----
