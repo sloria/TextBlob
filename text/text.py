@@ -4,12 +4,14 @@
 URL: http://www.clips.ua.ac.be/pages/pattern-web
 Licence: BSD
 '''
+from __future__ import unicode_literals
+from itertools import chain
 import types
 import os
 import re
 from xml.etree import cElementTree
 
-from .compat import text_type, string_types, PY2
+from .compat import text_type, string_types, PY2, basestring, imap
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -134,6 +136,55 @@ class lazylist(list):
     def pop(self, *args):
         return self._lazy("pop", *args)
 
+#--- UNIVERSAL TAGSET ------------------------------------------------------------------------------
+# The default part-of-speech tagset used in Pattern is Penn Treebank II.
+# However, not all languages are well-suited to Penn Treebank (which was developed for English).
+# As more languages are implemented, this is becoming more problematic.
+#
+# A universal tagset is proposed by Slav Petrov (2012):
+# http://www.petrovi.de/data/lrec.pdf
+#
+# Subclasses of Parser should start implementing
+# Parser.parse(tagset=UNIVERSAL) with a simplified tagset.
+# The names of the constants correspond to Petrov's naming scheme, while
+# the value of the constants correspond to Penn Treebank.
+
+UNIVERSAL = "universal"
+
+NOUN, VERB, ADJ, ADV, PRON, DET, PREP, ADP, NUM, CONJ, INTJ, PRT, PUNC, X = \
+    "NN", "VB", "JJ", "RB", "PR", "DT", "PP", "PP", "NO", "CJ", "UH", "PT", ".", "X"
+
+def penntreebank2universal(token, tag):
+    """ Returns a (token, tag)-tuple with a simplified universal part-of-speech tag.
+    """
+    if tag.startswith(("NNP-", "NNPS-")):
+        return (token, "%s-%s" % (NOUN, tag.split("-")[-1]))
+    if tag in ("NN", "NNS", "NNP", "NNPS", "NP"):
+        return (token, NOUN)
+    if tag in ("MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"):
+        return (token, VERB)
+    if tag in ("JJ", "JJR", "JJS"):
+        return (token, ADJ)
+    if tag in ("RB", "RBR", "RBS", "WRB"):
+        return (token, ADV)
+    if tag in ("PRP", "PRP$", "WP", "WP$"):
+        return (token, PRON)
+    if tag in ("DT", "PDT", "WDT", "EX"):
+        return (token, DET)
+    if tag in ("IN",):
+        return (token, PREP)
+    if tag in ("CD",):
+        return (token, NUM)
+    if tag in ("CC",):
+        return (token, CONJ)
+    if tag in ("UH",):
+        return (token, INTJ)
+    if tag in ("POS", "RP", "TO"):
+        return (token, PRT)
+    if tag in ("SYM", "LS", ".", "!", "?", ",", ":", "(", ")", "\"", "#", "$"):
+        return (token, PUNC)
+    return (token, X)
+
 #--- TOKENIZER -------------------------------------------------------------------------------------
 
 TOKEN = re.compile(r"(\S+)\s")
@@ -155,8 +206,24 @@ RE_ABBR2 = re.compile("^([A-Za-z]\.)+$")    # alternating letters, "U.S."
 RE_ABBR3 = re.compile("^[A-Z][" + "|".join( # capital followed by consonants, "Mr."
         "bcdfghjklmnpqrstvwxz") + "]+.$")
 
-RE_SMILEY = (r"[:|8]", r"-?", r"[\)|\(|D|S|o|p|s]") # eyes|nose|mouth :-)
-RE_SMILEY = re.compile(r"(%s) ?(%s) ?(%s)" % RE_SMILEY)
+# Handle emoticons.
+EMOTICONS = { # (facial expression, sentiment)-keys
+    ("love" , +1.00): set(("<3", "♥")),
+    ("grin" , +1.00): set((">:D", ":-D", ":D", "=-D", "=D", "X-D", "x-D", "XD", "xD", "8-D")),
+    ("taunt", +0.75): set((">:P", ":-P", ":P", ":-p", ":p", ":-b", ":b", ":c)", ":o)", ":^)")),
+    ("smile", +0.50): set((">:)", ":-)", ":)", "=)", "=]", ":]", ":}", ":>", ":3", "8)", "8-)")),
+    ("wink" , +0.25): set((">;]", ";-)", ";)", ";-]", ";]", ";D", ";^)", "*-)", "*)")),
+    ("gasp" , +0.05): set((">:o", ":-O", ":O", ":o", ":-o", "o_O", "o.O", "°O°", "°o°")),
+    ("worry", -0.25): set((">:/",  ":-/", ":/", ":\\", ">:\\", ":-.", ":-s", ":s", ":S", ":-S", ">.>")),
+    ("frown", -0.75): set((">:[", ":-(", ":(", "=(", ":-[", ":[", ":{", ":-<", ":c", ":-c", "=/")),
+    ("cry"  , -1.00): set((":'(", ":'''(", ";'("))
+}
+
+RE_EMOTICONS = [r" ?".join([re.escape(each) for each in e]) for v in EMOTICONS.values() for e in v]
+RE_EMOTICONS = re.compile(r"(%s)($|\s)" % "|".join(RE_EMOTICONS))
+
+# Handle sarcasm punctuation (!).
+RE_SARCASM = re.compile(r"\( ?\! ?\)")
 
 # Handle common contractions.
 replacements = {
@@ -244,8 +311,10 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
             i = j
         j += 1
     sentences[-1].extend(tokens[i:j])
-    sentences = [" ".join(s) for s in sentences if len(s) > 0]
-    sentences = [RE_SMILEY.sub("\\1\\2\\3", s) for s in sentences]
+    sentences = (" ".join(s) for s in sentences if len(s) > 0)
+    sentences = (RE_SARCASM.sub("(!)", s) for s in sentences)
+    sentences = [RE_EMOTICONS.sub(
+        lambda m: m.group(1).replace(" ", "") + m.group(2), s) for s in sentences]
     return sentences
 
 #### LEXICON #######################################################################################
@@ -356,9 +425,9 @@ class Morphology(lazylist, Rules):
         w = token[0]
         for r in self:
             if r[1] in self.cmd: # Rule = ly hassuf 2 RB x
-                f, x, pos, cmd = bool(0), r[0], r[-2], r[1]
+                f, x, pos, cmd = bool(0), r[0], r[-2], r[1].lower()
             if r[2] in self.cmd: # Rule = NN s fhassuf 1 NNS x
-                f, x, pos, cmd = bool(1), r[1], r[-2], r[2].lstrip("f")
+                f, x, pos, cmd = bool(1), r[1], r[-2], r[2].lower().lstrip("f")
             if f and token[1] != r[0]:
                 continue
             if (cmd == "char"       and x in w) \
@@ -372,6 +441,29 @@ class Morphology(lazylist, Rules):
             or (cmd == "goodright"  and x == previous[0]):
                 token[1] = pos
         return token
+
+    def insert(self, i, tag, affix, cmd="hassuf", tagged=None):
+        """ Inserts a new rule that assigns the given tag to words with the given affix
+            (and tagged as specified), e.g., Morphology.append("RB", "-ly").
+        """
+        if affix.startswith("-") and affix.endswith("-"):
+            affix, cmd = affix[+1:-1], "char"
+        if affix.startswith("-"):
+            affix, cmd = affix[+1:-0], "hassuf"
+        if affix.endswith("-"):
+            affix, cmd = affix[+0:-1], "haspref"
+        if tagged:
+            r = [tagged, affix, "f"+cmd.lstrip("f"), tag, "x"]
+        else:
+            r = [affix, cmd.lstrip("f"), tag, "x"]
+        lazylist.insert(self, i, r)
+
+    def append(self, *args, **kwargs):
+        self.insert(len(self)-1, *args, **kwargs)
+
+    def extend(self, rules=[]):
+        for r in rules:
+            self.append(*r)
 
 #--- CONTEXT RULES ---------------------------------------------------------------------------------
 # Brill's algorithm generates contextual rules in the following format:
@@ -400,15 +492,13 @@ class Context(lazylist, Rules):
          "prev1or2or3wd", # One of 3 following words is x.
              "prevwdtag", # Preceding word is x and tagged y.
              "nextwdtag", # Following word is x and tagged y.
-              "wdprevwd", # Current word is x and preceding word is y.
-              "wdnextwd", # Current word is x and following word is y.
-             "wdprevtag", # Current word is x and preceding word is tagged y.
+             "wdprevtag", # Current word is y and preceding word is tagged x.
              "wdnexttag", # Current word is x and following word is tagged y.
              "wdand2aft", # Current word is x and word 2 after is y.
-          "wdand2tagbfr", # Current word is x and word 2 before is tagged y.
+          "wdand2tagbfr", # Current word is y and word 2 before is tagged x.
           "wdand2tagaft", # Current word is x and word 2 after is tagged y.
-               "lbigram", # Preceding word is x and word before is y.
-               "rbigram", # Following word is x and word after is y.
+               "lbigram", # Current word is y and word before is x.
+               "rbigram", # Current word is x and word after is y.
             "prevbigram", # Preceding word is tagged x and word before is tagged y.
             "nextbigram", # Following word is tagged x and word after is tagged y.
         )
@@ -453,20 +543,34 @@ class Context(lazylist, Rules):
                 or (cmd == "next1or2wd"     and x in (t[i+1][0], t[i+2][0])) \
                 or (cmd == "prevwdtag"      and x ==  t[i-1][0] and y == t[i-1][1]) \
                 or (cmd == "nextwdtag"      and x ==  t[i+1][0] and y == t[i+1][1]) \
-                or (cmd == "wdprevwd"       and x ==  t[i+0][0] and y == t[i-1][0]) \
-                or (cmd == "wdnextwd"       and x ==  t[i+0][0] and y == t[i+1][0]) \
-                or (cmd == "wdprevtag"      and x ==  t[i+0][0] and y == t[i-1][1]) \
+                or (cmd == "wdprevtag"      and x ==  t[i-1][1] and y == t[i+0][0]) \
                 or (cmd == "wdnexttag"      and x ==  t[i+0][0] and y == t[i+1][1]) \
                 or (cmd == "wdand2aft"      and x ==  t[i+0][0] and y == t[i+2][0]) \
-                or (cmd == "wdand2tagbfr"   and x ==  t[i+0][0] and y == t[i-2][1]) \
+                or (cmd == "wdand2tagbfr"   and x ==  t[i-2][1] and y == t[i+0][0]) \
                 or (cmd == "wdand2tagaft"   and x ==  t[i+0][0] and y == t[i+2][1]) \
-                or (cmd == "lbigram"        and x ==  t[i-1][0] and y == t[i][0]) \
+                or (cmd == "lbigram"        and x ==  t[i-1][0] and y == t[i+0][0]) \
                 or (cmd == "rbigram"        and x ==  t[i+0][0] and y == t[i+1][0]) \
                 or (cmd == "prevbigram"     and x ==  t[i-2][1] and y == t[i-1][1]) \
                 or (cmd == "nextbigram"     and x ==  t[i+1][1] and y == t[i+2][1]):
-                    tokens[i-len(o)] = [tokens[i-len(o)][0], r[1]]
-        return tokens
+                    t[i] = [t[i][0], r[1]]
+        return t[len(o):-len(o)]
 
+    def insert(self, i, tag1, tag2, cmd="prevtag", x=None, y=None):
+        """ Inserts a new rule that updates words with tag1 to tag2,
+            given constraints x and y, e.g., Context.append("TO < NN", "VB")
+        """
+        if " < " in tag1 and not x and not y:
+            tag1, x = tag1.split(" < "); cmd="prevtag"
+        if " > " in tag1 and not x and not y:
+            x, tag1 = tag1.split(" > "); cmd="nexttag"
+        lazylist.insert(self, i, [tag1, tag2, cmd, x or "", y or ""])
+
+    def append(self, *args, **kwargs):
+        self.insert(len(self)-1, *args, **kwargs)
+
+    def extend(self, rules=[]):
+        for r in rules:
+            self.append(*r)
 #--- NAMED ENTITY RECOGNIZER -----------------------------------------------------------------------
 
 RE_ENTITY1 = re.compile(r"^http://")                            # http://www.domain.com/path
@@ -528,17 +632,39 @@ class Entities(lazydict, Rules):
             i += 1
         return tokens
 
+    def append(self, entity, name="pers"):
+        """ Appends a named entity to the lexicon,
+            e.g., Entities.append("Hooloovoo", "PERS")
+        """
+        e = [s.lower() for s in entity.split(" ") + [name]]
+        self.setdefault(e[0], []).append(e)
+
+    def extend(self, entities):
+        for entity, name in entities:
+            self.append(entity, name)
+
+
 ### SENTIMENT POLARITY LEXICON #####################################################################
 # A sentiment lexicon can be used to discern objective facts from subjective opinions in text.
 # Each word in the lexicon has scores for:
 # 1)     polarity: negative vs. positive    (-1.0 => +1.0)
 # 2) subjectivity: objective vs. subjective (+0.0 => +1.0)
-# 3)    intensity: modifies next word?   (x0.5 => x2.0)
+# 3)    intensity: modifies next word?      (x0.5 => x2.0)
 
-# For English, adverbs are used as modifiers.
+# For English, adverbs are used as modifiers (e.g., "very good").
 # For Dutch, adverbial adjectives are used as modifiers
 # ("hopeloos voorspelbaar", "ontzettend spannend", "verschrikkelijk goed").
 # Negation words (e.g., "not") reverse the polarity of the following word.
+
+# Sentiment()(txt) returns an averaged (polarity, subjectivity)-tuple.
+# Sentiment().assessments(txt) returns a list of (chunk, polarity, subjectivity, label)-tuples.
+
+# Semantic labels are useful for fine-grained analysis, e.g.,
+# negative words + positive emoticons could indicate cynicism.
+
+# Semantic labels:
+MOOD  = "mood"  # emoticons, emojis
+IRONY = "irony" # sarcasm mark (!)
 
 NOUN, VERB, ADJECTIVE, ADVERB = \
     "NN", "VB", "JJ", "RB"
@@ -566,11 +692,12 @@ class Sentiment(lazydict):
             The value for each word POS-tag is a tuple with values for
             polarity (-1.0-1.0), subjectivity (0.0-1.0) and intensity (0.5-2.0).
         """
-        self._path       = path
-        self._language   = None
-        self._confidence = None
-        self._synset     = synset
-        self._synsets    = {}
+        self._path       = path   # XML file path.
+        self._language   = None   # XML language attribute ("en", "fr", ...)
+        self._confidence = None   # XML confidence attribute threshold (>=).
+        self._synset     = synset # XML synset attribute ("wordnet_id", "cornetto_id", ...)
+        self._synsets    = {}     # {"a-01123879": (1.0, 1.0, 1.0)}
+        self.labeler     = {}     # {"dammit": "profanity"}
         self.tokenizer   = kwargs.get("tokenizer", find_tokens)
         self.negations   = kwargs.get("negations", ("no", "not", "n't", "never"))
         self.modifiers   = kwargs.get("modifiers", ("RB",))
@@ -588,40 +715,50 @@ class Sentiment(lazydict):
     def confidence(self):
         return self._confidence
 
-    def load(self):
+    def load(self, path=None):
+        """ Loads the XML-file (with sentiment annotations) from the given path.
+            By default, Sentiment.path is lazily loaded.
+        """
         # <word form="great" wordnet_id="a-01123879" pos="JJ" polarity="1.0" subjectivity="1.0" intensity="1.0" />
-        if not os.path.exists(self._path):
+        # <word form="damnmit" polarity="-0.75" subjectivity="1.0" label="profanity" />
+        if not path:
+            path = self._path
+        if not os.path.exists(path):
             return
-        words, synsets = {}, {}
-        xml = cElementTree.parse(self._path)
+        words, synsets, labels = {}, {}, {}
+        xml = cElementTree.parse(path)
         xml = xml.getroot()
         for w in xml.findall("word"):
             if self._confidence is None \
             or self._confidence <= float(w.attrib.get("confidence", 0.0)):
-                w, pos, p, s, i, synset = (
+                w, pos, p, s, i, label, synset = (
                     w.attrib.get("form"),
                     w.attrib.get("pos"),
                     w.attrib.get("polarity", 0.0),
                     w.attrib.get("subjectivity", 0.0),
                     w.attrib.get("intensity", 1.0),
+                    w.attrib.get("label"),
                     w.attrib.get(self._synset) # wordnet_id, cornetto_id, ...
                 )
                 psi = (float(p), float(s), float(i))
                 if w:
                     words.setdefault(w, {}).setdefault(pos, []).append(psi)
+                if w and label:
+                    labels[w] = label
                 if synset:
                     synsets.setdefault(synset, []).append(psi)
         self._language = xml.attrib.get("language", self._language)
         # Average scores of all word senses per part-of-speech tag.
         for w in words:
-            words[w] = dict((pos, list(map(avg, list(zip(*psi))))) for pos, psi in list(words[w].items()))
+            words[w] = dict((pos, [avg(each) for each in zip(*psi)]) for pos, psi in words[w].items())
         # Average scores of all part-of-speech tags.
         for w, pos in list(words.items()):
-            words[w][None] = list(map(avg, list(zip(*list(pos.values())))))
+            words[w][None] = [avg(each) for each in zip(*pos.values())]
         # Average scores of all synonyms per synset.
-        for id, psi in list(synsets.items()):
-            synsets[id] = list(map(avg, list(zip(*psi))))
+        for id, psi in synsets.items():
+            synsets[id] = [avg(each) for each in zip(*psi)]
         dict.update(self, words)
+        dict.update(self.labeler, labels)
         dict.update(self._synsets, synsets)
 
     def synset(self, id, pos=ADJECTIVE):
@@ -660,15 +797,15 @@ class Sentiment(lazydict):
         # A pattern.en.wordnet.Synset.
         # Sentiment(synsets("horrible", "JJ")[0]) => (-0.6, 1.0)
         if hasattr(s, "gloss"):
-            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos)]
+            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
         # A synset id.
         # Sentiment("a-00193480") => horrible => (-0.6, 1.0)   (English WordNet)
         # Sentiment("c_267") => verschrikkelijk => (-0.9, 1.0) (Dutch Cornetto)
-        elif type(s) in string_types and RE_SYNSET.match(s):
-            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos)]
+        elif isinstance(s, basestring) and RE_SYNSET.match(s):
+            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
         # A string of words.
         # Sentiment("a horrible movie") => (-0.6, 1.0)
-        elif type(s) in string_types:
+        elif isinstance(s, basestring):
             a = self.assessments(((w.lower(), None) for w in " ".join(self.tokenizer(s)).split()), negation)
         # A pattern.en.Text.
         elif hasattr(s, "sentences"):
@@ -681,25 +818,27 @@ class Sentiment(lazydict):
             a = self.assessments(((s.lemma or s.string.lower(), s.pos[:2]),), negation)
         # A pattern.vector.Document.
         # Average score = weighted average using feature weights.
+        # Bag-of words is unordered: inject None between each two words
+        # to stop assessments() from scanning for preceding negation & modifiers.
         elif hasattr(s, "terms"):
-            a = self.assessments(((w, None) for w in s.terms), negation)
+            a = self.assessments(chain(*(((w, None), (None, None)) for w in s)), negation)
             kwargs.setdefault("weight", lambda w: s.terms[w[0]])
         # A dict of (word, weight)-items.
         elif isinstance(s, dict):
-            a = self.assessments(((w, None) for w in s), negation)
+            a = self.assessments(chain(*(((w, None), (None, None)) for w in s)), negation)
             kwargs.setdefault("weight", lambda w: s[w[0]])
         # A list of words.
         elif isinstance(s, list):
             a = self.assessments(((w, None) for w in s), negation)
         else:
             a = []
-        weight = kwargs.get("weight", lambda w: 1)
-        return Score(polarity = avg([(w_p_s[0], w_p_s[1]) for w_p_s in a], weight),
-                 subjectivity = avg([(w_p_s1[0], w_p_s1[2]) for w_p_s1 in a], weight),
+        weight = kwargs.get("weight", lambda w: 1) # [(w, p) for w, p, s, x in a]
+        return Score(polarity = avg( [(w, p) for w, p, s, x in a], weight ),
+                 subjectivity = avg([(w, s) for w, p, s, x in a], weight),
                   assessments = a)
 
     def assessments(self, words=[], negation=True):
-        """ Returns a list of (chunk, polarity, subjectivity)-tuples for the given list of words,
+        """ Returns a list of (chunk, polarity, subjectivity, label)-tuples for the given list of words:
             where chunk is a list of successive words: a known word optionally
             preceded by a modifier ("very good") or a negation ("not good").
         """
@@ -709,17 +848,20 @@ class Sentiment(lazydict):
         for w, pos in words:
             # Only assess known words, preferably by part-of-speech tag.
             # Including unknown words (polarity 0.0 and subjectivity 0.0) lowers the average.
+            if w is None:
+                continue
             if w in self and pos in self[w]:
                 p, s, i = self[w][pos]
                 # Known word not preceded by a modifier ("good").
                 if m is None:
-                    a.append(dict(w=[w], p=p, s=s, i=i, n=1))
+                    a.append(dict(w=[w], p=p, s=s, i=i, n=1, x=self.labeler.get(w)))
                 # Known word preceded by a modifier ("really good").
                 if m is not None:
                     a[-1]["w"].append(w)
-                    a[-1]["p"] = min(p * a[-1]["i"], 1.0)
-                    a[-1]["s"] = min(p * a[-1]["i"], 1.0)
+                    a[-1]["p"] = max(-1.0, min(p * a[-1]["i"], +1.0))
+                    a[-1]["s"] = max(-1.0, min(s * a[-1]["i"], +1.0))
                     a[-1]["i"] = i
+                    a[-1]["x"] = self.labeler.get(w)
                 # Known word preceded by a negation ("not really good").
                 if n is not None:
                     a[-1]["w"].insert(0, n)
@@ -748,23 +890,37 @@ class Sentiment(lazydict):
                 # Unknown word. Retain modifier across small words ("really is a good").
                 elif m and len(w) > 2:
                     m = None
-                # Exclamation marks boost previous words.
+                # Exclamation marks boost previous word.
                 if w == "!" and len(a) > 0:
-                    for x in a[-3:]: x["p"] = min(x["p"] * 1.25, 1.0)
-                # Emoticon (happy).
-                if w in (":)", ":-)", ":-d", "<3", "♥"):
-                    a.append(dict(w=[w], p=+1.0, s=1.0, i=1.0, n=1))
-                # Emoticon (sad).
-                if w in (":(", ":-(", ":-s"):
-                    a.append(dict(w=[w], p=-1.0, s=1.0, i=1.0, n=1))
+                    a[-1]["w"].append("!")
+                    a[-1]["p"] = max(-1.0, min(a[-1]["p"] * 1.25, +1.0))
+                # Exclamation marks in parentheses indicate sarcasm.
+                if w == "(!)":
+                    a.append(dict(w=[w], p=0.0, s=1.0, i=1.0, n=1, x=IRONY))
+                # EMOTICONS: {("grin", +1.0): set((":-D", ":D"))}
+                if w.isalpha() is False and len(w) <= 5 and w not in PUNCTUATION: # speedup
+                    for (type, p), e in EMOTICONS.items():
+                        if w in imap(lambda e: e.lower(), e):
+                            a.append(dict(w=[w], p=p, s=1.0, i=1.0, n=1, x=MOOD))
+                            break
         for i in range(len(a)):
             w = a[i]["w"]
             p = a[i]["p"]
             s = a[i]["s"]
             n = a[i]["n"]
+            x = a[i]["x"]
             # "not good" = slightly bad, "not bad" = slightly good.
-            a[i] = (w, p * -0.5 if n < 0 else p, s)
+            a[i] = (w, p * -0.5 if n < 0 else p, s, x)
         return a
+
+    def annotate(self, word, pos=None, polarity=0.0, subjectivity=0.0, intensity=1.0, label=None):
+        """ Annotates the given word with polarity, subjectivity and intensity scores,
+            and optionally a semantic label (e.g., MOOD for emoticons, IRONY for "(!)").
+        """
+        w = self.setdefault(word, {})
+        w[pos] = w[None] = (polarity, subjectivity, intensity)
+        if label:
+            self.labeler[word] = label
 
 #--- PART-OF-SPEECH TAGGER -------------------------------------------------------------------------
 
@@ -798,7 +954,7 @@ def find_tags(tokens, lexicon={}, default=("NN", "NNP", "CD"), language="en", ma
         Unknown words that consist only of digits and punctuation marks are tagged CD.
         Unknown words are then improved with morphological rules.
         All words are improved with contextual rules.
-        If map is a function, it is applied to each tag after applying all rules.
+        If map is a function, it is applied to each (token, tag) after applying all rules.
     """
     tagged = []
     if isinstance(lexicon, Lexicon):
@@ -827,7 +983,7 @@ def find_tags(tokens, lexicon={}, default=("NN", "NNP", "CD"), language="en", ma
         tagged = lexicon.context.apply(tagged)
         tagged = lexicon.entities.apply(tagged)
     if map is not None:
-        tagged = [[token, list(map(tag)) or default[0]] for token, tag in tagged]
+        tagged = [list(map(token, tag)) or [token, default[0]] for token, tag in tagged]
     return tagged
 
 #### PARSER ########################################################################################
@@ -861,6 +1017,9 @@ def find_tags(tokens, lexicon={}, default=("NN", "NNP", "CD"), language="en", ma
 # - the phrases are labeled: SBJ (subject), OBJ (object), LOC (location), ...
 # - the phrase start is marked: B (begin), I (inside), O (outside),
 # - the past tense "sat" is lemmatized => "sit".
+# By default, the English parser uses the Penn Treebank II tagset:
+# http://www.clips.ua.ac.be/pages/penn-treebank-tagset
+PTB = PENN = "penn"
 
 class Parser:
 

@@ -21,7 +21,7 @@ class TestPatternTagger(unittest.TestCase):
         tags = self.tagger.tag(self.text)
         print(tags)
         assert_equal(tags,
-            [('Simple', 'NN'), ('is', 'NNS'), ('better', 'JJR'),
+            [('Simple', 'NN'), ('is', 'VBZ'), ('better', 'JJR'),
             ('than', 'IN'), ('complex', 'NN'), ('.', '.'),
             ('Complex', 'NNP'), ('is', 'VBZ'), ('better', 'RBR'),
             ('than', 'IN'), ('complicated', 'VBN'), ('.', '.')])

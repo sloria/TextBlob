@@ -5,7 +5,8 @@
 import os
 import sys
 
-from .text import Parser as _Parser, Sentiment, Lexicon, WORD, POS, CHUNK, PNP
+from .text import (Parser as _Parser, Sentiment as _Sentiment, Lexicon,
+    WORD, POS, CHUNK, PNP, PENN, UNIVERSAL)
 
 from .compat import text_type, unicode
 
@@ -36,6 +37,28 @@ class Parser(_Parser):
 
     def find_lemmata(self, tokens, **kwargs):
         return find_lemmata(tokens)
+
+    def find_tags(self, tokens, **kwargs):
+        if kwargs.get("tagset") in (PENN, None):
+            kwargs.setdefault("map", lambda token, tag: (token, tag))
+        if kwargs.get("tagset") == UNIVERSAL:
+            kwargs.setdefault("map", lambda token, tag: penntreebank2universal(token, tag))
+        return _Parser.find_tags(self, tokens, **kwargs)
+
+class Sentiment(_Sentiment):
+
+    def load(self, path=None):
+        _Sentiment.load(self, path)
+        # Map "terrible" to adverb "terribly" (+1% accuracy)
+        if not path:
+            for w, pos in list(dict.items(self)):
+                if "JJ" in pos:
+                    if w.endswith("y"):
+                        w = w[:-1] + "i"
+                    if w.endswith("le"):
+                        w = w[:-2]
+                    p, s, i = pos["JJ"]
+                    self.annotate(w + "ly", "RB", p, s, i)
 
 
 lexicon = Lexicon(

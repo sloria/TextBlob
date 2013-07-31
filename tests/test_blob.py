@@ -261,7 +261,7 @@ is managed by the non-profit Python Software Foundation.'''
                             'Complex is better than complicated.')
         assert_equal(blob.pos_tags, [
             ('Simple', 'NN'),
-            ('is', 'NNS'),
+            ('is', 'VBZ'),
             ('better', 'JJR'),
             ('than', 'IN'),
             ('complex', 'NN'),
@@ -492,6 +492,12 @@ is managed by the non-profit Python Software Foundation.'''
         zen = tb.TextBlob(self.text)
         assert_equal(round(zen.sentiment[0], 1), 0.2)
         assert_equal(round(zen.sentiment[1], 1), 0.6)
+        # assert False, 'temp'
+
+    def test_sentiment_of_emoticons(self):
+        b1 = tb.TextBlob("Faces have values =)")
+        b2 = tb.TextBlob("Faces have values")
+        assert_true(b1.sentiment > b2.sentiment)
 
     @attr('py27_only')
     def test_bad_init(self):
