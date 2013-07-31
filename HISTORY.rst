@@ -1,13 +1,14 @@
 Changelog
 =========
 
-0.3.9 (unreleased)
+0.3.9 (2013-07-31)
 ------------------
 - Updated nltk.
 - ConllExtractor is now Python 3-compatible.
 - Improved sentiment analysis.
 - Blobs are equal (with `==`) to their string counterparts.
 - Added instructions to install textblob without nltk bundled.
+- Dropping official 3.1 and 3.2 support.
 
 0.3.8 (2013-07-30)
 ------------------
