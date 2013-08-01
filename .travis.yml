@@ -6,7 +6,7 @@ python:
 # Install dependencies
 install:
     - "pip install -U . --use-mirrors"
-    - "python download_corpora.py"
+    - "curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python"
 # Run tests
 script: "python run_tests.py"
 branches:
