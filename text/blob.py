@@ -6,7 +6,7 @@ import sys
 import json
 from collections import defaultdict
 
-from nltk.tokenize import word_tokenize, sent_tokenize
+from .packages import nltk
 from .decorators import cached_property
 from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
@@ -149,7 +149,7 @@ class BaseBlob(ComparableMixin):
 
     def _tokenize(self):
         '''Tokenizes the blob into words.'''
-        return word_tokenize(self.raw)
+        return nltk.tokenize.word_tokenize(self.raw)
 
     # @cached_property
     # def np_extractor(self):
@@ -408,7 +408,7 @@ class TextBlob(BaseBlob):
         '''
         sentence_objects = []
         try:
-            sentences = sent_tokenize(blob)  # List of raw sentences
+            sentences = nltk.tokenize.sent_tokenize(blob)  # List of raw sentences
         except LookupError:
             raise MissingCorpusException()
         # if there is only one sentence or string of text

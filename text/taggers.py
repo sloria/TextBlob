@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import nltk
-from nltk.tag import pos_tag as nltk_tag
+from .packages import nltk
 from .en import tag as pattern_tag
 from .exceptions import MissingCorpusException
 
@@ -39,7 +38,7 @@ class NLTKTagger(BaseTagger):
         if tokenize:
             sentence = nltk.tokenize.word_tokenize(sentence)
         try:
-            tagged = nltk_tag(sentence)
+            tagged = nltk.tag.pos_tag(sentence)
         except LookupError:
             raise MissingCorpusException()
         return tagged

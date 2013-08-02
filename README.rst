@@ -21,16 +21,6 @@ Requirements
 Installation
 ------------
 
-If you don't have ``pip`` (you should), run this first: ``curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python``
-
-Option 1
-++++++++
-
-Choose this option if you:
-
-- Want a quick install.
-- Don't have nltk currently installed, or don't mind if your current installation is overriden by the latest version on the `master branch <https://github.com/nltk/nltk>`_. NOTE: You can also prevent the effects of this if you use textblob in a virtualenv.
-
 ::
 
     pip install -U textblob
@@ -38,21 +28,7 @@ Choose this option if you:
 
 This will install textblob and download the necessary NLTK corpora.
 
-Option 2
-++++++++
-
-Choose this option if you:
-
-- Don't want your local nltk installation to be overridden.
-- Want to keep your nltk on the bleeding edge of development.
-
-::
-
-    pip install -U git+https://github.com/nltk/nltk
-    pip install -U git+https://github.com/sloria/TextBlob.git@no-bundle
-    curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
-
-This will install the latest NLTK from the master branch, install textblob from the ``no-bundle`` branch, and download the necessary corpora.
+NOTE: If you don't have ``pip`` (you should), run this first: ``curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python``
 
 Usage
 -----

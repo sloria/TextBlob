@@ -1,8 +1,9 @@
 Changelog
 =========
 
-0.3.10 (unreleased)
+0.3.10 (2013-08-02)
 -------------------
+- Bundled NLTK no longer overrides local installation.
 - Fix sentiment analysis of text with non-ascii characters.
 
 0.3.9 (2013-07-31)
