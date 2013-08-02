@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''Downloads the necessary NLTK models and corpora.'''
-from nltk import download
+from text.packages import nltk
 
 REQUIRED_CORPORA = [
     'brown',
@@ -13,7 +13,7 @@ REQUIRED_CORPORA = [
 def main():
     for each in REQUIRED_CORPORA:
         print(('Downloading "{0}"'.format(each)))
-        download(each)
+        nltk.download(each)
     print("Finished.")
 
 if __name__ == '__main__':
