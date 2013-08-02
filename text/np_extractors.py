@@ -5,7 +5,7 @@ import re
 import nltk
 
 from .taggers import PatternTagger
-
+from .exceptions import MissingCorpusException
 
 class BaseNPExtractor(object):
 
@@ -34,9 +34,12 @@ class ChunkParser(nltk.ChunkParserI):
         self.trained = False
 
     def train(self):
-        train_data = [[(t, c) for (w, t, c) in nltk.chunk.tree2conlltags(sent)]
-                      for sent in
-                      nltk.corpus.conll2000.chunked_sents('train.txt', chunk_types=['NP'])]
+        try:
+            train_data = [[(t, c) for (w, t, c) in nltk.chunk.tree2conlltags(sent)]
+                          for sent in
+                          nltk.corpus.conll2000.chunked_sents('train.txt', chunk_types=['NP'])]
+        except LookupError:
+            raise MissingCorpusException()
         unigram_tagger = nltk.UnigramTagger(train_data)
         self.tagger = nltk.BigramTagger(train_data, backoff=unigram_tagger)
         self.trained = True
@@ -119,7 +122,10 @@ class FastNPExtractor(BaseNPExtractor):
         self.trained = False
 
     def train(self):
-        train_data = nltk.corpus.brown.tagged_sents(categories='news')
+        try:
+            train_data = nltk.corpus.brown.tagged_sents(categories='news')
+        except LookupError:
+            raise MissingCorpusException()
         REGEXP_TAGGER = nltk.RegexpTagger([
             (r'^-?[0-9]+(.[0-9]+)?$', 'CD'),
             (r'(-|:|;)$', ':'),

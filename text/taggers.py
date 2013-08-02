@@ -3,6 +3,7 @@
 import nltk
 from nltk.tag import pos_tag as nltk_tag
 from .en import tag as pattern_tag
+from .exceptions import MissingCorpusException
 
 class BaseTagger(object):
 
@@ -37,6 +38,10 @@ class NLTKTagger(BaseTagger):
     def tag(self, sentence, tokenize=True):
         if tokenize:
             sentence = nltk.tokenize.word_tokenize(sentence)
-        return nltk_tag(sentence)
+        try:
+            tagged = nltk_tag(sentence)
+        except LookupError:
+            raise MissingCorpusException()
+        return tagged
 
 

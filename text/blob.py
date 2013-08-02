@@ -15,6 +15,7 @@ from .mixins import ComparableMixin
 from .compat import text_type, string_types, unicode
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
+from .exceptions import MissingCorpusException
 
 
 class Word(unicode):
@@ -62,7 +63,7 @@ class WordList(list):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
         # String representation of words
-        strings = [text_type(w) for w in self._collection]
+        strings = [unicode(w) for w in self._collection]
         if len(self) > 60:
             return '{cls}({beginning}...{end})'.format(cls=class_name,
                                                 beginning=strings[:3],
@@ -185,9 +186,9 @@ class BaseBlob(ComparableMixin):
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
         '''
-        return [(Word(word, pos_tag=t), text_type(t))
+        return [(Word(word, pos_tag=t), unicode(t))
                 for word, t in self.pos_tagger.tag(self.raw)
-                if not PUNCTUATION_REGEX.match(text_type(t))]
+                if not PUNCTUATION_REGEX.match(unicode(t))]
 
     @cached_property
     def word_counts(self):
@@ -406,7 +407,10 @@ class TextBlob(BaseBlob):
         Examples: "An ellipses is no problem..." or "This is awesome!!!"
         '''
         sentence_objects = []
-        sentences = sent_tokenize(blob)  # List of raw sentences
+        try:
+            sentences = sent_tokenize(blob)  # List of raw sentences
+        except LookupError:
+            raise MissingCorpusException()
         # if there is only one sentence or string of text
         if len(sentences) <= 1:
             sentence_objects.append(Sentence(sentences[0], start_index=0,
