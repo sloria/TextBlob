@@ -11,7 +11,7 @@ import os
 import re
 from xml.etree import cElementTree
 
-from .compat import text_type, string_types, PY2, basestring, imap
+from .compat import text_type, string_types, basestring, imap, unicode
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -252,20 +252,12 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
         string = re.sub(a, b, string)
     # Handle Unicode quotes.
     if type(string) in string_types:
-        if PY2:
-            string = string.encode('utf-8').replace("“", " “ ")
-            string = string.encode('utf-8').replace("”", " ” ")
-            string = string.encode('utf-8').replace("‘", " ‘ ")
-            string = string.encode('utf-8').replace("’", " ’ ")
-            string = string.encode('utf-8').replace("'", " ' ")
-            string = string.encode('utf-8').replace('"', ' " ')
-        else:
-            string = string.replace("“", " “ ")
-            string = string.replace("”", " ” ")
-            string = string.replace("‘", " ‘ ")
-            string = string.replace("’", " ’ ")
-            string = string.replace("'", " ' ")
-            string = string.replace('"', ' " ')
+        string = unicode(string).replace("“", " “ ")\
+                                .replace("”", " ” ")\
+                                .replace("‘", " ‘ ")\
+                                .replace("’", " ’ ")\
+                                .replace("'", " ' ")\
+                                .replace('"', ' " ')
     # Collapse whitespace.
     string = re.sub("\r\n", "\n", string)
     string = re.sub(linebreak, " %s " % EOS, string)

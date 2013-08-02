@@ -121,6 +121,7 @@ class SentenceTest(TestCase):
                 ('vote', 'NN')]
         )
 
+    @attr('slow')
     def test_noun_phrases(self):
         nps = self.sentence.noun_phrases
         assert_equal(nps, ['belgian beer'])
@@ -199,6 +200,13 @@ is managed by the non-profit Python Software Foundation.'''
         blob = self.blob
         assert_equal(len(blob.sentences), 19)
         assert_true(isinstance(blob.sentences[0], tb.Sentence))
+
+    def test_sentiment_of_foreign_text(self):
+        blob = tb.TextBlob(u'Nous avons cherch\xe9 un motel dans la r\xe9gion de '
+            'Madison, mais les motels ne sont pas nombreux et nous avons '
+            'finalement choisi un Motel 6, attir\xe9s par le bas '
+            'prix de la chambre.')
+        assert_true(isinstance(blob.sentiment[0], float))
 
     def test_iter(self):
         for i, letter in enumerate(self.short_blob):
@@ -413,6 +421,7 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(len(blob2.sentences), 2)
         assert_equal(blob2.sentences[1].raw, 'I am soooo LOL!!!')
 
+    @attr('slow')
     def test_blob_noun_phrases(self):
         noun_phrases = self.np_test_blob.noun_phrases
         assert_true('python' in noun_phrases)

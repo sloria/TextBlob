@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.10 (unreleased)
+-------------------
+- Fix sentiment analysis of text with non-ascii characters.
+
 0.3.9 (2013-07-31)
 ------------------
 - Updated nltk.
