@@ -27,11 +27,25 @@ Lower-level classes
     :inherited-members:
     :members:
 
+Tokenizers
+----------
+.. module:: text.tokenizers
+
+.. autoclass:: BaseTokenizer
+    :members:
+
+.. autoclass:: WordTokenizer
+    :members:
+
+.. autoclass:: SentenceTokenizer
+    :members:
+
 POS Taggers
 -----------
 .. module:: text.taggers
 
 .. autoclass:: text.taggers.BaseTagger
+    :members:
 
 .. autoclass:: text.taggers.PatternTagger
     :inherited-members:
@@ -44,6 +58,8 @@ Noun Phrase Extractors
 .. module:: text.np_extractors
 
 .. autoclass:: text.np_extractors.BaseNPExtractor
+    :members:
+
 .. autoclass:: text.np_extractors.FastNPExtractor
 .. autoclass:: text.np_extractors.ConllExtractor
 

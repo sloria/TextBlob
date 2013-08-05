@@ -11,9 +11,13 @@ class UtilsTests(TestCase):
 
     def test_strip_punc(self):
         assert_equal(strip_punc(self.text),
-                    'this Has Punctuation ')
+                    'this. Has. Punctuation')
+
+    def test_strip_punc_all(self):
+        assert_equal(strip_punc(self.text, all=True),
+                    'this Has Punctuation')
 
     def test_lowerstrip(self):
         assert_equal(lowerstrip(self.text),
-                    'this has punctuation')
+                    'this. has. punctuation')
 

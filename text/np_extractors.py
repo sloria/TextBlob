@@ -12,11 +12,11 @@ class BaseNPExtractor(object):
 
     Descendant classes should implement an API, like so: ::
 
-        from text.np_extractor import MyExtractor
-        extractor = MyExtractor()
-        text = "Python is a high-level scripting language."
-        exractor.extract(text)
-        # ['Python', 'scripting language']
+        >>> from text.np_extractor import MyExtractor
+        >>> extractor = MyExtractor()
+        >>> text = "Python is a high-level scripting language."
+        >>> extractor.extract(text)
+        ['Python', 'scripting language']
 
     In other words, descendant classes must implement an ``extract(text)`` method
     that returns a list of noun phrases as strings.

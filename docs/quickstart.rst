@@ -79,6 +79,8 @@ You can break TextBlobs into words or sentences.
     >>> for sentence in zen.sentences:
     ...     print(sentence.sentiment)
 
+For more advanced tokenization, see the :ref:`Advanced Usage <advanced>` guide.
+
 
 Words and Inflection
 --------------------
@@ -95,6 +97,19 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     u'space'
     >>> sentence.words[-1].pluralize()
     u'levels'
+
+WordLists
+---------
+
+Similarly, ``WordLists`` are just Python lists with additional methods.
+
+.. doctest::
+
+    >>> animals = TextBlob("cat dog octopus")
+    >>> animals.words
+    WordList([u'cat', u'dog', u'octopus'])
+    >>> animals.words.pluralize()
+    [u'cats', u'dogs', u'octopodes']
 
 
 Get Word and Noun Phrase Frequencies
@@ -192,6 +207,6 @@ You can get a JSON representation of a blob with
 
 
 Next Steps
-----------
+++++++++++
 
 Want to use a different POS tagger or noun phrases parser implementation? Check out the :ref:`Advanced Usage <advanced>` guide.

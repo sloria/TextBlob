@@ -15,6 +15,7 @@ from .mixins import ComparableMixin
 from .compat import string_types, unicode
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
+from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
 from .exceptions import MissingCorpusException
 
 
@@ -117,12 +118,18 @@ class BaseBlob(ComparableMixin):
     '''An abstract base class that all text.blob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
     basic dunder and string methods for making objects like Python strings.
+
+    :param text: A string.
+    :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+    :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+    :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
     '''
 
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
+    tokenizer = WordTokenizer()
 
-    def __init__(self, text, pos_tagger=None, np_extractor=None):
+    def __init__(self, text, tokenizer=None, pos_tagger=None, np_extractor=None):
         '''Create a blob-like object.
 
         Arguments:
@@ -138,6 +145,12 @@ class BaseBlob(ComparableMixin):
         self.raw = text
         self.string = text
         self.stripped = lowerstrip(text)
+        # tokenizer may be a textblob or an NLTK tokenizer
+        if (tokenizer is not None and
+                not (isinstance(tokenizer, BaseTokenizer) or
+                    isinstance(tokenizer, nltk.tokenize.api.TokenizerI))):
+            raise ValueError("tokenizer must be an instance of BaseTokenizer")
+        self.tokenizer = tokenizer if tokenizer else BaseBlob.tokenizer
         if (np_extractor is not None and
                 not isinstance(np_extractor, BaseNPExtractor)):
             raise ValueError("np_extractor must be an instance of BaseNPExtractor")
@@ -147,16 +160,28 @@ class BaseBlob(ComparableMixin):
             raise ValueError("pos_tagger must be an instance of BaseTagger")
         self.pos_tagger = pos_tagger if pos_tagger else BaseBlob.pos_tagger
 
-    def _tokenize(self):
-        '''Tokenizes the blob into words.'''
-        return nltk.tokenize.word_tokenize(self.raw)
-
     @cached_property
     def words(self):
-        '''Returns list of word tokens.
+        '''Return a list of word tokens. This excludes punctuation characters.
+        If you want to include punctuation characters, access the ``tokens``
+        property.
         '''
-        return WordList([strip_punc(word) for word in self._tokenize()
-                        if strip_punc(word)])  # Excludes punctuation
+        return WordList(WordTokenizer().tokenize(self.raw, include_punc=False))
+
+    @cached_property
+    def tokens(self):
+        '''Return a list of tokens, using this blob's tokenizer object
+        (defaults to :class:`WordTokenizer <text.tokenizers.WordTokenizer>`).
+        '''
+        return WordList(self.tokenizer.tokenize(self.raw))
+
+    def tokenize(self, tokenizer=None):
+        '''Return a list of tokens, using ``tokenizer``.
+
+        :param tokenizer: (optional) A tokenizer object. If None, defaults to this blob's default tokenizer.
+        '''
+        t = tokenizer if tokenizer is not None else self.tokenizer
+        return WordList(t.tokenize(self.raw))
 
     @property
     def sentiment(self):
@@ -394,10 +419,9 @@ class TextBlob(BaseBlob):
         '''Returns a list of each sentences dict representation.'''
         return [sentence.dict for sentence in self.sentences]
 
-    @property
-    def json(self):
+    def json(self, *args, **kwargs):
         '''Returns a json representation of this blob.'''
-        return json.dumps(self.serialized)
+        return json.dumps(self.serialized, *args, **kwargs)
 
     @staticmethod
     def create_sentence_objects(blob):
@@ -406,9 +430,10 @@ class TextBlob(BaseBlob):
         have more than one punctuation mark at the end of the sentence.
         Examples: "An ellipses is no problem..." or "This is awesome!!!"
         '''
+        sent_tokenizer = SentenceTokenizer()
         sentence_objects = []
         try:
-            sentences = nltk.tokenize.sent_tokenize(blob)  # List of raw sentences
+            sentences = sent_tokenizer.tokenize(blob)  # List of raw sentences
         except LookupError:
             raise MissingCorpusException()
         # if there is only one sentence or string of text

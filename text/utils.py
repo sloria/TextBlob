@@ -6,9 +6,12 @@ import string
 PUNCTUATION_REGEX = re.compile('[{0}]'.format(re.escape(string.punctuation)))
 
 
-def strip_punc(s):
+def strip_punc(s, all=False):
     '''Removes punctuation from a string.'''
-    return PUNCTUATION_REGEX.sub('', s)
+    if all:
+        return PUNCTUATION_REGEX.sub('', s.strip())
+    else:
+        return s.strip().strip(string.punctuation)
 
 
 def lowerstrip(s):

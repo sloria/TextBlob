@@ -11,8 +11,10 @@ from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 from text.compat import PY2, text_type, unicode
 import text.blob as tb
+from text.packages import nltk
 from text.np_extractors import ConllExtractor, FastNPExtractor
 from text.taggers import NLTKTagger, PatternTagger
+from text.tokenizers import WordTokenizer
 
 
 class WordListTest(TestCase):
@@ -443,6 +445,7 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob2.words.count('special'), 2)
         assert_equal(blob2.words.count('special', case_sensitive=True), 1)
 
+    @attr('slow')
     def test_np_counts(self):
         # Add some text so that we have a noun phrase that
         # has a frequency greater than 1
@@ -524,9 +527,10 @@ is managed by the non-profit Python Software Foundation.'''
         assert_true('better' in blob)
         assert_true('fugly' not in blob)
 
+    @attr('slow')
     def test_json(self):
         blob = tb.TextBlob('Beautiful is better than ugly. ')
-        blob_dict = json.loads(blob.json)[0]
+        blob_dict = json.loads(blob.json())[0]
         assert_equal(blob_dict['stripped'], 'beautiful is better than ugly')
         assert_equal(blob_dict['noun_phrases'], blob.sentences[0].noun_phrases)
         assert_equal(blob_dict['start_index'], blob.sentences[0].start)
@@ -544,6 +548,26 @@ is managed by the non-profit Python Software Foundation.'''
         first_word, first_tag = blob.pos_tags[0]
         assert_true(isinstance(first_word, tb.Word))
         assert_equal(first_word.pos_tag, first_tag)
+
+    def test_tokenizer_defaults_to_word_tokenizer(self):
+        assert_true(isinstance(self.blob.tokenizer, WordTokenizer))
+
+    def test_tokens_property(self):
+        assert_true(self.blob.tokens,
+            tb.WordList(WordTokenizer().tokenize(self.text)))
+
+    def test_can_use_an_different_tokenizer(self):
+        tokenizer = nltk.tokenize.TabTokenizer()
+        blob = tb.TextBlob("This is\ttext.", tokenizer=tokenizer)
+        assert_equal(blob.tokens, tb.WordList(["This is", "text."]))
+
+    def test_tokenize_method(self):
+        tokenizer = nltk.tokenize.TabTokenizer()
+        blob = tb.TextBlob("This is\ttext.")
+        # If called without arguments, should default to WordTokenizer
+        assert_equal(blob.tokenize(), tb.WordList(["This", "is", "text", "."]))
+        # Pass in the TabTokenizer
+        assert_equal(blob.tokenize(tokenizer), tb.WordList(["This is", "text."]))
 
 
 class WordTest(TestCase):
