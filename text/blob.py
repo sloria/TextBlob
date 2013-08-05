@@ -12,7 +12,7 @@ from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .en import sentiment as _sentiment
 from .mixins import ComparableMixin
-from .compat import text_type, string_types, unicode
+from .compat import string_types, unicode
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .exceptions import MissingCorpusException
@@ -122,7 +122,7 @@ class BaseBlob(ComparableMixin):
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
 
-    def __init__(self, text, np_extractor=None, pos_tagger=None):
+    def __init__(self, text, pos_tagger=None, np_extractor=None):
         '''Create a blob-like object.
 
         Arguments:
@@ -363,16 +363,21 @@ class BaseBlob(ComparableMixin):
 class TextBlob(BaseBlob):
 
     """A general text block, meant for larger bodies of text (esp. those
-    containing sentences.
+    containing sentences). Inherits from :class:`BaseBlob <BaseBlob>`.
+
+    :param text: A string.
+    :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+    :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
     """
 
-    def __init__(self, text, *args, **kwargs):
+    def __init__(self, text, np_extractor=None, pos_tagger=None, *args, **kwargs):
         '''Initialize a textblob.
 
         Arguments:
         - `text`: a string
         '''
-        super(TextBlob, self).__init__(text, *args, **kwargs)
+        super(TextBlob, self).__init__(text,
+            pos_tagger=pos_tagger, np_extractor=np_extractor, *args, **kwargs)
 
     @cached_property
     def sentences(self):
@@ -440,19 +445,17 @@ class TextBlob(BaseBlob):
 
 class Sentence(BaseBlob):
 
-    '''A sentence within a TextBlob.'''
+    '''A sentence within a TextBlob. Inherits from :class:`BaseBlob <BaseBlob>`.
+
+    :param sentence: A string, the raw sentence.
+    :param start_index: An int, the index where this sentence begins
+                        in a TextBlob. If not given, defaults to 0.
+    :param end_index: An int, the index where this sentence ends in
+                        a TextBlob. If not given, defaults to the
+                        length of the sentence - 1.
+    '''
 
     def __init__(self, sentence, start_index=0, end_index=None):
-        '''Initialize a Sentence.
-
-        Arguments:
-        - sentence: A string, the raw sentence.
-        - start_index: An int, the index where this sentence begins
-                            in a TextBlob. If not given, defaults to 0.
-        - end_index: An int, the index where this sentence ends in
-                            a TextBlob. If not given, defaults to the
-                            length of the sentence - 1.
-        '''
         super(Sentence, self).__init__(sentence)
         self.start = self.start_index = start_index
         self.end = self.end_index = (end_index if end_index else len(sentence)

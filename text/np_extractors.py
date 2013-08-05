@@ -10,7 +10,7 @@ class BaseNPExtractor(object):
 
     '''Abstract base class from which all NPExtractor classes inherit.
 
-    Descendant classes should implement an API, like so:
+    Descendant classes should implement an API, like so: ::
 
         from text.np_extractor import MyExtractor
         extractor = MyExtractor()
@@ -18,7 +18,7 @@ class BaseNPExtractor(object):
         exractor.extract(text)
         # ['Python', 'scripting language']
 
-    In other words, descendant classes must implement an extract method
+    In other words, descendant classes must implement an ``extract(text)`` method
     that returns a list of noun phrases as strings.
     '''
 
@@ -104,8 +104,8 @@ class FastNPExtractor(BaseNPExtractor):
 
     '''A fast and simple noun phrase extractor.
 
-    Credit to Shlomi Babluk
-    Link to original blog post:
+    Credit to Shlomi Babluk. Link to original blog post:
+
         http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/
     '''
 

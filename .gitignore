@@ -38,3 +38,6 @@ nosetests.xml
 
 *.bak
 .bumpversion.cfg
+
+# Docs
+docs/_build

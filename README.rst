@@ -1,8 +1,8 @@
 
-TextBlob: Pythonic Text Processing
-==================================
+TextBlob: Simplified Text Processing
+====================================
 
-.. image:: https://travis-ci.org/sloria/TextBlob.png
+.. image:: https://travis-ci.org/sloria/TextBlob.png?branch=master
     :target: https://travis-ci.org/sloria/TextBlob
     :alt: Travis-CI
 

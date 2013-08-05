@@ -1,4 +1,5 @@
 .. _quickstart:
+
 Quickstart
 ==========
 
@@ -71,7 +72,7 @@ You can break TextBlobs into words or sentences.
     >>> zen.sentences
     [Sentence('Beautiful is better than ugly.'), Sentence('Explicit is better than implicit.'), Sentence('Simple is better than complex.')]
 
-``Sentence`` objects have the same properties as TextBlobs.
+``Sentence`` objects have the same properties and methods as TextBlobs.
 
 ::
 
@@ -188,3 +189,9 @@ You can get a JSON representation of a blob with
 
     >>> zen.json
     '[{"sentiment": [0.2166666666666667, 0.8333333333333334], "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "end_index": 30, "start_index": 0}, {"sentiment": [0.5, 0.5], "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "end_index": 63, "start_index": 30}, {"sentiment": [0.06666666666666667, 0.41904761904761906], "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "end_index": 93, "start_index": 63}]'
+
+
+Next Steps
+----------
+
+Want to use a different POS tagger or noun phrases parser implementation? Check out the :ref:`Advanced Usage <advanced>` guide.

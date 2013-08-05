@@ -1,7 +1,9 @@
+.. _advanced:
+
 Advanced Usage
 ==============
 
-In construction.
+TextBlob allows you to specify which algorithms you want to use under the hood of its simple API.
 
 Noun Phrase Chunkers
 --------------------

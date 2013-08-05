@@ -16,7 +16,8 @@ import sys, os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
+import text
 sys.path.append(os.path.abspath("_themes"))
 
 # -- General configuration -----------------------------------------------------
@@ -26,7 +27,7 @@ sys.path.append(os.path.abspath("_themes"))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -41,8 +42,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'textblob'
-copyright = u'2013, Steven Loria'
+project = u'TextBlob'
+copyright = u'2013, <a href="http://stevenloria.com/">Steven Loria</a>'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -80,7 +81,7 @@ exclude_patterns = ['_build']
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'flask_theme_support.FlaskyStyle'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -189,7 +190,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'textblob.tex', u'textblob Documentation',
+  ('index', 'TextBlob.tex', u'textblob Documentation',
    u'Steven Loria', 'manual'),
 ]
 
@@ -233,9 +234,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'textblob', u'textblob Documentation',
-   u'Steven Loria', 'textblob', 'One line description of project.',
-   'Miscellaneous'),
+  ('index', 'textblob', u'TextBlob Documentation',
+   u'Steven Loria', 'textblob', 'Simplified Python text-processing.',
+   'Natural Language Processing'),
 ]
 
 # Documents to append as an appendix to all manuals.

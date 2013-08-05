@@ -48,7 +48,7 @@ TextBlob supports Python >=2.6 or >=3.3.
 Dependencies
 ++++++++++++
 
-PyYAML is `TextBlob`'s only external dependency. It will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``. A vendorized version of NLTK_ is bundled internally.
+PyYAML is TextBlob's only external dependency. It will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``. A vendorized version of NLTK_ is bundled internally.
 
 .. _NLTK: http://nltk.org/
 

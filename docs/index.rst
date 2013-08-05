@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-TextBlob: Pythonic Text Processing
-===================================
+TextBlob: Simplified Text Processing
+====================================
 
 Release v\ |version|. (:ref:`Installation <install>`)
 
@@ -35,6 +35,7 @@ Release v\ |version|. (:ref:`Installation <install>`)
 
     for sentence in blob.sentences:
         print(blob.sentiment)
+    # (sentiment score, subjectivity score)
     # (0.060, 0.605)
     # (-0.34, 0.77)
 

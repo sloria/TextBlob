@@ -1,4 +1,0 @@
-API Reference
-=============
-
-In construction.
