@@ -1,4 +1,4 @@
-Results of doctest builder run on 2013-08-05 06:11:03
+Results of doctest builder run on 2013-08-05 06:35:50
 =====================================================
 
 Document: quickstart
