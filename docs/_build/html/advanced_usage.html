@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Advanced Usage &mdash; textblob 0.3.10 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="textblob 0.3.10 documentation" href="index.html" />
+    <link rel="next" title="API Reference" href="api_reference.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api_reference.html" title="API Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quickstart"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">textblob 0.3.10 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="advanced-usage">
+<h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h1>
+<p>In construction.</p>
+<div class="section" id="noun-phrase-chunkers">
+<h2>Noun Phrase Chunkers<a class="headerlink" href="#noun-phrase-chunkers" title="Permalink to this headline">¶</a></h2>
+<p>TextBlob currently has two noun phrases chunker implementations,
+<tt class="docutils literal"><span class="pre">text.np_extractors.FastNPExtractor</span></tt> (default, based on Shlomi Babluki&#8217;s implementation from
+<a class="reference external" href="http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/">this blog post</a>)
+and <tt class="docutils literal"><span class="pre">text.np_extractors.ConllExtractor</span></tt>, which uses the CoNLL 2000 corpus to train a tagger.</p>
+<p>You can change the chunker implementation (or even use your own) by explicitly passing an instance of a noun phrase extractor to a TextBlob&#8217;s constructor.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">text.blob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">from</span> <span class="nn">text.np_extractors</span> <span class="kn">import</span> <span class="n">ConllExtractor</span>
+
+<span class="n">extractor</span> <span class="o">=</span> <span class="n">ConllExtractor</span><span class="p">()</span>
+<span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">&quot;Extract my noun phrases.&quot;</span><span class="p">,</span> <span class="n">np_extractor</span><span class="o">=</span><span class="n">extractor</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">noun_phrases</span>  <span class="c"># This will use the Conll2000 noun phrase extractor</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pos-taggers">
+<h2>POS Taggers<a class="headerlink" href="#pos-taggers" title="Permalink to this headline">¶</a></h2>
+<p>TextBlob currently has two POS tagger implementations, located in <tt class="docutils literal"><span class="pre">text.taggers</span></tt>. The default is the <tt class="docutils literal"><span class="pre">PatternTagger</span></tt> which uses the same implementation as the excellent <a class="reference external" href="http://www.clips.ua.ac.be/pattern">pattern</a> library.</p>
+<p>The second implementation is <tt class="docutils literal"><span class="pre">NLTKTagger</span></tt> which uses <a class="reference external" href="http://nltk.org/">NLTK</a>&#8216;s TreeBank tagger. <em>It requires numpy and only works on Python 2</em>.</p>
+<p>Similar to the noun phrase chunkers, you can explicitly specify which POS tagger to use by passing a tagger instance to the constructor.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">text.blob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">from</span> <span class="nn">text.taggers</span> <span class="kn">import</span> <span class="n">NLTKTagger</span>
+
+<span class="n">nltk_tagger</span> <span class="o">=</span> <span class="n">NLTKTagger</span><span class="p">()</span>
+<span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">&quot;Tag! You&#39;re It!&quot;</span><span class="p">,</span> <span class="n">pos_tagger</span><span class="o">=</span><span class="n">nltk_tagger</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">pos_tags</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="home">
+  <h1><a href="index.html">TextBlob Home</a></h1>
+</p>
+
+<p>
+  <iframe src="http://ghbtns.com/github-btn.html?user=sloria&repo=TextBlob&type=watch&count=true&size=large"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<p>
+TextBlob is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
+</p>
+
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://pypi.python.org/pypi/textblob">TextBlob @ PyPI</a></li>
+  <li><a href="http://github.com/sloria/textblob">TextBlob @ GitHub</a></li>
+  <li><a href="http://github.com/sloria/textblob/issues">Issue Tracker</a></li>
+</ul>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Advanced Usage</a><ul>
+<li><a class="reference internal" href="#noun-phrase-chunkers">Noun Phrase Chunkers</a></li>
+<li><a class="reference internal" href="#pos-taggers">POS Taggers</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">Quickstart</a></li>
+      <li>Next: <a href="api_reference.html" title="next chapter">API Reference</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2013, Steven Loria.
+    </div>
+  </body>
+</html>

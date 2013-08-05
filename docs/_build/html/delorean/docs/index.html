@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Delorean: Time Travel Made Easy &mdash; textblob 0.3.10 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="textblob 0.3.10 documentation" href="../../index.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">textblob 0.3.10 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="delorean-time-travel-made-easy">
+<h1>Delorean: Time Travel Made Easy<a class="headerlink" href="#delorean-time-travel-made-easy" title="Permalink to this headline">¶</a></h1>
+<p>datetime?  Where we&#8217;re going, we don&#8217;t need datetime.</p>
+<p>This document describes Delorean v0.3.10.</p>
+<p><cite>Delorean</cite> is the name of the car in the movie Back to the Future. The movie deals with a lot of time travel, hence the name Delorean as a module dealing with datetimes.</p>
+<p><cite>Delorean</cite> is a library for clearing up the inconvenient truths that arise dealing with datetimes in Python. Understanding that timing is a delicate enough of a problem <cite>delorean</cite> hopes to provide a cleaner less troublesome solution to shifting, manipulating, generating <cite>datetimes</cite>.</p>
+<p>Delorean stands on the shoulders of giants <a class="reference external" href="http://pytz.sourceforge.net/">pytz</a> and <a class="reference external" href="http://labix.org/python-dateutil">dateutil</a></p>
+<p><cite>Delorean</cite> will provide natural language improvements for manipulating time, as well as datetime abstractions for ease of use. The overall goal is to improve datetime manipulations, with a little bit of software and philosophy.</p>
+<p>Pretty much make you a badass, time traveller.</p>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Here is the world without a flux capacitor at your side.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pytz</span> <span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="n">EST</span> <span class="o">=</span> <span class="s">&quot;US/Eastern&quot;</span>
+<span class="n">UTC</span> <span class="o">=</span> <span class="s">&quot;UTC&quot;</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="n">utc</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="n">UTC</span><span class="p">)</span>
+<span class="n">est</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="n">EST</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">utc</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">est</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">d</span>
+</pre></div>
+</div>
+<p>Now lets warm up the <cite>delorean</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">delorean</span> <span class="kn">import</span> <span class="n">Delorean</span>
+
+<span class="n">EST</span> <span class="o">=</span> <span class="s">&quot;US/Eastern&quot;</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">Delorean</span><span class="p">(</span><span class="n">timezone</span><span class="o">=</span><span class="n">EST</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">d</span>
+</pre></div>
+</div>
+<p>Look at you looking all fly. This was just a test drive checkout out what else
+<cite>delorean</cite> can help with below.</p>
+</div>
+</div>
+<div class="section" id="guide">
+<h1>Guide<a class="headerlink" href="#guide" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#obtaining-the-source">Obtaining the Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-from-pypi">Installing from PyPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-from-source">Installing from Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#making-some-time">Making Some Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#natural-language">Natural Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#truncation">Truncation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#strings-and-parsing">Strings and Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#making-a-few-stops">Making A Few Stops</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interface.html#delorean">Delorean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interface.html#inteface-methods">Inteface Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contribution.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contribution.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contribution.html#reporting-issues">Reporting Issues</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="home">
+  <h1><a href="../../index.html">TextBlob Home</a></h1>
+</p>
+
+<p>
+  <iframe src="http://ghbtns.com/github-btn.html?user=sloria&repo=TextBlob&type=watch&count=true&size=large"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<p>
+TextBlob is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
+</p>
+
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://pypi.python.org/pypi/textblob">TextBlob @ PyPI</a></li>
+  <li><a href="http://github.com/sloria/textblob">TextBlob @ GitHub</a></li>
+  <li><a href="http://github.com/sloria/textblob/issues">Issue Tracker</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Delorean: Time Travel Made Easy</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#guide">Guide</a><ul>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2013, Steven Loria.
+    </div>
+  </body>
+</html>

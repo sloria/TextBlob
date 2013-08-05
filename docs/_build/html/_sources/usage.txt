@@ -1,0 +1,6 @@
+.. _usage:
+Usage
+=====
+
+TextBlob aims to provide access to common text-processing operations through a familiar interface. You can treat ``TextBlob`` objects as if they were Python strings who learned how to do some Natural Language Processing.
+

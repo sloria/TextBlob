@@ -1,16 +1,12 @@
+.. textblob documentation master file, created by
+   sphinx-quickstart on Mon Aug  5 01:41:33 2013.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
 TextBlob: Pythonic Text Processing
-==================================
+===================================
 
-.. image:: https://travis-ci.org/sloria/TextBlob.png
-    :target: https://travis-ci.org/sloria/TextBlob
-    :alt: Travis-CI
-
-.. image:: https://pypip.in/d/textblob/badge.png
-    :target: https://crate.io/packages/textblob/
-    :alt: Number of PyPI downloads
-
-
+Release v\ |version|. (:ref:`Installation <install>`)
 
 `TextBlob` is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
 
@@ -49,25 +45,20 @@ Get it now
     $ pip install -U textblob
     $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
-
-Requirements
-------------
-
-- Python >= 2.6 or >= 3.3
+Ready to dive in? Go on to the :ref:`Quickstart guide <quickstart>`.
 
 
-Testing
--------
-Run ::
+Guide
+=====
 
-    python run_tests.py
+.. toctree::
+   :maxdepth: 2
 
-to run all tests.
+   license
+   install
+   quickstart
+   advanced_usage
+   api_reference
 
-License
--------
-
-TextBlob is licenced under the MIT license. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
-
-.. _pattern: http://www.clips.ua.ac.be/pattern
-.. _NLTK: http://nltk.org/
+.. _NLTK: http://www.nltk.org
+.. _pattern: http://www.clips.ua.ac.be/pages/pattern-en

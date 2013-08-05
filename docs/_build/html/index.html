@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TextBlob: Pythonic Text Processing &mdash; textblob 0.3.10 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="textblob 0.3.10 documentation" href="#" />
+    <link rel="next" title="License" href="license.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">textblob 0.3.10 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="textblob-pythonic-text-processing">
+<h1>TextBlob: Pythonic Text Processing<a class="headerlink" href="#textblob-pythonic-text-processing" title="Permalink to this headline">¶</a></h1>
+<p>Release v0.3.10. (<a class="reference internal" href="install.html#install"><em>Installation</em></a>)</p>
+<p><cite>TextBlob</cite> is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">text.blob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">The titular threat of The Blob has always struck me as the ultimate movie</span>
+<span class="s">monster: an insatiably hungry, amoeba-like mass able to penetrate</span>
+<span class="s">virtually any safeguard, capable of--as a doomed doctor chillingly</span>
+<span class="s">describes it--&quot;assimilating flesh on contact.</span>
+<span class="s">Snide comparisons to gelatin be damned, it&#39;s a concept with the most</span>
+<span class="s">devastating of potential consequences, not unlike the grey goo scenario</span>
+<span class="s">proposed by technological theorists fearful of</span>
+<span class="s">artificial intelligence run rampant.</span>
+<span class="s">&#39;&#39;&#39;</span>
+
+<span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">pos_tags</span>       <span class="c"># [(Word(&#39;The&#39;), u&#39;DT&#39;), (Word(&#39;titular&#39;), u&#39;JJ&#39;),</span>
+                    <span class="c">#  (Word(&#39;threat&#39;), u&#39;NN&#39;), ...])</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">noun_phrases</span>   <span class="c"># WordList([&#39;titular threat&#39;, &#39;blob&#39;,</span>
+                    <span class="c">#            &#39;ultimate movie monster&#39;,</span>
+                    <span class="c">#            &#39;amoeba-like mass&#39;, ...])</span>
+
+<span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">blob</span><span class="o">.</span><span class="n">sentences</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">blob</span><span class="o">.</span><span class="n">sentiment</span><span class="p">)</span>
+<span class="c"># (0.060, 0.605)</span>
+<span class="c"># (-0.34, 0.77)</span>
+</pre></div>
+</div>
+<div class="section" id="get-it-now">
+<h2>Get it now<a class="headerlink" href="#get-it-now" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>$ pip install -U textblob
+$ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python</pre>
+</div>
+<p>Ready to dive in? Go on to the <a class="reference internal" href="quickstart.html#quickstart"><em>Quickstart guide</em></a>.</p>
+</div>
+</div>
+<div class="section" id="guide">
+<h1>Guide<a class="headerlink" href="#guide" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#from-the-pypi">From the PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#from-source">From Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#create-a-textblob">Create a TextBlob</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#part-of-speech-tagging">Part-of-speech Tagging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#noun-phrase-extraction">Noun Phrase Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#sentiment-analysis">Sentiment Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#tokenization">Tokenization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#words-and-inflection">Words and Inflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#get-word-and-noun-phrase-frequencies">Get Word and Noun Phrase Frequencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#textblobs-are-like-python-strings">TextBlobs Are Like Python Strings!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#get-start-and-end-indices-of-sentences">Get Start and End Indices of Sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#get-a-json-serialized-version-of-a-blob">Get a JSON-serialized version of a blob</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="advanced_usage.html#noun-phrase-chunkers">Noun Phrase Chunkers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced_usage.html#pos-taggers">POS Taggers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="home">
+  <h1><a href="#">TextBlob Home</a></h1>
+</p>
+
+<p>
+  <iframe src="http://ghbtns.com/github-btn.html?user=sloria&repo=TextBlob&type=watch&count=true&size=large"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+<p>
+TextBlob is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
+</p>
+
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://pypi.python.org/pypi/textblob">TextBlob @ PyPI</a></li>
+  <li><a href="http://github.com/sloria/textblob">TextBlob @ GitHub</a></li>
+  <li><a href="http://github.com/sloria/textblob/issues">Issue Tracker</a></li>
+</ul>
+
+<h3>Stay Informed</h3>
+
+<p><iframe src="http://ghbtns.com/github-btn.html?user=sloria&type=follow"
+  allowtransparency="true" frameborder="0" scrolling="0" width="165" height="20"></iframe></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2013, Steven Loria.
+    </div>
+  </body>
+</html>
