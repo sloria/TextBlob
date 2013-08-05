@@ -151,11 +151,6 @@ class BaseBlob(ComparableMixin):
         '''Tokenizes the blob into words.'''
         return nltk.tokenize.word_tokenize(self.raw)
 
-    # @cached_property
-    # def np_extractor(self):
-    #     from .np_extractor import NPExtractor
-    #     return NPExtractor()
-
     @cached_property
     def words(self):
         '''Returns list of word tokens.
@@ -273,7 +268,7 @@ class BaseBlob(ComparableMixin):
         Arguments:
         - `other`: a string or a text object
         '''
-        if isinstance(other, text_type):
+        if type(other) in string_types:
             return TextBlob(str(self) + other)
         elif isinstance(other, BaseBlob):
             return TextBlob(str(self) + str(other))
@@ -403,7 +398,7 @@ class TextBlob(BaseBlob):
     def create_sentence_objects(blob):
         '''Returns a list of Sentence objects given
         a list of sentence strings. Attempts to handle sentences that
-        have more than one puntuation mark at the end of the sentence.
+        have more than one punctuation mark at the end of the sentence.
         Examples: "An ellipses is no problem..." or "This is awesome!!!"
         '''
         sentence_objects = []

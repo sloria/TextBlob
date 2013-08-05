@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.0 (unreleased)
+------------------
+- Fix bug with adding blobs to byte strings.
+
 0.3.10 (2013-08-02)
 -------------------
 - Bundled NLTK no longer overrides local installation.

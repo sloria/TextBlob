@@ -126,13 +126,19 @@ TextBlobs are like Python strings!
 
 .. code-block:: python
 
+    # Indexing
     zen[0:19]            # TextBlob("Beautiful is better")
+    # String methods
     zen.upper()          # TextBlob("BEAUTIFUL IS BETTER THAN UGLY...")
     zen.find("Simple")   # 65
 
+    # Comparison
     apple_blob = TextBlob('apples')
     banana_blob = TextBlob('bananas')
     apple_blob < banana_blob           # True
+    apple_blob == 'apples'             # True
+
+    # Concatenation and interpolation
     apple_blob + ' and ' + banana_blob # TextBlob('apples and bananas')
     "{0} and {1}".format(apple_blob, banana_blob)  # 'apples and bananas'
 
