@@ -130,15 +130,6 @@ class BaseBlob(ComparableMixin):
     tokenizer = WordTokenizer()
 
     def __init__(self, text, tokenizer=None, pos_tagger=None, np_extractor=None):
-        '''Create a blob-like object.
-
-        Arguments:
-        - text: A string, the text.
-        - np_extractor: An instance of an noun phrase extractor class found in
-            text.np_extractor. Defaults to the FastNPExtractor.
-        - pos_tagger: An instance of a POS tagger found in text.taggers.
-            Defaults to the PatternTagger.
-         '''
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
@@ -497,3 +488,54 @@ class Sentence(BaseBlob):
             'noun_phrases': self.noun_phrases,
             'sentiment': self.sentiment,
         }
+
+class Blobber(object):
+
+    '''A factory for TextBlobs that all share the same tagger,
+    tokenizer, and np_extractor.
+
+    Usage:
+
+        >>> from text.blob import Blobber
+        >>> from text.taggers import NLTKTagger
+        >>> from text.tokenizers import SentenceTokenizer
+        >>> tb = Blobber(pos_tagger=NLTKTagger(), tokenizer=SentenceTokenizer())
+        >>> blob1 = tb("This is one blob.")
+        >>> blob2 = tb("This blob has the same tagger and tokenizer.")
+        >>> blob1.pos_tagger == blob2.pos_tagger
+        True
+
+    :param tokenizer: A tokenizer. Default: :class:`WordTokenizer <text.tokenizers.WordTokenizer>`.
+    :param pos_tagger: A POS tagger. Default: :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param np_extractor: A NP extractor. Default: :class:`FastNPExtractor <text.np_extractors.FastNPExtractor>`.
+    '''
+
+    np_extractor = FastNPExtractor()
+    pos_tagger = PatternTagger()
+    tokenizer = WordTokenizer()
+
+    def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None):
+        # tokenizer may be a textblob or an NLTK tokenizer
+        if (tokenizer is not None and
+                not (isinstance(tokenizer, BaseTokenizer) or
+                    isinstance(tokenizer, nltk.tokenize.api.TokenizerI))):
+            raise ValueError("tokenizer must be an instance of BaseTokenizer")
+        self.tokenizer = tokenizer if tokenizer else Blobber.tokenizer
+        if (np_extractor is not None and
+                not isinstance(np_extractor, BaseNPExtractor)):
+            raise ValueError("np_extractor must be an instance of BaseNPExtractor")
+        self.np_extractor = np_extractor if np_extractor else Blobber.np_extractor
+        if (pos_tagger is not None and
+                not isinstance(pos_tagger, BaseTagger)):
+            raise ValueError("pos_tagger must be an instance of BaseTagger")
+        self.pos_tagger = pos_tagger if pos_tagger else Blobber.pos_tagger
+
+    def __call__(self, text):
+        '''Return a new TextBlob object with this Blobber's ``np_extractor``,
+        ``pos_tagger``, and ``tokenizer``.
+        '''
+        return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
+            np_extractor=self.np_extractor)
+
+
+

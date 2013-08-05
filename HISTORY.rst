@@ -4,9 +4,10 @@ Changelog
 0.4.0 (unreleased)
 ------------------
 - New tokenizer module with ``WordTokenizer`` and ``SentenceTokenizer``. Both textblob and NLTK tokenizer objects and be passed to TextBlob's constructor. Tokens are accessed through the new ``tokens`` property.
+- New ``Blobber`` class for creating TextBlobs that share the same tagger, tokenizer, and np_extractor.
 - `Backwards-incompatible`: ``TextBlob.json()`` is now a method, not a property. This allows you to pass arguments (the same that you would pass to ``json.dumps()``).
 - New home for documentation: https://textblob.readthedocs.org/
-- Fix bug with adding blobs to byte strings.
+- Fix bug with adding blobs to bytestrings.
 
 0.3.10 (2013-08-02)
 -------------------

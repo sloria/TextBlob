@@ -14,7 +14,7 @@ import text.blob as tb
 from text.packages import nltk
 from text.np_extractors import ConllExtractor, FastNPExtractor
 from text.taggers import NLTKTagger, PatternTagger
-from text.tokenizers import WordTokenizer
+from text.tokenizers import WordTokenizer, SentenceTokenizer
 
 
 class WordListTest(TestCase):
@@ -603,6 +603,44 @@ class WordTest(TestCase):
         assert_equal(self.cat.upper(), "CAT")
         assert_equal(self.cat.lower(), "cat")
         assert_equal(self.cat[0:2], 'ca')
+
+
+class BlobberTest(TestCase):
+
+    def setUp(self):
+        self.blobber = tb.Blobber()  # The default blobber
+
+
+    def test_creates_blobs(self):
+        blob1 = self.blobber("this is one blob")
+        assert_true(isinstance(blob1, tb.TextBlob))
+        blob2 = self.blobber("another blob")
+        assert_equal(blob1.pos_tagger, blob2.pos_tagger)
+
+    def test_default_tagger(self):
+        blob = self.blobber("Some text")
+        assert_true(isinstance(blob.pos_tagger, PatternTagger))
+
+    def test_default_np_extractor(self):
+        blob = self.blobber("Some text")
+        assert_true(isinstance(blob.np_extractor, FastNPExtractor))
+
+    def test_default_tokenizer(self):
+        blob = self.blobber("Some text")
+        assert_true(isinstance(blob.tokenizer, WordTokenizer))
+
+    def test_overrides(self):
+        b = tb.Blobber(tokenizer=SentenceTokenizer(),
+                        np_extractor=ConllExtractor())
+        blob = b("How now? Brown cow?")
+        assert_true(isinstance(blob.tokenizer, SentenceTokenizer))
+        assert_equal(blob.tokens, tb.WordList(["How now?", "Brown cow?"]))
+        blob2 = b("Another blob")
+        # blobs have the same tokenizer
+        assert_equal(blob.tokenizer, blob2.tokenizer)
+        # but aren't the same object
+        assert_not_equal(blob, blob2)
+
 
 
 def is_blob(obj):

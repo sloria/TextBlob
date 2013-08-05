@@ -29,6 +29,8 @@ Lower-level classes
 
 Tokenizers
 ----------
+New in `0.4.0`.
+
 .. module:: text.tokenizers
 
 .. autoclass:: BaseTokenizer
@@ -62,6 +64,14 @@ Noun Phrase Extractors
 
 .. autoclass:: text.np_extractors.FastNPExtractor
 .. autoclass:: text.np_extractors.ConllExtractor
+
+Blobber
+-------
+
+.. autoclass:: text.blob.Blobber
+    :members:
+    :special-members:
+    :exclude-members: __weakref__
 
 Exceptions
 ----------
