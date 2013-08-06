@@ -32,7 +32,7 @@ Part-of-speech tags can be accessed through the ``pos_tags`` property.
 .. doctest::
 
     >>> wiki.pos_tags
-    [(Word('Python'), u'NNP'), (Word('is'), u'VBZ'), (Word('a'), u'DT'), (Word('high-level'), u'NN'), (Word('general-purpose'), u'JJ'), (Word('programming'), u'NN'), (Word('language'), u'NN')]
+    [(u'Python', u'NNP'), (u'is', u'VBZ'), (u'a', u'DT'), (u'high-level', u'NN'), (u'general-purpose', u'JJ'), (u'programming', u'NN'), (u'language', u'NN')]
 
 Noun Phrase Extraction
 ----------------------
@@ -178,6 +178,19 @@ You can concatenate and interpolate TextBlobs and strings.
     >>> u"{0} and {1}".format(apple_blob, banana_blob)
     u'apples and bananas'
 
+`n`-grams
+---------
+
+The ``TextBlob.ngrams()`` method returns a list of tuples of `n` successive words.
+
+.. doctest::
+
+    >>> blob = TextBlob("Now is better than never.")
+    >>> blob.ngrams(n=3)
+    [WordList([u'Now', u'is', u'better']), WordList([u'is', u'better', u'than']), WordList([u'better', u'than', u'never'])]
+
+
+
 Get Start and End Indices of Sentences
 --------------------------------------
 
@@ -194,6 +207,7 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
     ---- Starts at index 30, Ends at index 63
     Simple is better than complex.
     ---- Starts at index 63, Ends at index 93
+
 
 Get a JSON-serialized version of a blob
 ---------------------------------------

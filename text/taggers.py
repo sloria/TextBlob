@@ -31,7 +31,7 @@ class PatternTagger(BaseTagger):
 class NLTKTagger(BaseTagger):
 
     '''Tagger that uses NLTK's standard TreeBank tagger.
-    NOTE: Requires numpy.
+    NOTE: Currently supported on Python 2 only, and requires numpy.
     '''
 
     def tag(self, sentence, tokenize=True):

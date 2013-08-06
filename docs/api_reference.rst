@@ -67,6 +67,7 @@ Noun Phrase Extractors
 
 Blobber
 -------
+New in `0.4.0`.
 
 .. autoclass:: text.blob.Blobber
     :members:

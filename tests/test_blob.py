@@ -198,6 +198,21 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob("Textblobs should be equal to strings.")
         assert_equal(blob, "Textblobs should be equal to strings.")
 
+    def test_ngrams(self):
+        blob = tb.TextBlob("I am eating a pizza.")
+        three_grams = blob.ngrams()
+        assert_equal(three_grams, [
+                tb.WordList(('I', 'am', 'eating')),
+                tb.WordList(('am', 'eating', 'a')),
+                tb.WordList(('eating', 'a', 'pizza'))
+            ])
+        four_grams = blob.ngrams(n=4)
+        assert_equal(four_grams, [
+            tb.WordList(('I', 'am', 'eating', 'a')),
+            tb.WordList(('am', 'eating', 'a', 'pizza'))
+        ])
+
+
     def test_sentences(self):
         blob = self.blob
         assert_equal(len(blob.sentences), 19)
@@ -431,6 +446,12 @@ is managed by the non-profit Python Software Foundation.'''
 
     def test_word_counts(self):
         blob = tb.TextBlob('Buffalo buffalo ate my blue buffalo.')
+        assert_equal(dict(blob.word_counts), {
+                'buffalo': 3,
+                'ate': 1,
+                'my': 1,
+                'blue': 1
+            })
         assert_equal(blob.word_counts['buffalo'], 3)
         assert_equal(blob.words.count('buffalo'), 3)
         assert_equal(blob.words.count('buffalo', case_sensitive=True), 2)
@@ -594,7 +615,7 @@ class WordTest(TestCase):
         assert_true(isinstance(plural, unicode))
 
     def test_repr(self):
-        assert_equal(repr(self.cat), "Word('cat')")
+        assert_equal(repr(self.cat), repr("cat"))
 
     def test_str(self):
         assert_equal(str(self.cat), 'cat')

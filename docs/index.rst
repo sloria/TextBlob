@@ -8,7 +8,8 @@ TextBlob: Simplified Text Processing
 
 Release v\ |version|. (:ref:`Installation <install>`)
 
-`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
+`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
+
 
 
 .. code-block:: python
@@ -38,6 +39,8 @@ Release v\ |version|. (:ref:`Installation <install>`)
     # (sentiment score, subjectivity score)
     # (0.060, 0.605)
     # (-0.34, 0.77)
+
+TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_.
 
 Get it now
 ----------

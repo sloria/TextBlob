@@ -8,7 +8,7 @@ from collections import defaultdict
 
 from .packages import nltk
 from .decorators import cached_property
-from .utils import lowerstrip, strip_punc, PUNCTUATION_REGEX
+from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .en import sentiment as _sentiment
 from .mixins import ComparableMixin
@@ -35,7 +35,7 @@ class Word(unicode):
         self.pos_tag = pos_tag
 
     def __repr__(self):
-        return "Word('{0}')".format(self.string)
+        return repr(self.string)
 
     def __str__(self):
         return self.string
@@ -219,6 +219,16 @@ class BaseBlob(ComparableMixin):
         for phrase in self.noun_phrases:
             counts[phrase] += 1
         return counts
+
+    def ngrams(self, n=3):
+        '''Return a list of n-grams (tuples of n successive words) for this
+        blob.
+        '''
+        if n <= 0:
+            return []
+        grams = [WordList(self.words[i:i+n])
+                            for i in range(len(self.words) - n + 1)]
+        return grams
 
     def __repr__(self):
         '''Returns a string representation for debugging.'''
