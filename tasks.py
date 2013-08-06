@@ -11,8 +11,8 @@ def test():
 @task
 def deps():
     print("Vendorizing nltk...")
-    run("rm -rf text/nltk")
     run("git clone https://github.com/nltk/nltk.git")
+    run("rm -rf text/nltk")
     run("mv nltk/nltk text/")
     run("rm -rf nltk")
 
