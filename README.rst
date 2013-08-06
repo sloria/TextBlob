@@ -32,14 +32,16 @@ Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>
     '''
 
     blob = TextBlob(text)
-    blob.pos_tags       # [(Word('The'), u'DT'), (Word('titular'), u'JJ'),
-                        #  (Word('threat'), u'NN'), ...])
+    blob.pos_tags       # [(u'The', u'DT'), (u'titular', u'JJ'),
+                        #  (u'threat', u'NN'), (u'of', u'IN'), ...]
+
     blob.noun_phrases   # WordList(['titular threat', 'blob',
                         #            'ultimate movie monster',
                         #            'amoeba-like mass', ...])
 
     for sentence in blob.sentences:
         print(blob.sentiment)
+    # (sentiment score, subjectivity score)
     # (0.060, 0.605)
     # (-0.34, 0.77)
 

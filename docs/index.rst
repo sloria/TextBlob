@@ -28,19 +28,19 @@ Release v\ |version|. (:ref:`Installation <install>`)
     '''
 
     blob = TextBlob(text)
-    blob.pos_tags       # [(Word('The'), u'DT'), (Word('titular'), u'JJ'),
-                        #  (Word('threat'), u'NN'), ...])
+    blob.pos_tags       # [(u'The', u'DT'), (u'titular', u'JJ'),
+                        #  (u'threat', u'NN'), (u'of', u'IN'), ...]
+
     blob.noun_phrases   # WordList(['titular threat', 'blob',
                         #            'ultimate movie monster',
                         #            'amoeba-like mass', ...])
 
     for sentence in blob.sentences:
-        print(blob.sentiment)
-    # (sentiment score, subjectivity score)
+        print(blob.sentiment)  # returns (sentiment, subjectivity)
     # (0.060, 0.605)
     # (-0.34, 0.77)
 
-TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_.
+TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_, and plays nicely with both.
 
 Get it now
 ----------

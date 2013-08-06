@@ -119,20 +119,22 @@ There are two ways to get the frequency of a word or noun phrase in a ``TextBlob
 
 The first is through the ``word_counts`` dictionary. ::
 
-    >>> wiki.word_counts['its']
-    2
+    >>> monty = TextBlob("We are no longer the Knights who say Ni. "
+    ...                     "We are no the Knights who say Ekki ekki ekki PTANG.")
+    >>> monty.word_counts['ekki']
+    3
 
 If you access the frequencies this way, the search will *not* be case sensitive, and words that are not found will have a frequency of 0.
 
-The second way is to use the ``count(strg, [case_sensitive=False])`` method. ::
+The second way is to use the ``count()`` method. ::
 
-    >>> wiki.words.count('its')
-    2
+    >>> monty.words.count('ekki')
+    3
 
 You can specify whether or not the search should be case-sensitive. ::
 
-    >>> wiki.words.count('its', case_sensitive=True)
-    1
+    >>> monty.words.count('ekki', case_sensitive=True)
+    2
 
 Each of these methods can also be used with noun phrases. ::
 
