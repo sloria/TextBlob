@@ -115,7 +115,7 @@ Similarly, ``WordLists`` are just Python lists with additional methods.
 Get Word and Noun Phrase Frequencies
 ------------------------------------
 
-There are two ways to get the frequency of a word or noun phrases in a ``TextBlob``.
+There are two ways to get the frequency of a word or noun phrase in a ``TextBlob``.
 
 The first is through the ``word_counts`` dictionary. ::
 
@@ -212,7 +212,7 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
 Dealing with HTML
 -----------------
 
-If your text comes in the form of an HTML document, you can pass ``clean_html=True`` to the TextBlob constructor to strip the HTML markup.
+If your text comes in the form of an HTML string, you can pass ``clean_html=True`` to the TextBlob constructor to strip the markup.
 
 .. doctest::
 
@@ -235,4 +235,4 @@ You can get a JSON representation of a blob with
 Next Steps
 ++++++++++
 
-Want to use a different POS tagger or noun phrases parser implementation? Check out the :ref:`Advanced Usage <advanced>` guide.
+Want to use a different POS tagger or noun phrase chunker implementation? Check out the :ref:`Advanced Usage <advanced>` guide.

@@ -82,7 +82,7 @@ New in `0.4.0`.
 
 It can be tedious to repeatedly pass taggers, NP extractors, and tokenizers to  multiple TextBlobs. To keep your code `DRY <https://en.wikipedia.org/wiki/DRY_principle>`_, you can use the ``Blobber`` class to create TextBlobs that share the same taggers, etc.
 
-First, instantiate a ``Blobber`` with the tagger, NP extractor, and/or tokenizer you want to use.
+First, instantiate a ``Blobber`` with the tagger, NP extractor, and/or tokenizer of your choice.
 
 .. doctest::
 
@@ -90,7 +90,7 @@ First, instantiate a ``Blobber`` with the tagger, NP extractor, and/or tokenizer
     >>> from text.taggers import NLTKTagger
     >>> tb = Blobber(pos_tagger=NLTKTagger())
 
-You can now create new TextBlobs, like so.
+You can now create new TextBlobs like so:
 
 .. doctest::
 
