@@ -17,6 +17,14 @@ def deps():
     run("rm -rf nltk")
 
 @task
+def clean():
+    run("rm -rf build")
+    run("rm -rf dist")
+    run("rm -rf textblob.egg-info")
+    clean_docs()
+    print("Cleaned up.")
+
+@task
 def clean_docs():
     run("rm -rf %s" % build_dir)
 

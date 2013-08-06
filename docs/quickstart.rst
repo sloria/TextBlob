@@ -94,9 +94,9 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     >>> sentence.words
     WordList([u'Use', u'4', u'spaces', u'per', u'indentation', u'level'])
     >>> sentence.words[2].singularize()
-    u'space'
+    'space'
     >>> sentence.words[-1].pluralize()
-    u'levels'
+    'levels'
 
 WordLists
 ---------
@@ -109,7 +109,7 @@ Similarly, ``WordLists`` are just Python lists with additional methods.
     >>> animals.words
     WordList([u'cat', u'dog', u'octopus'])
     >>> animals.words.pluralize()
-    [u'cats', u'dogs', u'octopodes']
+    ['cats', 'dogs', 'octopodes']
 
 
 Get Word and Noun Phrase Frequencies
@@ -208,6 +208,18 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
     Simple is better than complex.
     ---- Starts at index 63, Ends at index 93
 
+
+Dealing with HTML
+-----------------
+
+If your text comes in the form of an HTML document, you can pass ``clean_html=True`` to the TextBlob constructor to strip the HTML markup.
+
+.. doctest::
+
+    >>> html = "<b>HAML</b> Ain't Markup <a href='/languages'>Language</a>"
+    >>> clean = TextBlob(html, clean_html=True)
+    >>> print(clean.raw)
+    HAML Ain't Markup Language
 
 Get a JSON-serialized version of a blob
 ---------------------------------------

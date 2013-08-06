@@ -14,6 +14,6 @@ def strip_punc(s, all=False):
         return s.strip().strip(string.punctuation)
 
 
-def lowerstrip(s):
+def lowerstrip(s, all=False):
     '''Makes text all lowercase and strips punctuation and whitespace.'''
-    return strip_punc(s.lower().strip())
+    return strip_punc(s.lower().strip(), all=all)

@@ -123,19 +123,20 @@ class BaseBlob(ComparableMixin):
     :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param clean_html: (optional) Remove HTML markup from ``text``.
     '''
 
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
     tokenizer = WordTokenizer()
 
-    def __init__(self, text, tokenizer=None, pos_tagger=None, np_extractor=None):
+    def __init__(self, text, tokenizer=None,
+                pos_tagger=None, np_extractor=None, clean_html=False):
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
-        self.raw = text
-        self.string = text
-        self.stripped = lowerstrip(text)
+        self.raw = self.string = text if not clean_html else nltk.clean_html(text)
+        self.stripped = lowerstrip(self.raw, all=True)
         # tokenizer may be a textblob or an NLTK tokenizer
         if (tokenizer is not None and
                 not (isinstance(tokenizer, BaseTokenizer) or
@@ -394,21 +395,27 @@ class TextBlob(BaseBlob):
     :param text: A string.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param clean_html: (optional) Remove HTML markup from ``text``.
     """
-
-    def __init__(self, text, np_extractor=None, pos_tagger=None, *args, **kwargs):
-        '''Initialize a textblob.
-
-        Arguments:
-        - `text`: a string
-        '''
-        super(TextBlob, self).__init__(text,
-            pos_tagger=pos_tagger, np_extractor=np_extractor, *args, **kwargs)
 
     @cached_property
     def sentences(self):
-        '''List of Sentence objects.'''
+        '''Return list of :class:`Sentence <Sentence>` objects.'''
         return TextBlob.create_sentence_objects(self.raw)
+
+    @cached_property
+    def words(self):
+        '''Return a list of word tokens. This excludes punctuation characters.
+        If you want to include punctuation characters, access the ``tokens``
+        property.
+        '''
+        # NLTK's word tokenizer expects sentences as input, so tokenize the
+        # blob into sentences before tokenizing to words
+        words = []
+        for sent in self.sentences:
+            words.extend(WordTokenizer().tokenize(str(sent), include_punc=False))
+        return WordList(words)
+
 
     @property
     def raw_sentences(self):
@@ -481,11 +488,10 @@ class Sentence(BaseBlob):
                         length of the sentence - 1.
     '''
 
-    def __init__(self, sentence, start_index=0, end_index=None):
-        super(Sentence, self).__init__(sentence)
+    def __init__(self, sentence, start_index=0, end_index=None, *args, **kwargs):
+        super(Sentence, self).__init__(sentence, *args, **kwargs)
         self.start = self.start_index = start_index
-        self.end = self.end_index = (end_index if end_index else len(sentence)
-                                     - 1)
+        self.end = self.end_index = end_index if end_index else len(sentence) - 1
 
     @property
     def dict(self):

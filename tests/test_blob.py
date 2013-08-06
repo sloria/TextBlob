@@ -198,6 +198,10 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob("Textblobs should be equal to strings.")
         assert_equal(blob, "Textblobs should be equal to strings.")
 
+    def test_stripped(self):
+        blob = tb.TextBlob("Um... well this ain't right.!..")
+        assert_equal(blob.stripped, "um well this aint right")
+
     def test_ngrams(self):
         blob = tb.TextBlob("I am eating a pizza.")
         three_grams = blob.ngrams()
@@ -211,6 +215,11 @@ is managed by the non-profit Python Software Foundation.'''
             tb.WordList(('I', 'am', 'eating', 'a')),
             tb.WordList(('am', 'eating', 'a', 'pizza'))
         ])
+
+    def test_clean_html(self):
+        html = '<b>Python</b> is a widely used <a href="/wiki/General-purpose_programming_language" title="General-purpose programming language">general-purpose</a>, <a href="/wiki/High-level_programming_language" title="High-level programming language">high-level programming language</a>.'
+        blob = tb.TextBlob(html, clean_html=True)
+        assert_equal(blob.string, 'Python is a widely used general-purpose , high-level programming language .')
 
 
     def test_sentences(self):
@@ -279,6 +288,10 @@ is managed by the non-profit Python Software Foundation.'''
             'better',
             'than',
             'implicit',
+            ]))
+        short = tb.TextBlob("Just a bundle of words")
+        assert_equal(short.words, tb.WordList([
+            'Just', 'a', 'bundle', 'of', 'words'
             ]))
 
     def test_pos_tags(self):
