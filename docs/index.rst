@@ -35,9 +35,9 @@ Release v\ |version|. (:ref:`Installation <install>`)
                         #            'amoeba-like mass', ...])
 
     for sentence in blob.sentences:
-        print(blob.sentiment)
-    # 0.060
-    # -0.34
+        print(sentence.sentiment)  # returns (polarity, subjectivity)
+    # (0.060, 0.605)
+    # (-0.341, 0.767)
 
     blob.translate(to="es")  # TextBlob('La amenaza titular de The Blob...)
 

@@ -47,20 +47,16 @@ Similarly, noun phrases are accessed through the ``noun_phrases`` property.
 Sentiment Analysis
 ------------------
 
-The ``sentiment`` property returns the polarity score as a float within the range [-1.0, 1.0]
+The ``sentiment`` property returns the a tuple of the form ``(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very objective.
 
 .. doctest::
 
     >>> testimonial = TextBlob("Textblob is amazingly simple to use. What great fun!")
     >>> testimonial.sentiment
-    0.39166666666666666
+    (0.39166666666666666, 0.4357142857142857)
 
-The ``subjectivity`` property returns the subjectivity score as a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.
+You can also access the scores from the ``blob.polarity`` and ``blob.subjectivity`` properties.
 
-.. doctest::
-
-    >>> testimonial.subjectivity
-    0.4357142857142857
 
 Tokenization
 ------------
@@ -270,7 +266,7 @@ You can get a JSON representation of a blob with
 .. doctest::
 
     >>> zen.json()
-    '[{"sentiment": 0.2166666666666667, "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "subjectivity": 0.8333333333333334, "end_index": 30, "start_index": 0}, {"sentiment": 0.5, "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "subjectivity": 0.5, "end_index": 63, "start_index": 30}, {"sentiment": 0.06666666666666667, "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "subjectivity": 0.41904761904761906, "end_index": 93, "start_index": 63}]'
+    '[{"polarity": 0.2166666666666667, "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "subjectivity": 0.8333333333333334, "end_index": 30, "start_index": 0}, {"polarity": 0.5, "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "subjectivity": 0.5, "end_index": 63, "start_index": 30}, {"polarity": 0.06666666666666667, "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "subjectivity": 0.41904761904761906, "end_index": 93, "start_index": 63}]'
 
 
 Next Steps

@@ -96,7 +96,7 @@ class SentenceTest(TestCase):
         assert_equal(sentence_dict, {
             'raw': self.raw_sentence,
             'start_index': 0,
-            'sentiment': 0.0,
+            'polarity': 0.0,
             'subjectivity': 0.0,
             'end_index': len(self.raw_sentence) - 1,
             'stripped': 'any place with frites and belgian beer has my vote',
@@ -237,7 +237,7 @@ is managed by the non-profit Python Software Foundation.'''
             'Madison, mais les motels ne sont pas nombreux et nous avons '
             'finalement choisi un Motel 6, attir\xe9s par le bas '
             'prix de la chambre.')
-        assert_true(isinstance(blob.sentiment, float))
+        assert_true(isinstance(blob.sentiment[0], float))
 
     def test_iter(self):
         for i, letter in enumerate(self.short_blob):
@@ -541,22 +541,26 @@ is managed by the non-profit Python Software Foundation.'''
     def test_sentiment(self):
         positive = tb.TextBlob('This is the best, most amazing '
                             'text-processing library ever!')
-        assert_true(positive.sentiment > 0.0)
+        assert_true(positive.sentiment[0] > 0.0)
         negative = tb.TextBlob("bad bad bitches that's my muthufuckin problem.")
-        assert_true(negative.sentiment < 0.0)
+        assert_true(negative.sentiment[0] < 0.0)
         zen = tb.TextBlob(self.text)
-        assert_equal(round(zen.sentiment, 1), 0.2)
-        # assert False, 'temp'
+        assert_equal(round(zen.sentiment[0], 1), 0.2)
 
     def test_subjectivity(self):
         positive = tb.TextBlob("Oh my god this is so amazing! I'm so happy!")
         assert_true(isinstance(positive.subjectivity, float))
         assert_true(positive.subjectivity > 0)
 
+    def test_polarity(self):
+        positive = tb.TextBlob("Oh my god this is so amazing! I'm so happy!")
+        assert_true(isinstance(positive.polarity, float))
+        assert_true(positive.polarity > 0)
+
     def test_sentiment_of_emoticons(self):
         b1 = tb.TextBlob("Faces have values =)")
         b2 = tb.TextBlob("Faces have values")
-        assert_true(b1.sentiment > b2.sentiment)
+        assert_true(b1.sentiment[0] > b2.sentiment[0])
 
     @attr('py27_only')
     def test_bad_init(self):
@@ -582,8 +586,8 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob_dict['noun_phrases'], blob.sentences[0].noun_phrases)
         assert_equal(blob_dict['start_index'], blob.sentences[0].start)
         assert_equal(blob_dict['end_index'], blob.sentences[0].end)
-        assert_almost_equal(blob_dict['sentiment'],
-                            blob.sentences[0].sentiment, places=4)
+        assert_almost_equal(blob_dict['polarity'],
+                            blob.sentences[0].polarity, places=4)
         assert_almost_equal(blob_dict['subjectivity'],
                             blob.sentences[0].subjectivity, places=4)
 

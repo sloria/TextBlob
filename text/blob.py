@@ -195,20 +195,31 @@ class BaseBlob(ComparableMixin):
 
     @cached_property
     def sentiment(self):
-        '''Return sentiment score (polarity) as a float within the range [-1.0, 1.0].
+        '''Return a tuple of form (polarity, subjectivity ) where polarity
+        is a float within the range [-1.0, 1.0] and subjectivity is a float
+        within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is
+        very subjective.
+
+        :rtype: tuple
+        '''
+        return _sentiment(self.raw)
+
+    @cached_property
+    def polarity(self):
+        '''Return the polarity score as a float within the range [-1.0, 1.0]
 
         :rtype: float
         '''
-        return _sentiment(self.raw)[0]
+        return self.sentiment[0]
 
     @cached_property
     def subjectivity(self):
-        '''Return the subjectivity score as a float within the rage [0.0, 1.0]
+        '''Return the subjectivity score as a float within the range [0.0, 1.0]
         where 0.0 is very objective and 1.0 is very subjective.
 
         :rtype: float
         '''
-        return _sentiment(self.raw)[1]
+        return self.sentiment[1]
 
     @cached_property
     def noun_phrases(self):
@@ -583,7 +594,7 @@ class Sentence(BaseBlob):
             'end_index': self.end_index,
             'stripped': self.stripped,
             'noun_phrases': self.noun_phrases,
-            'sentiment': self.sentiment,
+            'polarity': self.polarity,
             'subjectivity': self.subjectivity,
         }
 

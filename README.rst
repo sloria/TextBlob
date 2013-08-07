@@ -13,7 +13,7 @@ TextBlob: Simplified Text Processing
 
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
 
-`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
+`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, translation, and more.
 
 
 .. code-block:: python
@@ -40,9 +40,9 @@ Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>
                         #            'amoeba-like mass', ...])
 
     for sentence in blob.sentences:
-        print(blob.sentiment)
-    # 0.060
-    # -0.34
+        print(sentence.sentiment)  # returns (polarity, subjectivity)
+    # (0.060, 0.605)
+    # (-0.341, 0.767)
 
     blob.translate(to="es")  # TextBlob('La amenaza titular de The Blob...)
 
@@ -52,6 +52,13 @@ Get it now
 
     $ pip install -U textblob
     $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
+
+Examples
+--------
+
+See more examples at the `Quickstart guide`_.
+
+.. _`Quickstart guide`: https://textblob.readthedocs.org/en/latest/quickstart.html#quickstart
 
 
 Documentation

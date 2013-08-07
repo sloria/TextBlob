@@ -3,9 +3,9 @@ Changelog
 
 0.5.0 (unreleased)
 ------------------
-- Language translation and detection API.
+- Language translation and detection API!
 - Part-of-speech tags can be accessed via ``TextBlob.tags`` or ``TextBlob.pos_tags``.
-- `Backwards-incompatible`: The ``TextBlob.sentiment`` property now returns a `float` (not a tuple) that is the sentiment polarity score. The subjectivity score is accessible via the ``TextBlob.subjectivity`` property.
+- Add ``polarity`` and ``subjectivity`` helper properties.
 
 0.4.0 (2013-08-05)
 ------------------
