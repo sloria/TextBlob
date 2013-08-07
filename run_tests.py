@@ -4,10 +4,12 @@
 '''
 The main test runner script.
 
-Usage:
+Usage: ::
     python run_tests.py
-    # To skip slow tests
+Skip slow tests
     python run_tests.py fast
+When there's no Internet
+    python run_tests.py no-internet
 '''
 from __future__ import unicode_literals
 import nose
@@ -24,7 +26,7 @@ def main():
 
 
 def get_argv():
-    args = [sys.argv[0], '--exclude', 'nltk']
+    args = [sys.argv[0],'--exclude', 'nltk']
     attr_conditions = []  # Use nose's attribselect plugin to filter tests
     if "force-all" in sys.argv:
         # Don't exclude any tests
@@ -42,6 +44,9 @@ def get_argv():
         attr_conditions.append("not py2_only")
     if "fast" in sys.argv:
         attr_conditions.append("not slow")
+    if "no-internet" in sys.argv:
+        # Exclude tests that require internet
+        attr_conditions.append("not requires_internet")
 
     attr_expression = " and ".join(attr_conditions)
     if attr_expression:

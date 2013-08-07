@@ -47,15 +47,20 @@ Similarly, noun phrases are accessed through the ``noun_phrases`` property.
 Sentiment Analysis
 ------------------
 
-The ``sentiment`` property returns a tuple of the form ``(polarity, subjectivity)`` where ``polarity`` ranges from -1.0 to 1.0 and
-``subjectivity`` ranges from 0.0 to 1.0.
+The ``sentiment`` property returns the polarity score as a float within the range [-1.0, 1.0]
 
 .. doctest::
 
     >>> testimonial = TextBlob("Textblob is amazingly simple to use. What great fun!")
     >>> testimonial.sentiment
-    (0.39166666666666666, 0.4357142857142857)
+    0.39166666666666666
 
+The ``subjectivity`` property returns the subjectivity score as a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.
+
+.. doctest::
+
+    >>> testimonial.subjectivity
+    0.4357142857142857
 
 Tokenization
 ------------
@@ -141,6 +146,40 @@ Each of these methods can also be used with noun phrases. ::
     >>> wiki.noun_phrases.count('python')
     1
 
+Translation and Language Detection
+----------------------------------
+New in version `0.5.0`.
+
+TextBlobs can be translated between languages.
+
+.. doctest::
+
+    >>> en_blob = TextBlob("Simple is better than complex.")
+    >>> en_blob.translate(to="es")
+    TextBlob('Simple es mejor que complejo .')
+
+The default source language is English. You can specify the source language explicitly, like so.
+
+.. doctest::
+
+    >>> chinese_blob = TextBlob(unicode("美丽优于丑陋"))
+    >>> chinese_blob.translate(from_lang="zh-CN", to='en')
+    TextBlob('Beautiful is better than ugly')
+
+You can also attempt to detect a TextBlob's language using ``TextBlob.detect_language()``.
+
+.. doctest::
+
+    >>> b = TextBlob(unicode("بسيط هو أفضل من مجمع"))
+    >>> b.detect_language()
+    u'ar'
+
+As a reference, language codes can be found `here <https://developers.google.com/translate/v2/using_rest#language-params>`_.
+
+Language translation and detection is powered by the `Google Translate API`_.
+
+.. _`Google Translate API`: https://developers.google.com/translate/
+
 TextBlobs Are Like Python Strings!
 ----------------------------------
 
@@ -220,8 +259,8 @@ If your text comes in the form of an HTML string, you can pass ``clean_html=True
 
     >>> html = "<b>HAML</b> Ain't Markup <a href='/languages'>Language</a>"
     >>> clean = TextBlob(html, clean_html=True)
-    >>> print(clean.raw)
-    HAML Ain't Markup Language
+    >>> str(clean)
+    "HAML Ain't Markup Language"
 
 Get a JSON-serialized version of a blob
 ---------------------------------------
@@ -231,7 +270,7 @@ You can get a JSON representation of a blob with
 .. doctest::
 
     >>> zen.json()
-    '[{"sentiment": [0.2166666666666667, 0.8333333333333334], "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "end_index": 30, "start_index": 0}, {"sentiment": [0.5, 0.5], "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "end_index": 63, "start_index": 30}, {"sentiment": [0.06666666666666667, 0.41904761904761906], "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "end_index": 93, "start_index": 63}]'
+    '[{"sentiment": 0.2166666666666667, "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "subjectivity": 0.8333333333333334, "end_index": 30, "start_index": 0}, {"sentiment": 0.5, "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "subjectivity": 0.5, "end_index": 63, "start_index": 30}, {"sentiment": 0.06666666666666667, "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "subjectivity": 0.41904761904761906, "end_index": 93, "start_index": 63}]'
 
 
 Next Steps

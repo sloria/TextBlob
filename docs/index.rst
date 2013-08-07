@@ -8,8 +8,7 @@ TextBlob: Simplified Text Processing
 
 Release v\ |version|. (:ref:`Installation <install>`)
 
-`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, and more.
-
+`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, translation, and more.
 
 
 .. code-block:: python
@@ -28,7 +27,7 @@ Release v\ |version|. (:ref:`Installation <install>`)
     '''
 
     blob = TextBlob(text)
-    blob.pos_tags       # [(u'The', u'DT'), (u'titular', u'JJ'),
+    blob.tags           # [(u'The', u'DT'), (u'titular', u'JJ'),
                         #  (u'threat', u'NN'), (u'of', u'IN'), ...]
 
     blob.noun_phrases   # WordList(['titular threat', 'blob',
@@ -36,9 +35,11 @@ Release v\ |version|. (:ref:`Installation <install>`)
                         #            'amoeba-like mass', ...])
 
     for sentence in blob.sentences:
-        print(blob.sentiment)  # returns (sentiment, subjectivity)
-    # (0.060, 0.605)
-    # (-0.34, 0.77)
+        print(blob.sentiment)
+    # 0.060
+    # -0.34
+
+    blob.translate(to="es")  # TextBlob('La amenaza titular de The Blob...)
 
 TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_, and plays nicely with both.
 

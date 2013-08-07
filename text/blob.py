@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 '''Wrappers for various units of text.'''
-from __future__ import unicode_literals
 import sys
 import json
 from collections import defaultdict
@@ -16,12 +15,15 @@ from .compat import string_types, unicode
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
+from .translate import Translator
 from .exceptions import MissingCorpusException
 
 
 class Word(unicode):
 
     '''A simple word representation.'''
+
+    translator = Translator()
 
     def __new__(cls, string, pos_tag=None):
         '''Return a new instance of the class. It is necessary to override
@@ -47,6 +49,22 @@ class Word(unicode):
     def pluralize(self):
         '''Return the plural version of the word as a string.'''
         return _pluralize(self.string)
+
+    def translate(self, from_lang="en", to="en"):
+        '''Translate the word to another language using Google's
+        Translate API.
+
+        New in `0.5.0`.
+        '''
+        return self.translator.translate(self.string,
+                                        from_lang=from_lang, to_lang=to)
+
+    def detect_language(self):
+        '''Detect the word's language using Google's Translate API.
+
+        New in `0.5.0`.
+        '''
+        return self.translator.detect(self.string)
 
 
 class WordList(list):
@@ -88,8 +106,7 @@ class WordList(list):
 
         Arguments:
         - s: The string to count.
-        - case_sensitive: A boolean, whether or not the search is
-                             case sensitive.
+        - case_sensitive: A boolean, whether or not the search is case-sensitive.
         """
         if not case_sensitive:
             return [word.lower() for word in self].count(strg.lower(), *args,
@@ -129,6 +146,7 @@ class BaseBlob(ComparableMixin):
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
     tokenizer = WordTokenizer()
+    translator = Translator()
 
     def __init__(self, text, tokenizer=None,
                 pos_tagger=None, np_extractor=None, clean_html=False):
@@ -175,13 +193,22 @@ class BaseBlob(ComparableMixin):
         t = tokenizer if tokenizer is not None else self.tokenizer
         return WordList(t.tokenize(self.raw))
 
-    @property
+    @cached_property
     def sentiment(self):
-        '''Returns sentiment scores as a tuple of the form
-        `(polarity, subjectivity)` where polarity is in the range [-1.0, 1.0]
-        and subjectivity is in the range [0.0, 1.0].
+        '''Return sentiment score (polarity) as a float within the range [-1.0, 1.0].
+
+        :rtype: float
         '''
-        return _sentiment(self.raw)
+        return _sentiment(self.raw)[0]
+
+    @cached_property
+    def subjectivity(self):
+        '''Return the subjectivity score as a float within the rage [0.0, 1.0]
+        where 0.0 is very objective and 1.0 is very subjective.
+
+        :rtype: float
+        '''
+        return _sentiment(self.raw)[1]
 
     @cached_property
     def noun_phrases(self):
@@ -192,15 +219,21 @@ class BaseBlob(ComparableMixin):
 
     @cached_property
     def pos_tags(self):
-        '''Returns an array of tuples of the form (word, POS tag).
+        '''Returns an list of tuples of the form (word, POS tag).
 
         Example:
+        ::
+
             [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
                     ('Thursday', 'NNP'), ('morning', 'NN')]
+
+        :rtype: list of tuples
         '''
         return [(Word(word, pos_tag=t), unicode(t))
                 for word, t in self.pos_tagger.tag(self.raw)
                 if not PUNCTUATION_REGEX.match(unicode(t))]
+
+    tags = pos_tags
 
     @cached_property
     def word_counts(self):
@@ -231,14 +264,62 @@ class BaseBlob(ComparableMixin):
                             for i in range(len(self.words) - n + 1)]
         return grams
 
+    def translate(self, from_lang="en", to="en"):
+        '''Translate the blob to another language.
+        Uses the Google Translate API. Returns a new TextBlob.
+
+        Requires an internet connection.
+
+        Usage:
+        ::
+
+            >>> b = TextBlob("Simple is better than complex")
+            >>> b.translate(to="es")
+            TextBlob('Lo simple es mejor que complejo')
+
+        Language code reference:
+            https://developers.google.com/translate/v2/using_rest#language-params
+
+        New in `0.5.0`.
+
+        :param from_lang: Language to translate from.
+        :param to: Language to translate to.
+        :rtype: Blob
+
+        '''
+        return self.__class__(self.translator.translate(self.raw,
+                        from_lang=from_lang, to_lang=to))
+
+    def detect_language(self):
+        '''Detect the blob's language using the Google Translate API.
+
+        Requires an internet connection.
+
+        Usage:
+        ::
+
+            >>> b = TextBlob("bonjour")
+            >>> b.detect_language()
+            u'fr'
+
+        Language code reference:
+            https://developers.google.com/translate/v2/using_rest#language-params
+
+        New in `0.5.0`.
+
+        :rtype: str
+
+        '''
+        return self.translator.detect(self.raw)
+
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
-        if len(self) > 60:
-            return "{cls}('{beginning}...{end}')".format(cls=class_name,
-                    beginning=self.raw[:40], end=self.raw[-20:])
+        if len(self) > 100:
+            return unicode("{cls}('{beginning}...{end}')".format(cls=class_name,
+                    beginning=unicode(self)[:50], end=self.raw[-20:]))
         else:
-            return "{cls}('{text}')".format(cls=class_name, text=self.raw)
+            return unicode("{cls}('{text}')".format(cls=class_name, text=self.raw))
 
     def __len__(self):
         '''Returns the length of the raw text.'''
@@ -503,6 +584,7 @@ class Sentence(BaseBlob):
             'stripped': self.stripped,
             'noun_phrases': self.noun_phrases,
             'sentiment': self.sentiment,
+            'subjectivity': self.subjectivity,
         }
 
 class Blobber(object):

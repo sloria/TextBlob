@@ -9,7 +9,7 @@ from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from text.compat import PY2, text_type, unicode
+from text.compat import PY2, unicode
 import text.blob as tb
 from text.packages import nltk
 from text.np_extractors import ConllExtractor, FastNPExtractor
@@ -96,7 +96,8 @@ class SentenceTest(TestCase):
         assert_equal(sentence_dict, {
             'raw': self.raw_sentence,
             'start_index': 0,
-            'sentiment': (0.0, 0.0),
+            'sentiment': 0.0,
+            'subjectivity': 0.0,
             'end_index': len(self.raw_sentence) - 1,
             'stripped': 'any place with frites and belgian beer has my vote',
             'noun_phrases': self.sentence.noun_phrases,
@@ -135,6 +136,13 @@ class SentenceTest(TestCase):
 
     def test_string_equality(self):
         assert_equal(self.sentence, 'Any place with frites and Belgian beer has my vote.')
+
+    @attr("requires_internet")
+    def test_translate(self):
+        blob = tb.Sentence("This is a sentence.")
+        translated = blob.translate(to="es")
+        assert_true(isinstance(translated, tb.Sentence))
+        assert_equal(translated, "Esta es una frase.")
 
 
 class TextBlobTest(TestCase):
@@ -181,9 +189,6 @@ is managed by the non-profit Python Software Foundation.'''
 
         self.short = "Beautiful is better than ugly. "
         self.short_blob = tb.TextBlob(self.short)
-
-    def tearDown(self):
-        pass
 
     def test_init(self):
         blob = tb.TextBlob('Wow I love this place. It really rocks my socks!!!')
@@ -232,7 +237,7 @@ is managed by the non-profit Python Software Foundation.'''
             'Madison, mais les motels ne sont pas nombreux et nous avons '
             'finalement choisi un Motel 6, attir\xe9s par le bas '
             'prix de la chambre.')
-        assert_true(isinstance(blob.sentiment[0], float))
+        assert_true(isinstance(blob.sentiment, float))
 
     def test_iter(self):
         for i, letter in enumerate(self.short_blob):
@@ -261,8 +266,8 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(repr(blob1), "TextBlob('lorem ipsum')")
         big_blob = tb.TextBlob(self.text)
         assert_equal(repr(big_blob),
-                     "TextBlob('Beautiful is better than ugly.\nExplicit ...'s do more of those!')"
-                     )
+            "TextBlob('Beautiful is better than ugly.\nExplicit is better ...'s do more of those!')"
+        )
 
     def test_cmp(self):
         blob1 = tb.TextBlob('lorem ipsum')
@@ -309,6 +314,9 @@ is managed by the non-profit Python Software Foundation.'''
             ('than', 'IN'),
             ('complicated', 'VBN'),
             ])
+
+    def test_tags(self):
+        assert_equal(self.blob.tags, self.blob.pos_tags)
 
     def test_pos_tags_includes_one_letter_articles(self):
         blob = tb.TextBlob("This is a sentence.")
@@ -485,6 +493,7 @@ is managed by the non-profit Python Software Foundation.'''
         # has a frequency greater than 1
         noun_phrases = self.np_test_blob.noun_phrases
         assert_equal(noun_phrases.count('python'), 6)
+        assert_equal(self.np_test_blob.np_counts['python'], noun_phrases.count('python'))
         assert_equal(noun_phrases.count('cpython'), 2)
         assert_equal(noun_phrases.count('not found'), 0)
 
@@ -532,13 +541,17 @@ is managed by the non-profit Python Software Foundation.'''
     def test_sentiment(self):
         positive = tb.TextBlob('This is the best, most amazing '
                             'text-processing library ever!')
-        assert_true(positive.sentiment[0] > 0.0)
+        assert_true(positive.sentiment > 0.0)
         negative = tb.TextBlob("bad bad bitches that's my muthufuckin problem.")
-        assert_true(negative.sentiment[0] < 0.0)
+        assert_true(negative.sentiment < 0.0)
         zen = tb.TextBlob(self.text)
-        assert_equal(round(zen.sentiment[0], 1), 0.2)
-        assert_equal(round(zen.sentiment[1], 1), 0.6)
+        assert_equal(round(zen.sentiment, 1), 0.2)
         # assert False, 'temp'
+
+    def test_subjectivity(self):
+        positive = tb.TextBlob("Oh my god this is so amazing! I'm so happy!")
+        assert_true(isinstance(positive.subjectivity, float))
+        assert_true(positive.subjectivity > 0)
 
     def test_sentiment_of_emoticons(self):
         b1 = tb.TextBlob("Faces have values =)")
@@ -569,8 +582,10 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob_dict['noun_phrases'], blob.sentences[0].noun_phrases)
         assert_equal(blob_dict['start_index'], blob.sentences[0].start)
         assert_equal(blob_dict['end_index'], blob.sentences[0].end)
-        assert_almost_equal(blob_dict['sentiment'][0],
-                            blob.sentences[0].sentiment[0], places=4)
+        assert_almost_equal(blob_dict['sentiment'],
+                            blob.sentences[0].sentiment, places=4)
+        assert_almost_equal(blob_dict['subjectivity'],
+                            blob.sentences[0].subjectivity, places=4)
 
     def test_words_are_word_objects(self):
         words = self.blob.words
@@ -602,6 +617,38 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob.tokenize(), tb.WordList(["This", "is", "text", "."]))
         # Pass in the TabTokenizer
         assert_equal(blob.tokenize(tokenizer), tb.WordList(["This is", "text."]))
+
+    @attr("requires_internet")
+    def test_translate(self):
+        blob = tb.TextBlob("This is a sentence.")
+        translated = blob.translate(to="es")
+        assert_true(isinstance(translated, tb.TextBlob))
+        assert_equal(translated, "Esta es una frase.")
+        es_blob = tb.TextBlob("Esta es una frase.")
+        to_en = es_blob.translate(from_lang="es", to="en")
+        assert_equal(to_en, "This is a phrase .")
+
+    @attr("requires_internet")
+    def test_translate_non_ascii(self):
+        blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
+        translated = blob.translate(from_lang="ar", to="en")
+        assert_equal(translated, "With full sovereignty")
+
+        chinese_blob = tb.TextBlob(unicode("美丽优于丑陋"))
+        translated = chinese_blob.translate(from_lang="zh-CN", to='en')
+        assert_equal(translated, "Beautiful is better than ugly")
+
+    @attr("requires_internet")
+    def test_detect(self):
+        es_blob = tb.TextBlob("Hola")
+        assert_equal(es_blob.detect_language(), "es")
+        en_blob = tb.TextBlob("Hello")
+        assert_equal(en_blob.detect_language(), "en")
+
+    @attr("requires_internet")
+    def test_detect_non_ascii(self):
+        blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
+        assert_equal(blob.detect_language(), "ar")
 
 
 class WordTest(TestCase):
@@ -637,6 +684,14 @@ class WordTest(TestCase):
         assert_equal(self.cat.upper(), "CAT")
         assert_equal(self.cat.lower(), "cat")
         assert_equal(self.cat[0:2], 'ca')
+
+    @attr('requires_internet')
+    def test_translate(self):
+        assert_equal(tb.Word("cat").translate(to="es"), "gato")
+
+    @attr('requires_internet')
+    def test_detect_language(self):
+        assert_equal(tb.Word("bonjour").detect_language(), 'fr')
 
 
 class BlobberTest(TestCase):

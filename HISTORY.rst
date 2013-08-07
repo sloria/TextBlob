@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.0 (unreleased)
+------------------
+- Language translation and detection API.
+- Part-of-speech tags can be accessed via ``TextBlob.tags`` or ``TextBlob.pos_tags``.
+- `Backwards-incompatible`: The ``TextBlob.sentiment`` property now returns a `float` (not a tuple) that is the sentiment polarity score. The subjectivity score is accessible via the ``TextBlob.subjectivity`` property.
+
 0.4.0 (2013-08-05)
 ------------------
 - New ``text.tokenizers`` module with ``WordTokenizer`` and ``SentenceTokenizer``. Tokenizer instances (from either textblob itself or NLTK) can be passed to TextBlob's constructor. Tokens are accessed through the new ``tokens`` property.

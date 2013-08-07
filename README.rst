@@ -32,7 +32,7 @@ Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>
     '''
 
     blob = TextBlob(text)
-    blob.pos_tags       # [(u'The', u'DT'), (u'titular', u'JJ'),
+    blob.tags           # [(u'The', u'DT'), (u'titular', u'JJ'),
                         #  (u'threat', u'NN'), (u'of', u'IN'), ...]
 
     blob.noun_phrases   # WordList(['titular threat', 'blob',
@@ -41,9 +41,10 @@ Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>
 
     for sentence in blob.sentences:
         print(blob.sentiment)
-    # (sentiment score, subjectivity score)
-    # (0.060, 0.605)
-    # (-0.34, 0.77)
+    # 0.060
+    # -0.34
+
+    blob.translate(to="es")  # TextBlob('La amenaza titular de The Blob...)
 
 Get it now
 ----------
