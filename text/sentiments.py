@@ -2,6 +2,7 @@
 from .packages import nltk
 from .en import sentiment as pattern_sentiment
 from .tokenizers import WordTokenizer
+from .exceptions import MissingCorpusException
 
 DISCRETE = 'ds'
 CONTINUOUS = 'co'
@@ -59,8 +60,12 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
 
     def train(self):
         super(NaiveBayesAnalyzer, self).train()
-        neg_ids = nltk.corpus.movie_reviews.fileids('neg')
-        pos_ids = nltk.corpus.movie_reviews.fileids('pos')
+        try:
+            neg_ids = nltk.corpus.movie_reviews.fileids('neg')
+            pos_ids = nltk.corpus.movie_reviews.fileids('pos')
+        except LookupError as e:
+            print(e)
+            raise MissingCorpusException()
         neg_feats = [(self._extract_feats(
             nltk.corpus.movie_reviews.words(fileids=[f])), 'neg') for f in neg_ids]
         pos_feats = [(self._extract_feats(

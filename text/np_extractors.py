@@ -123,7 +123,8 @@ class FastNPExtractor(BaseNPExtractor):
     def train(self):
         try:
             train_data = nltk.corpus.brown.tagged_sents(categories='news')
-        except LookupError:
+        except LookupError as e:
+            print(e)
             raise MissingCorpusException()
         REGEXP_TAGGER = nltk.RegexpTagger([
             (r'^-?[0-9]+(.[0-9]+)?$', 'CD'),

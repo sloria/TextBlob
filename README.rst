@@ -46,6 +46,21 @@ Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>
 
     blob.translate(to="es")  # TextBlob('La amenaza titular de The Blob...)
 
+TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_, and plays nicely with both.
+
+Features
+--------
+
+- Noun phrase extraction
+- Part-of-speech tagging
+- Sentiment analysis
+- Language translation and detection using Google Translate (*new in 0.5.0*)
+- Tokenization (splitting text into words and sentences)
+- Word and phrase frequencies
+- `n`-grams
+- Word inflection (pluralization and singularization)
+- JSON serialization
+
 Get it now
 ----------
 ::
@@ -64,7 +79,7 @@ See more examples at the `Quickstart guide`_.
 Documentation
 -------------
 
-Hosted `here <https://textblob.readthedocs.org/>`_ at ReadTheDocs.
+Full documentation is available at https://textblob.readthedocs.org/.
 
 Requirements
 ------------

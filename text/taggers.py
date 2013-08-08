@@ -39,7 +39,8 @@ class NLTKTagger(BaseTagger):
             sentence = nltk.tokenize.word_tokenize(sentence)
         try:
             tagged = nltk.tag.pos_tag(sentence)
-        except LookupError:
+        except LookupError as e:
+            print(e)
             raise MissingCorpusException()
         return tagged
 

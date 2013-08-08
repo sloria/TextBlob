@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-MISSING_CORPUS_MESSAGE = """Looks like you are missing some required data for this feature.
+MISSING_CORPUS_MESSAGE = """
+Looks like you are missing some required data for this feature.
 
 To download the necessary data, simply run
 
     curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
+Or use the NLTK downloader to download the missing data: http://nltk.org/data.html
 If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
 """
 

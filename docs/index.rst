@@ -43,6 +43,19 @@ Release v\ |version|. (:ref:`Installation <install>`)
 
 TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_, and plays nicely with both.
 
+Features
+--------
+
+- Noun phrase extraction
+- Part-of-speech tagging
+- Sentiment analysis
+- Language translation and detection using Google Translate (*new in 0.5.0*)
+- Tokenization (splitting text into words and sentences)
+- Word and phrase frequencies
+- `n`-grams
+- Word inflection (pluralization and singularization)
+- JSON serialization
+
 Get it now
 ----------
 ::
