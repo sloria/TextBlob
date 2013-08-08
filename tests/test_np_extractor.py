@@ -29,12 +29,12 @@ constructs intended to enable clear programs on both a small and large scale.
 
     @attr('slow')
     def test_parse_sentence(self):
-        parsed = self.extractor.parse_sentence(self.sentence)
+        parsed = self.extractor._parse_sentence(self.sentence)
         assert_true(isinstance(parsed, nltk.tree.Tree))
 
     @attr('slow')
     def test_filter_insignificant(self):
-        chunk = self.extractor.parse_sentence(self.sentence)
+        chunk = self.extractor._parse_sentence(self.sentence)
         tags = [tag for word, tag in chunk.leaves()]
         assert_true('DT' in tags)
         filtered = filter_insignificant(chunk.leaves())

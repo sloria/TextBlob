@@ -5,6 +5,25 @@ Advanced Usage
 
 TextBlob allows you to specify which algorithms you want to use under the hood of its simple API.
 
+Sentiment Analyzers
+-------------------
+
+New in version `0.5.0`.
+
+The ``text.sentiments`` module contains two sentiment analysis implementations, ``PatternAnalyzer`` (based on the pattern_ library) and ``NaiveBayesAnalyzer`` (an NLTK_ classifier trained on a movie reviews corpus).
+
+The default implementation is ``PatternAnalyzer``, but you can override the analyzer by passing another implementation into a TextBlob's constructor.
+
+For instance, the ``NaiveBayesAnalyzer`` returns its result as a tuple of the form: ``(classification, pos_probability, neg_probability)``.
+
+::
+
+    >>> from text.blob import TextBlob
+    >>> from text.sentiments import NaiveBayesAnalyzer
+    >>> blob = TextBlob("I love this library", analyzer=NaiveBayesAnalyzer())
+    >>> blob.sentiment
+    ('pos', 0.7996209910191279, 0.2003790089808724)
+
 Tokenizers
 ----------
 
@@ -75,14 +94,15 @@ Similar to the tokenizers and noun phrase chunkers, you can explicitly specify w
 .. _pattern: http://www.clips.ua.ac.be/pattern
 .. _NLTK: http://nltk.org/
 
+
 Blobber: A TextBlob Factory
 ---------------------------
 
 New in `0.4.0`.
 
-It can be tedious to repeatedly pass taggers, NP extractors, and tokenizers to  multiple TextBlobs. To keep your code `DRY <https://en.wikipedia.org/wiki/DRY_principle>`_, you can use the ``Blobber`` class to create TextBlobs that share the same taggers, etc.
+It can be tedious to repeatedly pass taggers, NP extractors, sentiment analyzers, and tokenizers to  multiple TextBlobs. To keep your code `DRY <https://en.wikipedia.org/wiki/DRY_principle>`_, you can use the ``Blobber`` class to create TextBlobs that share the same taggers, etc.
 
-First, instantiate a ``Blobber`` with the tagger, NP extractor, and/or tokenizer of your choice.
+First, instantiate a ``Blobber`` with the tagger, NP extractor, sentiment analyzer, and/or tokenizer of your choice.
 
 .. doctest::
 
@@ -96,6 +116,6 @@ You can now create new TextBlobs like so:
 
     >>> blob1 = tb("This is a blob.")
     >>> blob2 = tb("This is another blob.")
-    >>> blob1.pos_tagger == blob2.pos_tagger
+    >>> blob1.pos_tagger is blob2.pos_tagger
     True
 

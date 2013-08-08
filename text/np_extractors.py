@@ -75,14 +75,14 @@ class ConllExtractor(BaseNPExtractor):
     INSIGNIFICANT_SUFFIXES = ['DT', 'CC', 'PRP$', 'PRP']
 
     def __init__(self, parser=None):
-        self.parser = (ChunkParser() if not parser else parser)
+        self.parser = ChunkParser() if not parser else parser
 
     def extract(self, text):
         '''Return a list of noun phrases (strings) for body of text.'''
         sentences = nltk.tokenize.sent_tokenize(text)
         noun_phrases = []
         for sentence in sentences:
-            parsed = self.parse_sentence(sentence)
+            parsed = self._parse_sentence(sentence)
             # Get the string representation of each subtree that is a
             # noun phrase tree
             phrases = [normalize_tags(filter_insignificant(each,
@@ -94,7 +94,7 @@ class ConllExtractor(BaseNPExtractor):
             noun_phrases.extend(nps)
         return noun_phrases
 
-    def parse_sentence(self, sentence):
+    def _parse_sentence(self, sentence):
         '''Tag and parse a sentence (a plain, untagged string).'''
         tagged = self.POS_TAGGER.tag(sentence)
         return self.parser.parse(tagged)
@@ -145,33 +145,18 @@ class FastNPExtractor(BaseNPExtractor):
         return None
 
 
-    def tokenize_sentence(self, sentence):
-        '''Split the sentence into singlw words/tokens'''
+    def _tokenize_sentence(self, sentence):
+        '''Split the sentence into single words/tokens'''
         tokens = nltk.word_tokenize(sentence)
         return tokens
 
-    def normalize_tags(self, tagged):
-        '''Normalize brown corpus' tags ("NN", "NN-PL", "NNS" > "NN")'''
-        n_tagged = []
-        for t in tagged:
-            if t[1] == 'NP-TL' or t[1] == 'NP':
-                n_tagged.append((t[0], 'NNP'))
-                continue
-            if t[1].endswith('-TL'):
-                n_tagged.append((t[0], (t[1])[:-3]))
-                continue
-            if t[1].endswith('S'):
-                n_tagged.append((t[0], (t[1])[:-1]))
-                continue
-            n_tagged.append((t[0], t[1]))
-        return n_tagged
-
     def extract(self, sentence):
+        '''Return a list of noun phrases (strings) for body of text.'''
         if not self.trained:
             self.train()
-        tokens = self.tokenize_sentence(sentence)
+        tokens = self._tokenize_sentence(sentence)
         tagged = self.TAGGER.tag(tokens)
-        tags = self.normalize_tags(tagged)
+        tags = normalize_tags(tagged)
         merge = True
         while merge:
             merge = False

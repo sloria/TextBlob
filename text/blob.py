@@ -9,12 +9,12 @@ from .packages import nltk
 from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
-from .en import sentiment as _sentiment
 from .mixins import ComparableMixin
 from .compat import string_types, unicode
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
+from .sentiments import BaseSentimentAnalyzer, PatternAnalyzer
 from .translate import Translator
 from .exceptions import MissingCorpusException
 
@@ -140,6 +140,7 @@ class BaseBlob(ComparableMixin):
     :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
     :param clean_html: (optional) Remove HTML markup from ``text``.
     '''
 
@@ -147,9 +148,11 @@ class BaseBlob(ComparableMixin):
     pos_tagger = PatternTagger()
     tokenizer = WordTokenizer()
     translator = Translator()
+    analyzer = PatternAnalyzer()
 
     def __init__(self, text, tokenizer=None,
-                pos_tagger=None, np_extractor=None, clean_html=False):
+                pos_tagger=None, np_extractor=None, analyzer=None,
+                clean_html=False):
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
@@ -169,6 +172,10 @@ class BaseBlob(ComparableMixin):
                 not isinstance(pos_tagger, BaseTagger)):
             raise ValueError("pos_tagger must be an instance of BaseTagger")
         self.pos_tagger = pos_tagger if pos_tagger else BaseBlob.pos_tagger
+        if (analyzer is not None and
+                not isinstance(analyzer, BaseSentimentAnalyzer)):
+            raise ValueError("analyzer must be an instance of BaseSentimentAnalyzer")
+        self.analyzer = analyzer if analyzer else BaseBlob.analyzer
 
     @cached_property
     def words(self):
@@ -202,7 +209,7 @@ class BaseBlob(ComparableMixin):
 
         :rtype: tuple
         '''
-        return _sentiment(self.raw)
+        return self.analyzer.analyze(self.raw)
 
     @cached_property
     def polarity(self):
@@ -210,7 +217,7 @@ class BaseBlob(ComparableMixin):
 
         :rtype: float
         '''
-        return self.sentiment[0]
+        return PatternAnalyzer().analyze(str(self))[0]
 
     @cached_property
     def subjectivity(self):
@@ -219,7 +226,7 @@ class BaseBlob(ComparableMixin):
 
         :rtype: float
         '''
-        return self.sentiment[1]
+        return PatternAnalyzer().analyze(str(self))[1]
 
     @cached_property
     def noun_phrases(self):
@@ -485,8 +492,10 @@ class TextBlob(BaseBlob):
     containing sentences). Inherits from :class:`BaseBlob <BaseBlob>`.
 
     :param text: A string.
+    :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
     :param clean_html: (optional) Remove HTML markup from ``text``.
     """
 
@@ -617,13 +626,16 @@ class Blobber(object):
     :param tokenizer: A tokenizer. Default: :class:`WordTokenizer <text.tokenizers.WordTokenizer>`.
     :param pos_tagger: A POS tagger. Default: :class:`PatternTagger <text.taggers.PatternTagger>`.
     :param np_extractor: A NP extractor. Default: :class:`FastNPExtractor <text.np_extractors.FastNPExtractor>`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
     '''
 
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
     tokenizer = WordTokenizer()
+    analyzer = PatternAnalyzer()
 
-    def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None):
+    def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None,
+                analyzer=None):
         # tokenizer may be a textblob or an NLTK tokenizer
         if (tokenizer is not None and
                 not (isinstance(tokenizer, BaseTokenizer) or
@@ -638,13 +650,28 @@ class Blobber(object):
                 not isinstance(pos_tagger, BaseTagger)):
             raise ValueError("pos_tagger must be an instance of BaseTagger")
         self.pos_tagger = pos_tagger if pos_tagger else Blobber.pos_tagger
+        if (analyzer is not None and
+                not isinstance(analyzer, BaseSentimentAnalyzer)):
+            raise ValueError("analyzer must be an instance of BaseSentimentAnalyzer")
+        self.analyzer = analyzer if analyzer else BaseBlob.analyzer
 
     def __call__(self, text):
         '''Return a new TextBlob object with this Blobber's ``np_extractor``,
         ``pos_tagger``, and ``tokenizer``.
+
+        :returns: A new TextBlob.
         '''
         return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
-            np_extractor=self.np_extractor)
+            np_extractor=self.np_extractor, analyzer=self.analyzer)
+
+    def __repr__(self):
+        return "Blobber(tokenizer={0}(), pos_tagger={1}(), np_extractor={2}(), analyzer={3}())"\
+                    .format(self.tokenizer.__class__.__name__,
+                            self.pos_tagger.__class__.__name__,
+                            self.np_extractor.__class__.__name__,
+                            self.analyzer.__class__.__name__)
+
+    __str__ = __repr__
 
 
 

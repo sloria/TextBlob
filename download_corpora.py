@@ -8,6 +8,7 @@ REQUIRED_CORPORA = [
     'punkt',
     'conll2000',
     'maxent_treebank_pos_tagger',
+    'movie_reviews',
 ]
 
 def main():

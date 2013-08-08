@@ -31,39 +31,28 @@ Tokenizers
 ----------
 New in `0.4.0`.
 
-.. module:: text.tokenizers
-
-.. autoclass:: BaseTokenizer
-    :members:
-
-.. autoclass:: WordTokenizer
-    :members:
-
-.. autoclass:: SentenceTokenizer
+.. automodule:: text.tokenizers
     :members:
 
 POS Taggers
 -----------
-.. module:: text.taggers
 
-.. autoclass:: text.taggers.BaseTagger
+.. automodule:: text.taggers
     :members:
-
-.. autoclass:: text.taggers.PatternTagger
-    :inherited-members:
-
-.. autoclass:: text.taggers.NLTKTagger
-    :inherited-members:
 
 Noun Phrase Extractors
 ----------------------
-.. module:: text.np_extractors
 
-.. autoclass:: text.np_extractors.BaseNPExtractor
+.. automodule:: text.np_extractors
+    :members: BaseNPExtractor, ConllExtractor, FastNPExtractor
+
+Sentiment Analyzers
+-------------------
+
+New in `0.5.0`.
+
+.. automodule:: text.sentiments
     :members:
-
-.. autoclass:: text.np_extractors.FastNPExtractor
-.. autoclass:: text.np_extractors.ConllExtractor
 
 Blobber
 -------

@@ -15,7 +15,7 @@ from text.packages import nltk
 from text.np_extractors import ConllExtractor, FastNPExtractor
 from text.taggers import NLTKTagger, PatternTagger
 from text.tokenizers import WordTokenizer, SentenceTokenizer
-
+from text.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
 
 class WordListTest(TestCase):
 
@@ -340,6 +340,22 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob(text)
         blob.np_extractor = e
         assert_true(isinstance(blob.np_extractor, ConllExtractor))
+
+    def test_can_use_different_sentanalyzer(self):
+        blob = tb.TextBlob("I love this car", analyzer=NaiveBayesAnalyzer())
+        assert_true(isinstance(blob.analyzer, NaiveBayesAnalyzer))
+
+    @attr("slow")
+    def test_discrete_sentiment(self):
+        blob = tb.TextBlob("I feel great today.", analyzer=NaiveBayesAnalyzer())
+        print(blob.sentiment)
+        assert_equal(blob.sentiment[0], 'pos')
+
+    def test_can_get_subjectivity_and_polarity_with_different_analyzer(self):
+        blob = tb.TextBlob("I love this car.", analyzer=NaiveBayesAnalyzer())
+        pattern = PatternAnalyzer()
+        assert_equal(blob.polarity, pattern.analyze(str(blob))[0])
+        assert_equal(blob.subjectivity, pattern.analyze(str(blob))[1])
 
     def test_pos_tagger_defaults_to_pattern(self):
         blob = tb.TextBlob("some text")
@@ -703,7 +719,6 @@ class BlobberTest(TestCase):
     def setUp(self):
         self.blobber = tb.Blobber()  # The default blobber
 
-
     def test_creates_blobs(self):
         blob1 = self.blobber("this is one blob")
         assert_true(isinstance(blob1, tb.TextBlob))
@@ -722,6 +737,11 @@ class BlobberTest(TestCase):
         blob = self.blobber("Some text")
         assert_true(isinstance(blob.tokenizer, WordTokenizer))
 
+    def test_str_and_repr(self):
+        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=PatternTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer())"
+        assert_equal(repr(self.blobber), expected)
+        assert_equal(str(self.blobber), repr(self.blobber))
+
     def test_overrides(self):
         b = tb.Blobber(tokenizer=SentenceTokenizer(),
                         np_extractor=ConllExtractor())
@@ -730,15 +750,19 @@ class BlobberTest(TestCase):
         assert_equal(blob.tokens, tb.WordList(["How now?", "Brown cow?"]))
         blob2 = b("Another blob")
         # blobs have the same tokenizer
-        assert_equal(blob.tokenizer, blob2.tokenizer)
+        assert_true(blob.tokenizer is blob2.tokenizer)
         # but aren't the same object
         assert_not_equal(blob, blob2)
 
-
+    def test_override_analyzer(self):
+        b = tb.Blobber(analyzer=NaiveBayesAnalyzer())
+        blob = b("How now?")
+        blob2 = b("Brown cow")
+        assert_true(isinstance(blob.analyzer, NaiveBayesAnalyzer))
+        assert_true(blob.analyzer is blob2.analyzer)
 
 def is_blob(obj):
     return isinstance(obj, tb.TextBlob)
-
 
 if __name__ == '__main__':
     main()
