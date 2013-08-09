@@ -2,23 +2,12 @@
 '''
 Translator module that uses the Google Translate API.
 
-Adapted from Terry Yin's google-translate-python (License below).
+Adapted from Terry Yin's google-translate-python.
 Language detection added by Steven Loria.
-
-
-"THE BEER-WARE LICENSE" (Revision 42):
-<terry.yinzhe@gmail.com> wrote this file. As long as you retain this notice you
-can do whatever you want with this stuff. If we meet some day, and you think
-this stuff is worth it, you can buy me a beer in return to Terry Yin.
 '''
 import re
-try:
-    import urllib2 as request
-    from urllib import quote
-except:
-    from urllib import request
-    from urllib.parse import quote
-from .compat import PY2
+from .compat import PY2, request, urlquote
+
 
 class Translator(object):
 
@@ -53,17 +42,19 @@ class Translator(object):
             'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19')}
 
     def translate(self, source, from_lang='en', to_lang='en'):
+        '''Translate the source text from one language to another.'''
         if PY2:
             source = source.encode('utf-8')
-        escaped_source = quote(source, '')
+        escaped_source = urlquote(source, '')
         url = self.translate_url.format(from_lang, to_lang, escaped_source)
         json5 = self._get_json5(url)
         return self._unescape(self._get_translation_from_json5(json5))
 
     def detect(self, source):
+        '''Detect the source text's language.'''
         if PY2:
             source = source.encode('utf-8')
-        escaped_source = quote(source, '')
+        escaped_source = urlquote(source, '')
         url = self.detect_url.format(escaped_source)
         json5 = self._get_json5(url)
         lang = self._get_language_from_json5(json5)
@@ -87,7 +78,7 @@ class Translator(object):
         return result
 
     def _get_json5(self, url):
-        req =request.Request(url=url, headers=self.headers)
+        req = request.Request(url=url, headers=self.headers)
         r = request.urlopen(req)
         content = r.read()
         return content.decode('utf-8')

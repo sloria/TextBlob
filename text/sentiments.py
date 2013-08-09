@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Sentiment analysis implementations."""
+
 from .packages import nltk
 from .en import sentiment as pattern_sentiment
 from .tokenizers import WordTokenizer
@@ -25,6 +27,8 @@ class BaseSentimentAnalyzer(object):
         self._trained = True
 
     def analyze(self, text):
+        '''Return the result of of analysis. Typically returns either a
+        tuple, float, or dictionary.'''
         # Lazily train the classifier
         if not self._trained:
             self.train()
@@ -42,6 +46,9 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
     kind = CONTINUOUS
 
     def analyze(self, text):
+        """Return the sentiment as a tuple of the form:
+        ``(polarity, subjectivity)``
+        """
         return pattern_sentiment(text)
 
 class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
@@ -59,6 +66,7 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         self._classifier = None
 
     def train(self):
+        '''Train the Naive Bayes classifier on the movie review corpus.'''
         super(NaiveBayesAnalyzer, self).train()
         try:
             neg_ids = nltk.corpus.movie_reviews.fileids('neg')
@@ -70,12 +78,16 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
             nltk.corpus.movie_reviews.words(fileids=[f])), 'neg') for f in neg_ids]
         pos_feats = [(self._extract_feats(
             nltk.corpus.movie_reviews.words(fileids=[f])), 'pos') for f in pos_ids]
-        self._classifier = nltk.classify.NaiveBayesClassifier.train(pos_feats + neg_feats)
+        train_data = neg_feats + pos_feats
+        self._classifier = nltk.classify.NaiveBayesClassifier.train(train_data)
 
     def _extract_feats(self, words):
         return dict([(word, True) for word in words])
 
     def analyze(self, text):
+        """Return the sentiment as a tuple of the form:
+        ``(classification, pos_probability, neg_probability)``
+        """
         # Lazily train the classifier
         super(NaiveBayesAnalyzer, self).analyze(text)
         tokenizer = WordTokenizer()
@@ -85,9 +97,4 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         prob_dist = self._classifier.prob_classify(feats)
         # classification, p_pos, p_neg
         return prob_dist.max(), prob_dist.prob('pos'), prob_dist.prob("neg")
-
-
-
-
-
 

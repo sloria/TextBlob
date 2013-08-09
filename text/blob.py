@@ -665,7 +665,8 @@ class Blobber(object):
             np_extractor=self.np_extractor, analyzer=self.analyzer)
 
     def __repr__(self):
-        return "Blobber(tokenizer={0}(), pos_tagger={1}(), np_extractor={2}(), analyzer={3}())"\
+        return ("Blobber(tokenizer={0}(), pos_tagger={1}(), "
+                    "np_extractor={2}(), analyzer={3}())")\
                     .format(self.tokenizer.__class__.__name__,
                             self.pos_tagger.__class__.__name__,
                             self.np_extractor.__class__.__name__,

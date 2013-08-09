@@ -41,3 +41,6 @@ nosetests.xml
 
 # Docs
 docs/_build
+
+# Pylint
+pylintrc

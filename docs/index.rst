@@ -39,7 +39,7 @@ Release v\ |version|. (:ref:`Installation <install>`)
     # (0.060, 0.605)
     # (-0.341, 0.767)
 
-    blob.translate(to="es")  # TextBlob('La amenaza titular de The Blob...)
+    blob.translate(to="es")  # 'La amenaza titular de The Blob...'
 
 TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_, and plays nicely with both.
 

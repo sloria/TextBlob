@@ -24,27 +24,31 @@ class BaseNPExtractor(object):
 
     def extract(self, text):
         '''Return a list of noun phrases (strings) for a body of text.'''
-        raise(NotImplementedError, 'must implement an extract(text) method')
+        raise NotImplementedError('Must implement an extract(text) method')
 
 
 class ChunkParser(nltk.ChunkParserI):
 
     def __init__(self):
-        self.trained = False
+        self._trained = False
 
     def train(self):
+        '''Train the Chunker on the ConLL-2000 corpus.'''
         try:
-            train_data = [[(t, c) for (w, t, c) in nltk.chunk.tree2conlltags(sent)]
+            train_data = [[(t, c) for _, t, c in nltk.chunk.tree2conlltags(sent)]
                           for sent in
-                          nltk.corpus.conll2000.chunked_sents('train.txt', chunk_types=['NP'])]
-        except LookupError:
+                          nltk.corpus.conll2000.chunked_sents('train.txt',
+                                                        chunk_types=['NP'])]
+        except LookupError as e:
+            print(e)
             raise MissingCorpusException()
         unigram_tagger = nltk.UnigramTagger(train_data)
         self.tagger = nltk.BigramTagger(train_data, backoff=unigram_tagger)
-        self.trained = True
+        self._trained = True
 
     def parse(self, sentence):
-        if not self.trained:
+        '''Return the parse tree for the sentence.'''
+        if not self._trained:
             self.train()
         pos_tags = [pos for (word, pos) in sentence]
         tagged_pos_tags = self.tagger.tag(pos_tags)
@@ -118,7 +122,7 @@ class FastNPExtractor(BaseNPExtractor):
         }
 
     def __init__(self):
-        self.trained = False
+        self._trained = False
 
     def train(self):
         try:
@@ -126,7 +130,7 @@ class FastNPExtractor(BaseNPExtractor):
         except LookupError as e:
             print(e)
             raise MissingCorpusException()
-        REGEXP_TAGGER = nltk.RegexpTagger([
+        regexp_tagger = nltk.RegexpTagger([
             (r'^-?[0-9]+(.[0-9]+)?$', 'CD'),
             (r'(-|:|;)$', ':'),
             (r'\'*$', 'MD'),
@@ -140,9 +144,9 @@ class FastNPExtractor(BaseNPExtractor):
             (r'.*ed$', 'VBD'),
             (r'.*', 'NN'),
             ])
-        UNIGRAM_TAGGER = nltk.UnigramTagger(train_data, backoff=REGEXP_TAGGER)
-        self.TAGGER = nltk.BigramTagger(train_data, backoff=UNIGRAM_TAGGER)
-        self.trained = True
+        unigram_tagger = nltk.UnigramTagger(train_data, backoff=regexp_tagger)
+        self.tagger = nltk.BigramTagger(train_data, backoff=unigram_tagger)
+        self._trained = True
         return None
 
 
@@ -153,10 +157,10 @@ class FastNPExtractor(BaseNPExtractor):
 
     def extract(self, sentence):
         '''Return a list of noun phrases (strings) for body of text.'''
-        if not self.trained:
+        if not self._trained:
             self.train()
         tokens = self._tokenize_sentence(sentence)
-        tagged = self.TAGGER.tag(tokens)
+        tagged = self.tagger.tag(tokens)
         tags = normalize_tags(tagged)
         merge = True
         while merge:
@@ -201,6 +205,8 @@ def normalize_tags(chunk):
 
 
 def is_match(tagged_phrase, cfg):
+    '''Return whether or not a tagged phrases matches a context-free grammar.
+    '''
     copy = list(tagged_phrase)  # A copy of the list
     merge = True
     while merge:
@@ -217,12 +223,8 @@ def is_match(tagged_phrase, cfg):
                 pos = value
                 copy.insert(i, (match, pos))
                 break
-    is_match = any([t[1] in ('NNP', 'NNI') for t in copy])
-    return is_match
-
-
-def get_structure(chunk):
-    return tuple([tag for (word, tag) in chunk])
+    match = any([t[1] in ('NNP', 'NNI') for t in copy])
+    return match
 
 
 def tree2str(tree, concat=' '):
@@ -231,11 +233,11 @@ def tree2str(tree, concat=' '):
     For example:
         (NP a/DT beautiful/JJ new/JJ dashboard/NN) -> "a beautiful dashboard"
     '''
-    s = concat.join([word for (word, tag) in tree])
-    return s
+    return concat.join([word for (word, tag) in tree])
 
 
-def filter_insignificant(chunk, tag_suffixes=['DT', 'CC', 'PRP$', 'PRP']):
+def filter_insignificant(chunk, tag_suffixes=('DT', 'CC', 'PRP$', 'PRP')):
+    '''Filter out insignificant (word, tag) tuples from a chunk of text.'''
     good = []
     for word, tag in chunk:
         ok = True

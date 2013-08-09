@@ -14,7 +14,7 @@ If this doesn't fix the problem, file an issue at https://github.com/sloria/Text
 class MissingCorpusException(Exception):
 
     '''Exception thrown when a user tries to use a feature that requires a
-    dataset or model that the user does not on their system.
+    dataset or model that the user does not have on their system.
     '''
 
     def __init__(self, message=MISSING_CORPUS_MESSAGE, *args, **kwargs):

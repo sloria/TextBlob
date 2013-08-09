@@ -23,7 +23,7 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
 
     def tokenize(self, text):
         '''Return a list of tokens (strings) for a body of text.'''
-        raise(NotImplementedError, 'must implement a tokenize(text) method')
+        raise NotImplementedError('Must implement a tokenize(text) method')
 
 
 class WordTokenizer(BaseTokenizer):

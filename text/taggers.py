@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+'''Parts-of-speech tagger implementations.'''
 from .packages import nltk
 from .en import tag as pattern_tag
 from .exceptions import MissingCorpusException
@@ -15,7 +15,7 @@ class BaseTagger(object):
         '''Return a list of tuples of the form (word, tag)
         for a given set of text.
         '''
-        raise(NotImplementedError, 'Must implement a tag() method')
+        raise NotImplementedError('Must implement a tag() method')
 
 
 class PatternTagger(BaseTagger):
