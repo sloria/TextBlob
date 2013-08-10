@@ -47,7 +47,7 @@ Similarly, noun phrases are accessed through the ``noun_phrases`` property.
 Sentiment Analysis
 ------------------
 
-The ``sentiment`` property returns the a tuple of the form ``(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very objective.
+The ``sentiment`` property returns the a tuple of the form ``(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.
 
 .. doctest::
 
