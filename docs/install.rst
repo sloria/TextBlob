@@ -44,7 +44,7 @@ Once you have the source, you can install it into your site-packages with ::
 Upgrading
 ---------
 
-To upgrade to the latest version, run
+To upgrade to the latest version (|version|), run
 ::
 
     $ pip install -U textblob

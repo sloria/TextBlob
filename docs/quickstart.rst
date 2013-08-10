@@ -27,11 +27,11 @@ Let's create our first ``TextBlob``.
 Part-of-speech Tagging
 ----------------------
 
-Part-of-speech tags can be accessed through the ``pos_tags`` property.
+Part-of-speech tags can be accessed through the ``tags`` property.
 
 .. doctest::
 
-    >>> wiki.pos_tags
+    >>> wiki.tags
     [(u'Python', u'NNP'), (u'is', u'VBZ'), (u'a', u'DT'), (u'high-level', u'NN'), (u'general-purpose', u'JJ'), (u'programming', u'NN'), (u'language', u'NN')]
 
 Noun Phrase Extraction
