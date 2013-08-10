@@ -3,6 +3,7 @@
 Installation
 ============
 
+
 From the PyPI
 -------------
 ::
@@ -39,6 +40,14 @@ Once you have the source, you can install it into your site-packages with ::
 .. _tarball: https://github.com/sloria/TextBlob/tarball/master
 .. _zipball: https://github.com/sloria/TextBlob/zipball/master
 
+
+Upgrading
+---------
+
+To upgrade to the latest version, run
+::
+
+    $ pip install -U textblob
 
 Python
 ++++++

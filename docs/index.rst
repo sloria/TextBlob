@@ -49,7 +49,7 @@ Features
 - Noun phrase extraction
 - Part-of-speech tagging
 - Sentiment analysis
-- Language translation and detection using Google Translate (*new in 0.5.0*)
+- Language translation and detection powered by Google Translate (*new in 0.5.0*)
 - Tokenization (splitting text into words and sentences)
 - Word and phrase frequencies
 - `n`-grams
@@ -77,6 +77,16 @@ Guide
    quickstart
    advanced_usage
    api_reference
+
+Project info
+============
+
+.. toctree::
+   :maxdepth: 2
+
+   contributing
+   changelog
+
 
 .. _NLTK: http://www.nltk.org
 .. _pattern: http://www.clips.ua.ac.be/pages/pattern-en

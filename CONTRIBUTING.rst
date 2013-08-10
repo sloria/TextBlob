@@ -1,5 +1,5 @@
-Guidelines for contributing
-===========================
+Contributing guidelines
+=======================
 
 - `PEP 8`_, when sensible.
 - Test ruthlessly.

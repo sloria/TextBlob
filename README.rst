@@ -2,6 +2,10 @@
 TextBlob: Simplified Text Processing
 ====================================
 
+.. image:: https://badge.fury.io/py/textblob.png
+    :target: http://badge.fury.io/py/textblob
+    :alt: Latest version
+
 .. image:: https://travis-ci.org/sloria/TextBlob.png?branch=master
     :target: https://travis-ci.org/sloria/TextBlob
     :alt: Travis-CI
@@ -13,7 +17,7 @@ TextBlob: Simplified Text Processing
 
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
 
-`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a consistent API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, translation, and more.
+`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, translation, and more.
 
 
 .. code-block:: python
@@ -54,7 +58,7 @@ Features
 - Noun phrase extraction
 - Part-of-speech tagging
 - Sentiment analysis
-- Language translation and detection using Google Translate (*new in 0.5.0*)
+- Language translation and detection powered by Google Translate (*new in 0.5.0*)
 - Tokenization (splitting text into words and sentences)
 - Word and phrase frequencies
 - `n`-grams
@@ -87,18 +91,10 @@ Requirements
 - Python >= 2.6 or >= 3.3
 
 
-Testing
--------
-Run ::
-
-    python run_tests.py
-
-to run all tests.
-
 License
 -------
 
-TextBlob is licenced under the MIT license. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
+MIT licensed. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
 
 .. _pattern: http://www.clips.ua.ac.be/pattern
 .. _NLTK: http://nltk.org/

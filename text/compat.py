@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 
 PY2 = int(sys.version[0]) == 2
@@ -19,5 +20,5 @@ else:
     binary_type = bytes
     string_types = (str,)
     unicode = str
-    basestring = str
+    basestring = (str, bytes)
     imap = map

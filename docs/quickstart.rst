@@ -132,7 +132,7 @@ The second way is to use the ``count()`` method. ::
     >>> monty.words.count('ekki')
     3
 
-You can specify whether or not the search should be case-sensitive. ::
+You can specify whether or not the search should be case-sensitive (default is ``False``). ::
 
     >>> monty.words.count('ekki', case_sensitive=True)
     2

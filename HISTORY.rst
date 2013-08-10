@@ -4,6 +4,7 @@ Changelog
 0.5.0 (unreleased)
 ------------------
 - Language translation and detection API!
+- Add ``text.sentiments`` module. Contains the ``PatternAnalyzer`` (default implementation) as well as a ``NaiveBayesAnalyzer``.
 - Part-of-speech tags can be accessed via ``TextBlob.tags`` or ``TextBlob.pos_tags``.
 - Add ``polarity`` and ``subjectivity`` helper properties.
 
