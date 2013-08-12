@@ -11,7 +11,7 @@ from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .mixins import ComparableMixin
-from .compat import string_types, unicode, basestring
+from .compat import string_types, unicode, basestring, u
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
@@ -146,7 +146,7 @@ class WordList(list):
         '''Return the plural version of each word in this WordList.'''
         return [word.pluralize() for word in self]
 
-
+@nltk.compat.python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
@@ -350,8 +350,8 @@ class BaseBlob(ComparableMixin):
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
-        return unicode("{cls}({text})").format(cls=class_name,
-                                                text=repr(self.raw))
+        return "{cls}({text})".format(cls=class_name,
+                                        text=repr(self.raw))
     def __len__(self):
         '''Returns the length of the raw text.'''
         return len(self.raw)
@@ -363,7 +363,7 @@ class BaseBlob(ComparableMixin):
 
     def __unicode__(self):
         '''Returns the unicode representation of the blob.'''
-        return unicode(self.raw)
+        return u(self.raw)
 
     def __iter__(self):
         '''Makes the object iterable as if it were a string,
