@@ -265,7 +265,7 @@ You can get a JSON representation of a blob with
 
 .. doctest::
 
-    >>> zen.json()
+    >>> zen.json
     '[{"polarity": 0.2166666666666667, "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "subjectivity": 0.8333333333333334, "end_index": 30, "start_index": 0}, {"polarity": 0.5, "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "subjectivity": 0.5, "end_index": 63, "start_index": 30}, {"polarity": 0.06666666666666667, "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "subjectivity": 0.41904761904761906, "end_index": 93, "start_index": 63}]'
 
 

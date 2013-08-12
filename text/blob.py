@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''Wrappers for various units of text.'''
+from __future__ import unicode_literals
 import sys
 import json
 from collections import defaultdict
@@ -333,12 +334,8 @@ class BaseBlob(ComparableMixin):
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
-        if len(self) > 100:
-            return unicode("{cls}('{beginning}...{end}')".format(cls=class_name,
-                    beginning=unicode(self)[:50], end=self.raw[-20:]))
-        else:
-            return unicode("{cls}('{text}')".format(cls=class_name, text=self.raw))
-
+        return unicode("{cls}({text})").format(cls=class_name,
+                                                text=repr(self.raw))
     def __len__(self):
         '''Returns the length of the raw text.'''
         return len(self.raw)
@@ -528,9 +525,17 @@ class TextBlob(BaseBlob):
         '''Returns a list of each sentences dict representation.'''
         return [sentence.dict for sentence in self.sentences]
 
-    def json(self, *args, **kwargs):
-        '''Returns a json representation of this blob.'''
+
+    def to_json(self, *args, **kwargs):
+        '''Return a json representation (str) of this blob.
+        Takes the same arguments as json.dumps.
+        '''
         return json.dumps(self.serialized, *args, **kwargs)
+
+    @property
+    def json(self):
+        '''The json representation of this blob.'''
+        return self.to_json()
 
     @staticmethod
     def create_sentence_objects(blob):

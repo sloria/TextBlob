@@ -81,7 +81,7 @@ class SentenceTest(TestCase):
 
     def test_repr(self):
         assert_equal(repr(self.sentence),
-                     "Sentence('{0}')".format(self.raw_sentence))
+                     "Sentence({0})".format(repr(self.raw_sentence)))
 
     def test_stripped_sentence(self):
         assert_equal(self.sentence.stripped,
@@ -263,11 +263,7 @@ is managed by the non-profit Python Software Foundation.'''
 
     def test_repr(self):
         blob1 = tb.TextBlob('lorem ipsum')
-        assert_equal(repr(blob1), "TextBlob('lorem ipsum')")
-        big_blob = tb.TextBlob(self.text)
-        assert_equal(repr(big_blob),
-            "TextBlob('Beautiful is better than ugly.\nExplicit is better ...'s do more of those!')"
-        )
+        assert_equal(repr(blob1), "TextBlob({0})".format(repr('lorem ipsum')))
 
     def test_cmp(self):
         blob1 = tb.TextBlob('lorem ipsum')
@@ -597,7 +593,8 @@ is managed by the non-profit Python Software Foundation.'''
     @attr('slow')
     def test_json(self):
         blob = tb.TextBlob('Beautiful is better than ugly. ')
-        blob_dict = json.loads(blob.json())[0]
+        assert_equal(blob.json, blob.to_json())
+        blob_dict = json.loads(blob.json)[0]
         assert_equal(blob_dict['stripped'], 'beautiful is better than ugly')
         assert_equal(blob_dict['noun_phrases'], blob.sentences[0].noun_phrases)
         assert_equal(blob_dict['start_index'], blob.sentences[0].start)

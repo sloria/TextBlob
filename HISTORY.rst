@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.1 (unreleased)
+------------------
+- Fix bug that disallowed display of non-ascii characters in the Python REPL.
+- Restore ``blob.json`` property. Add a ``to_json()`` method that takes the same arguments as ``json.dumps``.
+
 0.5.0 (2013-08-10)
 ------------------
 - Language translation and detection API!
