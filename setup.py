@@ -61,7 +61,7 @@ if 'run_tests' in sys.argv:
     try:
         __import__('nose')
     except ImportError:
-        print('nose required. Run `pip install wheel.')
+        print('nose required. Run `pip install nose`.')
         sys.exit(1)
 
     status = subprocess.call(TEST_CMD, shell=True)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''Wrappers for various units of text.'''
+from __future__ import unicode_literals
 import sys
 import json
 from collections import defaultdict
@@ -10,7 +11,7 @@ from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .mixins import ComparableMixin
-from .compat import string_types, unicode
+from .compat import string_types, unicode, basestring, u
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
@@ -104,14 +105,30 @@ class WordList(list):
     def count(self, strg, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
 
-        Arguments:
-        - s: The string to count.
-        - case_sensitive: A boolean, whether or not the search is case-sensitive.
+        :param strg: The string to count.
+        :param case_sensitive: A boolean, whether or not the search is case-sensitive.
         """
         if not case_sensitive:
             return [word.lower() for word in self].count(strg.lower(), *args,
                     **kwargs)
         return self._collection.count(strg, *args, **kwargs)
+
+    def append(self, obj):
+        '''Append an object to end. If the object is a string, appends a
+        ``Word`` object.
+        '''
+        if isinstance(obj, basestring):
+            return self._collection.append(Word(obj))
+        else:
+            return self._collection.append(obj)
+
+    def extend(self, iterable):
+        '''Extend WordList by appending alements from ``iterable``. If an element
+        is a string, appends a ``Word`` object.
+        '''
+        [self._collection.append(Word(e) if isinstance(e, basestring) else e)
+            for e in iterable]
+        return self
 
     def upper(self):
         '''Return a new WordList with each word upper-cased.'''
@@ -129,7 +146,7 @@ class WordList(list):
         '''Return the plural version of each word in this WordList.'''
         return [word.pluralize() for word in self]
 
-
+@nltk.compat.python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
@@ -333,12 +350,8 @@ class BaseBlob(ComparableMixin):
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
-        if len(self) > 100:
-            return unicode("{cls}('{beginning}...{end}')".format(cls=class_name,
-                    beginning=unicode(self)[:50], end=self.raw[-20:]))
-        else:
-            return unicode("{cls}('{text}')".format(cls=class_name, text=self.raw))
-
+        return "{cls}({text})".format(cls=class_name,
+                                        text=repr(self.raw))
     def __len__(self):
         '''Returns the length of the raw text.'''
         return len(self.raw)
@@ -350,7 +363,7 @@ class BaseBlob(ComparableMixin):
 
     def __unicode__(self):
         '''Returns the unicode representation of the blob.'''
-        return unicode(self.raw)
+        return u(self.raw)
 
     def __iter__(self):
         '''Makes the object iterable as if it were a string,
@@ -528,9 +541,17 @@ class TextBlob(BaseBlob):
         '''Returns a list of each sentences dict representation.'''
         return [sentence.dict for sentence in self.sentences]
 
-    def json(self, *args, **kwargs):
-        '''Returns a json representation of this blob.'''
+
+    def to_json(self, *args, **kwargs):
+        '''Return a json representation (str) of this blob.
+        Takes the same arguments as json.dumps.
+        '''
         return json.dumps(self.serialized, *args, **kwargs)
+
+    @property
+    def json(self):
+        '''The json representation of this blob.'''
+        return self.to_json()
 
     @staticmethod
     def create_sentence_objects(blob):
