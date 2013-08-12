@@ -47,7 +47,7 @@ Similarly, noun phrases are accessed through the ``noun_phrases`` property.
 Sentiment Analysis
 ------------------
 
-The ``sentiment`` property returns the a tuple of the form ``(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very objective.
+The ``sentiment`` property returns the a tuple of the form ``(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.
 
 .. doctest::
 
@@ -121,7 +121,7 @@ There are two ways to get the frequency of a word or noun phrase in a ``TextBlob
 The first is through the ``word_counts`` dictionary. ::
 
     >>> monty = TextBlob("We are no longer the Knights who say Ni. "
-    ...                     "We are no the Knights who say Ekki ekki ekki PTANG.")
+    ...                     "We are now the Knights who say Ekki ekki ekki PTANG.")
     >>> monty.word_counts['ekki']
     3
 
