@@ -4,7 +4,8 @@ Changelog
 0.5.1 (unreleased)
 ------------------
 - Fix bug that disallowed display of non-ascii characters in the Python REPL.
-- Restore ``blob.json`` property. Add a ``to_json()`` method that takes the same arguments as ``json.dumps``.
+- Backwards incompatible: Restore ``blob.json`` property for backwards compatibility with textblob<=0.3.10. Add a ``to_json()`` method that takes the same arguments as ``json.dumps``.
+- Add ``WordList.append`` and ``WordList.extend`` methods that append Word objects.
 
 0.5.0 (2013-08-10)
 ------------------

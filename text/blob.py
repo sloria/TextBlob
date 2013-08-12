@@ -11,7 +11,7 @@ from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .mixins import ComparableMixin
-from .compat import string_types, unicode
+from .compat import string_types, unicode, basestring
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
@@ -105,14 +105,30 @@ class WordList(list):
     def count(self, strg, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
 
-        Arguments:
-        - s: The string to count.
-        - case_sensitive: A boolean, whether or not the search is case-sensitive.
+        :param strg: The string to count.
+        :param case_sensitive: A boolean, whether or not the search is case-sensitive.
         """
         if not case_sensitive:
             return [word.lower() for word in self].count(strg.lower(), *args,
                     **kwargs)
         return self._collection.count(strg, *args, **kwargs)
+
+    def append(self, obj):
+        '''Append an object to end. If the object is a string, appends a
+        ``Word`` object.
+        '''
+        if isinstance(obj, basestring):
+            return self._collection.append(Word(obj))
+        else:
+            return self._collection.append(obj)
+
+    def extend(self, iterable):
+        '''Extend WordList by appending alements from ``iterable``. If an element
+        is a string, appends a ``Word`` object.
+        '''
+        [self._collection.append(Word(e) if isinstance(e, basestring) else e)
+            for e in iterable]
+        return self
 
     def upper(self):
         '''Return a new WordList with each word upper-cased.'''

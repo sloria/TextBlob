@@ -71,6 +71,19 @@ class WordListTest(TestCase):
         wl = tb.WordList(self.words)
         assert_equal(list(wl), self.words)
 
+    def test_append(self):
+        wl = tb.WordList(['dog'])
+        wl.append("cat")
+        assert_true(isinstance(wl[1], tb.Word))
+        wl.append(('a', 'tuple'))
+        assert_true(isinstance(wl[2], tuple))
+
+    def test_extend(self):
+        wl = tb.WordList(["cats", "dogs"])
+        wl.extend(["buffalo", 4])
+        assert_true(isinstance(wl[2], tb.Word))
+        assert_true(isinstance(wl[3], int))
+
 
 class SentenceTest(TestCase):
 
