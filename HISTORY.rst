@@ -1,10 +1,10 @@
 Changelog
 =========
 
-0.5.2 (unreleased)
+0.5.2 (2013-08-14)
 ------------------
+- `Important patch update for NLTK users`: Fix bug with importing TextBlob if local NLTK is installed.
 - Fix bug with computing start and end indices of sentences.
-- Fix bug with importing TextBlob if local NLTK is installed.
 
 
 0.5.1 (2013-08-13)
