@@ -564,19 +564,20 @@ class TextBlob(BaseBlob):
         sentence_objects = []
         try:
             sentences = sent_tokenizer.tokenize(blob)  # List of raw sentences
-        except LookupError:
+        except LookupError as err:
+            print(err)
             raise MissingCorpusException()
         # if there is only one sentence or string of text
         if len(sentences) <= 1:
             sentence_objects.append(Sentence(sentences[0], start_index=0,
-                                    end_index=len(sentences[0]) - 1))
+                                    end_index=len(sentences[0])))
         else:
         # If there are many sentences
             char_index = 0  # Keeps track of character index within the blob
             for i, raw_sentence in enumerate(sentences):
                 # Compute the start and end indices of the sentence
                 # within the blob
-                start_index = char_index
+                start_index = blob.index(str(raw_sentence), char_index)
                 char_index += len(raw_sentence)
 
                 # Sometimes the NLTK tokenizer misses some punctuation when
@@ -593,8 +594,9 @@ class TextBlob(BaseBlob):
                     raw_sentence += next_token  # append the extra punctuation
                     char_index += 1  # also correct the char_index
                 # Create a Sentence object and add it the the list
+                end_index = start_index + len(raw_sentence)
                 sentence_objects.append(Sentence(raw_sentence,
-                        start_index=start_index, end_index=char_index))
+                        start_index=start_index, end_index=end_index))
         return sentence_objects
 
 

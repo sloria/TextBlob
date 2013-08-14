@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.2 (unreleased)
+------------------
+- Fix bug with computing start and end indices of sentences.
+
+
 0.5.1 (2013-08-13)
 ------------------
 - Fix bug that disallowed display of non-ascii characters in the Python REPL.

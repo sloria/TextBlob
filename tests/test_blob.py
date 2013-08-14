@@ -268,7 +268,7 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(len(blob.sentences), 1)
         # the start index is 0, the end index is len(text) - 1
         assert_equal(blob.sentences[0].start_index, 0)
-        assert_equal(blob.sentences[0].end_index, len(text) - 1)
+        assert_equal(blob.sentences[0].end_index, len(text))
 
     def test_len(self):
         blob = tb.TextBlob('lorem ipsum')
@@ -441,25 +441,29 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob.format(1 + 1), tb.TextBlob('1 + 1 = 2'))
         assert_equal('1 + 1 = {0}'.format(tb.TextBlob('2')), '1 + 1 = 2')
 
-    def test_indices(self):
-        blob = tb.TextBlob(self.text)
-        first_sentence = blob.sentences[0]
-        second_sentence = blob.sentences[1]
-        last_sentence = blob.sentences[len(blob.sentences) - 1]
-        assert_equal(first_sentence.start_index, 0)
-        assert_equal(first_sentence.end_index, 30)
+    def test_using_indices_for_slicing(self):
+        blob = tb.TextBlob("Hello world. How do you do?")
+        sent1, sent2 = blob.sentences
+        assert_equal(blob[sent1.start:sent1.end], tb.TextBlob(str(sent1)))
+        assert_equal(blob[sent2.start:sent2.end], tb.TextBlob(str(sent2)))
 
-        assert_equal(second_sentence.start_index, 30)
-        assert_equal(second_sentence.end_index, 63)
 
-        assert_equal(last_sentence.start_index, 740)
-        assert_equal(last_sentence.end_index, 804)
+    def test_indices_with_only_one_sentences(self):
+        blob = tb.TextBlob("Hello world.")
+        sent1 = blob.sentences[0]
+        assert_equal(blob[sent1.start:sent1.end], tb.TextBlob(str(sent1)))
+
+    def test_indices_with_multiple_puncutations(self):
+        blob = tb.TextBlob("Hello world. How do you do?! This has an ellipses...")
+        sent1, sent2, sent3 = blob.sentences
+        assert_equal(blob[sent2.start:sent2.end], tb.TextBlob("How do you do?!"))
+        assert_equal(blob[sent3.start:sent3.end], tb.TextBlob("This has an ellipses..."))
 
     def test_indices_short_names(self):
         blob = tb.TextBlob(self.text)
         last_sentence = blob.sentences[len(blob.sentences) - 1]
-        assert_equal(last_sentence.start, 740)
-        assert_equal(last_sentence.end, 804)
+        assert_equal(last_sentence.start, last_sentence.start_index)
+        assert_equal(last_sentence.end, last_sentence.end_index)
 
     def test_replace(self):
         blob = tb.TextBlob('textblob is a blobby blob')

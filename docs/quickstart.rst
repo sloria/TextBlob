@@ -5,9 +5,6 @@ Quickstart
 
 TextBlob aims to provide access to common text-processing operations through a familiar interface. You can treat ``TextBlob`` objects as if they were Python strings that learned how to do Natural Language Processing.
 
-.. testsetup::
-
-    from __future__ import unicode_literals
 
 Create a TextBlob
 -----------------
@@ -150,23 +147,23 @@ TextBlobs can be translated between languages.
 
 .. doctest::
 
-    >>> en_blob = TextBlob("Simple is better than complex.")
+    >>> en_blob = TextBlob(u"Simple is better than complex.")
     >>> en_blob.translate(to="es")
-    TextBlob('Simple es mejor que complejo .')
+    TextBlob(u'Simple es mejor que complejo .')
 
 The default source language is English. You can specify the source language explicitly, like so.
 
 .. doctest::
 
-    >>> chinese_blob = TextBlob(unicode("美丽优于丑陋"))
+    >>> chinese_blob = TextBlob(u"美丽优于丑陋")
     >>> chinese_blob.translate(from_lang="zh-CN", to='en')
-    TextBlob('Beautiful is better than ugly')
+    TextBlob(u'Beautiful is better than ugly')
 
 You can also attempt to detect a TextBlob's language using ``TextBlob.detect_language()``.
 
 .. doctest::
 
-    >>> b = TextBlob(unicode("بسيط هو أفضل من مجمع"))
+    >>> b = TextBlob(u"بسيط هو أفضل من مجمع")
     >>> b.detect_language()
     u'ar'
 
@@ -241,9 +238,9 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
     Beautiful is better than ugly.
     ---- Starts at index 0, Ends at index 30
     Explicit is better than implicit.
-    ---- Starts at index 30, Ends at index 63
+    ---- Starts at index 31, Ends at index 64
     Simple is better than complex.
-    ---- Starts at index 63, Ends at index 93
+    ---- Starts at index 65, Ends at index 95
 
 
 Dealing with HTML
@@ -266,8 +263,7 @@ You can get a JSON representation of a blob with
 .. doctest::
 
     >>> zen.json
-    '[{"polarity": 0.2166666666666667, "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "subjectivity": 0.8333333333333334, "end_index": 30, "start_index": 0}, {"polarity": 0.5, "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "subjectivity": 0.5, "end_index": 63, "start_index": 30}, {"polarity": 0.06666666666666667, "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "subjectivity": 0.41904761904761906, "end_index": 93, "start_index": 63}]'
-
+    '[{"polarity": 0.2166666666666667, "stripped": "beautiful is better than ugly", "noun_phrases": ["beautiful"], "raw": "Beautiful is better than ugly.", "subjectivity": 0.8333333333333334, "end_index": 30, "start_index": 0}, {"polarity": 0.5, "stripped": "explicit is better than implicit", "noun_phrases": ["explicit"], "raw": "Explicit is better than implicit.", "subjectivity": 0.5, "end_index": 64, "start_index": 31}, {"polarity": 0.06666666666666667, "stripped": "simple is better than complex", "noun_phrases": ["simple"], "raw": "Simple is better than complex.", "subjectivity": 0.41904761904761906, "end_index": 95, "start_index": 65}]'
 
 Next Steps
 ++++++++++
