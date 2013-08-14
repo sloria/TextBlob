@@ -33,6 +33,15 @@ class TestSentenceTokenizer(unittest.TestCase):
         assert_equal(self.tokenizer.tokenize(self.text),
             ["Beautiful is better than ugly.", "Simple is better than complex."])
 
+    def test_tokenize_with_multiple_punctuation(self):
+        text = "Hello world. How do you do?! My name's Steve..."
+        assert_equal(self.tokenizer.tokenize(text),
+            ["Hello world.", "How do you do?!", "My name's Steve..."])
+        text2 = 'OMG! I am soooo LOL!!!'
+        tokens = self.tokenizer.tokenize(text2)
+        assert_equal(len(tokens), 2)
+        assert_equal(tokens,
+            ["OMG!", "I am soooo LOL!!!"])
 
 if __name__ == '__main__':
     unittest.main()
