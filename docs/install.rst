@@ -49,6 +49,14 @@ To upgrade to the latest version (|version|), run
 
     $ pip install -U textblob
 
+Get the bleeding edge version
+-----------------------------
+
+To get the latest development version of TextBlob, run
+::
+
+    $ pip install -U git+https://github.com/sloria/TextBlob.git@dev
+
 Python
 ++++++
 

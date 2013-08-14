@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.2 (2013-08-14)
+------------------
+- `Important patch update for NLTK users`: Fix bug with importing TextBlob if local NLTK is installed.
+- Fix bug with computing start and end indices of sentences.
+
+
 0.5.1 (2013-08-13)
 ------------------
 - Fix bug that disallowed display of non-ascii characters in the Python REPL.

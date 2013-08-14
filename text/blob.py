@@ -11,13 +11,13 @@ from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .mixins import ComparableMixin
-from .compat import string_types, unicode, basestring, u
+from .compat import (string_types, unicode, basestring,
+    python_2_unicode_compatible, u)
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
 from .sentiments import BaseSentimentAnalyzer, PatternAnalyzer
 from .translate import Translator
-from .exceptions import MissingCorpusException
 
 
 class Word(unicode):
@@ -146,7 +146,8 @@ class WordList(list):
         '''Return the plural version of each word in this WordList.'''
         return [word.pluralize() for word in self]
 
-@nltk.compat.python_2_unicode_compatible
+
+@python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
@@ -562,39 +563,17 @@ class TextBlob(BaseBlob):
         '''
         sent_tokenizer = SentenceTokenizer()
         sentence_objects = []
-        try:
-            sentences = sent_tokenizer.tokenize(blob)  # List of raw sentences
-        except LookupError:
-            raise MissingCorpusException()
-        # if there is only one sentence or string of text
-        if len(sentences) <= 1:
-            sentence_objects.append(Sentence(sentences[0], start_index=0,
-                                    end_index=len(sentences[0]) - 1))
-        else:
-        # If there are many sentences
-            char_index = 0  # Keeps track of character index within the blob
-            for i, raw_sentence in enumerate(sentences):
-                # Compute the start and end indices of the sentence
-                # within the blob
-                start_index = char_index
-                char_index += len(raw_sentence)
-
-                # Sometimes the NLTK tokenizer misses some punctuation when
-                # there are multiple punctuations, e.g. with ellipses ("...")
-                # or multiple exclamation points ("!!!")
-                try:
-                    next_token = sentences[i + 1]
-                except IndexError:
-                    # Continue if the last token is a punctuation
-                    if len(raw_sentence) <= 1:
-                        continue
-                # If the next token is 1 character, assume it's a punctuation
-                if len(next_token) == 1:
-                    raw_sentence += next_token  # append the extra punctuation
-                    char_index += 1  # also correct the char_index
-                # Create a Sentence object and add it the the list
-                sentence_objects.append(Sentence(raw_sentence,
-                        start_index=start_index, end_index=char_index))
+        sentences = sent_tokenizer.tokenize(blob)  # List of raw sentences
+        char_index = 0  # Keeps track of character index within the blob
+        for sent in sentences:
+            # Compute the start and end indices of the sentence
+            # within the blob
+            start_index = blob.index(str(sent), char_index)
+            char_index += len(sent)
+            # Create a Sentence object and add it the the list
+            end_index = start_index + len(sent)
+            sentence_objects.append(Sentence(sent,
+                    start_index=start_index, end_index=end_index))
         return sentence_objects
 
 
