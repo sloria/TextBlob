@@ -4,6 +4,7 @@ Changelog
 0.5.2 (unreleased)
 ------------------
 - Fix bug with computing start and end indices of sentences.
+- Fix bug with import TextBlob if local NLTK is installed.
 
 
 0.5.1 (2013-08-13)

@@ -11,7 +11,8 @@ from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .mixins import ComparableMixin
-from .compat import string_types, unicode, basestring, u
+from .compat import (string_types, unicode, basestring,
+    python_2_unicode_compatible, u)
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
@@ -146,7 +147,8 @@ class WordList(list):
         '''Return the plural version of each word in this WordList.'''
         return [word.pluralize() for word in self]
 
-@nltk.compat.python_2_unicode_compatible
+
+@python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
