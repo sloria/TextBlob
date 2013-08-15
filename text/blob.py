@@ -55,7 +55,7 @@ class Word(unicode):
         '''Translate the word to another language using Google's
         Translate API.
 
-        New in `0.5.0`.
+        .. versionadded:: 0.5.0
         '''
         return self.translator.translate(self.string,
                                         from_lang=from_lang, to_lang=to)
@@ -63,7 +63,7 @@ class Word(unicode):
     def detect_language(self):
         '''Detect the word's language using Google's Translate API.
 
-        New in `0.5.0`.
+        .. versionadded:: 0.5.0
         '''
         return self.translator.detect(self.string)
 
@@ -316,7 +316,7 @@ class BaseBlob(ComparableMixin):
         Language code reference:
             https://developers.google.com/translate/v2/using_rest#language-params
 
-        New in `0.5.0`.
+        .. versionadded:: 0.5.0.
 
         :param from_lang: Language to translate from.
         :param to: Language to translate to.
@@ -341,7 +341,7 @@ class BaseBlob(ComparableMixin):
         Language code reference:
             https://developers.google.com/translate/v2/using_rest#language-params
 
-        New in `0.5.0`.
+        .. versionadded:: 0.5.0
 
         :rtype: str
 
@@ -516,7 +516,7 @@ class TextBlob(BaseBlob):
     @cached_property
     def sentences(self):
         '''Return list of :class:`Sentence <Sentence>` objects.'''
-        return TextBlob.create_sentence_objects(self.raw)
+        return TextBlob._create_sentence_objects(self.raw)
 
     @cached_property
     def words(self):
@@ -539,23 +539,30 @@ class TextBlob(BaseBlob):
 
     @property
     def serialized(self):
-        '''Returns a list of each sentences dict representation.'''
+        '''Returns a list of each sentence's dict representation.'''
         return [sentence.dict for sentence in self.sentences]
 
 
     def to_json(self, *args, **kwargs):
         '''Return a json representation (str) of this blob.
         Takes the same arguments as json.dumps.
+
+        .. versionadded:: 0.5.1
         '''
         return json.dumps(self.serialized, *args, **kwargs)
 
     @property
     def json(self):
-        '''The json representation of this blob.'''
+        '''The json representation of this blob.
+
+        .. versionchanged:: 0.5.1
+            Made ``json`` a property instead of a method to restore backwards
+            compatibility that was broken after version 0.4.0.
+        '''
         return self.to_json()
 
     @staticmethod
-    def create_sentence_objects(blob):
+    def _create_sentence_objects(blob):
         '''Returns a list of Sentence objects given
         a list of sentence strings. Attempts to handle sentences that
         have more than one punctuation mark at the end of the sentence.

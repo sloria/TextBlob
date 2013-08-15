@@ -14,8 +14,10 @@ classes, which both inherit from :class:`BaseBlob <BaseBlob>`.
     :members:
 
 .. autoclass:: TextBlob
+    :members:
 
 .. autoclass:: Sentence
+    :members:
 
 Lower-level classes
 -------------------
