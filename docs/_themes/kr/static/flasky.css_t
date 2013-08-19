@@ -534,3 +534,8 @@ a:hover tt {
 .revsys-inline {
     display: none!important;
 }
+
+div.sphinxsidebar a.flattr-button {
+    text-decoration: none;
+    border-bottom: none;
+}

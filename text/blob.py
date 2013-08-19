@@ -235,7 +235,7 @@ class BaseBlob(ComparableMixin):
 
         :rtype: float
         '''
-        return PatternAnalyzer().analyze(str(self))[0]
+        return PatternAnalyzer().analyze(self.raw)[0]
 
     @cached_property
     def subjectivity(self):
@@ -244,7 +244,7 @@ class BaseBlob(ComparableMixin):
 
         :rtype: float
         '''
-        return PatternAnalyzer().analyze(str(self))[1]
+        return PatternAnalyzer().analyze(self.raw)[1]
 
     @cached_property
     def noun_phrases(self):
@@ -409,44 +409,44 @@ class BaseBlob(ComparableMixin):
         - `other`: a string or a text object
         '''
         if type(other) in string_types:
-            return TextBlob(str(self) + other)
+            return TextBlob(self.raw + other)
         elif isinstance(other, BaseBlob):
-            return TextBlob(str(self) + str(other))
+            return TextBlob(self.raw + other.raw)
         else:
             raise TypeError('Operands must be either strings or {0} objects'
                 .format(self.__class__.__name__))
 
     def __contains__(self, sub):
         '''Implements the `in` keyword like a Python string.'''
-        return sub in str(self)
+        return sub in self.raw
 
     def find(self, sub, start=0, end=sys.maxsize):
         '''Behaves like the built-in str.find() method. Returns an integer,
         the index of the first occurrence of the substring argument sub in the
         sub-string given by [start:end].
         '''
-        return str(self).find(sub, start, end)
+        return self.raw.find(sub, start, end)
 
     def rfind(self, sub, start=0, end=sys.maxsize):
         '''Behaves like the built-in str.rfind() method. Returns an integer,
         the index of he last (right-most) occurence of the substring argument
         sub in the sub-sequence given by [start:end].
         '''
-        return str(self).rfind(sub, start, end)
+        return self.raw.rfind(sub, start, end)
 
     def index(self, sub, start=0, end=sys.maxsize):
         '''Like blob.find() but raise ValueError when the substring
         is not found.
         '''
-        return str(self).index(sub, start, end)
+        return self.raw.index(sub, start, end)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
         """Returns True if the blob starts with the given prefix."""
-        return str(self).startswith(prefix, start, end)
+        return self.raw.startswith(prefix, start, end)
 
     def endswith(self, suffix, start=0, end=sys.maxsize):
         """Returns True if the blob ends with the given suffix."""
-        return str(self).endswith(suffix, start, end)
+        return self.raw.endswith(suffix, start, end)
 
     # PEP8 aliases
     starts_with = startswith
@@ -454,35 +454,35 @@ class BaseBlob(ComparableMixin):
 
     def title(self):
         """Returns a blob object with the text in title-case."""
-        return TextBlob(str(self).title())
+        return self.__class__(self.raw.title())
 
     def format(self, *args, **kwargs):
         """Perform a string formatting operation, like the built-in
         `str.format(*args, **kwargs)`. Returns a blob object.
         """
-        return TextBlob(str(self).format(*args, **kwargs))
+        return self.__class__(self.raw.format(*args, **kwargs))
 
     def split(self, sep=None, maxsplit=sys.maxsize):
         """Behaves like the built-in str.split() except returns a
         WordList.
         """
-        return WordList(str(self).split(sep, maxsplit))
+        return WordList(self.raw.split(sep, maxsplit))
 
     def strip(self, chars=None):
         """Behaves like the built-in str.strip([chars]) method. Returns
         an object with leading and trailing whitespace removed.
         """
-        return self.__class__(str(self).strip(chars))
+        return self.__class__(self.raw.strip(chars))
 
     def upper(self):
         """Like str.upper(), returns new object with all upper-cased characters.
         """
-        return self.__class__(str(self).upper())
+        return self.__class__(self.raw.upper())
 
     def lower(self):
         """Like str.lower(), returns new object with all lower-cased characters.
         """
-        return self.__class__(str(self).lower())
+        return self.__class__(self.raw.lower())
 
     def join(self, iterable):
         """Behaves like the built-in `str.join(iterable)` method, except
@@ -491,13 +491,13 @@ class BaseBlob(ComparableMixin):
         Returns a blob which is the concatenation of the strings or blobs
         in the iterable.
         """
-        return self.__class__(str(self).join(iterable))
+        return self.__class__(self.raw.join(iterable))
 
     def replace(self, old, new, count=sys.maxsize):
         """Return a new blob object with all the occurence of `old` replaced
         by `new`.
         """
-        return self.__class__(str(self).replace(old, new, count))
+        return self.__class__(self.raw.replace(old, new, count))
 
 
 class TextBlob(BaseBlob):
