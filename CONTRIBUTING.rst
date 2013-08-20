@@ -33,7 +33,7 @@ Setting Up for Local Development
 
     $ mkvirtualenv textblob
     $ cd textblob
-    $ pip install dev-requirements.txt
+    $ pip install -r dev-requirements.txt
 
 - If you don't have virtualenv and virtualenvwrapper, you can install both using `virtualenv-burrito`_.
 
