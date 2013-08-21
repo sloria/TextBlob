@@ -100,4 +100,5 @@ setup(
         "Topic :: Text Processing :: Linguistic",
     ),
     tests_require=['nose'],
+    keywords=["textblob", "nlp"]
 )

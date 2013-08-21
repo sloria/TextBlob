@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.3 (unreleased)
+------------------
+- Unicode fixes
+
 0.5.2 (2013-08-14)
 ------------------
 - `Important patch update for NLTK users`: Fix bug with importing TextBlob if local NLTK is installed.

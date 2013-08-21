@@ -58,6 +58,9 @@ Pull Requests
 
 2. Commit your changes. Write `good commit messages <http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html>`_.
 
+    $ git commit -m "Detailed commit message"
+    $ git push origin name-of-feature
+
 2. Before submitting a pull request, check the following:
 
 - If the pull request adds functionality, it should be tested and the docs should be updated.

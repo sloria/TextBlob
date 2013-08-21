@@ -528,7 +528,7 @@ class TextBlob(BaseBlob):
         # blob into sentences before tokenizing to words
         words = []
         for sent in self.sentences:
-            words.extend(WordTokenizer().tokenize(str(sent), include_punc=False))
+            words.extend(WordTokenizer().tokenize(sent.raw, include_punc=False))
         return WordList(words)
 
 
@@ -575,7 +575,7 @@ class TextBlob(BaseBlob):
         for sent in sentences:
             # Compute the start and end indices of the sentence
             # within the blob
-            start_index = blob.index(str(sent), char_index)
+            start_index = blob.index(sent, char_index)
             char_index += len(sent)
             # Create a Sentence object and add it the the list
             end_index = start_index + len(sent)
