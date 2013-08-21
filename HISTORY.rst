@@ -3,7 +3,8 @@ Changelog
 
 0.5.3 (unreleased)
 ------------------
-- Unicode fixes
+- Unicode fixes: This fixes a bug that sometimes raised a ``UnicodeEncodeError`` upon creating TextBlobs with non-ascii characters.
+- Update NLTK
 
 0.5.2 (2013-08-14)
 ------------------
