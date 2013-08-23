@@ -186,6 +186,23 @@ def _validated_param(obj, name, base_class, default, base_class_name=None):
                             .format(name=name, cls=base_class_name))
     return obj if obj else default
 
+def _initialize_models(obj, tokenizer, pos_tagger,
+                            np_extractor, analyzer, parser):
+    """Common initialization between BaseBlob and Blobber classes."""
+    # tokenizer may be a textblob or an NLTK tokenizer
+    obj.tokenizer = _validated_param(tokenizer, "tokenizer",
+                                    base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
+                                    default=BaseBlob.tokenizer,
+                                    base_class_name="BaseTokenizer")
+    obj.np_extractor = _validated_param(np_extractor, "np_extractor",
+                                        base_class=BaseNPExtractor,
+                                        default=BaseBlob.np_extractor)
+    obj.pos_tagger = _validated_param(pos_tagger, "pos_tagger",
+                                        BaseTagger, BaseBlob.pos_tagger)
+    obj.analyzer = _validated_param(analyzer, "analyzer",
+                                     BaseSentimentAnalyzer, BaseBlob.analyzer)
+    obj.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
+
 @python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
 
@@ -216,20 +233,7 @@ class BaseBlob(ComparableMixin):
                             'must be a string, not {0}'.format(type(text)))
         self.raw = self.string = text if not clean_html else nltk.clean_html(text)
         self.stripped = lowerstrip(self.raw, all=True)
-        # tokenizer may be a textblob or an NLTK tokenizer
-        self.tokenizer = _validated_param(tokenizer, "tokenizer",
-                                        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
-                                        default=BaseBlob.tokenizer,
-                                        base_class_name="BaseTokenizer")
-        self.np_extractor = _validated_param(np_extractor, "np_extractor",
-                                            base_class=BaseNPExtractor,
-                                            default=BaseBlob.np_extractor)
-        self.pos_tagger = _validated_param(pos_tagger, "pos_tagger",
-                                            BaseTagger, BaseBlob.pos_tagger)
-        self.analyzer = _validated_param(analyzer, "analyzer",
-                                         BaseSentimentAnalyzer, BaseBlob.analyzer)
-        self.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
-
+        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser)
 
     @cached_property
     def words(self):
@@ -400,7 +404,7 @@ class BaseBlob(ComparableMixin):
         :rtype: BaseBlob
         '''
         tok = WordTokenizer()
-        corrected = [Word(w).correct() for w in tok.tokenize(self.raw, include_punc=True)]
+        corrected = (Word(w).correct() for w in tok.tokenize(self.raw, include_punc=True))
         # Separate each token with a space unless the token is a punctuation
         ret = ''
         for i, word in enumerate(corrected):
@@ -594,7 +598,6 @@ class TextBlob(BaseBlob):
             words.extend(WordTokenizer().tokenize(sent.raw, include_punc=False))
         return WordList(words)
 
-
     @property
     def raw_sentences(self):
         '''List of strings, the raw sentences in the blob.'''
@@ -604,7 +607,6 @@ class TextBlob(BaseBlob):
     def serialized(self):
         '''Returns a list of each sentence's dict representation.'''
         return [sentence.dict for sentence in self.sentences]
-
 
     def to_json(self, *args, **kwargs):
         '''Return a json representation (str) of this blob.
@@ -677,6 +679,7 @@ class Sentence(BaseBlob):
             'subjectivity': self.subjectivity,
         }
 
+
 class Blobber(object):
 
     '''A factory for TextBlobs that all share the same tagger,
@@ -708,19 +711,7 @@ class Blobber(object):
 
     def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None,
                 analyzer=None, parser=None):
-        # tokenizer may be a textblob or an NLTK tokenizer
-        self.tokenizer = _validated_param(tokenizer, "tokenizer",
-                                        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
-                                        default=BaseBlob.tokenizer,
-                                        base_class_name="BaseTokenizer")
-        self.np_extractor = _validated_param(np_extractor, "np_extractor",
-                                            base_class=BaseNPExtractor,
-                                            default=BaseBlob.np_extractor)
-        self.pos_tagger = _validated_param(pos_tagger, "pos_tagger",
-                                            BaseTagger, BaseBlob.pos_tagger)
-        self.analyzer = _validated_param(analyzer, "analyzer",
-                                         BaseSentimentAnalyzer, BaseBlob.analyzer)
-        self.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
+        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser)
 
     def __call__(self, text):
         '''Return a new TextBlob object with this Blobber's ``np_extractor``,
@@ -729,7 +720,7 @@ class Blobber(object):
         :returns: A new TextBlob.
         '''
         return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
-            np_extractor=self.np_extractor, analyzer=self.analyzer)
+                        np_extractor=self.np_extractor, analyzer=self.analyzer)
 
     def __repr__(self):
         return ("Blobber(tokenizer={0}(), pos_tagger={1}(), "
