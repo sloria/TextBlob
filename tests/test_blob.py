@@ -157,6 +157,11 @@ class SentenceTest(TestCase):
         assert_true(isinstance(translated, tb.Sentence))
         assert_equal(translated, "Esta es una frase.")
 
+    def test_correct(self):
+        blob = tb.Sentence("I havv bad speling.")
+        assert_true(isinstance(blob.correct(), tb.Sentence))
+        assert_equal(blob.correct(), tb.Sentence("I have bad spelling."))
+
 
 class TextBlobTest(TestCase):
 
@@ -684,6 +689,17 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
         assert_equal(blob.detect_language(), "ar")
 
+    def test_correct(self):
+        blob = tb.TextBlob("I havv bad speling.")
+        assert_true(isinstance(blob.correct(), tb.TextBlob))
+        assert_equal(blob.correct(), tb.TextBlob("I have bad spelling."))
+        blob2 = tb.TextBlob("I am so exciited!!!")
+        assert_equal(blob2.correct(), "I am so excited!!!")
+        blob3 = tb.TextBlob("The meaning of life is 42.0.")
+        assert_equal(blob3.correct(), "The meaning of life is 42.0.")
+        blob4 = tb.TextBlob("?")
+        assert_equal(blob4.correct(), "?")
+
 
 class WordTest(TestCase):
 
@@ -700,13 +716,13 @@ class WordTest(TestCase):
     def test_singularize(self):
         singular = self.cats.singularize()
         assert_equal(singular, 'cat')
-        assert_true(isinstance(singular, unicode))
         assert_equal(self.cat.singularize(), 'cat')
+        assert_true(isinstance(self.cat.singularize(), tb.Word))
 
     def test_pluralize(self):
         plural = self.cat.pluralize()
         assert_equal(self.cat.pluralize(), 'cats')
-        assert_true(isinstance(plural, unicode))
+        assert_true(isinstance(plural, tb.Word))
 
     def test_repr(self):
         assert_equal(repr(self.cat), repr("cat"))
@@ -726,6 +742,28 @@ class WordTest(TestCase):
     @attr('requires_internet')
     def test_detect_language(self):
         assert_equal(tb.Word("bonjour").detect_language(), 'fr')
+
+    def test_spellcheck(self):
+        blob = tb.Word("speling")
+        suggestions = blob.spellcheck()
+        assert_equal(suggestions[0][0], "spelling")
+
+    def test_spellcheck_special_cases(self):
+        # Punctuation
+        assert_equal(tb.Word("!").spellcheck(), [("!", 1.0)])
+        # Numbers
+        assert_equal(tb.Word("42").spellcheck(), [("42", 1.0)])
+        assert_equal(tb.Word("12.34").spellcheck(), [("12.34", 1.0)])
+        # One-letter words
+        assert_equal(tb.Word("I").spellcheck(), [("I", 1.0)])
+        assert_equal(tb.Word("A").spellcheck(), [("A", 1.0)])
+        assert_equal(tb.Word("a").spellcheck(), [("a", 1.0)])
+
+    def test_correct(self):
+        w = tb.Word('speling')
+        correct = w.correct()
+        assert_equal(correct, tb.Word('spelling'))
+        assert_true(isinstance(correct, tb.Word))
 
 
 class BlobberTest(TestCase):

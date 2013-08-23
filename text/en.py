@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-'''This module is based on pattern.en.'''
-
-
+'''This module is based on pattern.en. See the bundled NOTICE file for
+license information.
+'''
 import os
-import sys
+import string
 
 from .text import (Parser as _Parser, Sentiment as _Sentiment, Lexicon,
-    WORD, POS, CHUNK, PNP, PENN, UNIVERSAL)
+    WORD, POS, CHUNK, PNP, PENN, UNIVERSAL, Spelling)
 
 from .compat import text_type, unicode
 
@@ -15,6 +15,9 @@ try:
 except:
     MODULE = ""
 
+spelling = Spelling(
+        path = os.path.join(MODULE, "en-spelling.txt")
+)
 
 #--- ENGLISH PARSER --------------------------------------------------------------------------------
 
@@ -117,6 +120,9 @@ def tag(s, tokenize=True, encoding="utf-8"):
 def suggest(w):
     """ Returns a list of (word, confidence)-tuples of spelling corrections.
     """
+    # Don't correct one-letter, uppercased words
+    if w in ['I', 'A']:
+        return [(w, 1.0)]
     return spelling.suggest(w)
 
 def polarity(s, **kwargs):
@@ -133,3 +139,4 @@ def positive(s, threshold=0.1, **kwargs):
     """ Returns True if the given sentence has a positive sentiment (polarity >= threshold).
     """
     return polarity(unicode(s), **kwargs) >= threshold
+

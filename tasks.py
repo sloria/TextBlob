@@ -39,3 +39,8 @@ def build_docs(clean=False, browse=False):
     run("sphinx-build %s %s" % (docs_dir, build_dir), pty=True)
     if browse:
         browse_docs()
+
+@task
+def doctest():
+    os.chdir(docs_dir)
+    run("make doctest")

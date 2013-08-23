@@ -96,6 +96,31 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     >>> sentence.words[-1].pluralize()
     'levels'
 
+Spelling Correction
+-------------------
+
+Use the ``correct()`` method to attempt spelling correction.
+
+.. doctest::
+
+    >>> b = TextBlob("I havv goood speling!")
+    >>> print(b.correct())
+    I have good spelling!
+
+``Word`` objects have a ``spellcheck()`` method that returns a list of (word, confidence) tuples with spelling suggestions.
+
+.. doctest::
+
+    >>> from text.blob import Word
+    >>> w = Word('falibility')
+    >>> w.spellcheck()
+    [(u'fallibility', 1.0)]
+
+Spelling correction is based on Peter Norvig's "How to Write a Spelling Corrector"[#]_ as implemented in the pattern library. It is about 70% accurate [#]_.
+
+.. [#]  http://norvig.com/spell-correct.html
+.. [#]  http://www.clips.ua.ac.be/pages/pattern-en#spelling
+
 WordLists
 ---------
 

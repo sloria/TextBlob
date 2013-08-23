@@ -5,6 +5,7 @@ URL: http://www.clips.ua.ac.be/pages/pattern-web
 Licence: BSD
 '''
 from __future__ import unicode_literals
+import string
 from itertools import chain
 import types
 import os
@@ -51,6 +52,13 @@ def encode_string(v, encoding="utf-8"):
 
 decode_utf8 = decode_string
 encode_utf8 = encode_string
+
+def isnumeric(strg):
+    try:
+        float(strg)
+    except ValueError:
+        return False
+    return True
 
 #--- LAZY DICTIONARY -------------------------------------------------------------------------------
 # A lazy dictionary is empty until one of its methods is called.
@@ -1178,4 +1186,90 @@ class TaggedString(str):
         return [[[x.replace("&slash;", "/") for x in token.split("/")]
             for token in sentence.split(" ")]
                 for sentence in str.split(self, "\n")]
+
+#### SPELLING CORRECTION ###########################################################################
+# Based on: Peter Norvig, "How to Write a Spelling Corrector", http://norvig.com/spell-correct.html
+
+class Spelling(lazydict):
+
+    ALPHA = "abcdefghijklmnopqrstuvwxyz"
+
+    def __init__(self, path=""):
+        self._path = path
+
+    def load(self):
+        for x in _read(self._path):
+            x = x.split()
+            dict.__setitem__(self, x[0], int(x[1]))
+
+    @property
+    def path(self):
+        return self._path
+
+    @property
+    def language(self):
+        return self._language
+
+    @classmethod
+    def train(self, s, path="spelling.txt"):
+        """ Counts the words in the given string and saves the probabilities at the given path.
+            This can be used to generate a new model for the Spelling() constructor.
+        """
+        model = {}
+        for w in re.findall("[a-z]+", s.lower()):
+            model[w] = w in model and model[w] + 1 or 1
+        model = ("%s %s" % (k, v) for k, v in sorted(model.items()))
+        model = "\n".join(model)
+        f = open(path, "w")
+        f.write(model)
+        f.close()
+
+    def _edit1(self, w):
+        """ Returns a set of words with edit distance 1 from the given word.
+        """
+        # Of all spelling errors, 80% is covered by edit distance 1.
+        # Edit distance 1 = one character deleted, swapped, replaced or inserted.
+        split = [(w[:i], w[i:]) for i in range(len(w) + 1)]
+        delete, transpose, replace, insert = (
+            [a + b[1:] for a, b in split if b],
+            [a + b[1] + b[0] + b[2:] for a, b in split if len(b) > 1],
+            [a + c + b[1:] for a, b in split for c in Spelling.ALPHA if b],
+            [a + c + b[0:] for a, b in split for c in Spelling.ALPHA]
+        )
+        return set(delete + transpose + replace + insert)
+
+    def _edit2(self, w):
+        """ Returns a set of words with edit distance 2 from the given word
+        """
+        # Of all spelling errors, 99% is covered by edit distance 2.
+        # Only keep candidates that are actually known words (20% speedup).
+        return set(e2 for e1 in self._edit1(w) for e2 in self._edit1(e1) if e2 in self)
+
+    def _known(self, words=[]):
+        """ Returns the given list of words filtered by known words.
+        """
+        return set(w for w in words if w in self)
+
+    def suggest(self, w):
+        """ Return a list of (word, confidence) spelling corrections for the given word,
+            based on the probability of known words with edit distance 1-2 from the given word.
+        """
+        # Don't correct punctuation or numbers
+        if any([w in string.punctuation,
+                isnumeric(w)]):
+            return [(w, 1.0)]
+        if len(self) == 0:
+            self.load()
+        candidates = self._known([w]) \
+                  or self._known(self._edit1(w)) \
+                  or self._known(self._edit2(w)) \
+                  or [w]
+        candidates = [(self.get(c, 0.0), c) for c in candidates]
+        s = float(sum(p for p, word in candidates) or 1)
+        candidates = sorted(((p / s, word) for p, word in candidates), reverse=True)
+        if w.istitle():  # Preserve capitalization
+            candidates = [(word.title(), p) for p, word in candidates]
+        else:
+            candidates = [(word, p) for p, word in candidates]
+        return candidates
 

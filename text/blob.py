@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import sys
 import json
+import string
 from collections import defaultdict
 
 from .packages import nltk
@@ -18,6 +19,7 @@ from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
 from .sentiments import BaseSentimentAnalyzer, PatternAnalyzer
 from .translate import Translator
+from .en import suggest
 
 
 class Word(unicode):
@@ -45,11 +47,11 @@ class Word(unicode):
 
     def singularize(self):
         '''Return the singular version of the word as a string.'''
-        return _singularize(self.string)
+        return Word(_singularize(self.string))
 
     def pluralize(self):
         '''Return the plural version of the word as a string.'''
-        return _pluralize(self.string)
+        return Word(_pluralize(self.string))
 
     def translate(self, from_lang="en", to="en"):
         '''Translate the word to another language using Google's
@@ -66,6 +68,25 @@ class Word(unicode):
         .. versionadded:: 0.5.0
         '''
         return self.translator.detect(self.string)
+
+    def spellcheck(self):
+        '''Return a list of (word, confidence) tuples of spelling corrections.
+
+        Based on: Peter Norvig, "How to Write a Spelling Corrector"
+        (http://norvig.com/spell-correct.html) as implemented in the pattern
+        library.
+
+        .. versionadded:: 0.5.4
+        '''
+        return suggest(self.string)
+
+    def correct(self):
+        '''Correct the spelling of the word. Returns the word with the highest
+        confidence using the spelling corrector.
+
+        .. versionadded:: 0.5.4
+        '''
+        return Word(self.spellcheck()[0][0])
 
 
 class WordList(list):
@@ -320,7 +341,7 @@ class BaseBlob(ComparableMixin):
 
         :param from_lang: Language to translate from.
         :param to: Language to translate to.
-        :rtype: Blob
+        :rtype: BaseBlob
 
         '''
         return self.__class__(self.translator.translate(self.raw,
@@ -347,6 +368,25 @@ class BaseBlob(ComparableMixin):
 
         '''
         return self.translator.detect(self.raw)
+
+    def correct(self):
+        '''Attempt to correct the spelling of a blob.
+
+        .. versionadded:: 0.5.4
+
+        :rtype: BaseBlob
+        '''
+        tok = WordTokenizer()
+        corrected = [Word(w).correct() for w in tok.tokenize(self.raw, include_punc=True)]
+        # Separate each token with a space unless the token is a punctuation
+        ret = ''
+        for i, word in enumerate(corrected):
+            # Avoid an extra space at the beginning
+            if word in string.punctuation or i == 0:
+                ret = ''.join([ret, word])
+            else:
+                ret = ' '.join([ret, word])
+        return self.__class__(ret)
 
     def __repr__(self):
         '''Returns a string representation for debugging.'''

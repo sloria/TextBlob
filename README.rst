@@ -67,6 +67,7 @@ Features
 - Word and phrase frequencies
 - `n`-grams
 - Word inflection (pluralization and singularization)
+- Spelling correction (*new in 0.5.4*)
 - JSON serialization
 
 Get it now

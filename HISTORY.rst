@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.4 (unreleased)
+------------------
+- Add spelling correction. This includes the ``TextBlob.correct()`` and ``Word.spellcheck()`` methods.
+
 0.5.3 (2013-08-21)
 ------------------
 - Unicode fixes: This fixes a bug that sometimes raised a ``UnicodeEncodeError`` upon creating TextBlobs with non-ascii characters.
