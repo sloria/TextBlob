@@ -18,6 +18,7 @@ from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
 from .sentiments import BaseSentimentAnalyzer, PatternAnalyzer
+from .parsers import BaseParser, PatternParser
 from .translate import Translator
 from .en import suggest
 
@@ -76,7 +77,7 @@ class Word(unicode):
         (http://norvig.com/spell-correct.html) as implemented in the pattern
         library.
 
-        .. versionadded:: 0.5.4
+        .. versionadded:: 0.6.0
         '''
         return suggest(self.string)
 
@@ -84,7 +85,7 @@ class Word(unicode):
         '''Correct the spelling of the word. Returns the word with the highest
         confidence using the spelling corrector.
 
-        .. versionadded:: 0.5.4
+        .. versionadded:: 0.6.0
         '''
         return Word(self.spellcheck()[0][0])
 
@@ -167,6 +168,20 @@ class WordList(list):
         '''Return the plural version of each word in this WordList.'''
         return [word.pluralize() for word in self]
 
+def _validated_param(obj, name, base_class, default, base_class_name=None):
+    '''Validates a parameter passed to __init__. Makes sure that obj is
+    the correct class. Return obj if it's not None or falls back to default
+
+    :param obj: The object passed in.
+    :param name: The name of the parameter.
+    :param base_class: The class that obj must inherit from.
+    :param default: The default object to fall back upon if obj is None.
+    '''
+    base_class_name = base_class_name if base_class_name else base_class.__name__
+    if obj is not None and not isinstance(obj, base_class):
+        raise ValueError("{name} must be an instance of {cls}"
+                            .format(name=name, cls=base_class_name))
+    return obj if obj else default
 
 @python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
@@ -188,33 +203,30 @@ class BaseBlob(ComparableMixin):
     tokenizer = WordTokenizer()
     translator = Translator()
     analyzer = PatternAnalyzer()
+    parser = PatternParser()
 
     def __init__(self, text, tokenizer=None,
                 pos_tagger=None, np_extractor=None, analyzer=None,
-                clean_html=False):
+                parser=None, clean_html=False):
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
         self.raw = self.string = text if not clean_html else nltk.clean_html(text)
         self.stripped = lowerstrip(self.raw, all=True)
         # tokenizer may be a textblob or an NLTK tokenizer
-        if (tokenizer is not None and
-                not (isinstance(tokenizer, BaseTokenizer) or
-                    isinstance(tokenizer, nltk.tokenize.api.TokenizerI))):
-            raise ValueError("tokenizer must be an instance of BaseTokenizer")
-        self.tokenizer = tokenizer if tokenizer else BaseBlob.tokenizer
-        if (np_extractor is not None and
-                not isinstance(np_extractor, BaseNPExtractor)):
-            raise ValueError("np_extractor must be an instance of BaseNPExtractor")
-        self.np_extractor = np_extractor if np_extractor else BaseBlob.np_extractor
-        if (pos_tagger is not None and
-                not isinstance(pos_tagger, BaseTagger)):
-            raise ValueError("pos_tagger must be an instance of BaseTagger")
-        self.pos_tagger = pos_tagger if pos_tagger else BaseBlob.pos_tagger
-        if (analyzer is not None and
-                not isinstance(analyzer, BaseSentimentAnalyzer)):
-            raise ValueError("analyzer must be an instance of BaseSentimentAnalyzer")
-        self.analyzer = analyzer if analyzer else BaseBlob.analyzer
+        self.tokenizer = _validated_param(tokenizer, "tokenizer",
+                                        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
+                                        default=BaseBlob.tokenizer,
+                                        base_class_name="BaseTokenizer")
+        self.np_extractor = _validated_param(np_extractor, "np_extractor",
+                                            base_class=BaseNPExtractor,
+                                            default=BaseBlob.np_extractor)
+        self.pos_tagger = _validated_param(pos_tagger, "pos_tagger",
+                                            BaseTagger, BaseBlob.pos_tagger)
+        self.analyzer = _validated_param(analyzer, "analyzer",
+                                         BaseSentimentAnalyzer, BaseBlob.analyzer)
+        self.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
+
 
     @cached_property
     def words(self):
@@ -238,6 +250,14 @@ class BaseBlob(ComparableMixin):
         '''
         t = tokenizer if tokenizer is not None else self.tokenizer
         return WordList(t.tokenize(self.raw))
+
+    def parse(self, parser=None):
+        '''Parse the text.
+
+        :param parser: (optional) A parser instance. If ``None``, defaults to this blob's default parser.
+        '''
+        p = parser if parser is not None else self.parser
+        return p.parse(self.raw)
 
     @cached_property
     def sentiment(self):
@@ -372,7 +392,7 @@ class BaseBlob(ComparableMixin):
     def correct(self):
         '''Attempt to correct the spelling of a blob.
 
-        .. versionadded:: 0.5.4
+        .. versionadded:: 0.6.0
 
         :rtype: BaseBlob
         '''
@@ -657,7 +677,7 @@ class Sentence(BaseBlob):
 class Blobber(object):
 
     '''A factory for TextBlobs that all share the same tagger,
-    tokenizer, and np_extractor.
+    tokenizer, parser, and np_extractor.
 
     Usage:
 
@@ -667,40 +687,37 @@ class Blobber(object):
         >>> tb = Blobber(pos_tagger=NLTKTagger(), tokenizer=SentenceTokenizer())
         >>> blob1 = tb("This is one blob.")
         >>> blob2 = tb("This blob has the same tagger and tokenizer.")
-        >>> blob1.pos_tagger == blob2.pos_tagger
+        >>> blob1.pos_tagger is blob2.pos_tagger
         True
 
     :param tokenizer: A tokenizer. Default: :class:`WordTokenizer <text.tokenizers.WordTokenizer>`.
     :param pos_tagger: A POS tagger. Default: :class:`PatternTagger <text.taggers.PatternTagger>`.
     :param np_extractor: A NP extractor. Default: :class:`FastNPExtractor <text.np_extractors.FastNPExtractor>`.
-    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
+    :param analyzer: A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+    :param parser: A parser. If ``None``, defaults to :class:`PatternParser <text.parsers.PatternParser>`.
     '''
 
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
     tokenizer = WordTokenizer()
     analyzer = PatternAnalyzer()
+    parser = PatternParser()
 
     def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None,
-                analyzer=None):
+                analyzer=None, parser=None):
         # tokenizer may be a textblob or an NLTK tokenizer
-        if (tokenizer is not None and
-                not (isinstance(tokenizer, BaseTokenizer) or
-                    isinstance(tokenizer, nltk.tokenize.api.TokenizerI))):
-            raise ValueError("tokenizer must be an instance of BaseTokenizer")
-        self.tokenizer = tokenizer if tokenizer else Blobber.tokenizer
-        if (np_extractor is not None and
-                not isinstance(np_extractor, BaseNPExtractor)):
-            raise ValueError("np_extractor must be an instance of BaseNPExtractor")
-        self.np_extractor = np_extractor if np_extractor else Blobber.np_extractor
-        if (pos_tagger is not None and
-                not isinstance(pos_tagger, BaseTagger)):
-            raise ValueError("pos_tagger must be an instance of BaseTagger")
-        self.pos_tagger = pos_tagger if pos_tagger else Blobber.pos_tagger
-        if (analyzer is not None and
-                not isinstance(analyzer, BaseSentimentAnalyzer)):
-            raise ValueError("analyzer must be an instance of BaseSentimentAnalyzer")
-        self.analyzer = analyzer if analyzer else BaseBlob.analyzer
+        self.tokenizer = _validated_param(tokenizer, "tokenizer",
+                                        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
+                                        default=BaseBlob.tokenizer,
+                                        base_class_name="BaseTokenizer")
+        self.np_extractor = _validated_param(np_extractor, "np_extractor",
+                                            base_class=BaseNPExtractor,
+                                            default=BaseBlob.np_extractor)
+        self.pos_tagger = _validated_param(pos_tagger, "pos_tagger",
+                                            BaseTagger, BaseBlob.pos_tagger)
+        self.analyzer = _validated_param(analyzer, "analyzer",
+                                         BaseSentimentAnalyzer, BaseBlob.analyzer)
+        self.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
 
     def __call__(self, text):
         '''Return a new TextBlob object with this Blobber's ``np_extractor``,

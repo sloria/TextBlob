@@ -16,6 +16,7 @@ from text.np_extractors import ConllExtractor, FastNPExtractor
 from text.taggers import NLTKTagger, PatternTagger
 from text.tokenizers import WordTokenizer, SentenceTokenizer
 from text.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
+from text.parsers import PatternParser
 
 class WordListTest(TestCase):
 
@@ -699,6 +700,26 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob3.correct(), "The meaning of life is 42.0.")
         blob4 = tb.TextBlob("?")
         assert_equal(blob4.correct(), "?")
+
+    def test_parse(self):
+        blob = tb.TextBlob("And now for something completely different.")
+        assert_equal(blob.parse(), PatternParser().parse(blob.string))
+
+    @attr("py27_only")
+    def test_passing_bad_init_params(self):
+        tagger = PatternTagger()
+        with assert_raises(ValueError):
+            tb.TextBlob("blah", parser=tagger)
+        with assert_raises(ValueError):
+            tb.TextBlob("blah", np_extractor=tagger)
+        with assert_raises(ValueError):
+            tb.TextBlob("blah", tokenizer=tagger)
+        with assert_raises(ValueError):
+            tb.TextBlob("blah", analyzer=tagger)
+        analyzer = PatternAnalyzer
+        with assert_raises(ValueError):
+            tb.TextBlob("blah", pos_tagger=analyzer)
+
 
 
 class WordTest(TestCase):

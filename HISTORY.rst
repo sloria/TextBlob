@@ -1,8 +1,9 @@
 Changelog
 =========
 
-0.5.4 (unreleased)
+0.6.0 (unreleased)
 ------------------
+- Add parsing functionality via the ``TextBlob.parse()`` method. The ``text.parsers`` module currently has one implementation (``PatternParser``).
 - Add spelling correction. This includes the ``TextBlob.correct()`` and ``Word.spellcheck()`` methods.
 
 0.5.3 (2013-08-21)

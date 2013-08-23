@@ -94,6 +94,21 @@ Similar to the tokenizers and noun phrase chunkers, you can explicitly specify w
 .. _pattern: http://www.clips.ua.ac.be/pattern
 .. _NLTK: http://nltk.org/
 
+Parsers
+-------
+
+New in version `0.6.0`.
+
+Parser implementations can also be passed to the TextBlob constructor.
+
+::
+
+    >>> from text.blob import TextBlob
+    >>> from text.parsers import PatternParser
+    >>> blob = TextBlob("Parsing is fun.", parser=PatternParser())
+    >>> blob.parse()
+    'Parsing/VBG/B-VP/O is/VBZ/I-VP/O fun/VBG/I-VP/O ././O/O'
+
 
 Blobber: A TextBlob Factory
 ---------------------------

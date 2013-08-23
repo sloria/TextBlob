@@ -118,8 +118,6 @@ Use the ``correct()`` method to attempt spelling correction.
 
 Spelling correction is based on Peter Norvig's "How to Write a Spelling Corrector"[#]_ as implemented in the pattern library. It is about 70% accurate [#]_.
 
-.. [#]  http://norvig.com/spell-correct.html
-.. [#]  http://www.clips.ua.ac.be/pages/pattern-en#spelling
 
 WordLists
 ---------
@@ -197,6 +195,21 @@ As a reference, language codes can be found `here <https://developers.google.com
 Language translation and detection is powered by the `Google Translate API`_.
 
 .. _`Google Translate API`: https://developers.google.com/translate/
+
+Parsing
+-------
+
+Use the ``parse()`` method to parse the text.
+
+.. doctest::
+
+    >>> from text.blob import TextBlob
+    >>> b = TextBlob("And now for something completely different.")
+    >>> b.parse()
+    'And/CC/O/O now/RB/B-ADVP/O for/IN/B-PP/B-PNP something/NN/B-NP/I-PNP completely/RB/B-ADJP/O different/JJ/I-ADJP/O ././O/O'
+
+By default, TextBlob uses pattern's parser [#]_.
+
 
 TextBlobs Are Like Python Strings!
 ----------------------------------
@@ -294,3 +307,7 @@ Next Steps
 ++++++++++
 
 Want to use a different POS tagger or noun phrase chunker implementation? Check out the :ref:`Advanced Usage <advanced>` guide.
+
+.. [#]  http://norvig.com/spell-correct.html
+.. [#]  http://www.clips.ua.ac.be/pages/pattern-en#spelling
+.. [#]  http://www.clips.ua.ac.be/pages/pattern-en#parser

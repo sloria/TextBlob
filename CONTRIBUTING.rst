@@ -37,6 +37,23 @@ Setting Up for Local Development
 
 - If you don't have virtualenv and virtualenvwrapper, you can install both using `virtualenv-burrito`_.
 
+Creating your own models
+++++++++++++++++++++++++
+
+You can add your own implementation for POS taggers, sentiment analyzers, chunkers, parsers, etc. simply by adding a class to the appropriate module in the ``text/`` package.
+
+For example, if you want to create your own tagger, you would add a class to ``text/taggers.py``. The only requirement is that the class have a ``tag()`` method.
+
+.. code-block:: python
+
+    class MyTagger(BaseTagger):
+        def tag(self, text):
+            # Your implementation goes here
+
+
+Check out the `API reference`_ for more info on the model interfaces.
+
+.. _`API reference`: https://textblob.readthedocs.org/en/latest/api_reference.html
 
 Git Branch Structure
 ++++++++++++++++++++

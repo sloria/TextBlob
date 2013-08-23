@@ -62,12 +62,13 @@ Features
 - Noun phrase extraction
 - Part-of-speech tagging
 - Sentiment analysis
-- Language translation and detection powered by Google Translate (*new in 0.5.0*)
+- Language translation and detection powered by Google Translate
 - Tokenization (splitting text into words and sentences)
 - Word and phrase frequencies
+- Parsing
 - `n`-grams
 - Word inflection (pluralization and singularization)
-- Spelling correction (*new in 0.5.4*)
+- Spelling correction
 - JSON serialization
 
 Get it now

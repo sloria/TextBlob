@@ -56,6 +56,14 @@ New in `0.5.0`.
 .. automodule:: text.sentiments
     :members:
 
+Parsers
+-------
+
+New in `0.6.0`.
+
+.. automodule:: text.parsers
+    :members:
+
 Blobber
 -------
 New in `0.4.0`.
