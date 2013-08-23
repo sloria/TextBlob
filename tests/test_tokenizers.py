@@ -23,6 +23,12 @@ class TestWordTokenizer(unittest.TestCase):
             ['Python', 'is', 'a', 'high-level', 'programming',
             'language'])
 
+    def test_itokenize(self):
+        gen = self.tokenizer.itokenize(self.text)
+        assert_equal(next(gen), "Python")
+        assert_equal(next(gen), "is")
+
+
 class TestSentenceTokenizer(unittest.TestCase):
 
     def setUp(self):
@@ -42,6 +48,11 @@ class TestSentenceTokenizer(unittest.TestCase):
         assert_equal(len(tokens), 2)
         assert_equal(tokens,
             ["OMG!", "I am soooo LOL!!!"])
+
+    def test_itokenize(self):
+        gen = self.tokenizer.itokenize(self.text)
+        assert_equal(next(gen), "Beautiful is better than ugly.")
+        assert_equal(next(gen), "Simple is better than complex.")
 
 if __name__ == '__main__':
     unittest.main()

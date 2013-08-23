@@ -26,6 +26,10 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
         '''Return a list of tokens (strings) for a body of text.'''
         raise NotImplementedError('Must implement a tokenize(text) method')
 
+    def itokenize(self, text, *args, **kwargs):
+        '''Return a generator that generates tokens "on-demand".'''
+        return (t for t in self.tokenize(text, *args, **kwargs))
+
 
 class WordTokenizer(BaseTokenizer):
 

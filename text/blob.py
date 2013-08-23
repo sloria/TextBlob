@@ -124,6 +124,9 @@ class WordList(list):
         # This is included for Python 2.* compatibility
         return self.__class__(self._collection[i:j])
 
+    def __iter__(self):
+        return iter(self._collection)
+
     def count(self, strg, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
 
@@ -234,7 +237,7 @@ class BaseBlob(ComparableMixin):
         If you want to include punctuation characters, access the ``tokens``
         property.
         '''
-        return WordList(WordTokenizer().tokenize(self.raw, include_punc=False))
+        return WordList(WordTokenizer().itokenize(self.raw, include_punc=False))
 
     @cached_property
     def tokens(self):
@@ -630,7 +633,7 @@ class TextBlob(BaseBlob):
         '''
         sent_tokenizer = SentenceTokenizer()
         sentence_objects = []
-        sentences = sent_tokenizer.tokenize(blob)  # List of raw sentences
+        sentences = sent_tokenizer.itokenize(blob)  # Generates raw sentences
         char_index = 0  # Keeps track of character index within the blob
         for sent in sentences:
             # Compute the start and end indices of the sentence
@@ -730,13 +733,11 @@ class Blobber(object):
 
     def __repr__(self):
         return ("Blobber(tokenizer={0}(), pos_tagger={1}(), "
-                    "np_extractor={2}(), analyzer={3}())")\
+                    "np_extractor={2}(), analyzer={3}(), parser={4}())")\
                     .format(self.tokenizer.__class__.__name__,
                             self.pos_tagger.__class__.__name__,
                             self.np_extractor.__class__.__name__,
-                            self.analyzer.__class__.__name__)
+                            self.analyzer.__class__.__name__,
+                            self.parser.__class__.__name__)
 
     __str__ = __repr__
-
-
-

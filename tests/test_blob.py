@@ -811,7 +811,7 @@ class BlobberTest(TestCase):
         assert_true(isinstance(blob.tokenizer, WordTokenizer))
 
     def test_str_and_repr(self):
-        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=PatternTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer())"
+        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=PatternTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser())"
         assert_equal(repr(self.blobber), expected)
         assert_equal(str(self.blobber), repr(self.blobber))
 

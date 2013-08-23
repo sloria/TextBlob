@@ -5,10 +5,11 @@ Changelog
 ------------------
 - Add parsing functionality via the ``TextBlob.parse()`` method. The ``text.parsers`` module currently has one implementation (``PatternParser``).
 - Add spelling correction. This includes the ``TextBlob.correct()`` and ``Word.spellcheck()`` methods.
+- Add ``itokenize()`` method to tokenizers that returns a generator instead of a list of tokens.
 
 0.5.3 (2013-08-21)
 ------------------
-- Unicode fixes: This fixes a bug that sometimes raised a ``UnicodeEncodeError`` upon creating TextBlobs with non-ascii characters.
+- Unicode fixes: This fixes a bug that sometimes raised a ``UnicodeEncodeError`` upon creating accessing ``sentences`` for TextBlobs with non-ascii characters.
 - Update NLTK
 
 0.5.2 (2013-08-14)
