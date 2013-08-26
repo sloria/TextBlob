@@ -224,7 +224,9 @@ class BaseBlob(ComparableMixin):
         defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
         :class:`PatternParser <text.parsers.PatternParser>`.
-    :param clean_html: (optional) Remove HTML markup from ``text``.
+
+    .. versionchanged:: 0.6.0
+        ``clean_html`` parameter deprecated, as it was in NLTK.
     '''
 
     np_extractor = FastNPExtractor()
@@ -240,7 +242,11 @@ class BaseBlob(ComparableMixin):
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
-        self.raw = self.string = text if not clean_html else nltk.clean_html(text)
+        if clean_html:
+            raise NotImplementedError("clean_html has been deprecated. "
+                                    "To remove HTML markup, use BeautifulSoup's "
+                                    "get_text() function")
+        self.raw = self.string = text
         self.stripped = lowerstrip(self.raw, all=True)
         _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier)
 
@@ -596,7 +602,6 @@ class TextBlob(BaseBlob):
     :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
-    :param clean_html: (optional) Remove HTML markup from ``text``.
     """
 
     @cached_property

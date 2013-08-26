@@ -280,19 +280,6 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
     Simple is better than complex.
     ---- Starts at index 65, Ends at index 95
 
-
-Dealing with HTML
------------------
-
-If your text comes in the form of an HTML string, you can pass ``clean_html=True`` to the TextBlob constructor to strip the markup.
-
-.. doctest::
-
-    >>> html = "<b>HAML</b> Ain't Markup <a href='/languages'>Language</a>"
-    >>> clean = TextBlob(html, clean_html=True)
-    >>> str(clean)
-    "HAML Ain't Markup Language"
-
 Get a JSON-serialized version of a blob
 ---------------------------------------
 

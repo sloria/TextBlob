@@ -67,7 +67,7 @@ You can get the label probability distribution with the ``prob_classify(text)`` 
 Classifying TextBlobs
 =====================
 
-Another way to classify text is to pass a classifier into the constructor of ``TextBlob`` and calling its ``classify()`` method.
+Another way to classify text is to pass a classifier into the constructor of ``TextBlob`` and call its ``classify()`` method.
 
 .. doctest::
 

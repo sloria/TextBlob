@@ -270,11 +270,11 @@ is managed by the non-profit Python Software Foundation.'''
             tb.WordList(('am', 'eating', 'a', 'pizza'))
         ])
 
+    @attr("py27_only")
     def test_clean_html(self):
         html = '<b>Python</b> is a widely used <a href="/wiki/General-purpose_programming_language" title="General-purpose programming language">general-purpose</a>, <a href="/wiki/High-level_programming_language" title="High-level programming language">high-level programming language</a>.'
-        blob = tb.TextBlob(html, clean_html=True)
-        assert_equal(blob.string, 'Python is a widely used general-purpose , high-level programming language .')
-
+        with assert_raises(NotImplementedError):
+            blob = tb.TextBlob(html, clean_html=True)
 
     def test_sentences(self):
         blob = self.blob
