@@ -175,7 +175,7 @@ TextBlobs can be translated between languages.
     >>> en_blob.translate(to="es")
     TextBlob(u'Simple es mejor que complejo .')
 
-The default source language is English. You can specify the source language explicitly, like so.
+If no source language is specified, TextBlob will attempt to detect the language. You can specify the source language explicitly, like so.
 
 .. doctest::
 

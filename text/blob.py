@@ -54,12 +54,14 @@ class Word(unicode):
         '''Return the plural version of the word as a string.'''
         return Word(_pluralize(self.string))
 
-    def translate(self, from_lang="en", to="en"):
+    def translate(self, from_lang=None, to="en"):
         '''Translate the word to another language using Google's
         Translate API.
 
         .. versionadded:: 0.5.0
         '''
+        if from_lang is None:
+            from_lang = self.translator.detect(self.string)
         return self.translator.translate(self.string,
                                         from_lang=from_lang, to_lang=to)
 
@@ -362,7 +364,7 @@ class BaseBlob(ComparableMixin):
                             for i in range(len(self.words) - n + 1)]
         return grams
 
-    def translate(self, from_lang="en", to="en"):
+    def translate(self, from_lang=None, to="en"):
         '''Translate the blob to another language.
         Uses the Google Translate API. Returns a new TextBlob.
 
@@ -380,11 +382,14 @@ class BaseBlob(ComparableMixin):
 
         .. versionadded:: 0.5.0.
 
-        :param from_lang: Language to translate from.
+        :param from_lang: Language to translate from. If ``None``, will attempt
+            to detect the language.
         :param to: Language to translate to.
         :rtype: BaseBlob
 
         '''
+        if from_lang is None:
+            from_lang = self.translator.detect(self.string)
         return self.__class__(self.translator.translate(self.raw,
                         from_lang=from_lang, to_lang=to))
 

@@ -78,7 +78,7 @@ def custom_extractor(document):
     feats = {}
     tokens = document.split()
     for tok in tokens:
-        feat_name = "last_letter({})".format(tok[-1])
+        feat_name = "last_letter({0})".format(tok[-1])
         feats[feat_name] = True
     return feats
 

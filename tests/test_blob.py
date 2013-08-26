@@ -188,6 +188,11 @@ class SentenceTest(TestCase):
         assert_true(isinstance(blob.correct(), tb.Sentence))
         assert_equal(blob.correct(), tb.Sentence("I have bad spelling."))
 
+    @attr('requires_internet')
+    def test_translate_detects_language_by_default(self):
+        blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
+        assert_equal(blob.translate(), "With full sovereignty")
+
 
 class TextBlobTest(TestCase):
 
@@ -794,6 +799,10 @@ class WordTest(TestCase):
     @attr('requires_internet')
     def test_translate(self):
         assert_equal(tb.Word("cat").translate(to="es"), "gato")
+
+    @attr('requires_internet')
+    def test_translate_without_from_lang(self):
+        assert_equal(tb.Word('hola').translate(), tb.Word('hello'))
 
     @attr('requires_internet')
     def test_detect_language(self):
