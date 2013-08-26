@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Various parser implementations.
 
+.. versionadded:: 0.6.0
+'''
 from .en import parse as pattern_parse
 
 class BaseParser(object):

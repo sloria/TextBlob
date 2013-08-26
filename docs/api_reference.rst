@@ -31,42 +31,52 @@ Lower-level classes
 
 Tokenizers
 ----------
-New in `0.4.0`.
 
 .. automodule:: text.tokenizers
     :members:
+    :inherited-members:
 
 POS Taggers
 -----------
 
 .. automodule:: text.taggers
     :members:
+    :inherited-members:
 
 Noun Phrase Extractors
 ----------------------
 
 .. automodule:: text.np_extractors
     :members: BaseNPExtractor, ConllExtractor, FastNPExtractor
+    :inherited-members:
+
 
 Sentiment Analyzers
 -------------------
 
-New in `0.5.0`.
-
 .. automodule:: text.sentiments
     :members:
+    :inherited-members:
+
 
 Parsers
 -------
 
-New in `0.6.0`.
-
 .. automodule:: text.parsers
     :members:
+    :inherited-members:
+
+.. _api_classifiers:
+
+Classifiers
+-----------
+
+.. automodule:: text.classifiers
+    :members:
+    :inherited-members:
 
 Blobber
 -------
-New in `0.4.0`.
 
 .. autoclass:: text.blob.Blobber
     :members:

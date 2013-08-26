@@ -3,7 +3,6 @@
 Installation
 ============
 
-
 From the PyPI
 -------------
 ::

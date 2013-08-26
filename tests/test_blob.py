@@ -17,6 +17,31 @@ from text.taggers import NLTKTagger, PatternTagger
 from text.tokenizers import WordTokenizer, SentenceTokenizer
 from text.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
 from text.parsers import PatternParser
+from text.classifiers import NaiveBayesClassifier
+
+train = [
+    ('I love this sandwich.', 'pos'),
+    ('This is an amazing place!', 'pos'),
+    ('I feel very good about these beers.', 'pos'),
+    ('This is my best work.', 'pos'),
+    ("What an awesome view", 'pos'),
+    ('I do not like this restaurant', 'neg'),
+    ('I am tired of this stuff.', 'neg'),
+    ("I can't deal with this", 'neg'),
+    ('He is my sworn enemy!', 'neg'),
+    ('My boss is horrible.', 'neg')
+]
+
+test = [
+    ('The beer was good.', 'pos'),
+    ('I do not enjoy my job', 'neg'),
+    ("I ain't feeling dandy today.", 'neg'),
+    ("I feel amazing!", 'pos'),
+    ('Gary is a friend of mine.', 'pos'),
+    ("I can't believe I'm doing this.", 'neg')
+]
+
+classifier = NaiveBayesClassifier(train)
 
 class WordListTest(TestCase):
 
@@ -363,7 +388,6 @@ is managed by the non-profit Python Software Foundation.'''
     @attr("slow")
     def test_discrete_sentiment(self):
         blob = tb.TextBlob("I feel great today.", analyzer=NaiveBayesAnalyzer())
-        print(blob.sentiment)
         assert_equal(blob.sentiment[0], 'pos')
 
     def test_can_get_subjectivity_and_polarity_with_different_analyzer(self):
@@ -720,7 +744,18 @@ is managed by the non-profit Python Software Foundation.'''
         with assert_raises(ValueError):
             tb.TextBlob("blah", pos_tagger=analyzer)
 
+    def test_classify(self):
+        blob = tb.TextBlob("This is an amazing library. What an awesome classifier!",
+            classifier=classifier)
+        assert_equal(blob.classify(), 'pos')
+        for s in blob.sentences:
+            assert_equal(s.classify(), 'pos')
 
+    @attr("py27_only")
+    def test_classify_without_classifier(self):
+        blob = tb.TextBlob("This isn't gonna be good")
+        with assert_raises(NameError):
+            blob.classify()
 
 class WordTest(TestCase):
 
@@ -811,7 +846,7 @@ class BlobberTest(TestCase):
         assert_true(isinstance(blob.tokenizer, WordTokenizer))
 
     def test_str_and_repr(self):
-        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=PatternTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser())"
+        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=PatternTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser(), classifier=None)"
         assert_equal(repr(self.blobber), expected)
         assert_equal(str(self.blobber), repr(self.blobber))
 
@@ -833,6 +868,12 @@ class BlobberTest(TestCase):
         blob2 = b("Brown cow")
         assert_true(isinstance(blob.analyzer, NaiveBayesAnalyzer))
         assert_true(blob.analyzer is blob2.analyzer)
+
+    def test_overrider_classifier(self):
+        b = tb.Blobber(classifier=classifier)
+        blob = b("I am so amazing")
+        assert_equal(blob.classify(), 'pos')
+
 
 def is_blob(obj):
     return isinstance(obj, tb.TextBlob)

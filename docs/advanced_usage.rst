@@ -1,7 +1,7 @@
 .. _advanced:
 
-Advanced Usage
-==============
+Advanced Usage: Overriding Models and the Blobber Class
+=======================================================
 
 TextBlob allows you to specify which algorithms you want to use under the hood of its simple API.
 
@@ -115,9 +115,9 @@ Blobber: A TextBlob Factory
 
 New in `0.4.0`.
 
-It can be tedious to repeatedly pass taggers, NP extractors, sentiment analyzers, and tokenizers to  multiple TextBlobs. To keep your code `DRY <https://en.wikipedia.org/wiki/DRY_principle>`_, you can use the ``Blobber`` class to create TextBlobs that share the same taggers, etc.
+It can be tedious to repeatedly pass taggers, NP extractors, sentiment analyzers, classifiers, and tokenizers to  multiple TextBlobs. To keep your code `DRY <https://en.wikipedia.org/wiki/DRY_principle>`_, you can use the ``Blobber`` class to create TextBlobs that share the same models.
 
-First, instantiate a ``Blobber`` with the tagger, NP extractor, sentiment analyzer, and/or tokenizer of your choice.
+First, instantiate a ``Blobber`` with the tagger, NP extractor, sentiment analyzer, classifier, and/or tokenizer of your choice.
 
 .. doctest::
 

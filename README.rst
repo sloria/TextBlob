@@ -21,7 +21,7 @@ TextBlob: Simplified Text Processing
 
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
 
-`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, translation, and more.
+`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more.
 
 
 .. code-block:: python
@@ -62,6 +62,7 @@ Features
 - Noun phrase extraction
 - Part-of-speech tagging
 - Sentiment analysis
+- Classification (Naive Bayes)
 - Language translation and detection powered by Google Translate
 - Tokenization (splitting text into words and sentences)
 - Word and phrase frequencies
@@ -70,6 +71,7 @@ Features
 - Word inflection (pluralization and singularization)
 - Spelling correction
 - JSON serialization
+- Easily swap models, or create your own
 
 Get it now
 ----------

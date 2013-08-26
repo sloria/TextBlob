@@ -1,7 +1,7 @@
 .. _quickstart:
 
-Quickstart
-==========
+Tutorial: Quickstart
+====================
 
 TextBlob aims to provide access to common text-processing operations through a familiar interface. You can treat ``TextBlob`` objects as if they were Python strings that learned how to do Natural Language Processing.
 
@@ -96,27 +96,6 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     >>> sentence.words[-1].pluralize()
     'levels'
 
-Spelling Correction
--------------------
-
-Use the ``correct()`` method to attempt spelling correction.
-
-.. doctest::
-
-    >>> b = TextBlob("I havv goood speling!")
-    >>> print(b.correct())
-    I have good spelling!
-
-``Word`` objects have a ``spellcheck()`` method that returns a list of (word, confidence) tuples with spelling suggestions.
-
-.. doctest::
-
-    >>> from text.blob import Word
-    >>> w = Word('falibility')
-    >>> w.spellcheck()
-    [(u'fallibility', 1.0)]
-
-Spelling correction is based on Peter Norvig's "How to Write a Spelling Corrector"[#]_ as implemented in the pattern library. It is about 70% accurate [#]_.
 
 
 WordLists
@@ -131,6 +110,28 @@ Similarly, ``WordLists`` are just Python lists with additional methods.
     WordList([u'cat', u'dog', u'octopus'])
     >>> animals.words.pluralize()
     ['cats', 'dogs', 'octopodes']
+
+Spelling Correction
+-------------------
+
+Use the ``correct()`` method to attempt spelling correction.
+
+.. doctest::
+
+    >>> b = TextBlob("I havv goood speling!")
+    >>> print(b.correct())
+    I have good spelling!
+
+``Word`` objects have a ``spellcheck()`` method that returns a list of ``(word, confidence)`` tuples with spelling suggestions.
+
+.. doctest::
+
+    >>> from text.blob import Word
+    >>> w = Word('falibility')
+    >>> w.spellcheck()
+    [(u'fallibility', 1.0)]
+
+Spelling correction is based on Peter Norvig's "How to Write a Spelling Corrector"[#]_ as implemented in the pattern library. It is about 70% accurate [#]_.
 
 
 Get Word and Noun Phrase Frequencies
@@ -203,7 +204,6 @@ Use the ``parse()`` method to parse the text.
 
 .. doctest::
 
-    >>> from text.blob import TextBlob
     >>> b = TextBlob("And now for something completely different.")
     >>> b.parse()
     'And/CC/O/O now/RB/B-ADVP/O for/IN/B-PP/B-PNP something/NN/B-NP/I-PNP completely/RB/B-ADJP/O different/JJ/I-ADJP/O ././O/O'
@@ -305,6 +305,8 @@ You can get a JSON representation of a blob with
 
 Next Steps
 ++++++++++
+
+Want to build your own text classification system? Check out the :ref:`Classifiers Tutorial <classifiers>`.
 
 Want to use a different POS tagger or noun phrase chunker implementation? Check out the :ref:`Advanced Usage <advanced>` guide.
 

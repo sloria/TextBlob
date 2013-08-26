@@ -187,7 +187,7 @@ def _validated_param(obj, name, base_class, default, base_class_name=None):
     return obj if obj else default
 
 def _initialize_models(obj, tokenizer, pos_tagger,
-                            np_extractor, analyzer, parser):
+                            np_extractor, analyzer, parser, classifier):
     """Common initialization between BaseBlob and Blobber classes."""
     # tokenizer may be a textblob or an NLTK tokenizer
     obj.tokenizer = _validated_param(tokenizer, "tokenizer",
@@ -202,6 +202,7 @@ def _initialize_models(obj, tokenizer, pos_tagger,
     obj.analyzer = _validated_param(analyzer, "analyzer",
                                      BaseSentimentAnalyzer, BaseBlob.analyzer)
     obj.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
+    obj.classifier = classifier
 
 @python_2_unicode_compatible
 class BaseBlob(ComparableMixin):
@@ -211,10 +212,16 @@ class BaseBlob(ComparableMixin):
     basic dunder and string methods for making objects like Python strings.
 
     :param text: A string.
-    :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
-    :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
-    :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
-    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
+    :param tokenizer: (optional) A tokenizer instance. If ``None``,
+        defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+    :param np_extractor: (optional) An NPExtractor instance. If ``None``,
+        defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+    :param pos_tagger: (optional) A Tagger instance. If ``None``,
+        defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``,
+        defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+    :param parser: A parser. If ``None``, defaults to
+        :class:`PatternParser <text.parsers.PatternParser>`.
     :param clean_html: (optional) Remove HTML markup from ``text``.
     '''
 
@@ -227,13 +234,13 @@ class BaseBlob(ComparableMixin):
 
     def __init__(self, text, tokenizer=None,
                 pos_tagger=None, np_extractor=None, analyzer=None,
-                parser=None, clean_html=False):
+                parser=None, classifier=None, clean_html=False):
         if type(text) not in string_types:
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
         self.raw = self.string = text if not clean_html else nltk.clean_html(text)
         self.stripped = lowerstrip(self.raw, all=True)
-        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser)
+        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier)
 
     @cached_property
     def words(self):
@@ -262,9 +269,16 @@ class BaseBlob(ComparableMixin):
         '''Parse the text.
 
         :param parser: (optional) A parser instance. If ``None``, defaults to this blob's default parser.
+
+        .. versionadded:: 0.6.0
         '''
         p = parser if parser is not None else self.parser
         return p.parse(self.raw)
+
+    def classify(self):
+        if self.classifier is None:
+            raise NameError("This blob has no classfier. Train one first!")
+        return self.classifier.classify(self.raw)
 
     @cached_property
     def sentiment(self):
@@ -583,7 +597,7 @@ class TextBlob(BaseBlob):
     @cached_property
     def sentences(self):
         '''Return list of :class:`Sentence <Sentence>` objects.'''
-        return TextBlob._create_sentence_objects(self.raw)
+        return self._create_sentence_objects()
 
     @cached_property
     def words(self):
@@ -626,8 +640,7 @@ class TextBlob(BaseBlob):
         '''
         return self.to_json()
 
-    @staticmethod
-    def _create_sentence_objects(blob):
+    def _create_sentence_objects(self):
         '''Returns a list of Sentence objects given
         a list of sentence strings. Attempts to handle sentences that
         have more than one punctuation mark at the end of the sentence.
@@ -635,17 +648,20 @@ class TextBlob(BaseBlob):
         '''
         sent_tokenizer = SentenceTokenizer()
         sentence_objects = []
-        sentences = sent_tokenizer.itokenize(blob)  # Generates raw sentences
+        sentences = sent_tokenizer.itokenize(self.raw)
         char_index = 0  # Keeps track of character index within the blob
         for sent in sentences:
             # Compute the start and end indices of the sentence
             # within the blob
-            start_index = blob.index(sent, char_index)
+            start_index = self.raw.index(sent, char_index)
             char_index += len(sent)
-            # Create a Sentence object and add it the the list
             end_index = start_index + len(sent)
-            sentence_objects.append(Sentence(sent,
-                    start_index=start_index, end_index=end_index))
+            # Sentences share the same models as their parent blob
+            s = Sentence(sent, start_index=start_index, end_index=end_index,
+                tokenizer=self.tokenizer, np_extractor=self.np_extractor,
+                pos_tagger=self.pos_tagger, analyzer=self.analyzer,
+                parser=self.parser, classifier=self.classifier)
+            sentence_objects.append(s)
         return sentence_objects
 
 
@@ -683,7 +699,7 @@ class Sentence(BaseBlob):
 class Blobber(object):
 
     '''A factory for TextBlobs that all share the same tagger,
-    tokenizer, parser, and np_extractor.
+    tokenizer, parser, classifier, and np_extractor.
 
     Usage:
 
@@ -696,11 +712,18 @@ class Blobber(object):
         >>> blob1.pos_tagger is blob2.pos_tagger
         True
 
-    :param tokenizer: A tokenizer. Default: :class:`WordTokenizer <text.tokenizers.WordTokenizer>`.
-    :param pos_tagger: A POS tagger. Default: :class:`PatternTagger <text.taggers.PatternTagger>`.
-    :param np_extractor: A NP extractor. Default: :class:`FastNPExtractor <text.np_extractors.FastNPExtractor>`.
-    :param analyzer: A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
-    :param parser: A parser. If ``None``, defaults to :class:`PatternParser <text.parsers.PatternParser>`.
+    :param tokenizer: (optional) A tokenizer instance. If ``None``,
+        defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+    :param np_extractor: (optional) An NPExtractor instance. If ``None``,
+        defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+    :param pos_tagger: (optional) A Tagger instance. If ``None``,
+        defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``,
+        defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+    :param parser: A parser. If ``None``, defaults to
+        :class:`PatternParser <text.parsers.PatternParser>`.
+
+    .. versionadded:: 0.4.0
     '''
 
     np_extractor = FastNPExtractor()
@@ -710,8 +733,8 @@ class Blobber(object):
     parser = PatternParser()
 
     def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None,
-                analyzer=None, parser=None):
-        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser)
+                analyzer=None, parser=None, classifier=None):
+        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier)
 
     def __call__(self, text):
         '''Return a new TextBlob object with this Blobber's ``np_extractor``,
@@ -720,15 +743,18 @@ class Blobber(object):
         :returns: A new TextBlob.
         '''
         return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
-                        np_extractor=self.np_extractor, analyzer=self.analyzer)
+                        np_extractor=self.np_extractor, analyzer=self.analyzer,
+                        classifier=self.classifier)
 
     def __repr__(self):
+        classifier_name = self.classifier.__class__.__name__ + "()" if self.classifier else "None"
         return ("Blobber(tokenizer={0}(), pos_tagger={1}(), "
-                    "np_extractor={2}(), analyzer={3}(), parser={4}())")\
+                    "np_extractor={2}(), analyzer={3}(), parser={4}(), classifier={5})")\
                     .format(self.tokenizer.__class__.__name__,
                             self.pos_tagger.__class__.__name__,
                             self.np_extractor.__class__.__name__,
                             self.analyzer.__class__.__name__,
-                            self.parser.__class__.__name__)
+                            self.parser.__class__.__name__,
+                            classifier_name)
 
     __str__ = __repr__

@@ -3,6 +3,7 @@ Changelog
 
 0.6.0 (unreleased)
 ------------------
+- Add Naive Bayes classification. New ``text.classifiers`` module, ``TextBlob.classify()``, and ``Sentence.classify()``.
 - Add parsing functionality via the ``TextBlob.parse()`` method. The ``text.parsers`` module currently has one implementation (``PatternParser``).
 - Add spelling correction. This includes the ``TextBlob.correct()`` and ``Word.spellcheck()`` methods.
 - Add ``itokenize()`` method to tokenizers that returns a generator instead of a list of tokens.

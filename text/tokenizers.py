@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-'''Various tokenizer implementations.'''
+'''Various tokenizer implementations.
+
+.. versionadded:: 0.4.0
+'''
 
 from .packages import nltk
 from .utils import strip_punc
@@ -23,11 +26,19 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
     '''
 
     def tokenize(self, text):
-        '''Return a list of tokens (strings) for a body of text.'''
+        '''Return a list of tokens (strings) for a body of text.
+
+        :rtype: list
+        '''
         raise NotImplementedError('Must implement a tokenize(text) method')
 
     def itokenize(self, text, *args, **kwargs):
-        '''Return a generator that generates tokens "on-demand".'''
+        '''Return a generator that generates tokens "on-demand".
+
+        .. versionadded:: 0.6.0
+
+        :rtype: generator
+        '''
         return (t for t in self.tokenize(text, *args, **kwargs))
 
 
@@ -68,6 +79,7 @@ class SentenceTokenizer(BaseTokenizer):
     '''
 
     def tokenize(self, text):
+        '''Return a list of sentences.'''
         ret = []
         try:
             sentences = nltk.tokenize.sent_tokenize(text)  # Initial tokenization

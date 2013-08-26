@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Sentiment analysis implementations."""
+"""Sentiment analysis implementations.
+
+.. versionadded:: 0.5.0
+"""
 
 from .packages import nltk
 from .en import sentiment as pattern_sentiment
