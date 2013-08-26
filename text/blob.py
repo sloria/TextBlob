@@ -224,6 +224,7 @@ class BaseBlob(ComparableMixin):
         defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
         :class:`PatternParser <text.parsers.PatternParser>`.
+    :param classifier: A classifier.
 
     .. versionchanged:: 0.6.0
         ``clean_html`` parameter deprecated, as it was in NLTK.
@@ -602,6 +603,7 @@ class TextBlob(BaseBlob):
     :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
+    :param classsifier: (optional) A classifier.
     """
 
     @cached_property
@@ -732,6 +734,7 @@ class Blobber(object):
         defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
         :class:`PatternParser <text.parsers.PatternParser>`.
+    :param classifier: A classifier.
 
     .. versionadded:: 0.4.0
     '''

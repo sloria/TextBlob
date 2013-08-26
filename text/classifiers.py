@@ -19,7 +19,7 @@ Example Usage:
     >>> cl = NaiveBayesClassifier(train)
     >>> cl.classify("I feel amazing!")
     'pos'
-    >>> blob = TextBlob("The beer is good. But the hangover is horrible.")
+    >>> blob = TextBlob("The beer is good. But the hangover is horrible.", classifier=cl)
     >>> for s in blob.sentences:
     ...     print(s)
     ...     print(s.classify())

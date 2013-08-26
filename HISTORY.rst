@@ -1,11 +1,12 @@
 Changelog
 =========
 
-0.6.0 (unreleased)
+0.6.0 (2013-08-25)
 ------------------
 - Add Naive Bayes classification. New ``text.classifiers`` module, ``TextBlob.classify()``, and ``Sentence.classify()`` methods.
 - Add parsing functionality via the ``TextBlob.parse()`` method. The ``text.parsers`` module currently has one implementation (``PatternParser``).
 - Add spelling correction. This includes the ``TextBlob.correct()`` and ``Word.spellcheck()`` methods.
+- Update NLTK.
 - Backwards incompatible: ``clean_html`` has been deprecated, just as it has in NLTK. Use Beautiful Soup's ``soup.get_text()`` method for HTML-cleaning instead.
 - Slight API change to language translation: if ``from_lang`` isn't specified, attempts to detect the language.
 - Add ``itokenize()`` method to tokenizers that returns a generator instead of a list of tokens.
