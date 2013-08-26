@@ -92,6 +92,7 @@ class BaseClassifier(object):
     def __init__(self, train_set, feature_extractor=basic_extractor):
         self.feature_extractor = feature_extractor
         self.train_set = train_set
+        self.train_features = None
 
     @cached_property
     def classifier(self):
@@ -103,6 +104,10 @@ class BaseClassifier(object):
         raise NotImplementedError('Must implement a "classify" method.')
 
     def extract_features(self, text):
+        '''Extracts features from a body of text.
+
+        :rtype: dictionary of features
+        '''
         try:
             return self.feature_extractor(text, self.train_set)
         except TypeError:
