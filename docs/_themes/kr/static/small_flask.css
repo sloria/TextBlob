@@ -88,3 +88,7 @@ div.body {
 .github {
     display: none;
 }
+
+img {
+    border: 0px 0px;
+}
