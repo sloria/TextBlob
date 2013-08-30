@@ -1,9 +1,13 @@
+import os
 import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
 from text.tokenizers import WordTokenizer
 from text.classifiers import NaiveBayesClassifier, basic_extractor
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+CSV_FILE = os.path.join(HERE, 'data.csv')
 
 class TestNaiveBayesClassifier(unittest.TestCase):
 
@@ -73,6 +77,19 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         cl = NaiveBayesClassifier(self.train_set, custom_extractor)
         cl.classify("Yay! I'm so happy it works.")
         assert_equal(cl.train_features[0][1], 'positive')
+
+    def test_init_with_csv_file(self):
+        cl = NaiveBayesClassifier(CSV_FILE, format="csv")
+        assert_equal(cl.classify("I feel happy this morning"), 'pos')
+
+    def test_init_with_csv_file_without_format_specifier(self):
+        cl = NaiveBayesClassifier(CSV_FILE)
+        assert_equal(cl.classify("I feel happy this morning"), 'pos')
+
+    @attr("py27_only")
+    def test_init_with_bad_format_specifier(self):
+        with assert_raises(ValueError):
+            NaiveBayesClassifier(CSV_FILE, format='unknown')
 
 def custom_extractor(document):
     feats = {}

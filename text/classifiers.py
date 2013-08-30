@@ -33,8 +33,9 @@ Example Usage:
 '''
 from .packages import nltk
 from .tokenizers import WordTokenizer
-from .compat import basestring
+from .compat import basestring, u
 from .decorators import cached_property
+import formats
 
 ##### Basic feature extractors #####
 
@@ -69,7 +70,7 @@ def basic_extractor(document, train_set):
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
         tokens = set((w.lower() for w in document))
-    features = dict([('contains({0})'.format(w), (w in tokens))
+    features = dict([(u('contains({0})').format(w), (w in tokens))
                                             for w in word_features])
     return features
 
@@ -89,9 +90,20 @@ class BaseClassifier(object):
     .. versionadded:: 0.6.0
     '''
 
-    def __init__(self, train_set, feature_extractor=basic_extractor):
+    def __init__(self, train_set, feature_extractor=basic_extractor, format=None):
         self.feature_extractor = feature_extractor
-        self.train_set = train_set
+        if isinstance(train_set, basestring): # train_set is a filename
+            # Attempt to detect file format if "format" isn't specified
+            if not format:
+                format_class = formats.detect(train_set)
+            else:
+                try:
+                    format_class = formats.AVAILABLE[format]
+                except KeyError:
+                    raise ValueError("'{0}' format not supported.".format(format))
+            self.train_set = format_class(train_set).to_iterable()
+        else: # train_set is a list of tuples
+            self.train_set = train_set
         self.train_features = None
 
     @cached_property

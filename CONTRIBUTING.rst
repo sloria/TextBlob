@@ -29,13 +29,17 @@ Setting Up for Local Development
 
     $ git clone git@github.com/yourusername/textblob.git
 
-3. Make your virtualenv and install dependencies. If you have virtualenv and virtualenvwrapper_, run::
+3. It is recommended that you use virtualenv to keep your environment clean. If you have virtualenv and virtualenvwrapper_, run ::
 
     $ mkvirtualenv textblob
     $ cd textblob
-    $ pip install -r dev-requirements.txt
+    $ workon textblob
 
 - If you don't have virtualenv and virtualenvwrapper, you can install both using `virtualenv-burrito`_.
+
+4. Install the development requirements. ::
+
+    $ pip install -r dev-requirements.txt
 
 Creating your own models
 ++++++++++++++++++++++++
@@ -74,16 +78,17 @@ Pull Requests
     $ git checkout -b name-of-feature
 
 2. Commit your changes. Write `good commit messages <http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html>`_.
+::
 
     $ git commit -m "Detailed commit message"
     $ git push origin name-of-feature
 
-2. Before submitting a pull request, check the following:
+3. Before submitting a pull request, check the following:
 
 - If the pull request adds functionality, it should be tested and the docs should be updated.
 - The pull request should work on Python 2.6, 2.7, 3.3, and PyPy. Use ``tox`` to verify that it does.
 
-3. Submit a pull request to the ``sloria:dev`` branch.
+4. Submit a pull request to the ``sloria:dev`` branch.
 
 Running tests
 +++++++++++++
@@ -103,7 +108,6 @@ To skip tests that require internet: ::
 To run tests on Python 2.6, 2.7, and 3.3 virtual environents: ::
 
     $ tox
-
 
 Documentation
 +++++++++++++

@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import sys
 import json
-import string
+import string as pystring
 from collections import defaultdict
 
 from .packages import nltk
@@ -285,6 +285,7 @@ class BaseBlob(ComparableMixin):
         return p.parse(self.raw)
 
     def classify(self):
+        '''Classify the blob using the blob's ``classifier``.'''
         if self.classifier is None:
             raise NameError("This blob has no classfier. Train one first!")
         return self.classifier.classify(self.raw)
@@ -435,7 +436,7 @@ class BaseBlob(ComparableMixin):
         ret = ''
         for i, word in enumerate(corrected):
             # Avoid an extra space at the beginning
-            if word in string.punctuation or i == 0:
+            if word in pystring.punctuation or i == 0:
                 ret = ''.join([ret, word])
             else:
                 ret = ' '.join([ret, word])
@@ -747,7 +748,8 @@ class Blobber(object):
 
     def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None,
                 analyzer=None, parser=None, classifier=None):
-        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier)
+        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer,
+                            parser, classifier)
 
     def __call__(self, text):
         '''Return a new TextBlob object with this Blobber's ``np_extractor``,

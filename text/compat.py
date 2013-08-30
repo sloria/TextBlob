@@ -8,7 +8,7 @@ if PY2:
         return s
     def u(s):
         return unicode(s, "unicode_escape")
-    from itertools import imap
+    from itertools import imap, izip
     import urllib2 as request
     from urllib import quote as urlquote
     text_type = unicode
@@ -17,6 +17,8 @@ if PY2:
     unicode = unicode
     basestring = basestring
     imap = imap
+    izip = izip
+    import unicodecsv as csv
 else:
     def b(s):
         return s.encode("latin-1")
@@ -30,6 +32,8 @@ else:
     unicode = str
     basestring = (str, bytes)
     imap = map
+    izip = zip
+    import csv
 
 # ======= Compatibility layer for __str__ and __repr__ ==========
 
