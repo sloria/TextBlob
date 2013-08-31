@@ -83,6 +83,13 @@ Blobber
     :special-members:
     :exclude-members: __weakref__
 
+File Formats
+------------
+
+..automodule:: text.formats
+    :members:
+    :inherited-members:
+
 Exceptions
 ----------
 .. module:: text.exceptions

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File formats."""
+"""File formats for training and testing data."""
 
 from __future__ import absolute_import
 from text.compat import PY2, csv
@@ -28,17 +28,20 @@ class BaseFormat(object):
         '''
         raise NotImplementedError("Must implement a 'detect' static method.")
 
-class CSV(BaseFormat):
+class DelimitedFormat(BaseFormat):
 
-    """CSV format."""
+    """A general character-delimited format."""
+
+    delimiter = ","
 
     def __init__(self, fname):
-        super(CSV, self).__init__(fname)
+        super(DelimitedFormat, self).__init__(fname)
         with open(fname, 'r') as fp:
             if PY2:
-                reader = csv.reader(fp, encoding=DEFAULT_ENCODING)
+                reader = csv.reader(fp, delimiter=self.delimiter,
+                                    encoding=DEFAULT_ENCODING)
             else:
-                reader = csv.reader(fp)
+                reader = csv.reader(fp, delimiter=self.delimiter)
             self.data = [row for row in reader]
 
     def to_iterable(self):
@@ -53,6 +56,26 @@ class CSV(BaseFormat):
             return True
         except (csv.Error, TypeError):
             return False
+
+
+class CSV(DelimitedFormat):
+
+    '''CSV format. Assumes each row is of the form ``text,label``.
+    ::
+        Today is a good day,pos
+        I hate this car.,pos
+    '''
+    delimiter = ","
+
+    @staticmethod
+    def detect(stream):
+        '''Return True if stream is valid CSV.'''
+        try:
+            csv.Sniffer().sniff(stream, delimiters=",")
+            return True
+        except (csv.Error, TypeError):
+            return False
+
 
 class JSON(BaseFormat):
 
