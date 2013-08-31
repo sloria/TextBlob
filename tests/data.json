@@ -1,0 +1,42 @@
+[
+    {
+        "text": "I love this car",
+        "label": "pos"
+    },
+    {
+        "text": "美丽优于丑陋",
+        "label": "pos"
+    },
+    {
+        "text": "I am so excited about the concert",
+        "label": "pos"
+    },
+    {
+        "text": "I feel great this morning",
+        "label": "pos"
+    },
+    {
+        "text": "He is my best friend",
+        "label": "pos"
+    },
+    {
+        "text": "This view is amazing",
+        "label": "pos"
+    },
+    {
+        "text": "I do not like this car",
+        "label": "neg"
+    },
+    {
+        "text": "I am not looking forward to the concert",
+        "label": "neg"
+    },
+    {
+        "text": "He is my enemy",
+        "label": "neg"
+    },
+    {
+        "text": "I feel tired this morning",
+        "label": "neg"
+    }
+]

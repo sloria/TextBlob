@@ -82,10 +82,14 @@ class BaseClassifier(object):
     minimum, descendant classes must implement a ``classify`` method and have
     a ``classifier`` property.
 
-    :param train_set: The training set, a list of tuples of the form
-        ``(text, classification)`` where text may be either a string or an iterable.
+    :param train_set: The training set, either a list of tuples of the form
+        ``(text, classification)`` or a filename. ``text`` may be either
+        a string or an iterable.
     :param feature_extractor: A feature extractor function that takes one or
         two arguments: ``document`` and ``train_set``.
+    :param format: If ``train_set`` is a filename, the file format, e.g.
+        ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
+        file format.
 
     .. versionadded:: 0.6.0
     '''
@@ -93,18 +97,23 @@ class BaseClassifier(object):
     def __init__(self, train_set, feature_extractor=basic_extractor, format=None):
         self.feature_extractor = feature_extractor
         if isinstance(train_set, basestring): # train_set is a filename
-            # Attempt to detect file format if "format" isn't specified
-            if not format:
-                format_class = formats.detect(train_set)
-            else:
-                try:
-                    format_class = formats.AVAILABLE[format]
-                except KeyError:
-                    raise ValueError("'{0}' format not supported.".format(format))
-            self.train_set = format_class(train_set).to_iterable()
+            self.train_set = self._read_data(train_set, format)
         else: # train_set is a list of tuples
             self.train_set = train_set
         self.train_features = None
+
+    def _read_data(self, dataset, format=None):
+        '''Reads a data file and returns and iterable that can be used
+        as testing or training data.
+        '''
+        # Attempt to detect file format if "format" isn't specified
+        if not format:
+            format_class = formats.detect(dataset)
+        else:
+            if format not in formats.AVAILABLE.keys():
+                raise ValueError("'{0}' format not supported.".format(format))
+            format_class = formats.AVAILABLE[format]
+        return format_class(dataset).to_iterable()
 
     @cached_property
     def classifier(self):
@@ -125,12 +134,20 @@ class BaseClassifier(object):
         except TypeError:
             return self.feature_extractor(text)
 
-    def accuracy(self, test_set):
+    def accuracy(self, test_set, format=None):
         '''Compute the accuracy on a test set.
 
-        :param test_set: A list of tuples of the form ``(text, label)``.
+        :param test_set: A list of tuples of the form ``(text, label)``, or a
+            filename.
+        :param format: If ``test_set`` is a filename, the file format, e.g.
+            ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
+            file format.
         '''
-        test_features = [(self.extract_features(d), c) for d, c in test_set]
+        if isinstance(test_set, basestring):  # test_set is a filename
+            test_data = self._read_data(test_set)
+        else:  # test_set is a list of tuples
+            test_data = test_set
+        test_features = [(self.extract_features(d), c) for d, c in test_data]
         return nltk.classify.accuracy(self.classifier, test_features)
 
 

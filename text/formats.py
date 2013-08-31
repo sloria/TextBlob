@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import
 from text.compat import PY2, csv
+import json
 
 DEFAULT_ENCODING = 'utf-8'
 
@@ -10,10 +11,10 @@ class BaseFormat(object):
 
     """Interface for format classes.
 
-    :param fname: A filename or file-like object.
+    :param f: A filename.
     """
 
-    def __init__(self, fname):
+    def __init__(self, f):
         pass
 
     def to_iterable(self):
@@ -33,18 +34,11 @@ class CSV(BaseFormat):
 
     def __init__(self, fname):
         super(CSV, self).__init__(fname)
-        try:
-            with open(fname, 'r') as fp:
-                if PY2:
-                    reader = csv.reader(fp, encoding=DEFAULT_ENCODING)
-                else:
-                    reader = csv.reader(fp)
-                self.data = [row for row in reader]
-        except TypeError: # fname is a file-like object
+        with open(fname, 'r') as fp:
             if PY2:
-                reader = csv.reader(fname, encoding=DEFAULT_ENCODING)
+                reader = csv.reader(fp, encoding=DEFAULT_ENCODING)
             else:
-                reader = csv.reader(fname)
+                reader = csv.reader(fp)
             self.data = [row for row in reader]
 
     def to_iterable(self):
@@ -60,8 +54,47 @@ class CSV(BaseFormat):
         except (csv.Error, TypeError):
             return False
 
+class JSON(BaseFormat):
+
+    """JSON format.
+
+    Assumes that JSON is formatted as an array of objects with ``text`` and
+    ``label`` properties.
+    ::
+
+        [
+            {
+                "text": "Today is a good day.",
+                "label": "pos"
+            },
+            {
+                "text": "I hate this car.",
+                "label": "neg"
+            }
+        ]
+    """
+
+    def __init__(self, fname):
+        super(JSON, self).__init__(fname)
+        with open(fname, "r") as fp:
+            self.dict = json.load(fp)
+
+    def to_iterable(self):
+        '''Return an iterable object from the JSON data.'''
+        return [(d['text'], d['label']) for d in self.dict]
+
+    @staticmethod
+    def detect(stream):
+        '''Return True if stream is valid JSON.'''
+        try:
+            json.loads(stream)
+            return True
+        except ValueError:
+            return False
+
 AVAILABLE = {
-    'csv': CSV
+    'csv': CSV,
+    'json': JSON
 }
 
 def detect(filename, max_read=1024):
