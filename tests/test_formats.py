@@ -5,11 +5,13 @@ import logging
 from nose.tools import *  # PEP8 asserts
 
 from text import formats
+from text.compat import unicode
 
 logging.basicConfig(level=logging.DEBUG)
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, 'data.csv')
 JSON_FILE = os.path.join(HERE, "data.json")
+TSV_FILE = os.path.join(HERE, "data.tsv")
 
 class TestFormats(unittest.TestCase):
 
@@ -25,8 +27,9 @@ class TestFormats(unittest.TestCase):
         assert_equal(format, formats.JSON)
 
     def test_available(self):
-        assert_in('csv', formats.AVAILABLE.keys())
-        assert_in('json', formats.AVAILABLE.keys())
+        assert_true('csv' in formats.AVAILABLE.keys())
+        assert_true('json' in formats.AVAILABLE.keys())
+        assert_true('tsv' in formats.AVAILABLE.keys())
 
 class TestCSV(unittest.TestCase):
 
@@ -37,6 +40,16 @@ class TestCSV(unittest.TestCase):
         with open(CSV_FILE, 'r') as fp:
             stream = fp.read()
             assert_true(formats.CSV.detect(stream))
+
+class TestTSV(unittest.TestCase):
+
+    def test_read_from_filename(self):
+        data = formats.TSV(TSV_FILE)
+
+    def test_detect(self):
+        with open(TSV_FILE, 'r') as fp:
+            stream = fp.read()
+            assert_true(formats.TSV.detect(stream))
 
 class TestJSON(unittest.TestCase):
 

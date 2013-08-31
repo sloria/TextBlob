@@ -45,12 +45,12 @@ class DelimitedFormat(BaseFormat):
             self.data = [row for row in reader]
 
     def to_iterable(self):
-        '''Return an iterable object from the CSV data.'''
+        '''Return an iterable object from the data.'''
         return self.data
 
     @staticmethod
     def detect(stream):
-        '''Return True if stream is valid CSV.'''
+        '''Return True if stream is valid.'''
         try:
             csv.Sniffer().sniff(stream)
             return True
@@ -76,6 +76,21 @@ class CSV(DelimitedFormat):
         except (csv.Error, TypeError):
             return False
 
+class TSV(DelimitedFormat):
+
+    '''TSV format. Assumes each row is of the form ``text\tlabel``.
+    '''
+
+    delimiter = "\t"
+
+    @staticmethod
+    def detect(stream):
+        '''Return True if stream is valid CSV.'''
+        try:
+            csv.Sniffer().sniff(stream, delimiters="\t")
+            return True
+        except (csv.Error, TypeError):
+            return False
 
 class JSON(BaseFormat):
 
@@ -117,13 +132,14 @@ class JSON(BaseFormat):
 
 AVAILABLE = {
     'csv': CSV,
-    'json': JSON
+    'json': JSON,
+    'tsv': TSV
 }
 
 def detect(filename, max_read=1024):
     '''Attempt to detect a file's format, trying each of the supported
     formats. Return the format class that was detected. If no format is
-    detected, return None.
+    detected, return ``None``.
     '''
     with open(filename, 'r') as fp:
         for Format in AVAILABLE.values():

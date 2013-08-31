@@ -10,6 +10,8 @@ from text.compat import unicode
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, 'data.csv')
 JSON_FILE = os.path.join(HERE, "data.json")
+TSV_FILE = os.path.join(HERE, "data.tsv")
+
 
 class TestNaiveBayesClassifier(unittest.TestCase):
 
@@ -111,6 +113,12 @@ class TestNaiveBayesClassifier(unittest.TestCase):
     def test_accuracy_on_json_file(self):
         a = self.classifier.accuracy(JSON_FILE)
         assert_true(isinstance(a, float))
+
+    def test_init_with_tsv_file(self):
+        cl = NaiveBayesClassifier(TSV_FILE)
+        assert_equal(cl.classify("I feel happy this morning"), 'pos')
+        training_sentence = cl.train_set[0][0]
+        assert_true(isinstance(training_sentence, unicode))
 
     @attr("py27_only")
     def test_init_with_bad_format_specifier(self):

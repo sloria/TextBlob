@@ -86,7 +86,7 @@ Blobber
 File Formats
 ------------
 
-..automodule:: text.formats
+.. automodule:: text.formats
     :members:
     :inherited-members:
 
