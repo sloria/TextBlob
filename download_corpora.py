@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''Downloads the necessary NLTK models and corpora.'''
+'''Downloads the necessary NLTK models and corpora required to support
+all of TextBlob's features. Modify for your own needs.
+'''
 from text.packages import nltk
 
 REQUIRED_CORPORA = [
@@ -9,6 +11,7 @@ REQUIRED_CORPORA = [
     'conll2000',
     'maxent_treebank_pos_tagger',
     'movie_reviews',
+    'wordnet'
 ]
 
 def main():

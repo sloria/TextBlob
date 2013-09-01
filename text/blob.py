@@ -21,6 +21,7 @@ from .sentiments import BaseSentimentAnalyzer, PatternAnalyzer
 from .parsers import BaseParser, PatternParser
 from .translate import Translator
 from .en import suggest
+from .exceptions import MissingCorpusException
 
 
 class Word(unicode):
@@ -90,6 +91,16 @@ class Word(unicode):
         .. versionadded:: 0.6.0
         '''
         return Word(self.spellcheck()[0][0])
+
+    @cached_property
+    def lemma(self):
+        '''Return the lemma for a word using WordNet's morphy function.'''
+        lemmatizer = nltk.stem.WordNetLemmatizer()
+        try:
+            return lemmatizer.lemmatize(self.string)
+        except LookupError as err:
+            print(err)
+            raise MissingCorpusException()
 
 
 class WordList(list):
@@ -167,11 +178,15 @@ class WordList(list):
 
     def singularize(self):
         '''Return the single version of each word in this WordList.'''
-        return [word.singularize() for word in self]
+        return self.__class__([word.singularize() for word in self])
 
     def pluralize(self):
         '''Return the plural version of each word in this WordList.'''
-        return [word.pluralize() for word in self]
+        return self.__class__([word.pluralize() for word in self])
+
+    def lemmatize(self):
+        '''Return the lemma of each word in this WordList.'''
+        return self.__class__([word.lemma for word in self])
 
 def _validated_param(obj, name, base_class, default, base_class_name=None):
     '''Validates a parameter passed to __init__. Makes sure that obj is

@@ -42,6 +42,36 @@ Now we'll create a Naive Bayes classifier, passing the training data into the co
     >>> from text.classifiers import NaiveBayesClassifier
     >>> cl = NaiveBayesClassifier(train)
 
+.. _data_files:
+
+Loading Data from Files
+-----------------------
+
+You can also load data from common file formats including CSV, JSON, and TSV.
+
+CSV files should be formatted like so:
+::
+
+    I love this sandwich.,pos
+    This is an amazing place!,pos
+    I do not like this restaurant,neg
+
+JSON files should be formatted like so:
+
+::
+
+    [
+        {"text": "I love this sandwich.", "label": "pos"},
+        {"text": "This is an amazing place!", "label": "pos"},
+        {"text": "I do not like this restaurant", "label": "neg"}
+    ]
+
+You can then pass the filename into the constructor.
+
+::
+
+    >>> cl = NaiveBayesClassifier("train.json", format="json")
+
 Classifying Text
 ================
 
@@ -99,6 +129,10 @@ To compute the accuracy on our test set, use the ``accuracy(test_data)`` method.
     >>> cl.accuracy(test)
     0.8333333333333334
 
+.. admonition:: Note
+
+    You can also pass in a filename into the ``accuracy`` method. The file can be in any of the formats listed in the :ref:`Loading Data <data_files>` section.
+
 Use the ``show_informative_features()`` method to display a listing of the most informative features.
 
 .. doctest::
@@ -142,27 +176,27 @@ For example, let's create a feature extractor that just uses the first and last 
 
 .. doctest::
 
-    >>> def last_word_extractor(document):
+    >>> def end_word_extractor(document):
     ...     tokens = document.split()
     ...     first_word, last_word = tokens[0], tokens[-1]
     ...     feats = {}
     ...     feats["first({0})".format(first_word)] = True
     ...     feats["last({0})".format(last_word)] = False
     ...     return feats
-    >>> last_word_extractor("I feel happy")
+    >>> end_word_extractor("I feel happy")
     {'first(I)': True, 'last(happy)': False}
 
 We can then use the feature extractor in a classifier by passing it as the second argument of the constructor.
 
 .. doctest::
 
-    >>> cl2 = NaiveBayesClassifier(test, feature_extractor=last_word_extractor)
+    >>> cl2 = NaiveBayesClassifier(test, feature_extractor=end_word_extractor)
     >>> blob = TextBlob("I'm excited to try my new classifier.", classifier=cl2)
     >>> blob.classify()
     'pos'
 
 Next Steps
-++++++++++
+==========
 
 Be sure to check out the :ref:`API Reference <api_classifiers>` for the :ref:`classifiers module <api_classifiers>`.
 

@@ -68,7 +68,7 @@ Features
 - Word and phrase frequencies
 - Parsing
 - `n`-grams
-- Word inflection (pluralization and singularization)
+- Word inflection (pluralization and singularization) and lemmatization
 - Spelling correction
 - JSON serialization
 - Easily swap models, or create your own

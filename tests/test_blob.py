@@ -72,12 +72,16 @@ class WordListTest(TestCase):
 
     def test_singularize(self):
         wl = tb.WordList(['dogs', 'cats', 'buffaloes', 'men', 'mice'])
-        assert_equal(wl.singularize(), ['dog', 'cat', 'buffalo', 'man', 'mouse'
-                     ])
+        assert_equal(wl.singularize(), tb.WordList(['dog', 'cat', 'buffalo', 'man', 'mouse'
+                     ]))
 
     def test_pluralize(self):
         wl = tb.WordList(['dog', 'cat', 'buffalo'])
-        assert_equal(wl.pluralize(), ['dogs', 'cats', 'buffaloes'])
+        assert_equal(wl.pluralize(), tb.WordList(['dogs', 'cats', 'buffaloes']))
+
+    def test_lemmatize(self):
+        wl = tb.WordList(["cat", "dogs", "oxen"])
+        assert_equal(wl.lemmatize(), tb.WordList(['cat', 'dog', 'ox']))
 
     def test_upper(self):
         wl = tb.WordList(self.words)
@@ -829,6 +833,12 @@ class WordTest(TestCase):
         correct = w.correct()
         assert_equal(correct, tb.Word('spelling'))
         assert_true(isinstance(correct, tb.Word))
+
+    def test_lemma(self):
+        w = tb.Word("cars")
+        assert_equal(w.lemma, "car")
+        w = tb.Word("wolves")
+        assert_equal(w.lemma, "wolf")
 
 
 class BlobberTest(TestCase):

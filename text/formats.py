@@ -14,7 +14,7 @@ class BaseFormat(object):
     :param f: A filename.
     """
 
-    def __init__(self, f):
+    def __init__(self, fname):
         pass
 
     def to_iterable(self):

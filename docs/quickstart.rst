@@ -80,8 +80,8 @@ You can break TextBlobs into words or sentences.
 For more advanced tokenization, see the :ref:`Advanced Usage <advanced>` guide.
 
 
-Words and Inflection
---------------------
+Words Inflection and Lemmatization
+----------------------------------
 
 Each word in ``TextBlob.words`` or ``Sentence.words`` is a ``Word``
 object (a subclass of ``unicode``) with useful methods, e.g. for word inflection.
@@ -96,6 +96,14 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     >>> sentence.words[-1].pluralize()
     'levels'
 
+Words can be lemmatized by accessing the ``lemma`` property.
+
+.. doctest::
+
+    >>> from text.blob import Word
+    >>> w = Word("octopi")
+    >>> w.lemma
+    'octopus'
 
 
 WordLists

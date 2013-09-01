@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.1 (unreleased)
+------------------
+- Classifiers can be trained and tested on CSV, JSON, or TSV data.
+- Add basic WordNet lemmatization via the ``Word.lemma`` property.
+
 0.6.0 (2013-08-25)
 ------------------
 - Add Naive Bayes classification. New ``text.classifiers`` module, ``TextBlob.classify()``, and ``Sentence.classify()`` methods.
