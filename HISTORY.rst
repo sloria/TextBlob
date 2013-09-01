@@ -5,6 +5,7 @@ Changelog
 ------------------
 - Classifiers can be trained and tested on CSV, JSON, or TSV data.
 - Add basic WordNet lemmatization via the ``Word.lemma`` property.
+- ``WordList.pluralize()`` and ``WordList.singularize()`` methods return ``WordList`` objects.
 
 0.6.0 (2013-08-25)
 ------------------

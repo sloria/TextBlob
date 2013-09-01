@@ -117,7 +117,7 @@ Similarly, ``WordLists`` are just Python lists with additional methods.
     >>> animals.words
     WordList([u'cat', u'dog', u'octopus'])
     >>> animals.words.pluralize()
-    ['cats', 'dogs', 'octopodes']
+    WordList([u'cats', u'dogs', u'octopodes'])
 
 Spelling Correction
 -------------------
