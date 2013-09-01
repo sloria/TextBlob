@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6.1 (unreleased)
+0.6.1 (2013-09-01)
 ------------------
 - Classifiers can be trained and tested on CSV, JSON, or TSV data.
 - Add basic WordNet lemmatization via the ``Word.lemma`` property.
