@@ -9,8 +9,6 @@ from text.compat import unicode
 @attr('requires_internet')
 class TestTranslator(unittest.TestCase):
 
-    '''An example unit test case.'''
-
     def setUp(self):
         self.translator = Translator()
         self.sentence = "This is a sentence."

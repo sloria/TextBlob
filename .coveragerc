@@ -1,0 +1,10 @@
+[run]
+include =
+    text*
+omit =
+    *nltk*
+    *yaml*
+    *unicodecsv*
+    text/en.py
+    text/text.py
+    text/inflect.py

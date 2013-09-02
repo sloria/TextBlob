@@ -105,6 +105,10 @@ To skip tests that require internet: ::
 
     $ python run_tests no-internet
 
+To get test coverage reports: ::
+
+    $ python run_tests cover
+
 To run tests on Python 2.6, 2.7, and 3.3 virtual environents: ::
 
     $ tox

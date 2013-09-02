@@ -31,6 +31,8 @@ def get_argv():
     if "force-all" in sys.argv:
         # Don't exclude any tests
         return args
+    if "cover" in sys.argv:
+        args += ["--with-coverage", "--cover-html"]
     if PY26:
         # Exclude tests that don't work on python2.6
         attr_conditions.append("not py27_only")
