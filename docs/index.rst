@@ -49,7 +49,7 @@ Features
 - Noun phrase extraction
 - Part-of-speech tagging
 - Sentiment analysis
-- Classification (Naive Bayes)
+- Classification (Naive Bayes, Decision Tree)
 - Language translation and detection powered by Google Translate
 - Tokenization (splitting text into words and sentences)
 - Word and phrase frequencies

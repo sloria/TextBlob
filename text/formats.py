@@ -62,6 +62,7 @@ class CSV(DelimitedFormat):
 
     '''CSV format. Assumes each row is of the form ``text,label``.
     ::
+
         Today is a good day,pos
         I hate this car.,pos
     '''
@@ -101,14 +102,8 @@ class JSON(BaseFormat):
     ::
 
         [
-            {
-                "text": "Today is a good day.",
-                "label": "pos"
-            },
-            {
-                "text": "I hate this car.",
-                "label": "neg"
-            }
+            {"text": "Today is a good day.", "label": "pos"},
+            {"text": "I hate this car.", "label": "neg"}
         ]
     """
 

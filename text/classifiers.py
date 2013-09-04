@@ -137,7 +137,17 @@ class BaseClassifier(object):
 
 class NLTKClassifier(BaseClassifier):
 
-    """An abstract class that wraps around the nltk.classify module."""
+    """An abstract class that wraps around the nltk.classify module.
+
+    Expects that descendant classes include a class variable ``nltk_class``
+    which is the class in the nltk.classify module to be wrapped.
+
+    Example: ::
+
+        class SVMClassifier(NLTKClassifier):
+            nltk_class = nltk.classify.svm.SvmClassifier
+
+    """
 
     nltk_class = None # This must be a class within nltk.classify
 
@@ -198,10 +208,14 @@ class NaiveBayesClassifier(NLTKClassifier):
     '''A classifier based on the Naive Bayes algorithm, as implemented in
     NLTK.
 
-    :param train_set: The training set, a list of tuples of the form
-        ``(text, classification)`` where text may be either a string or an iterable.
-    :param feature_extractor: (optional) A feature extractor function that
-        must take two arguments: ``document`` and ``train_set``.
+    :param train_set: The training set, either a list of tuples of the form
+        ``(text, classification)`` or a filename. ``text`` may be either
+        a string or an iterable.
+    :param feature_extractor: A feature extractor function that takes one or
+        two arguments: ``document`` and ``train_set``.
+    :param format: If ``train_set`` is a filename, the file format, e.g.
+        ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
+        file format.
 
     .. versionadded:: 0.6.0
     '''
@@ -238,4 +252,34 @@ class NaiveBayesClassifier(NLTKClassifier):
         classifier.
         '''
         return self.classifier.show_most_informative_features(*args, **kwargs)
+
+class DecisionTreeClassifier(NLTKClassifier):
+
+    '''A classifier based on the decision tree algorithm, as implemented in
+    NLTK
+
+    :param train_set: The training set, either a list of tuples of the form
+        ``(text, classification)`` or a filename. ``text`` may be either
+        a string or an iterable.
+    :param feature_extractor: A feature extractor function that takes one or
+        two arguments: ``document`` and ``train_set``.
+    :param format: If ``train_set`` is a filename, the file format, e.g.
+        ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
+        file format.
+    '''
+
+    nltk_class = nltk.classify.decisiontree.DecisionTreeClassifier
+
+    def pprint(self, *args, **kwargs):
+        '''Return a string contaiing a pretty-printed version of this decision
+        tree. Each line in the string corresponds to a single decision tree node
+        or leaf, and indentation is used to display the structure of the tree.
+        '''
+        return self.classifier.pp(*args, **kwargs)
+
+    def pseudocode(self, *args, **kwargs):
+        '''Return a string representation of this decision tree that expresses
+        the decisions it makes as a nested set of pseudocode if statements.
+        '''
+        return self.classifier.pseudocode(*args, **kwargs)
 

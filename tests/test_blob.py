@@ -79,6 +79,7 @@ class WordListTest(TestCase):
         wl = tb.WordList(['dog', 'cat', 'buffalo'])
         assert_equal(wl.pluralize(), tb.WordList(['dogs', 'cats', 'buffaloes']))
 
+    @attr('slow')
     def test_lemmatize(self):
         wl = tb.WordList(["cat", "dogs", "oxen"])
         assert_equal(wl.lemmatize(), tb.WordList(['cat', 'dog', 'ox']))
@@ -841,6 +842,7 @@ class WordTest(TestCase):
         assert_equal(correct, tb.Word('spelling'))
         assert_true(isinstance(correct, tb.Word))
 
+    @attr('slow')
     def test_lemma(self):
         w = tb.Word("cars")
         assert_equal(w.lemma, "car")
