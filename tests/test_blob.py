@@ -367,6 +367,13 @@ is managed by the non-profit Python Software Foundation.'''
     def test_tags(self):
         assert_equal(self.blob.tags, self.blob.pos_tags)
 
+    def test_tagging_nonascii(self):
+        b = tb.TextBlob('Learn how to make the five classic French mother sauces: '
+                        'Béchamel, Tomato Sauce, Espagnole, Velouté and Hollandaise.')
+        tags = b.tags
+        assert_true(isinstance(tags[0][0], unicode))
+
+
     def test_pos_tags_includes_one_letter_articles(self):
         blob = tb.TextBlob("This is a sentence.")
         assert_equal(blob.pos_tags[2][0], 'a')

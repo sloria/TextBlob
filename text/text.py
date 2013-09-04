@@ -1248,7 +1248,7 @@ class Parser:
                 s[i][j] = "/".join(s[i][j])
             s[i] = " ".join(s[i])
         s = "\n".join(s)
-        s = TaggedString(s, format, language=kwargs.get("language", self.language))
+        s = TaggedString(unicode(s), format, language=kwargs.get("language", self.language))
         return s
 
 
@@ -1259,7 +1259,7 @@ class Parser:
 
 TOKENS = "tokens"
 
-class TaggedString(str):
+class TaggedString(unicode):
 
     def __new__(self, string, tags=["word"], language=None):
         """ Unicode string with tags and language attributes.
@@ -1272,7 +1272,7 @@ class TaggedString(str):
         if isinstance(string, list):
             string = [[[x.replace("/", "&slash;") for x in token] for token in s] for s in string]
             string = "\n".join(" ".join("/".join(token) for token in s) for s in string)
-        s = str.__new__(self, string)
+        s = unicode.__new__(self, string)
         s.tags = list(tags)
         s.language = language
         return s
@@ -1282,12 +1282,12 @@ class TaggedString(str):
             where each token is a list of word + tags.
         """
         if sep != TOKENS:
-            return str.split(self, sep)
+            return unicode.split(self, sep)
         if len(self) == 0:
             return []
         return [[[x.replace("&slash;", "/") for x in token.split("/")]
             for token in sentence.split(" ")]
-                for sentence in str.split(self, "\n")]
+                for sentence in unicode.split(self, "\n")]
 
 #### SPELLING CORRECTION ###########################################################################
 # Based on: Peter Norvig, "How to Write a Spelling Corrector", http://norvig.com/spell-correct.html

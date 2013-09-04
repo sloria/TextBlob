@@ -284,7 +284,8 @@ class BaseBlob(ComparableMixin):
     def tokenize(self, tokenizer=None):
         '''Return a list of tokens, using ``tokenizer``.
 
-        :param tokenizer: (optional) A tokenizer object. If None, defaults to this blob's default tokenizer.
+        :param tokenizer: (optional) A tokenizer object. If None, defaults to
+            this blob's default tokenizer.
         '''
         t = tokenizer if tokenizer is not None else self.tokenizer
         return WordList(t.tokenize(self.raw))
@@ -292,7 +293,8 @@ class BaseBlob(ComparableMixin):
     def parse(self, parser=None):
         '''Parse the text.
 
-        :param parser: (optional) A parser instance. If ``None``, defaults to this blob's default parser.
+        :param parser: (optional) A parser instance. If ``None``, defaults to
+            this blob's default parser.
 
         .. versionadded:: 0.6.0
         '''
@@ -615,11 +617,15 @@ class TextBlob(BaseBlob):
     containing sentences). Inherits from :class:`BaseBlob <BaseBlob>`.
 
     :param text: A string.
-    :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
-    :param np_extractor: (optional) An NPExtractor instance. If ``None``, defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
-    :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
-    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to :class:`PatternAnalyzer` <text.sentiments.PatternAnalyzer>`.
-    :param classsifier: (optional) A classifier.
+    :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to
+        :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+    :param np_extractor: (optional) An NPExtractor instance. If ``None``,
+        defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+    :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to
+        :class:`PatternTagger <text.taggers.PatternTagger>`.
+    :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to
+        :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+    :param classifier: (optional) A classifier.
     """
 
     @cached_property
