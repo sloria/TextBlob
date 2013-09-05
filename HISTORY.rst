@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6.2 (unreleased)
+0.6.2 (2013-09-05)
 ------------------
 - Fix bug that resulted in a ``UnicodeEncodeError`` when tagging text with non-ascii characters.
 - Add ``DecisionTreeClassifier``.
