@@ -54,8 +54,11 @@ try:
 except ImportError:
     import pickle
 
+# these imports should be more specific:
 import nltk
 from nltk import compat
+
+from nltk.compat import py3_data
 
 ######################################################################
 # Search Path
@@ -268,6 +271,7 @@ class FileSystemPathPointer(PathPointer,compat.text_type):
     A path pointer that identifies a file which can be accessed
     directly via a given absolute path.
     """
+    @py3_data
     def __init__(self, _path):
         """
         Create a new path pointer for the given absolute path.
@@ -324,6 +328,7 @@ class BufferedGzipFile(GzipFile):
     """
     SIZE = 2 * 2**20
 
+    @py3_data
     def __init__(self, filename=None, mode=None, compresslevel=9,
                  fileobj=None, **kwargs):
         """
@@ -428,6 +433,7 @@ class ZipFilePathPointer(PathPointer):
     A path pointer that identifies a file contained within a zipfile,
     which can be accessed by reading that zipfile.
     """
+    @py3_data
     def __init__(self, zipfile, entry=''):
         """
         Create a new path pointer pointing at the specified entry
@@ -879,6 +885,7 @@ def _open(resource_url):
 # decorator to LazyLoader, this is resource.__class__ responsibility.
 
 class LazyLoader(object):
+    @py3_data
     def __init__(self, _path):
         self._path = _path
 
@@ -917,6 +924,7 @@ class OpenOnDemandZipFile(zipfile.ZipFile):
     file-like object (to allow re-opening).  ``OpenOnDemandZipFile`` is
     read-only (i.e. ``write()`` and ``writestr()`` are disabled.
     """
+    @py3_data
     def __init__(self, filename):
         if not isinstance(filename, compat.string_types):
             raise TypeError('ReopenableZipFile filename must be a string')
@@ -964,6 +972,7 @@ class SeekableUnicodeStreamReader(object):
     """
     DEBUG = True #: If true, then perform extra sanity checks.
 
+    @py3_data
     def __init__(self, stream, encoding, errors='strict'):
         # Rewind the stream to its beginning.
         stream.seek(0)

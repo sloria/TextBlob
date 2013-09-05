@@ -40,6 +40,9 @@ class TestCSV(unittest.TestCase):
         with open(CSV_FILE, 'r') as fp:
             stream = fp.read()
             assert_true(formats.CSV.detect(stream))
+        with open(JSON_FILE, 'r') as fp:
+            stream = fp.read()
+            assert_false(formats.CSV.detect(stream))
 
 class TestTSV(unittest.TestCase):
 
@@ -51,6 +54,10 @@ class TestTSV(unittest.TestCase):
             stream = fp.read()
             assert_true(formats.TSV.detect(stream))
 
+        with open(CSV_FILE, 'r') as fp:
+            stream = fp.read()
+            assert_false(formats.TSV.detect(stream))
+
 class TestJSON(unittest.TestCase):
 
     def test_read_from_filename(self):
@@ -60,6 +67,9 @@ class TestJSON(unittest.TestCase):
         with open(JSON_FILE, 'r') as fp:
             stream = fp.read()
             assert_true(formats.JSON.detect(stream))
+        with open(CSV_FILE, 'r') as fp:
+            stream = fp.read()
+            assert_false(formats.JSON.detect(stream))
 
     def test_to_iterable(self):
         d = formats.JSON(JSON_FILE)

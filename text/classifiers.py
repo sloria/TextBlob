@@ -124,6 +124,14 @@ class BaseClassifier(object):
         '''Classifies a string of text.'''
         raise NotImplementedError('Must implement a "classify" method.')
 
+    def train(self, labeled_featureset):
+        '''Trains the classifier.'''
+        raise NotImplementedError('Must implement a "train" method.')
+
+    def labels(self):
+        '''Returns an iterable containing the possible labels.'''
+        raise NotImplementedError('Must implement a "labels" method.')
+
     def extract_features(self, text):
         '''Extracts features from a body of text.
 
@@ -144,22 +152,49 @@ class NLTKClassifier(BaseClassifier):
 
     Example: ::
 
-        class SVMClassifier(NLTKClassifier):
+        class MyClassifier(NLTKClassifier):
             nltk_class = nltk.classify.svm.SvmClassifier
 
     """
 
     nltk_class = None # This must be a class within nltk.classify
 
+    def __init__(self, train_set,
+                 feature_extractor=basic_extractor, format=None):
+        super(NLTKClassifier, self).__init__(train_set, feature_extractor, format)
+        self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
+
     @cached_property
     def classifier(self):
         '''The classifier.'''
-        self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
         try:
-            return self.nltk_class.train(self.train_features)
+            return self.train()
         except AttributeError: # nltk_class has not been defined
             raise ValueError("NLTKClassifier must have a nltk_class"
                             " variable that is not None.")
+
+    def train(self, *args, **kwargs):
+        '''Train the classifier with a labeled feature set and return
+        the classifier. Takes the same arguments as the wrapped NLTK class.
+        This method is implicitly called when calling ``classify`` or
+        ``accuracy`` methods and is included only to allow passing in arguments
+        to the ``train`` method of the wrapped NLTK class.
+
+        .. versionadded:: 0.6.2
+
+        :rtype: A classifier
+        '''
+        try:
+            self.classifier = self.nltk_class.train(self.train_features,
+                                                    *args, **kwargs)
+            return self.classifier
+        except AttributeError:
+            raise ValueError("NLTKClassifier must have a nltk_class"
+                            " variable that is not None.")
+
+    def labels(self):
+        '''Return an iterable of possible labels.'''
+        return self.classifier.labels()
 
     def classify(self, text):
         '''Classifies the text.
@@ -185,7 +220,7 @@ class NLTKClassifier(BaseClassifier):
         test_features = [(self.extract_features(d), c) for d, c in test_data]
         return nltk.classify.accuracy(self.classifier, test_features)
 
-    def update(self, new_data):
+    def update(self, new_data, *args, **kwargs):
         '''Update the classifier with new training data and re-trains the
         classifier.
 
@@ -196,7 +231,8 @@ class NLTKClassifier(BaseClassifier):
         self.train_features = [(self.extract_features(d), c)
                                 for d, c in self.train_set]
         try:
-            self.classifier = self.nltk_class.train(self.train_features)
+            self.classifier = self.nltk_class.train(self.train_features,
+                                                    *args, **kwargs)
         except AttributeError: # Descendant has not defined nltk_class
             raise ValueError("NLTKClassifier must have a nltk_class"
                             " variable that is not None.")
@@ -244,12 +280,16 @@ class NaiveBayesClassifier(NLTKClassifier):
     def informative_features(self, *args, **kwargs):
         '''Return the most informative features as a list of tuples of the
         form ``(feature_name, feature_value)``.
+
+        :rtype: list
         '''
         return self.classifier.most_informative_features(*args, **kwargs)
 
     def show_informative_features(self, *args, **kwargs):
         '''Displays a listing of the most informative features for this
         classifier.
+
+        :rtype: None
         '''
         return self.classifier.show_most_informative_features(*args, **kwargs)
 
@@ -266,6 +306,8 @@ class DecisionTreeClassifier(NLTKClassifier):
     :param format: If ``train_set`` is a filename, the file format, e.g.
         ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
         file format.
+
+    .. versionadded:: 0.6.2
     '''
 
     nltk_class = nltk.classify.decisiontree.DecisionTreeClassifier
@@ -274,12 +316,16 @@ class DecisionTreeClassifier(NLTKClassifier):
         '''Return a string contaiing a pretty-printed version of this decision
         tree. Each line in the string corresponds to a single decision tree node
         or leaf, and indentation is used to display the structure of the tree.
+
+        :rtype: str
         '''
         return self.classifier.pp(*args, **kwargs)
 
     def pseudocode(self, *args, **kwargs):
         '''Return a string representation of this decision tree that expresses
         the decisions it makes as a nested set of pseudocode if statements.
+
+        :rtype: str
         '''
         return self.classifier.pseudocode(*args, **kwargs)
 

@@ -4,7 +4,8 @@ from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
 from text.tokenizers import WordTokenizer
-from text.classifiers import NaiveBayesClassifier, DecisionTreeClassifier, basic_extractor
+from text.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
+                                basic_extractor, NLTKClassifier)
 from text.compat import unicode
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -31,6 +32,28 @@ test_set = [('I feel happy this morning', 'positive'),
                 ('My house is not great.', 'negative'),
                 ('Your song is annoying.', 'negative')]
 
+class BadNLTKClassifier(NLTKClassifier):
+
+    '''An NLTK classifier without ``nltk_class`` defined. Oops!'''
+    pass
+
+class TestNLTKClassifier(unittest.TestCase):
+
+    def setUp(self):
+        self.bad_classifier = BadNLTKClassifier(train_set)
+
+    @attr("py27_only")
+    def test_raises_value_error_without_nltk_class(self):
+        with assert_raises(ValueError):
+            self.bad_classifier.classifier
+
+        with assert_raises(ValueError):
+            self.bad_classifier.train(train_set)
+
+        with assert_raises(ValueError):
+            self.bad_classifier.update([("This is no good.", 'negative')])
+
+
 class TestNaiveBayesClassifier(unittest.TestCase):
 
     def setUp(self):
@@ -52,6 +75,17 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         assert_equal(res, 'positive')
         assert_equal(len(self.classifier.train_set), len(train_set))
 
+    def test_classify_a_list_of_words(self):
+        res = self.classifier.classify(["I", "feel", "happy", "this", "morning"])
+        assert_equal(res, "positive")
+
+    def test_train_from_lists_of_words(self):
+        # classifier can be trained on lists of words instead of strings
+        train = [(doc.split(), label) for doc, label in train_set]
+        classifier = NaiveBayesClassifier(train)
+        assert_equal(classifier.accuracy(test_set),
+                        self.classifier.accuracy(test_set))
+
     def test_prob_classify(self):
         res = self.classifier.prob_classify("I feel happy this morning")
         assert_equal(res.max(), "positive")
@@ -69,6 +103,11 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         res2 = self.classifier.prob_classify("lorem ipsum")
         assert_true(res2.prob("positive") > res1.prob("positive"))
         assert_equal(original_length + 1, new_length)
+
+    def test_labels(self):
+        labels = self.classifier.labels()
+        assert_true("positive" in labels)
+        assert_true("negative" in labels)
 
     def test_show_informative_features(self):
         feats = self.classifier.show_informative_features()

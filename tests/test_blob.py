@@ -326,7 +326,10 @@ is managed by the non-profit Python Software Foundation.'''
 
         assert_true(blob1 == blob2)  # test ==
         assert_true(blob1 > blob3)  # test >
+        assert_true(blob1 >= blob3) # test >=
         assert_true(blob3 < blob2)  # test <
+        assert_true(blob3 <= blob2) # test <=
+
 
     def test_words(self):
         blob = tb.TextBlob('Beautiful is better than ugly. '
