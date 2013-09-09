@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.3 (unreleased)
+------------------
+- Minor word tokenization fix: Words that stem from a contraction will still have an apostrophe, e.g. ``"Let's" => ["Let", "'s"]``. This makes it easier to identify contractions.
+
 0.6.2 (2013-09-05)
 ------------------
 - Fix bug that resulted in a ``UnicodeEncodeError`` when tagging text with non-ascii characters.

@@ -109,7 +109,7 @@ To get test coverage reports: ::
 
     $ python run_tests cover
 
-To run tests on Python 2.6, 2.7, and 3.3 virtual environents: ::
+To run tests on Python 2.6, 2.7, and 3.3 virtual environments (must have each interpreter installed): ::
 
     $ tox
 

@@ -2,9 +2,15 @@
 include =
     text*
 omit =
+    # Vendorized dependencied
     *nltk*
     *yaml*
     *unicodecsv*
+    # Pattern.en code
     text/en.py
     text/text.py
     text/inflect.py
+
+[report]
+exclude_lines =
+    raise NotImplementedError

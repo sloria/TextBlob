@@ -52,7 +52,7 @@ class DelimitedFormat(BaseFormat):
     def detect(stream):
         '''Return True if stream is valid.'''
         try:
-            csv.Sniffer().sniff(stream)
+            csv.Sniffer().sniff(stream, delimiters=",")
             return True
         except (csv.Error, TypeError):
             return False

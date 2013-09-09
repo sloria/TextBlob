@@ -352,6 +352,13 @@ is managed by the non-profit Python Software Foundation.'''
             'Just', 'a', 'bundle', 'of', 'words'
             ]))
 
+    def test_words_includes_apostrophes_in_contractions(self):
+        blob = tb.TextBlob("Let's test this.")
+        assert_equal(blob.words, tb.WordList(['Let', "'s", "test", "this"]))
+        blob2 = tb.TextBlob("I can't believe it's not butter.")
+        assert_equal(blob2.words, tb.WordList(['I', 'ca', "n't", "believe",
+                                            'it', "'s", "not", "butter"]))
+
     def test_pos_tags(self):
         blob = tb.TextBlob('Simple is better than complex. '
                             'Complex is better than complicated.')

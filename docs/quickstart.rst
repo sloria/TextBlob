@@ -213,8 +213,8 @@ Use the ``parse()`` method to parse the text.
 .. doctest::
 
     >>> b = TextBlob("And now for something completely different.")
-    >>> b.parse()
-    'And/CC/O/O now/RB/B-ADVP/O for/IN/B-PP/B-PNP something/NN/B-NP/I-PNP completely/RB/B-ADJP/O different/JJ/I-ADJP/O ././O/O'
+    >>> print(b.parse())
+    And/CC/O/O now/RB/B-ADVP/O for/IN/B-PP/B-PNP something/NN/B-NP/I-PNP completely/RB/B-ADJP/O different/JJ/I-ADJP/O ././O/O
 
 By default, TextBlob uses pattern's parser [#]_.
 

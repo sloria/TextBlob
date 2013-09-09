@@ -31,6 +31,19 @@ class TestFormats(unittest.TestCase):
         assert_true('json' in formats.AVAILABLE.keys())
         assert_true('tsv' in formats.AVAILABLE.keys())
 
+class TestDelimitedFormat(unittest.TestCase):
+
+    def test_delimiter_defaults_to_comma(self):
+        assert_equal(formats.DelimitedFormat.delimiter, ",")
+
+    def test_detect(self):
+        with open(CSV_FILE, 'r') as fp:
+            stream = fp.read()
+            assert_true(formats.DelimitedFormat.detect(stream))
+        with open(JSON_FILE, 'r') as fp:
+            stream = fp.read()
+            assert_false(formats.DelimitedFormat.detect(stream))
+
 class TestCSV(unittest.TestCase):
 
     def test_read_from_filename(self):
