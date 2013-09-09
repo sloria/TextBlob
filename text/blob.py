@@ -11,7 +11,7 @@ from .packages import nltk
 from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
-from .mixins import ComparableMixin
+from .mixins import BlobComparableMixin
 from .compat import unicode, basestring, python_2_unicode_compatible, u
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
@@ -221,7 +221,7 @@ def _initialize_models(obj, tokenizer, pos_tagger,
     obj.classifier = classifier
 
 @python_2_unicode_compatible
-class BaseBlob(ComparableMixin):
+class BaseBlob(BlobComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
@@ -487,15 +487,6 @@ class BaseBlob(ComparableMixin):
         operators.
         '''
         return self.raw
-
-    def __eq__(self, other):
-        '''Equality comparator. Blobs are equal to blobs with the same
-        text and also to their string counterparts.
-        '''
-        if isinstance(other, basestring):
-            return self.raw == other
-        else:
-            return super(BaseBlob, self).__eq__(other)
 
     def __hash__(self):
         return hash(self._cmpkey())

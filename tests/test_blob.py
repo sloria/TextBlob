@@ -342,7 +342,13 @@ is managed by the non-profit Python Software Foundation.'''
 
     def test_invalid_comparison(self):
         blob = tb.TextBlob("one")
-        assert_false(blob < 2)
+        if PY2:
+            # invalid comparison returns False
+            assert_false(blob < 2)
+        else:
+            # invalid comparison raises Error
+            with assert_raises(TypeError):
+                blob < 2
 
     def test_words(self):
         blob = tb.TextBlob('Beautiful is better than ugly. '
