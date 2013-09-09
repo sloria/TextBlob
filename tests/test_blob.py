@@ -257,6 +257,16 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob("Textblobs should be equal to strings.")
         assert_equal(blob, "Textblobs should be equal to strings.")
 
+    def test_string_comparison(self):
+        blob = tb.TextBlob("apple")
+        assert_true(blob < "banana")
+        assert_true(blob > 'aardvark')
+
+    def test_hash(self):
+        blob = tb.TextBlob('apple')
+        assert_equal(hash(blob), hash('apple'))
+        assert_not_equal(hash(blob), hash('banana'))
+
     def test_stripped(self):
         blob = tb.TextBlob("Um... well this ain't right.!..")
         assert_equal(blob.stripped, "um well this aint right")
@@ -279,7 +289,7 @@ is managed by the non-profit Python Software Foundation.'''
     def test_clean_html(self):
         html = '<b>Python</b> is a widely used <a href="/wiki/General-purpose_programming_language" title="General-purpose programming language">general-purpose</a>, <a href="/wiki/High-level_programming_language" title="High-level programming language">high-level programming language</a>.'
         with assert_raises(NotImplementedError):
-            blob = tb.TextBlob(html, clean_html=True)
+            tb.TextBlob(html, clean_html=True)
 
     def test_sentences(self):
         blob = self.blob
@@ -330,6 +340,9 @@ is managed by the non-profit Python Software Foundation.'''
         assert_true(blob3 < blob2)  # test <
         assert_true(blob3 <= blob2) # test <=
 
+    def test_invalid_comparison(self):
+        blob = tb.TextBlob("one")
+        assert_false(blob < 2)
 
     def test_words(self):
         blob = tb.TextBlob('Beautiful is better than ugly. '

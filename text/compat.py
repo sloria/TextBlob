@@ -19,7 +19,7 @@ if PY2:
     imap = imap
     izip = izip
     import unicodecsv as csv
-else:
+else: # PY3
     def b(s):
         return s.encode("latin-1")
     def u(s):

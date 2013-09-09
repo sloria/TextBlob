@@ -12,8 +12,7 @@ from .decorators import cached_property
 from .utils import lowerstrip, PUNCTUATION_REGEX
 from .inflect import singularize as _singularize, pluralize as _pluralize
 from .mixins import ComparableMixin
-from .compat import (string_types, unicode, basestring,
-    python_2_unicode_compatible, u)
+from .compat import unicode, basestring, python_2_unicode_compatible, u
 from .np_extractors import BaseNPExtractor, FastNPExtractor
 from .taggers import BaseTagger, PatternTagger
 from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
@@ -255,7 +254,7 @@ class BaseBlob(ComparableMixin):
     def __init__(self, text, tokenizer=None,
                 pos_tagger=None, np_extractor=None, analyzer=None,
                 parser=None, classifier=None, clean_html=False):
-        if type(text) not in string_types:
+        if not isinstance(text, basestring):
             raise TypeError('The `text` argument passed to `__init__(text)` '
                             'must be a string, not {0}'.format(type(text)))
         if clean_html:
@@ -490,10 +489,10 @@ class BaseBlob(ComparableMixin):
         return self.raw
 
     def __eq__(self, other):
-        '''Equality comparator. Blobs are be equal to blobs with the same
+        '''Equality comparator. Blobs are equal to blobs with the same
         text and also to their string counterparts.
         '''
-        if type(other) in string_types:
+        if isinstance(other, basestring):
             return self.raw == other
         else:
             return super(BaseBlob, self).__eq__(other)
@@ -519,7 +518,7 @@ class BaseBlob(ComparableMixin):
         Arguments:
         - `other`: a string or a text object
         '''
-        if type(other) in string_types:
+        if isinstance(other, basestring):
             return TextBlob(self.raw + other)
         elif isinstance(other, BaseBlob):
             return TextBlob(self.raw + other.raw)
