@@ -56,6 +56,7 @@ START = ['-START-', '-START2-']
 END = ['-END-', '-END2-']
 AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
+
 class PerceptronTagger(BaseTagger):
     '''Greedy Averaged Perceptron tagger'''
     def __init__(self, load=True):
