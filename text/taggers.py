@@ -133,7 +133,7 @@ class PerceptronTagger(BaseTagger):
         {hashable: float} dict. If the features change, a new model must be
         trained.'''
         def add(name, *args):
-            features[(name,) + tuple(args)] += 1
+            features[hash((name,) + tuple(args))] += 1
 
         i += len(START)
         features = defaultdict(int)
