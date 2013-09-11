@@ -98,7 +98,7 @@ class PerceptronTagger(BaseTagger):
                 for i, word in enumerate(words):
                     guess = self.tagdict.get(word)
                     if not guess:
-                        feats = self._get_features(i+2, word, context, prev, prev2)
+                        feats = self._get_features(i, word, context, prev, prev2)
                         guess = self.model.predict(feats)
                         self.model.update(tags[i], guess, feats)
                     prev2 = prev; prev = guess
@@ -108,8 +108,9 @@ class PerceptronTagger(BaseTagger):
                 print("Iter %d: %d/%d=%.3f" % (iter_, c, n, _pc(c, n)))
         self.model.average_weights()
         # Pickle as a binary file
-        cPickle.dump((self.model.weights, self.tagdict, self.classes),
-                     open(save_loc, 'wb'), -1)
+        if save_loc is not None:
+            cPickle.dump((self.model.weights, self.tagdict, self.classes),
+                         open(save_loc, 'wb'), -1)
 
     def load(self, loc):
         w_td_c = cPickle.load(open(loc, 'rb'))
@@ -123,10 +124,8 @@ class PerceptronTagger(BaseTagger):
             return '!YEAR'
         elif word[0].isdigit():
             return '!DIGITS'
-        elif not self.case_sensitive:
-            return word.lower()
         else:
-            return word
+            return word.lower()
 
     def _get_features(self, i, word, context, prev, prev2):
         '''Map tokens into a feature representation, implemented as a
@@ -134,29 +133,24 @@ class PerceptronTagger(BaseTagger):
         trained.'''
         def add(name, *args):
             features[(name,) + tuple(args)] += 1
+
+        i += len(START)
         features = defaultdict(int)
         # It's useful to have a constant feature, which acts sort of like a prior
-        add('prior')
-        add('curr suffix', word[-3:])
-        add('curr pref1', word[0])
-        add('prev tag', prev)
-        add('2prev tag', prev2)
-        add('prev tag+2prev tag', prev, prev2)
-        add('curr w', context[i])
-        add('prev tag+curr word', prev, context[i])
-        add('prev w', context[i-1])
-        add('prev suff', context[i-1][-3:])
-        add('2prev w', context[i-2])
-        add('next w', context[i+1])
-        add('next suff', context[i+1][-3:])
-        add('2next w', context[i+2])
-        if context[i] in self.uppers:
-            add('upper')
-            add('upper+prev', prev)
-        if context[i] in self.titles:
-            add('title')
-            add('title+suffix', word[-3:])
-            add('title+prev', prev)
+        add('bias')
+        add('i suffix', word[-3:])
+        add('i pref1', word[0])
+        add('i-1 tag', prev)
+        add('i-2 tag', prev2)
+        add('i tag+i-2 tag', prev, prev2)
+        add('i word', context[i])
+        add('i-1 tag+i word', prev, context[i])
+        add('i-1 word', context[i-1])
+        add('i-1 suffix', context[i-1][-3:])
+        add('i-2 word', context[i-2])
+        add('i+1 word', context[i+1])
+        add('i+1 suffix', context[i+1][-3:])
+        add('i+2 word', context[i+2])
         return features
 
     def _make_tagdict(self, sentences, quiet=False):
@@ -165,26 +159,16 @@ class PerceptronTagger(BaseTagger):
         for words, tags in sentences:
             for word, tag in zip(words, tags):
                 counts[word][tag] += 1
-                self.model.weights[tag] = {}
                 self.classes.add(tag)
-        freq_thresh = 100
-        ambiguity_thresh = 0.99
-        total = 0; covered = 0
+        freq_thresh = 20
+        ambiguity_thresh = 0.97
         for word, tag_freqs in counts.items():
-            n = 0.0; mode = 0.0
-            for tag, freq in tag_freqs.items():
-                if freq >= mode:
-                    incumbent = tag
-                    mode = freq
-                n += freq; total += freq
+            tag, mode = max(tag_freqs.items(), key=lambda item: item[1])
+            n = sum(tag_freqs.values())
             # Don't add rare words to the tag dictionary
             # Only add quite unambiguous words
             if n >= freq_thresh and (float(mode) / n) >= ambiguity_thresh:
-                self.tagdict[word] = incumbent
-                covered += n
-        if not quiet:
-            msg = "Cached tags for %d types (%.2fpc of tokens)"
-            print(msg % (len(self.tagdict.keys()), _pc(covered, total)))
+                self.tagdict[word] = tag
 
 def _pc(n, d):
     return (float(n) / d) * 100
