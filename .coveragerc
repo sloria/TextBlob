@@ -2,7 +2,7 @@
 include =
     text*
 omit =
-    # Vendorized dependencied
+    # Vendorized dependencies
     *nltk*
     *yaml*
     *unicodecsv*

@@ -3,18 +3,27 @@
 Installation
 ============
 
-From the PyPI
--------------
+Installing/Upgrading From the PyPI
+----------------------------------
 ::
 
     $ pip install -U textblob
     $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
-This will install textblob and download the necessary NLTK corpora.
+This will install TextBlob and download the necessary NLTK corpora.
 
-If you don't have ``pip`` (you should), run this first: ::
+.. admonition:: Downloading the minimum corpora
 
-    $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
+    If you only intend to use TextBlob's default models (no model overrides), then you can use the ``download_corpora_lite.py`` script instead. This downloads only those corpora needed for basic functionality.
+    ::
+
+        $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora_lite.py | python
+
+.. admonition:: If you don't have pip:
+
+    If you don't have ``pip`` (you should), run this first: ::
+
+        $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
 
 
 From Source
@@ -39,14 +48,6 @@ Once you have the source, you can install it into your site-packages with ::
 .. _tarball: https://github.com/sloria/TextBlob/tarball/master
 .. _zipball: https://github.com/sloria/TextBlob/zipball/master
 
-
-Upgrading
----------
-
-To upgrade to the latest version (|version|), run
-::
-
-    $ pip install -U textblob
 
 Get the bleeding edge version
 -----------------------------

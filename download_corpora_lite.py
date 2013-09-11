@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''Downloads the necessary NLTK models and corpora required to support
-all of TextBlob's features. Modify for your own needs.
+'''Downloads the minimum necessary NLTK models and corpora required to support
+TextBlob's basic features. Use this script if you only intend to use
+TextBlob's default models. If you want to use other models, use
+download_corpora.py. Modify for your own needs.
 '''
 from text.packages import nltk
 
 REQUIRED_CORPORA = [
     'brown',  # Required for FastNPExtractor
     'punkt',  # Required for WordTokenizer
-    'conll2000',  # Required for ConllExtractor
-    'maxent_treebank_pos_tagger',  # Required for NLTKTagger
-    'movie_reviews',  # Required for NaiveBayesAnalyzer
     'wordnet' # Required for lemmatization
 ]
 

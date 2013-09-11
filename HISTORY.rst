@@ -3,8 +3,10 @@ Changelog
 
 0.6.3 (unreleased)
 ------------------
-- Minor word tokenization fix: Words that stem from a contraction will still have an apostrophe, e.g. ``"Let's" => ["Let", "'s"]``. This makes it easier to identify contractions.
+- Word tokenization fix: Words that stem from a contraction will still have an apostrophe, e.g. ``"Let's" => ["Let", "'s"]``. This makes it easier to identify contractions.
 - Fix bug with comparing blobs to strings.
+- Note for Python 3 users: You may need to update your corpora, since NLTK master has reorganized its corpus system. Just run ``curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python`` again.
+- Add ``download_corpora_lite.py`` script for getting the minimum corpora requirements for TextBlob's basic features.
 
 0.6.2 (2013-09-05)
 ------------------
