@@ -87,6 +87,7 @@ Pull Requests
 
 - If the pull request adds functionality, it should be tested and the docs should be updated.
 - The pull request should work on Python 2.6, 2.7, 3.3, and PyPy. Use ``tox`` to verify that it does.
+- You've added yourself to ``AUTHORS.rst``.
 
 4. Submit a pull request to the ``sloria:dev`` branch.
 

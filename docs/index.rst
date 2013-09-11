@@ -87,10 +87,11 @@ Project info
 ============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    contributing
    changelog
+   authors
 
 
 .. _NLTK: http://www.nltk.org
