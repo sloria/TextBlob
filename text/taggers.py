@@ -54,43 +54,38 @@ class NLTKTagger(BaseTagger):
 
 START = ['-START-', '-START2-']
 END = ['-END-', '-END2-']
-
+AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
 class PerceptronTagger(BaseTagger):
     '''Greedy Averaged Perceptron tagger'''
-    def __init__(self):
+    def __init__(self, load=True):
         self.model = Perceptron()
         self.tagdict = {}
-        self.case_sensitive = False
-        self.uppers = set()
-        self.titles = set()
         self.classes = set()
-        upper_thresh = 0.05
-        title_thresh = 0.3
-        for line in open(os.path.join(os.path.dirname(__file__), 'en-case.txt')):
-            word, upper, title, lower = line.split()
-            upper = int(upper); title = int(title); lower = int(lower)
-            total = float(upper + title + lower)
-            if (upper / total) >= upper_thresh:
-                self.uppers.add(word)
-            if (title / total) >= title_thresh:
-                self.titles.add(word)
+        if load:
+            self.load(AP_MODEL_LOC)
 
-    def tag(self, sentence, tokenize=True):
-        words = nltk.word_tokenize(sentence) if tokenize else sentence.split()
+    def tag(self, text, tokenize=True):
+        s_split = nltk.sent_tokenize if tokenize else lambda t: t.split('\n')
+        w_split = nltk.word_tokenize if tokenize else lambda s: s.split()
+        def split_sents(text):
+           for s in s_split(text):
+                yield w_split(s)
+        
         prev, prev2 = START
-        context = START + [self._normalize(w) for w in words] + END
-        tags = []
-        for i, word in enumerate(words):
-            tag = self.tagdict.get(word)
-            if not tag:
-                features = self._get_features(i+2, word, context, prev, prev2)
-                tag = self.model.predict(features)
-            tags.append(tag)
-            prev2 = prev; prev = tag
-        return zip(words, tags)
+        tokens = []
+        for words in split_sents(text):
+            context = START + [self._normalize(w) for w in words] + END
+            for i, word in enumerate(words):
+                tag = self.tagdict.get(word)
+                if not tag:
+                    features = self._get_features(i, word, context, prev, prev2)
+                    tag = self.model.predict(features)
+                tokens.append((word, unicode(tag)))
+                prev2 = prev; prev = tag
+        return tokens 
 
-    def train(self, sentences, save_loc, nr_iter=5, quiet=False):
+    def train(self, sentences, save_loc=None, nr_iter=5, quiet=False):
         '''Train a model from sentences, and save it at save_loc. nr_iter
         controls the number of Perceptron training iterations.'''
         self._make_tagdict(sentences, quiet=quiet)
