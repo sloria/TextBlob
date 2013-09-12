@@ -13,7 +13,7 @@ class TestPerceptronTagger(unittest.TestCase):
     def setUp(self):
         self.text = ("Simple is better than complex. "
                      "Complex is better than complicated.")
-        self.tagger = text.taggers.PerceptronTagger()
+        self.tagger = text.taggers.PerceptronTagger(load=False)
 
     def test_init(self):
         tagger = text.taggers.PerceptronTagger()
