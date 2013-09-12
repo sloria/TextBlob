@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
@@ -7,6 +8,8 @@ from collections import defaultdict
 
 import text.taggers
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+AP_MODEL_LOC = os.path.join(HERE, 'trontagger.pickle')
 
 class TestPerceptronTagger(unittest.TestCase):
     def setUp(self):
@@ -15,7 +18,7 @@ class TestPerceptronTagger(unittest.TestCase):
         self.tagger = text.taggers.PerceptronTagger(load=False)
 
     def test_init(self):
-        tagger = text.taggers.PerceptronTagger()
+        tagger = text.taggers.PerceptronTagger(load=False)
         assert_true(isinstance(tagger, text.taggers.BaseTagger))
 
     def test_train(self):
@@ -32,9 +35,10 @@ class TestPerceptronTagger(unittest.TestCase):
         assert_equal(len(tag_set), len(self.tagger.model.classes))
         for tag in tag_set:
             assert_true(tag in self.tagger.model.classes)
-        
+
+    @attr("slow")
     def test_tag(self):
-        self.tagger.load('/tmp/model')
+        self.tagger.load(AP_MODEL_LOC)
         tokens = self.tagger.tag(self.text)
         assert_equal([w for w, t in tokens],
             ['Simple', 'is', 'better', 'than', 'complex', '.', 'Complex', 'is',

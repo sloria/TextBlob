@@ -58,7 +58,9 @@ AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
 
 class PerceptronTagger(BaseTagger):
+
     '''Greedy Averaged Perceptron tagger'''
+
     def __init__(self, load=True):
         self.model = Perceptron()
         self.tagdict = {}
@@ -73,7 +75,7 @@ class PerceptronTagger(BaseTagger):
         def split_sents(text):
            for s in s_split(text):
                 yield w_split(s)
-        
+
         prev, prev2 = START
         tokens = []
         for words in split_sents(text):
@@ -85,7 +87,7 @@ class PerceptronTagger(BaseTagger):
                     tag = self.model.predict(features)
                 tokens.append((word, tag))
                 prev2 = prev; prev = tag
-        return tokens 
+        return tokens
 
     def train(self, sentences, save_loc=None, nr_iter=5, quiet=False):
         '''Train a model from sentences, and save it at save_loc. nr_iter
