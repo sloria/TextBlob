@@ -4,9 +4,9 @@ import os
 import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from collections import defaultdict
 
 import text.taggers
+from text.exceptions import MissingCorpusException
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 AP_MODEL_LOC = os.path.join(HERE, 'trontagger.pickle')
@@ -43,6 +43,10 @@ class TestPerceptronTagger(unittest.TestCase):
         assert_equal([w for w, t in tokens],
             ['Simple', 'is', 'better', 'than', 'complex', '.', 'Complex', 'is',
              'better', 'than', 'complicated', '.'])
+
+
+    def test_loading_missing_file_raises_missing_corpus_exception(self):
+        assert_raises(MissingCorpusException, self.tagger.load, 'missing.pickle')
 
 
 def _read_tagged(text, sep='|'):

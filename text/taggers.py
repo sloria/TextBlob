@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 '''Parts-of-speech tagger implementations.'''
+from __future__ import absolute_import
 import random
 import os.path
 from collections import defaultdict
 import pickle
 
-from .packages import nltk
-from .en import tag as pattern_tag
-from .exceptions import MissingCorpusException
-from _perceptron import Perceptron
+import text
+from text.packages import nltk
+from text.en import tag as pattern_tag
+from text.exceptions import MissingCorpusException
+from text._perceptron import Perceptron
 
 
 class BaseTagger(object):
@@ -59,7 +61,15 @@ AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
 class PerceptronTagger(BaseTagger):
 
-    '''Greedy Averaged Perceptron tagger'''
+    '''Greedy Averaged Perceptron tagger, as implemented by Matthew Honnibal.
+    Requires that ``trontagger.pickle`` exists in the text/ package directory.
+
+    See more info at this blog post: http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/
+
+    The tagger is about 96.8\% accurate.
+
+    :param load: Load the pickled model upon initiation.
+    '''
 
     def __init__(self, load=True):
         self.model = Perceptron()
@@ -117,7 +127,15 @@ class PerceptronTagger(BaseTagger):
                          open(save_loc, 'wb'), -1)
 
     def load(self, loc):
-        w_td_c = pickle.load(open(loc, 'rb'))
+        try:
+            w_td_c = pickle.load(open(loc, 'rb'))
+        except IOError:
+            package_dir = text.PACKAGE_DIR
+            msg = ("Missing trontagger.pickle. Download it from the TextBlob "
+                    "release page: https://github.com/sloria/TextBlob/releases"
+                    " and add it to your textblob package "
+                    "directory: {0}".format(package_dir))
+            raise MissingCorpusException(msg)
         self.model.weights, self.tagdict, self.classes = w_td_c
         self.model.classes = self.classes
 
