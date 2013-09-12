@@ -24,7 +24,7 @@ class TestPerceptronTagger(unittest.TestCase):
     def test_train(self):
         sentences = _read_tagged(_wsj_train)
         nr_iter = 5
-        self.tagger.train(sentences, nr_iter=nr_iter, quiet=True)
+        self.tagger.train(sentences, nr_iter=nr_iter)
         nr_words = sum(len(words) for words, tags in sentences)
         # Check that the model has 'ticked over' once per instance
         assert_equal(nr_words * nr_iter, self.tagger.model.i)

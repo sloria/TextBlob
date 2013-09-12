@@ -8,6 +8,13 @@ import random
 
 
 class Perceptron(object):
+
+    '''An averaged perceptron, as implemented by Matthew Honnibal.
+
+    See more implementation details here:
+        http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/
+    '''
+
     def __init__(self):
         # Each feature gets its own weight vector, so weights is a dict-of-dicts
         self.weights = {}
@@ -23,18 +30,19 @@ class Perceptron(object):
         self.i = 0
 
     def predict(self, features):
-        '''Dot-product the features and current weights and return the best class.'''
+        '''Dot-product the features and current weights and return the best label.'''
         scores = defaultdict(float)
         for feat, value in features.items():
             if feat not in self.weights or value == 0:
                 continue
             weights = self.weights[feat]
-            for clas, weight in weights.items():
-                scores[clas] += value * weight
+            for label, weight in weights.items():
+                scores[label] += value * weight
         # Do a secondary alphabetic sort, for stability
-        return max(self.classes, key=lambda clas: (scores[clas], clas))
+        return max(self.classes, key=lambda label: (scores[label], label))
 
-    def update(self, truth, guess, features):       
+    def update(self, truth, guess, features):
+        '''Update the feature weights.'''
         def upd_feat(c, f, w, v):
             param = (f, c)
             self._totals[param] += (self.i - self._tstamps[param]) * w
@@ -62,9 +70,11 @@ class Perceptron(object):
             self.weights[feat] = new_feat_weights
 
     def save(self, path):
+        '''Save the pickled model weights.'''
         pickle.dump(dict(self.weights), open(path, 'w'))
 
     def load(self, path):
+        '''Load the pickled model weights.'''
         self.weights = pickle.load(open(path))
 
 

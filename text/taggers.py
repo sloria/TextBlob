@@ -2,6 +2,7 @@
 '''Parts-of-speech tagger implementations.'''
 from __future__ import absolute_import
 import random
+import logging
 import os.path
 from collections import defaultdict
 import pickle
@@ -20,7 +21,7 @@ class BaseTagger(object):
     `tag()` method.
     '''
 
-    def tag(self, sentence):
+    def tag(self, sentence, tokenize=True):
         '''Return a list of tuples of the form (word, tag)
         for a given set of text.
         '''
@@ -35,6 +36,7 @@ class PatternTagger(BaseTagger):
     '''
 
     def tag(self, sentence, tokenize=True):
+        '''Tag a string `sentence`.'''
         return pattern_tag(sentence, tokenize)
 
 class NLTKTagger(BaseTagger):
@@ -44,6 +46,7 @@ class NLTKTagger(BaseTagger):
     '''
 
     def tag(self, sentence, tokenize=True):
+        '''Tag a string `sentence`.'''
         if tokenize:
             sentence = nltk.tokenize.word_tokenize(sentence)
         try:
@@ -66,7 +69,7 @@ class PerceptronTagger(BaseTagger):
 
     See more info at this blog post: http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/
 
-    The tagger is about 96.8\% accurate.
+    The tagger is about 96.8%% accurate.
 
     :param load: Load the pickled model upon initiation.
     '''
@@ -78,17 +81,18 @@ class PerceptronTagger(BaseTagger):
         if load:
             self.load(AP_MODEL_LOC)
 
-    def tag(self, text, tokenize=True):
-        # Assume untokenized text has \n between sentences and ' ' between words
+    def tag(self, corpus, tokenize=True):
+        '''Tags a string `corpus`.'''
+        # Assume untokenized corpus has \n between sentences and ' ' between words
         s_split = nltk.sent_tokenize if tokenize else lambda t: t.split('\n')
         w_split = nltk.word_tokenize if tokenize else lambda s: s.split()
-        def split_sents(text):
-           for s in s_split(text):
+        def split_sents(corpus):
+            for s in s_split(corpus):
                 yield w_split(s)
 
         prev, prev2 = START
         tokens = []
-        for words in split_sents(text):
+        for words in split_sents(corpus):
             context = START + [self._normalize(w) for w in words] + END
             for i, word in enumerate(words):
                 tag = self.tagdict.get(word)
@@ -99,14 +103,20 @@ class PerceptronTagger(BaseTagger):
                 prev2 = prev; prev = tag
         return tokens
 
-    def train(self, sentences, save_loc=None, nr_iter=5, quiet=False):
+    def train(self, sentences, save_loc=None, nr_iter=5):
         '''Train a model from sentences, and save it at save_loc. nr_iter
-        controls the number of Perceptron training iterations.'''
-        self._make_tagdict(sentences, quiet=quiet)
+        controls the number of Perceptron training iterations.
+
+        :param sentences: A list of (words, tags) tuples.
+        :param save_loc: If not ``None``, saves a pickled model in this location.
+        :param nr_iter: Number of training iterations.
+        '''
+        self._make_tagdict(sentences)
         self.model.classes = self.classes
         prev, prev2 = START
         for iter_ in range(nr_iter):
-            c = 0; n = 0
+            c = 0
+            n = 0
             for words, tags in sentences:
                 context = START + [self._normalize(w) for w in words] + END
                 for i, word in enumerate(words):
@@ -116,17 +126,19 @@ class PerceptronTagger(BaseTagger):
                         guess = self.model.predict(feats)
                         self.model.update(tags[i], guess, feats)
                     prev2 = prev; prev = guess
-                    c += guess == tags[i]; n += 1
+                    c += guess == tags[i]
+                    n += 1
             random.shuffle(sentences)
-            if not quiet:
-                print("Iter %d: %d/%d=%.3f" % (iter_, c, n, _pc(c, n)))
+            logging.info("Iter {0}: {1}/{2}={3}".format(iter_, c, n, _pc(c, n)))
         self.model.average_weights()
         # Pickle as a binary file
         if save_loc is not None:
             pickle.dump((self.model.weights, self.tagdict, self.classes),
                          open(save_loc, 'wb'), -1)
+        return None
 
     def load(self, loc):
+        '''Load a pickled model.'''
         try:
             w_td_c = pickle.load(open(loc, 'rb'))
         except IOError:
@@ -138,8 +150,17 @@ class PerceptronTagger(BaseTagger):
             raise MissingCorpusException(msg)
         self.model.weights, self.tagdict, self.classes = w_td_c
         self.model.classes = self.classes
+        return None
 
     def _normalize(self, word):
+        '''Normalization used in pre-processing.
+
+        - All words are lower cased
+        - Digits in the range 1800-2100 are represented as !YEAR;
+        - Other digits are represented as !DIGITS
+
+        :rtype: str
+        '''
         if '-' in word and word[0] != '-':
             return '!HYPHEN'
         elif word.isdigit() and len(word) == 4:
@@ -175,7 +196,7 @@ class PerceptronTagger(BaseTagger):
         add('i+2 word', context[i+2])
         return features
 
-    def _make_tagdict(self, sentences, quiet=False):
+    def _make_tagdict(self, sentences):
         '''Make a tag dictionary for single-tag words.'''
         counts = defaultdict(lambda: defaultdict(int))
         for words, tags in sentences:
