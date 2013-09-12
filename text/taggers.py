@@ -67,6 +67,7 @@ class PerceptronTagger(BaseTagger):
             self.load(AP_MODEL_LOC)
 
     def tag(self, text, tokenize=True):
+        # Assume untokenized text has \n between sentences and ' ' between words
         s_split = nltk.sent_tokenize if tokenize else lambda t: t.split('\n')
         w_split = nltk.word_tokenize if tokenize else lambda s: s.split()
         def split_sents(text):
