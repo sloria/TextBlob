@@ -3,7 +3,7 @@
 import random
 import os.path
 from collections import defaultdict
-import cPickle
+import pickle
 
 from .packages import nltk
 from .en import tag as pattern_tag
@@ -111,11 +111,11 @@ class PerceptronTagger(BaseTagger):
         self.model.average_weights()
         # Pickle as a binary file
         if save_loc is not None:
-            cPickle.dump((self.model.weights, self.tagdict, self.classes),
+            pickle.dump((self.model.weights, self.tagdict, self.classes),
                          open(save_loc, 'wb'), -1)
 
     def load(self, loc):
-        w_td_c = cPickle.load(open(loc, 'rb'))
+        w_td_c = pickle.load(open(loc, 'rb'))
         self.model.weights, self.tagdict, self.classes = w_td_c
         self.model.classes = self.classes
 

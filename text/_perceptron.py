@@ -3,7 +3,7 @@ Averaged perceptron classifier. Implementation geared for simplicity rather than
 efficiency.
 """
 from collections import defaultdict
-import cPickle
+import pickle
 import random
 
 
@@ -62,10 +62,10 @@ class Perceptron(object):
             self.weights[feat] = new_feat_weights
 
     def save(self, path):
-        cPickle.dump(dict(self.weights), open(path, 'w'))
+        pickle.dump(dict(self.weights), open(path, 'w'))
 
     def load(self, path):
-        self.weights = cPickle.load(open(path))
+        self.weights = pickle.load(open(path))
 
 
 def train(nr_iter, examples):
