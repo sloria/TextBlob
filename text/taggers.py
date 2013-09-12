@@ -83,7 +83,7 @@ class PerceptronTagger(BaseTagger):
                 if not tag:
                     features = self._get_features(i, word, context, prev, prev2)
                     tag = self.model.predict(features)
-                tokens.append((word, unicode(tag)))
+                tokens.append((word, tag))
                 prev2 = prev; prev = tag
         return tokens 
 
