@@ -10,7 +10,3 @@ install:
     - "python download_corpora.py"
 # Run tests
 script: "python run_tests.py"
-branches:
-    only:
-        - master
-        - dev
