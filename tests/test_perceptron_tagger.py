@@ -8,7 +8,6 @@ from collections import defaultdict
 import text.taggers
 
 
-
 class TestPerceptronTagger(unittest.TestCase):
     def setUp(self):
         self.text = ("Simple is better than complex. "
