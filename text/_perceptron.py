@@ -1,6 +1,8 @@
 """
 Averaged perceptron classifier. Implementation geared for simplicity rather than
 efficiency.
+
+.. versionadded:: 0.6.3
 """
 from collections import defaultdict
 import pickle
@@ -59,6 +61,7 @@ class Perceptron(object):
         return None
 
     def average_weights(self):
+        '''Average weights from all iterations.'''
         for feat, weights in self.weights.items():
             new_feat_weights = {}
             for clas, weight in weights.items():
@@ -82,6 +85,9 @@ class Perceptron(object):
 
 
 def train(nr_iter, examples):
+    '''Return an averaged perceptron model trained on ``examples`` for
+    ``nr_iter`` iterations.
+    '''
     model = Perceptron()
     for i in range(nr_iter):
         random.shuffle(examples)

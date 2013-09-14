@@ -57,11 +57,6 @@ class NLTKTagger(BaseTagger):
         return tagged
 
 
-START = ['-START-', '-START2-']
-END = ['-END-', '-END2-']
-AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
-
-
 class PerceptronTagger(BaseTagger):
 
     '''Greedy Averaged Perceptron tagger, as implemented by Matthew Honnibal.
@@ -78,14 +73,20 @@ class PerceptronTagger(BaseTagger):
     The tagger is about 96.8%% accurate.
 
     :param load: Load the pickled model upon initiation.
+
+    .. versionadded:: 0.6.3
     '''
+
+    START = ['-START-', '-START2-']
+    END = ['-END-', '-END2-']
+    AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
     def __init__(self, load=True):
         self.model = Perceptron()
         self.tagdict = {}
         self.classes = set()
         if load:
-            self.load(AP_MODEL_LOC)
+            self.load(self.AP_MODEL_LOC)
 
     def tag(self, corpus, tokenize=True):
         '''Tags a string `corpus`.'''
@@ -96,17 +97,18 @@ class PerceptronTagger(BaseTagger):
             for s in s_split(corpus):
                 yield w_split(s)
 
-        prev, prev2 = START
+        prev, prev2 = self.START
         tokens = []
         for words in split_sents(corpus):
-            context = START + [self._normalize(w) for w in words] + END
+            context = self.START + [self._normalize(w) for w in words] + self.END
             for i, word in enumerate(words):
                 tag = self.tagdict.get(word)
                 if not tag:
                     features = self._get_features(i, word, context, prev, prev2)
                     tag = self.model.predict(features)
                 tokens.append((word, tag))
-                prev2 = prev; prev = tag
+                prev2 = prev
+                prev = tag
         return tokens
 
     def train(self, sentences, save_loc=None, nr_iter=5):
@@ -119,19 +121,21 @@ class PerceptronTagger(BaseTagger):
         '''
         self._make_tagdict(sentences)
         self.model.classes = self.classes
-        prev, prev2 = START
+        prev, prev2 = self.START
         for iter_ in range(nr_iter):
             c = 0
             n = 0
             for words, tags in sentences:
-                context = START + [self._normalize(w) for w in words] + END
+                context = self.START + [self._normalize(w) for w in words] \
+                                                                    + self.END
                 for i, word in enumerate(words):
                     guess = self.tagdict.get(word)
                     if not guess:
                         feats = self._get_features(i, word, context, prev, prev2)
                         guess = self.model.predict(feats)
                         self.model.update(tags[i], guess, feats)
-                    prev2 = prev; prev = guess
+                    prev2 = prev
+                    prev = guess
                     c += guess == tags[i]
                     n += 1
             random.shuffle(sentences)
@@ -184,7 +188,7 @@ class PerceptronTagger(BaseTagger):
         def add(name, *args):
             features[' '.join((name,) + tuple(args))] += 1
 
-        i += len(START)
+        i += len(self.START)
         features = defaultdict(int)
         # It's useful to have a constant feature, which acts sort of like a prior
         add('bias')

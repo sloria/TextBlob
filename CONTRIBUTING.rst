@@ -106,7 +106,7 @@ To skip tests that require internet: ::
 
     $ python run_tests no-internet
 
-To get test coverage reports: ::
+To get test coverage reports (must have coverage installed): ::
 
     $ python run_tests cover
 
