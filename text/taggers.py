@@ -69,7 +69,7 @@ class PerceptronTagger(BaseTagger):
     For more information on how to get and install the pickled model, see
     the install guide here:
 
-        https:/textblob.readthedocs.org/en/latest/install.html
+        https://textblob.readthedocs.org/en/latest/install.html
 
     See more info about the Averaged Perceptron Tagger at this blog post:
 
