@@ -11,7 +11,10 @@ Or use the NLTK downloader to download the missing data: http://nltk.org/data.ht
 If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
 """
 
-class MissingCorpusException(Exception):
+class TextBlobException(Exception):
+    '''A TextBlob-related exception.'''
+
+class MissingCorpusException(TextBlobException):
 
     '''Exception thrown when a user tries to use a feature that requires a
     dataset or model that the user does not have on their system.
