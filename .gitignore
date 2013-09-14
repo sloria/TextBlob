@@ -1,3 +1,5 @@
+### Python ###
+
 *.py[cod]
 
 # C extensions
@@ -44,3 +46,7 @@ docs/_build
 
 # Pylint
 pylintrc
+
+### Extra models and data ###
+
+text/trontagger.pickle
