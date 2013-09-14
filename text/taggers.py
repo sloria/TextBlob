@@ -179,7 +179,8 @@ class PerceptronTagger(BaseTagger):
     def _get_features(self, i, word, context, prev, prev2):
         '''Map tokens into a feature representation, implemented as a
         {hashable: float} dict. If the features change, a new model must be
-        trained.'''
+        trained.
+        '''
         def add(name, *args):
             features[' '.join((name,) + tuple(args))] += 1
 
