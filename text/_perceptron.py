@@ -56,6 +56,7 @@ class Perceptron(object):
             weights = self.weights.setdefault(f, {})
             upd_feat(truth, f, weights.get(truth, 0.0), 1.0)
             upd_feat(guess, f, weights.get(guess, 0.0), -1.0)
+        return None
 
     def average_weights(self):
         for feat, weights in self.weights.items():
@@ -68,14 +69,16 @@ class Perceptron(object):
                 if averaged:
                     new_feat_weights[clas] = averaged
             self.weights[feat] = new_feat_weights
+        return None
 
     def save(self, path):
         '''Save the pickled model weights.'''
-        pickle.dump(dict(self.weights), open(path, 'w'))
+        return pickle.dump(dict(self.weights), open(path, 'w'))
 
     def load(self, path):
         '''Load the pickled model weights.'''
         self.weights = pickle.load(open(path))
+        return None
 
 
 def train(nr_iter, examples):

@@ -66,8 +66,14 @@ class PerceptronTagger(BaseTagger):
 
     '''Greedy Averaged Perceptron tagger, as implemented by Matthew Honnibal.
     Requires that ``trontagger.pickle`` exists in the text/ package directory.
+    For more information on how to get and install the pickled model, see
+    the install guide here:
 
-    See more info at this blog post: http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/
+        https:/textblob.readthedocs.org/en/latest/install.html
+
+    See more info about the Averaged Perceptron Tagger at this blog post:
+
+        http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/
 
     The tagger is about 96.8%% accurate.
 
