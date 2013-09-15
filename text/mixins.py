@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
-from .compat import basestring
+from __future__ import absolute_import
+from text.compat import basestring
 
 class ComparableMixin(object):
 

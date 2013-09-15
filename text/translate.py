@@ -5,8 +5,9 @@ Translator module that uses the Google Translate API.
 Adapted from Terry Yin's google-translate-python.
 Language detection added by Steven Loria.
 '''
+from __future__ import absolute_import
 import re
-from .compat import PY2, request, urlquote
+from text.compat import PY2, request, urlquote
 
 
 class Translator(object):

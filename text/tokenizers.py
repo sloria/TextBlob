@@ -3,10 +3,10 @@
 
 .. versionadded:: 0.4.0
 '''
-
-from .packages import nltk
-from .utils import strip_punc
-from .exceptions import MissingCorpusException
+from __future__ import absolute_import
+from text.packages import nltk
+from text.utils import strip_punc
+from text.exceptions import MissingCorpusException
 
 
 class BaseTokenizer(nltk.tokenize.api.TokenizerI):

@@ -31,10 +31,11 @@ Example Usage:
 
 .. versionadded:: 0.6.0
 '''
-from .packages import nltk
-from .tokenizers import WordTokenizer
-from .compat import basestring, u
-from .decorators import cached_property
+from __future__ import absolute_import
+from text.packages import nltk
+from text.tokenizers import WordTokenizer
+from text.compat import basestring, u
+from text.decorators import cached_property
 import formats
 
 ##### Basic feature extractors #####

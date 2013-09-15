@@ -3,11 +3,11 @@
 
 .. versionadded:: 0.5.0
 """
-
-from .packages import nltk
-from .en import sentiment as pattern_sentiment
-from .tokenizers import WordTokenizer
-from .exceptions import MissingCorpusException
+from __future__ import absolute_import
+from text.packages import nltk
+from text.en import sentiment as pattern_sentiment
+from text.tokenizers import WordTokenizer
+from text.exceptions import MissingCorpusException
 
 DISCRETE = 'ds'
 CONTINUOUS = 'co'

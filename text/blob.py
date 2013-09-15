@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
 
 '''Wrappers for various units of text.'''
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 import sys
 import json
 import string as pystring
 from collections import defaultdict
 
-from .packages import nltk
-from .decorators import cached_property
-from .utils import lowerstrip, PUNCTUATION_REGEX
-from .inflect import singularize as _singularize, pluralize as _pluralize
-from .mixins import BlobComparableMixin
-from .compat import unicode, basestring, python_2_unicode_compatible, u
-from .np_extractors import BaseNPExtractor, FastNPExtractor
-from .taggers import BaseTagger, PatternTagger
-from .tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
-from .sentiments import BaseSentimentAnalyzer, PatternAnalyzer
-from .parsers import BaseParser, PatternParser
-from .translate import Translator
-from .en import suggest
-from .exceptions import MissingCorpusException
+from text.packages import nltk
+from text.decorators import cached_property
+from text.utils import lowerstrip, PUNCTUATION_REGEX
+from text.inflect import singularize as _singularize, pluralize as _pluralize
+from text.mixins import BlobComparableMixin
+from text.compat import unicode, basestring, python_2_unicode_compatible, u
+from text.np_extractors import BaseNPExtractor, FastNPExtractor
+from text.taggers import BaseTagger, PatternTagger
+from text.tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
+from text.sentiments import BaseSentimentAnalyzer, PatternAnalyzer
+from text.parsers import BaseParser, PatternParser
+from text.translate import Translator
+from text.en import suggest
+from text.exceptions import MissingCorpusException
 
 
 class Word(unicode):

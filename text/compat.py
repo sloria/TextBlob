@@ -35,7 +35,7 @@ else: # PY3
     izip = zip
     import csv
 
-# ======= Compatibility layer for __str__ and __repr__ ==========
+# ======= Compatibility layer for __str__ and __repr__ from NLTK ==========
 
 import unicodedata
 import functools

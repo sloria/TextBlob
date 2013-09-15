@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-from .packages import nltk
+from __future__ import unicode_literals, absolute_import
+from text.packages import nltk
 
-from .taggers import PatternTagger
-from .exceptions import MissingCorpusException
+from text.taggers import PatternTagger
+from text.exceptions import MissingCorpusException
 
 class BaseNPExtractor(object):
 
