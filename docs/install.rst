@@ -33,7 +33,7 @@ TextBlob is actively developed on Github_.
 
 You can clone the public repo: ::
 
-    git clone https://github.com/sloria/TextBlob.git
+    $ git clone https://github.com/sloria/TextBlob.git
 
 Or download one of the following:
 

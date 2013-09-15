@@ -112,7 +112,7 @@ class PerceptronTagger(BaseTagger):
         return tokens
 
     def train(self, sentences, save_loc=None, nr_iter=5):
-        '''Train a model from sentences, and save it at save_loc. nr_iter
+        '''Train a model from sentences, and save it at ``save_loc``. ``nr_iter``
         controls the number of Perceptron training iterations.
 
         :param sentences: A list of (words, tags) tuples.

@@ -3,7 +3,8 @@
 
 .. versionadded:: 0.6.0
 '''
-from .en import parse as pattern_parse
+from __future__ import absolute_import
+from text.en import parse as pattern_parse
 
 class BaseParser(object):
 

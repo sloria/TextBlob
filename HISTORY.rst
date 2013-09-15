@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6.3 (unreleased)
+0.6.3 (2013-09-15)
 ------------------
 .. module:: text.taggers
 
