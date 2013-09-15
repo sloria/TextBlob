@@ -3,11 +3,10 @@ Changelog
 
 0.6.3 (2013-09-15)
 ------------------
-.. module:: text.taggers
 
 - Word tokenization fix: Words that stem from a contraction will still have an apostrophe, e.g. ``"Let's" => ["Let", "'s"]``.
 - Fix bug with comparing blobs to strings.
-- Add :class:`text.taggers.PerceptronTagger <text.taggers.PerceptronTagger>`, a fast and accurate POS tagger. Thanks `@syllog1sm <http://github.com/syllog1sm>`_.
+- Add ``text.taggers.PerceptronTagger``, a fast and accurate POS tagger. Thanks `@syllog1sm <http://github.com/syllog1sm>`_.
 - Note for Python 3 users: You may need to update your corpora, since NLTK master has reorganized its corpus system. Just run ``curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python`` again.
 - Add ``download_corpora_lite.py`` script for getting the minimum corpora requirements for TextBlob's basic features.
 
