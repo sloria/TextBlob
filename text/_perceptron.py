@@ -9,7 +9,7 @@ import pickle
 import random
 
 
-class Perceptron(object):
+class AveragedPerceptron(object):
 
     '''An averaged perceptron, as implemented by Matthew Honnibal.
 
@@ -88,7 +88,7 @@ def train(nr_iter, examples):
     '''Return an averaged perceptron model trained on ``examples`` for
     ``nr_iter`` iterations.
     '''
-    model = Perceptron()
+    model = AveragedPerceptron()
     for i in range(nr_iter):
         random.shuffle(examples)
         for features, class_ in examples:

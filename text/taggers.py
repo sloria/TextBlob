@@ -11,7 +11,7 @@ import text
 from text.packages import nltk
 from text.en import tag as pattern_tag
 from text.exceptions import MissingCorpusException
-from text._perceptron import Perceptron
+from text._perceptron import AveragedPerceptron
 
 
 class BaseTagger(object):
@@ -82,7 +82,7 @@ class PerceptronTagger(BaseTagger):
     AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
     def __init__(self, load=True):
-        self.model = Perceptron()
+        self.model = AveragedPerceptron()
         self.tagdict = {}
         self.classes = set()
         if load:

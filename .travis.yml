@@ -6,7 +6,7 @@ python:
     - "pypy"
 # Install dependencies
 install:
-    - "pip install -U . --use-mirrors"
+    - "pip install -U ."
     - "python download_corpora.py"
 # Run tests
 script: "python run_tests.py"

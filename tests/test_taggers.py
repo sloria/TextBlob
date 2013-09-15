@@ -89,7 +89,6 @@ class TestPerceptronTagger(unittest.TestCase):
     def test_loading_missing_file_raises_missing_corpus_exception(self):
         assert_raises(MissingCorpusException, self.tagger.load, 'missing.pickle')
 
-
 def _read_tagged(text, sep='|'):
     sentences = []
     for sent in text.split('\n'):
@@ -101,8 +100,6 @@ def _read_tagged(text, sep='|'):
             tags.append(pos)
         sentences.append((tokens, tags))
     return sentences
-
-
 
 _wsj_train = ("Pierre|NNP Vinken|NNP ,|, 61|CD years|NNS old|JJ ,|, will|MD "
               "join|VB the|DT board|NN as|IN a|DT nonexecutive|JJ director|NN "
