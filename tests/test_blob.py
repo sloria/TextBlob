@@ -70,6 +70,10 @@ class WordListTest(TestCase):
         else:
             assert_equal(repr(wl), "WordList(['Beautiful', 'is', 'better'])")
 
+    def test_str(self):
+        wl = tb.WordList(self.words)
+        assert_equal(str(wl), str(self.words))
+
     def test_singularize(self):
         wl = tb.WordList(['dogs', 'cats', 'buffaloes', 'men', 'mice'])
         assert_equal(wl.singularize(), tb.WordList(['dog', 'cat', 'buffalo', 'man', 'mouse'

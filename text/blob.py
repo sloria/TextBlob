@@ -113,6 +113,9 @@ class WordList(list):
         self._collection = [Word(w) for w in collection]
         super(WordList, self).__init__(self._collection)
 
+    def __str__(self):
+        return str(self._collection)
+
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
