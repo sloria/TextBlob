@@ -2,30 +2,9 @@
 
 from __future__ import unicode_literals, absolute_import
 from text.packages import nltk
-
 from text.taggers import PatternTagger
 from text.exceptions import MissingCorpusException
-
-class BaseNPExtractor(object):
-
-    '''Abstract base class from which all NPExtractor classes inherit.
-
-    Descendant classes should implement an API, like so: ::
-
-        >>> from text.np_extractor import MyExtractor
-        >>> extractor = MyExtractor()
-        >>> text = "Python is a high-level scripting language."
-        >>> extractor.extract(text)
-        ['Python', 'scripting language']
-
-    In other words, descendant classes must implement an ``extract(text)`` method
-    that returns a list of noun phrases as strings.
-    '''
-
-    def extract(self, text):
-        '''Return a list of noun phrases (strings) for a body of text.'''
-        raise NotImplementedError('Must implement an extract(text) method')
-
+from text.base import BaseNPExtractor
 
 class ChunkParser(nltk.ChunkParserI):
 

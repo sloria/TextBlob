@@ -7,39 +7,7 @@ from __future__ import absolute_import
 from text.packages import nltk
 from text.utils import strip_punc
 from text.exceptions import MissingCorpusException
-
-
-class BaseTokenizer(nltk.tokenize.api.TokenizerI):
-
-    '''Abstract base class from which all Tokenizer classes inherit.
-
-    Descendant classes should implement an API like so: ::
-
-        >>> from text.tokenizers import MyTokenizer
-        >>> tokenizer = MyTokenizer()
-        >>> text = "I am a sentence."
-        >>> tokenizer.tokenize(text)
-        ['I', 'am', 'a', 'sentence.']
-
-    In other words, descendant classes must implement a ``tokenize(text)`` method
-    that returns a list of noun phrases as strings.
-    '''
-
-    def tokenize(self, text):
-        '''Return a list of tokens (strings) for a body of text.
-
-        :rtype: list
-        '''
-        raise NotImplementedError('Must implement a tokenize(text) method')
-
-    def itokenize(self, text, *args, **kwargs):
-        '''Return a generator that generates tokens "on-demand".
-
-        .. versionadded:: 0.6.0
-
-        :rtype: generator
-        '''
-        return (t for t in self.tokenize(text, *args, **kwargs))
+from text.base import BaseTokenizer
 
 
 class WordTokenizer(BaseTokenizer):

@@ -12,21 +12,7 @@ from text.packages import nltk
 from text.en import tag as pattern_tag
 from text.exceptions import MissingCorpusException
 from text._perceptron import AveragedPerceptron
-
-
-class BaseTagger(object):
-
-    '''Abstract tagger class from which all taggers
-    inherit from. All descendants must implement a
-    `tag()` method.
-    '''
-
-    def tag(self, sentence, tokenize=True):
-        '''Return a list of tuples of the form (word, tag)
-        for a given set of text.
-        '''
-        raise NotImplementedError('Must implement a tag() method')
-
+from text.base import BaseTagger
 
 class PatternTagger(BaseTagger):
 

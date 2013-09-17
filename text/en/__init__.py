@@ -2,13 +2,13 @@
 '''This module is based on pattern.en. See the bundled NOTICE file for
 license information.
 '''
+from __future__ import absolute_import
 import os
-import string
 
-from .text import (Parser as _Parser, Sentiment as _Sentiment, Lexicon,
+from text._text import (Parser as _Parser, Sentiment as _Sentiment, Lexicon,
     WORD, POS, CHUNK, PNP, PENN, UNIVERSAL, Spelling)
 
-from .compat import text_type, unicode
+from text.compat import text_type, unicode
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))

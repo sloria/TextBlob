@@ -85,8 +85,9 @@ setup(
     url='https://github.com/sloria/TextBlob',
     install_requires=['PyYAML'],
     packages=find_packages(exclude=('test*', 'text.nltk.test')),
+    include_package_data=True,
     package_data={
-        "text": ["*.txt", "*.xml"],
+        "text.en": ["*.txt", "*.xml"]
     },
     classifiers=(
         'Development Status :: 4 - Beta',

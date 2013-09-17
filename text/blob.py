@@ -13,11 +13,13 @@ from text.utils import lowerstrip, PUNCTUATION_REGEX
 from text.inflect import singularize as _singularize, pluralize as _pluralize
 from text.mixins import BlobComparableMixin
 from text.compat import unicode, basestring, python_2_unicode_compatible, u
-from text.np_extractors import BaseNPExtractor, FastNPExtractor
-from text.taggers import BaseTagger, PatternTagger
-from text.tokenizers import BaseTokenizer, WordTokenizer, SentenceTokenizer
-from text.sentiments import BaseSentimentAnalyzer, PatternAnalyzer
-from text.parsers import BaseParser, PatternParser
+from text.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
+                        BaseSentimentAnalyzer, BaseParser)
+from text.np_extractors import FastNPExtractor
+from text.taggers import PatternTagger
+from text.tokenizers import WordTokenizer, SentenceTokenizer
+from text.sentiments import PatternAnalyzer
+from text.parsers import PatternParser
 from text.translate import Translator
 from text.en import suggest
 from text.exceptions import MissingCorpusException

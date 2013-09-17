@@ -5,16 +5,8 @@
 '''
 from __future__ import absolute_import
 from text.en import parse as pattern_parse
+from text.base import BaseParser
 
-class BaseParser(object):
-
-    '''Abstract parser class from which all parsers inherit from. All
-    descendants must implement a `parse()` method.
-    '''
-
-    def parse(self, text):
-        '''Parses the text.'''
-        raise NotImplementedError("Must implement a parse() method.")
 
 class PatternParser(BaseParser):
 

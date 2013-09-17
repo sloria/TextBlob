@@ -8,35 +8,8 @@ from text.packages import nltk
 from text.en import sentiment as pattern_sentiment
 from text.tokenizers import WordTokenizer
 from text.exceptions import MissingCorpusException
+from text.base import BaseSentimentAnalyzer, DISCRETE, CONTINUOUS
 
-DISCRETE = 'ds'
-CONTINUOUS = 'co'
-
-
-class BaseSentimentAnalyzer(object):
-
-    '''Abstract base class from which all sentiment analyzers inherit.
-    Should implement an ``analyze(text)`` method which returns either the
-    results of analysis.
-    '''
-
-    kind = DISCRETE
-
-    def __init__(self):
-        self._trained = False
-
-    def train(self):
-        # Train me
-        self._trained = True
-
-    def analyze(self, text):
-        '''Return the result of of analysis. Typically returns either a
-        tuple, float, or dictionary.'''
-        # Lazily train the classifier
-        if not self._trained:
-            self.train()
-        # Analyze text
-        return None
 
 class PatternAnalyzer(BaseSentimentAnalyzer):
 
