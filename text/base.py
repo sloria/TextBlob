@@ -5,6 +5,7 @@ which define the interface for descendant classes.
 from __future__ import absolute_import
 from text.packages import nltk
 
+##### POS TAGGERS #####
 
 class BaseTagger(object):
 
@@ -19,6 +20,7 @@ class BaseTagger(object):
         '''
         raise NotImplementedError('Must implement a tag() method')
 
+##### NOUN PHRASE EXTRACTORS #####
 
 class BaseNPExtractor(object):
 
@@ -40,6 +42,7 @@ class BaseNPExtractor(object):
         '''Return a list of noun phrases (strings) for a body of text.'''
         raise NotImplementedError('Must implement an extract(text) method')
 
+##### TOKENIZERS #####
 
 class BaseTokenizer(nltk.tokenize.api.TokenizerI):
 
@@ -73,8 +76,11 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
         '''
         return (t for t in self.tokenize(text, *args, **kwargs))
 
+##### SENTIMENT ANALYZERS ####
+
 DISCRETE = 'ds'
 CONTINUOUS = 'co'
+
 
 class BaseSentimentAnalyzer(object):
 
@@ -101,6 +107,7 @@ class BaseSentimentAnalyzer(object):
         # Analyze text
         return None
 
+##### PARSERS #####
 
 class BaseParser(object):
 

@@ -39,14 +39,14 @@ Tokenizers
 POS Taggers
 -----------
 
-.. automodule:: text.taggers
+.. automodule:: text.en.taggers
     :members:
     :inherited-members:
 
 Noun Phrase Extractors
 ----------------------
 
-.. automodule:: text.np_extractors
+.. automodule:: text.en.np_extractors
     :members: BaseNPExtractor, ConllExtractor, FastNPExtractor
     :inherited-members:
 
@@ -54,7 +54,7 @@ Noun Phrase Extractors
 Sentiment Analyzers
 -------------------
 
-.. automodule:: text.sentiments
+.. automodule:: text.en.sentiments
     :members:
     :inherited-members:
 
@@ -62,7 +62,7 @@ Sentiment Analyzers
 Parsers
 -------
 
-.. automodule:: text.parsers
+.. automodule:: text.en.parsers
     :members:
     :inherited-members:
 

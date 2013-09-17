@@ -35,10 +35,10 @@ from __future__ import absolute_import
 from text.packages import nltk
 from text.tokenizers import WordTokenizer
 from text.compat import basestring, u
+import text.formats as formats
 from text.decorators import cached_property
-import formats
 
-##### Basic feature extractors #####
+### Basic feature extractors ###
 
 def _get_words_from_dataset(dataset):
     '''Return a set of all words in a dataset.
@@ -75,7 +75,7 @@ def basic_extractor(document, train_set):
                                             for w in word_features])
     return features
 
-##### Classifiers #####
+##### CLASSIFIERS #####
 
 class BaseClassifier(object):
 

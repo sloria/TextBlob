@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''This module is based on pattern.en. See the bundled NOTICE file for
+'''This file is based on pattern.en. See the bundled NOTICE file for
 license information.
 '''
 from __future__ import absolute_import

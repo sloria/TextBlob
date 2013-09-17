@@ -4,7 +4,8 @@ from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
 from text.packages import nltk
-from text.np_extractors import ConllExtractor, filter_insignificant
+from text.np_extractors import ConllExtractor
+from text.utils import filter_insignificant
 
 
 class TestConllExtractor(unittest.TestCase):
