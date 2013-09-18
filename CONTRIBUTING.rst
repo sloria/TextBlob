@@ -5,6 +5,7 @@ In General
 ----------
 
 - `PEP 8`_, when sensible.
+- Conventions *and* configuration.
 - Test ruthlessly. Write docs for new features.
 - Even more important than Test-Driven Development--*Human-Driven Development*.
 

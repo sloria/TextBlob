@@ -49,4 +49,5 @@ pylintrc
 
 ### Extra models and data ###
 
-text/trontagger.pickle
+text/*.pickle
+text/en/*.pickle

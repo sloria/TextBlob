@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import random
 import logging
 import os.path
+import warnings
 from collections import defaultdict
 import pickle
 
@@ -46,21 +47,15 @@ class NLTKTagger(BaseTagger):
 class PerceptronTagger(BaseTagger):
 
     '''Greedy Averaged Perceptron tagger, as implemented by Matthew Honnibal.
-    Requires that ``trontagger.pickle`` exists in the text/ package directory.
-    For more information on how to get and install the pickled model, see
-    the install guide here:
+    Requires that ``trontagger.pickle`` exists in the text/en package directory.
+    The pickle file can be obtained from the Github Releases page for TextBlob.
 
-        https://textblob.readthedocs.org/en/latest/install.html
+    .. note::
+        This class is deprecated as of version ``0.7.0``. It is now maintained
+        as a TextBlob extension, ``textblob-aptagger``.
 
-    See more info about the Averaged Perceptron Tagger at this blog post:
-
-        http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/
-
-    The tagger is about 96.8%% accurate.
-
-    :param load: Load the pickled model upon initiation.
-
-    .. versionadded:: 0.6.3
+    .. deprecated:: 0.7.0
+        Install the ``textblob-aptagger`` extension instead.
     '''
 
     START = ['-START-', '-START2-']
@@ -68,6 +63,9 @@ class PerceptronTagger(BaseTagger):
     AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), 'trontagger.pickle')
 
     def __init__(self, load=True):
+        warnings.warn("PerceptronTagger is deprecated. Use "
+                        " the textblob-aptagger extension instead",
+                        category=DeprecationWarning)
         self.model = AveragedPerceptron()
         self.tagdict = {}
         self.classes = set()

@@ -19,7 +19,7 @@ This will install TextBlob and download the necessary NLTK corpora.
 
         $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora_lite.py | python
 
-.. admonition:: If you don't have pip:
+.. admonition:: If you don't have pip
 
     If you don't have ``pip`` (you should), run this first: ::
 
@@ -56,23 +56,6 @@ To get the latest development version of TextBlob, run
 ::
 
     $ pip install -U git+https://github.com/sloria/TextBlob.git@dev
-
-Getting Extra Models and Data
------------------------------
-
-.. module:: text.taggers
-
-Some features, such as the :class:`PerceptronTagger <PerceptronTagger>`, require data that is not available from the NLTK downloader. These data will be made available on the Github `release page`_ for TextBlob.
-
-To install a model or corpus:
-
-1. Download the file from the `release page`_.
-2. Unzip/untar the downloaded file.
-3. Place the uncompressed file in your TextBlob installation directory. To find out where this is, you can run ::
-
-    $ python -c "import text; print(text.__path__[0])"
-
-.. _release page: https://github.com/sloria/TextBlob/releases
 
 Python
 ++++++

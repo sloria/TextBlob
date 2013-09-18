@@ -1,9 +1,14 @@
 Changelog
 =========
 
+0.7.0 (unreleased)
+------------------
+- Move all English-specific code to its own module, ``text.en``.
+- Basic extensions framework in place. TextBlob has been refactored to make it easier to develop extensions.
+- *Backwards-incompatible*: All abstract base classes have been moved to the ``text.base`` module.
+
 0.6.3 (2013-09-15)
 ------------------
-
 - Word tokenization fix: Words that stem from a contraction will still have an apostrophe, e.g. ``"Let's" => ["Let", "'s"]``.
 - Fix bug with comparing blobs to strings.
 - Add ``text.taggers.PerceptronTagger``, a fast and accurate POS tagger. Thanks `@syllog1sm <http://github.com/syllog1sm>`_.
