@@ -58,7 +58,7 @@ Features
 - Word inflection (pluralization and singularization) and lemmatization
 - Spelling correction
 - JSON serialization
-- Easily swap models, or create your own
+- Add new models or languages through extensions
 
 Get it now
 ----------
@@ -81,6 +81,7 @@ Guide
    quickstart
    classifiers
    advanced_usage
+   extensions
    api_reference
 
 Project info

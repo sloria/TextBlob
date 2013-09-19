@@ -172,7 +172,7 @@ You can override this feature extractor by writing your own. A feature extractor
 
 The function should return a dictionary of features for ``document``.
 
-For example, let's create a feature extractor that just uses the first and last words of a document its features.
+For example, let's create a feature extractor that just uses the first and last words of a document as its features.
 
 .. doctest::
 
@@ -201,5 +201,3 @@ Next Steps
 Be sure to check out the :ref:`API Reference <api_classifiers>` for the :ref:`classifiers module <api_classifiers>`.
 
 Want to try different POS taggers or noun phrase chunkers with TextBlobs? Check out the :ref:`Advanced Usage <advanced>` guide.
-
-

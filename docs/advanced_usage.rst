@@ -79,7 +79,7 @@ TextBlob currently has three POS tagger implementations, located in ``text.tagge
 
 The second implementation is ``NLTKTagger`` which uses NLTK_'s TreeBank tagger. *It requires numpy and only works on Python 2*.
 
-The third implementation is ``PerceptronTagger`` which is based on the Averaged Perceptron algorithm, as implemented by Matthew Honnibal. More information can be found at `this blog post <http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/>`_. *This tagger requires the trontagger.pickle file*. See the :ref:`installation guide <install>` for instructions on obtaining the pickled model.
+The third implementation is ``PerceptronTagger`` which is based on the Averaged Perceptron algorithm, as implemented by Matthew Honnibal. More information can be found here: `A Good Part of Speech Tagger in About 200 Lines of Python <http://honnibal.wordpress.com/2013/09/11/a-good-part-of-speechpos-tagger-in-about-200-lines-of-python/>`_. *This tagger requires the trontagger.pickle file*. See the :ref:`installation guide <install>` for instructions on obtaining the pickled model.
 
 Similar to the tokenizers and noun phrase chunkers, you can explicitly specify which POS tagger to use by passing a tagger instance to the constructor.
 
