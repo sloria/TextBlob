@@ -5,7 +5,6 @@ Tutorial: Quickstart
 
 TextBlob aims to provide access to common text-processing operations through a familiar interface. You can treat ``TextBlob`` objects as if they were Python strings that learned how to do Natural Language Processing.
 
-
 Create a TextBlob
 -----------------
 
@@ -15,7 +14,7 @@ First, the import.
 
     >>> from text.blob import TextBlob
 
-Let's create our first ``TextBlob``.
+Let's create our first :class:`TextBlob <text.blob.TextBlob>`.
 
 .. doctest::
 
@@ -83,7 +82,7 @@ For more advanced tokenization, see the :ref:`Advanced Usage <advanced>` guide.
 Words Inflection and Lemmatization
 ----------------------------------
 
-Each word in ``TextBlob.words`` or ``Sentence.words`` is a ``Word``
+Each word in ``TextBlob.words`` or ``Sentence.words`` is a :class:`Word <text.blob.Word>`
 object (a subclass of ``unicode``) with useful methods, e.g. for word inflection.
 
 .. doctest::
@@ -105,11 +104,43 @@ Words can be lemmatized by accessing the ``lemma`` property.
     >>> w.lemma
     'octopus'
 
+WordNet Integration
+-------------------
+
+You can access the synsets for a :class:`Word <text.blob.Word>` via the ``synsets()`` method, optionally passing in a part of speech.
+
+.. doctest::
+
+    >>> from text.blob import Word, VERB
+    >>> word = Word("octopus")
+    >>> word.synsets()
+    [Synset('octopus.n.01'), Synset('octopus.n.02')]
+    >>> Word("hack").synsets(pos=VERB)
+    [Synset('chop.v.05'), Synset('hack.v.02'), Synset('hack.v.03'), Synset('hack.v.04'), Synset('hack.v.05'), Synset('hack.v.06'), Synset('hack.v.07'), Synset('hack.v.08')]
+
+You can access the definitions for each synset via the ``definitions()`` method, which can also take an optional part-of-speech argument.
+
+.. doctest::
+
+    >>> Word("octopus").definitions()
+    ['tentacles of octopus prepared as food', 'bottom-living cephalopod having a soft oval body with eight long tentacles']
+
+You can also create synsets directly.
+
+.. doctest::
+
+    >>> from text.blob import Synset
+    >>> octopus = Synset('octopus.n.02')
+    >>> shrimp = Synset('shrimp.n.03')
+    >>> octopus.path_similarity(shrimp)
+    0.1111111111111111
+
+For more information on the WordNet API, see the NLTK documentation on the `Wordnet Interface <http://nltk.googlecode.com/svn/trunk/doc/howto/wordnet.html>`_.
 
 WordLists
 ---------
 
-Similarly, ``WordLists`` are just Python lists with additional methods.
+A :class:`WordList <text.blob.WordList>` is just a Python list with additional methods.
 
 .. doctest::
 

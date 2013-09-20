@@ -72,6 +72,7 @@ Features
 - Spelling correction
 - JSON serialization
 - Add new models or languages through extensions
+- WordNet integration
 
 Get it now
 ----------

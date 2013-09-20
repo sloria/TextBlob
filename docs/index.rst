@@ -59,6 +59,7 @@ Features
 - Spelling correction
 - JSON serialization
 - Add new models or languages through extensions
+- WordNet integration
 
 Get it now
 ----------
@@ -68,7 +69,6 @@ Get it now
     $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
 
 Ready to dive in? Go on to the :ref:`Quickstart guide <quickstart>`.
-
 
 Guide
 =====

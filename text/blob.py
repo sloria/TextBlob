@@ -139,7 +139,6 @@ class Word(unicode):
     def synsets(self, pos=None):
         '''Return a list of Synset objects for this word.
 
-
         :param pos: A part-of-speech tag to filter upon. If ``None``, all
             synsets for all parts of speech will be loaded.
 
@@ -289,13 +288,13 @@ class BaseBlob(BlobComparableMixin):
     :param tokenizer: (optional) A tokenizer instance. If ``None``,
         defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
-        defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+        defaults to :class:`FastNPExtractor() <text.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``,
-        defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+        defaults to :class:`PatternTagger <text.en.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``,
-        defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+        defaults to :class:`PatternAnalyzer <text.en.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
-        :class:`PatternParser <text.parsers.PatternParser>`.
+        :class:`PatternParser <text.en.parsers.PatternParser>`.
     :param classifier: A classifier.
 
     .. versionchanged:: 0.6.0
@@ -668,11 +667,11 @@ class TextBlob(BaseBlob):
     :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to
         :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
-        defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+        defaults to :class:`FastNPExtractor() <text.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to
-        :class:`PatternTagger <text.taggers.PatternTagger>`.
+        :class:`PatternTagger <text.en.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to
-        :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+        :class:`PatternAnalyzer <text.en.sentiments.PatternAnalyzer>`.
     :param classifier: (optional) A classifier.
     """
 
