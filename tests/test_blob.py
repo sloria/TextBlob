@@ -9,7 +9,7 @@ from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from text.compat import PY2, unicode
+from text.compat import PY2, unicode, basestring
 import text.blob as tb
 from text.packages import nltk
 from text.np_extractors import ConllExtractor, FastNPExtractor
@@ -18,6 +18,8 @@ from text.tokenizers import WordTokenizer, SentenceTokenizer
 from text.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
 from text.parsers import PatternParser
 from text.classifiers import NaiveBayesClassifier
+
+Synset = nltk.corpus.reader.Synset
 
 train = [
     ('I love this sandwich.', 'pos'),
@@ -881,6 +883,38 @@ class WordTest(TestCase):
         assert_equal(w.lemma, "car")
         w = tb.Word("wolves")
         assert_equal(w.lemma, "wolf")
+
+
+    def test_synsets(self):
+        w = tb.Word("car")
+        assert_true(isinstance(w.synsets(), (list, tuple)))
+        assert_true(isinstance(w.synsets()[0], Synset))
+
+    def test_synsets_with_pos_argument(self):
+        w = tb.Word("work")
+        noun_syns = w.synsets(pos=tb.NOUN)
+        for synset in noun_syns:
+            assert_equal(synset.pos, tb.NOUN)
+
+    def test_definitions(self):
+        w = tb.Word("octopus")
+        for definition in w.definitions():
+            assert_true(isinstance(definition, basestring))
+
+class TestWordnetInterface(TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_synset(self):
+        syn = tb.Synset("dog.n.01")
+        word = tb.Word("dog")
+        assert_equal(word.synsets()[0], syn)
+
+    def test_lemma(self):
+        lemma = tb.Lemma('eat.v.01.eat')
+        word = tb.Word("eat")
+        assert_equal(word.synsets()[0].lemmas[0], lemma)
 
 
 class BlobberTest(TestCase):

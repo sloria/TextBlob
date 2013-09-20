@@ -1,6 +1,32 @@
 # -*- coding: utf-8 -*-
 
-'''Wrappers for various units of text.'''
+'''Wrappers for various units of text, including the main ``TextBlob``,
+``Word``, and ``WordList`` classes.
+Example usage: ::
+
+    >>> from text.blob import TextBlob
+    >>> b = TextBlob("Simple is better than complex.")
+    >>> b.tags
+    [(u'Simple', u'NN'), (u'is', u'VBZ'), (u'better', u'JJR'), (u'than', u'IN'), (u'complex', u'NN')]
+    >>> b.noun_phrases
+    WordList([u'simple'])
+    >>> b.words
+    WordList([u'Simple', u'is', u'better', u'than', u'complex'])
+    >>> b.sentiment
+    (0.06666666666666667, 0.41904761904761906)
+    >>> b.words[0].synsets()[0]
+    Synset('simple.n.01')
+
+Also includes hooks into NLTK's Wordnet interface.
+
+.. data:: Synset
+
+    Synset constructor.
+
+.. data:: Lemma
+
+    Lemma constructor.
+'''
 from __future__ import unicode_literals, absolute_import
 import sys
 import json
@@ -23,6 +49,13 @@ from text.parsers import PatternParser
 from text.translate import Translator
 from text.en import suggest
 from text.exceptions import MissingCorpusException
+
+# Wordnet interface
+wordnet = nltk.corpus.wordnet
+Synset = nltk.corpus.wordnet.synset
+Lemma = nltk.corpus.wordnet.lemma
+# Part of speech constants
+VERB, NOUN, ADJ, ADV = wordnet.VERB, wordnet.NOUN, wordnet.ADJ, wordnet.ADV
 
 
 class Word(unicode):
@@ -102,6 +135,26 @@ class Word(unicode):
         except LookupError as err:
             print(err)
             raise MissingCorpusException()
+
+    def synsets(self, pos=None):
+        '''Return a list of Synset objects for this word.
+
+
+        :param pos: A part-of-speech tag to filter upon. If ``None``, all
+            synsets for all parts of speech will be loaded.
+
+        :rtype: list of Synsets
+        '''
+        return wordnet.synsets(self.string, pos)
+
+    def definitions(self, pos=None):
+        '''Return a list of definitions for this word. Each definition
+        corresponds to a synset for this word.
+
+        :param pos: A part-of-speech tag to filter upon. If ``None``, definitions
+            for all parts of speech will be loaded.
+        '''
+        return [syn.definition for syn in self.synsets(pos=pos)]
 
 
 class WordList(list):

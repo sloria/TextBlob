@@ -5,28 +5,8 @@ API Reference
 
 Blob Classes
 ------------
-.. module:: text.blob
 
-These include the :class:`TextBlob <TextBlob>` and :class:`Sentence <Sentence>`
-classes, which both inherit from :class:`BaseBlob <BaseBlob>`.
-
-.. autoclass:: BaseBlob
-    :members:
-
-.. autoclass:: TextBlob
-    :members:
-
-.. autoclass:: Sentence
-    :members:
-
-Lower-level classes
--------------------
-.. autoclass:: Word
-    :inherited-members:
-    :members:
-
-.. autoclass:: WordList
-    :inherited-members:
+.. automodule:: text.blob
     :members:
 
 Tokenizers
