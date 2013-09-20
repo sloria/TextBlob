@@ -1,4 +1,3 @@
-
 TextBlob: Simplified Text Processing
 ====================================
 
@@ -18,6 +17,9 @@ TextBlob: Simplified Text Processing
     :target: http://flattr.com/thing/1786153/sloriaTextBlob-on-GitHub
     :alt: Flattr Steve
 
+.. image:: https://badge.waffle.io/sloria/TextBlob.png
+    :target: https://waffle.io/sloria/TextBlob
+    :alt: Issues in Ready
 
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
 
