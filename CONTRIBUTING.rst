@@ -20,8 +20,9 @@ In Particular
 Questions, Feature Requests, Bug Reports, and Feedback. . .
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-. . .should all be reported on the `Github Issue Tracker`_ .
+. . .should all be reported on the `Github Issue Tracker`_ . For a nicer interface, check out the `TextBlob waffle.io board`_.
 
+.. _TextBlob waffle.io board: https://waffle.io/sloria/TextBlob
 .. _`Github Issue Tracker`: https://github.com/sloria/TextBlob/issues?state=open
 
 Setting Up for Local Development

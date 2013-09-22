@@ -302,9 +302,11 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
     sentences, i, j = [[]], 0, 0
     while j < len(tokens):
         if tokens[j] in ("...", ".", "!", "?", EOS):
-            # There may be a trailing parenthesis.
+            # Handle citations, trailing parenthesis, repeated punctuation (!?).
             while j < len(tokens) \
-              and tokens[j] in ("...", ".", "!", "?", ")", "'", "\"", "”", "’", EOS):
+                    and tokens[j] in ("'", "\"", u"”", u"’", "...", ".", "!", "?", ")", EOS):
+                if tokens[j] in ("'", "\"") and sentences[-1].count(tokens[j]) % 2 == 0:
+                    break  # Balanced quotes.
                 j += 1
             sentences[-1].extend(t for t in tokens[i:j] if t != EOS)
             sentences.append([])
@@ -419,8 +421,7 @@ class Morphology(lazylist, Rules):
         list.extend(self, (x.split() for x in _read(self._path)))
 
     def apply(self, token, previous=(None, None), next=(None, None)):
-        """ Applies lexical rules to the given token,
-            which is a [word, tag] list.
+        """ Applies lexical rules to the given token, which is a [word, tag] list.
         """
         w = token[0]
         for r in self:
@@ -443,8 +444,8 @@ class Morphology(lazylist, Rules):
         return token
 
     def insert(self, i, tag, affix, cmd="hassuf", tagged=None):
-        """ Inserts a new rule that assigns the given tag to words with the given affix
-            (and tagged as specified), e.g., Morphology.append("RB", "-ly").
+        """ Inserts a new rule that assigns the given tag to words with the given affix,
+            e.g., Morphology.append("RB", "-ly").
         """
         if affix.startswith("-") and affix.endswith("-"):
             affix, cmd = affix[+1:-1], "char"
@@ -1197,8 +1198,8 @@ class Parser:
             the tokenizer, tagger, chunker, labeler and lemmatizer.
         """
         # Tokenizer.
-        if tokenize is True:
-            s = self.find_tokens(s)
+        if tokenize:
+            s = self.find_tokens(s, **kwargs)
         if isinstance(s, (list, tuple)):
             s = [type(s) in string_types and s.split(" ") or s for s in s]
         if type(s) in string_types:
@@ -1356,12 +1357,14 @@ class Spelling(lazydict):
         """ Return a list of (word, confidence) spelling corrections for the given word,
             based on the probability of known words with edit distance 1-2 from the given word.
         """
-        # Don't correct punctuation or numbers
-        if any([w in string.punctuation,
-                isnumeric(w)]):
-            return [(w, 1.0)]
         if len(self) == 0:
             self.load()
+        if len(w) == 1:
+            return [(w, 1.0)] # I
+        if w in PUNCTUATION:
+            return [(w, 1.0)] # .?!
+        if w.replace(".", "").isdigit():
+            return [(w, 1.0)] # 1.5
         candidates = self._known([w]) \
                   or self._known(self._edit1(w)) \
                   or self._known(self._edit2(w)) \
@@ -1374,4 +1377,3 @@ class Spelling(lazydict):
         else:
             candidates = [(word, p) for p, word in candidates]
         return candidates
-

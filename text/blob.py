@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 '''Wrappers for various units of text, including the main ``TextBlob``,
 ``Word``, and ``WordList`` classes.
 Example usage: ::
@@ -40,7 +39,7 @@ from text.inflect import singularize as _singularize, pluralize as _pluralize
 from text.mixins import BlobComparableMixin
 from text.compat import unicode, basestring, python_2_unicode_compatible, u
 from text.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
-                        BaseSentimentAnalyzer, BaseParser)
+                       BaseSentimentAnalyzer, BaseParser)
 from text.np_extractors import FastNPExtractor
 from text.taggers import PatternTagger
 from text.tokenizers import WordTokenizer, SentenceTokenizer
@@ -244,6 +243,7 @@ class WordList(list):
         '''Return the lemma of each word in this WordList.'''
         return self.__class__([word.lemma for word in self])
 
+
 def _validated_param(obj, name, base_class, default, base_class_name=None):
     '''Validates a parameter passed to __init__. Makes sure that obj is
     the correct class. Return obj if it's not None or falls back to default
@@ -256,11 +256,12 @@ def _validated_param(obj, name, base_class, default, base_class_name=None):
     base_class_name = base_class_name if base_class_name else base_class.__name__
     if obj is not None and not isinstance(obj, base_class):
         raise ValueError("{name} must be an instance of {cls}"
-                            .format(name=name, cls=base_class_name))
+                         .format(name=name, cls=base_class_name))
     return obj if obj else default
 
+
 def _initialize_models(obj, tokenizer, pos_tagger,
-                            np_extractor, analyzer, parser, classifier):
+                       np_extractor, analyzer, parser, classifier):
     """Common initialization between BaseBlob and Blobber classes."""
     # tokenizer may be a textblob or an NLTK tokenizer
     obj.tokenizer = _validated_param(tokenizer, "tokenizer",
@@ -276,6 +277,7 @@ def _initialize_models(obj, tokenizer, pos_tagger,
                                      BaseSentimentAnalyzer, BaseBlob.analyzer)
     obj.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
     obj.classifier = classifier
+
 
 @python_2_unicode_compatible
 class BaseBlob(BlobComparableMixin):
@@ -320,7 +322,8 @@ class BaseBlob(BlobComparableMixin):
                                     "get_text() function")
         self.raw = self.string = text
         self.stripped = lowerstrip(self.raw, all=True)
-        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier)
+        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer,
+                           parser, classifier)
 
     @cached_property
     def words(self):

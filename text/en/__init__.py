@@ -120,9 +120,6 @@ def tag(s, tokenize=True, encoding="utf-8"):
 def suggest(w):
     """ Returns a list of (word, confidence)-tuples of spelling corrections.
     """
-    # Don't correct one-letter, uppercased words
-    if w in ['I', 'A']:
-        return [(w, 1.0)]
     return spelling.suggest(w)
 
 def polarity(s, **kwargs):
