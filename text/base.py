@@ -5,17 +5,17 @@ which define the interface for descendant classes.
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
 from text.packages import nltk
+from text.compat import add_metaclass
 
 ##### POS TAGGERS #####
 
+@add_metaclass(ABCMeta)
 class BaseTagger(object):
 
     '''Abstract tagger class from which all taggers
     inherit from. All descendants must implement a
     `tag()` method.
     '''
-    __metaclass__ = ABCMeta
-
     @abstractmethod
     def tag(self, text, tokenize=True):
         '''Return a list of tuples of the form (word, tag)
@@ -25,6 +25,7 @@ class BaseTagger(object):
 
 ##### NOUN PHRASE EXTRACTORS #####
 
+@add_metaclass(ABCMeta)
 class BaseNPExtractor(object):
 
     '''Abstract base class from which all NPExtractor classes inherit.
@@ -40,7 +41,6 @@ class BaseNPExtractor(object):
     In other words, descendant classes must implement an ``extract(text)`` method
     that returns a list of noun phrases as strings.
     '''
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def extract(self, text):
@@ -49,6 +49,7 @@ class BaseNPExtractor(object):
 
 ##### TOKENIZERS #####
 
+@add_metaclass(ABCMeta)
 class BaseTokenizer(nltk.tokenize.api.TokenizerI):
 
     '''Abstract base class from which all Tokenizer classes inherit.
@@ -64,8 +65,6 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
     In other words, descendant classes must implement a ``tokenize(text)`` method
     that returns a list of noun phrases as strings.
     '''
-    __metaclass__ = ABCMeta
-
     @abstractmethod
     def tokenize(self, text):
         '''Return a list of tokens (strings) for a body of text.
@@ -88,15 +87,13 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
 DISCRETE = 'ds'
 CONTINUOUS = 'co'
 
-
+@add_metaclass(ABCMeta)
 class BaseSentimentAnalyzer(object):
 
     '''Abstract base class from which all sentiment analyzers inherit.
     Should implement an ``analyze(text)`` method which returns either the
     results of analysis.
     '''
-    __metaclass__ = ABCMeta
-
     kind = DISCRETE
 
     def __init__(self):
@@ -118,14 +115,12 @@ class BaseSentimentAnalyzer(object):
 
 ##### PARSERS #####
 
+@add_metaclass(ABCMeta)
 class BaseParser(object):
 
     '''Abstract parser class from which all parsers inherit from. All
     descendants must implement a `parse()` method.
     '''
-
-    __metaclass__ = ABCMeta
-
     @abstractmethod
     def parse(self, text):
         '''Parses the text.'''
