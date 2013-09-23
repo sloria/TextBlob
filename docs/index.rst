@@ -90,9 +90,9 @@ Project info
 .. toctree::
    :maxdepth: 1
 
-   contributing
    changelog
    authors
+   contributing
 
 
 .. _NLTK: http://www.nltk.org

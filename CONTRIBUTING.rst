@@ -75,7 +75,7 @@ The process for developing language extensions is the same as developing model e
 
 To see examples of existing extensions, visit the :ref:`Extensions <extensions>` page.
 
-Check out the :ref:`API reference <api>` for more info on the model interfaces.
+Check out the :ref:`API reference <api_base_classes>` for more info on the model interfaces.
 
 
 Git Branch Structure

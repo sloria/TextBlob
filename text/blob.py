@@ -129,6 +129,8 @@ class Word(unicode):
             synsets for all parts of speech will be loaded.
 
         :rtype: list of Synsets
+
+        .. versionadded:: 0.7.0
         '''
         return _wordnet.synsets(self.string, pos)
 
@@ -138,6 +140,8 @@ class Word(unicode):
 
         :param pos: A part-of-speech tag to filter upon. If ``None``, definitions
             for all parts of speech will be loaded.
+
+        .. versionadded:: 0.7.0
         '''
         return [syn.definition for syn in self.synsets(pos=pos)]
 

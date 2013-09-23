@@ -2,6 +2,8 @@
 '''Wordnet interface. Contains classes for creating Synsets and Lemmas
 directly.
 
+.. versionadded:: 0.7.0
+
 .. data:: wordnet
 
     NLTK's wordnet module.

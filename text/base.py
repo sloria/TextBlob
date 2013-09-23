@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 '''Abstract base classes for models (taggers, noun phrase extractors, etc.)
 which define the interface for descendant classes.
+
+.. versionadded:: 0.7.0
 '''
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
@@ -29,16 +31,7 @@ class BaseTagger(object):
 class BaseNPExtractor(object):
 
     '''Abstract base class from which all NPExtractor classes inherit.
-
-    Descendant classes should implement an API, like so: ::
-
-        >>> from text.np_extractor import MyExtractor
-        >>> extractor = MyExtractor()
-        >>> text = "Python is a high-level scripting language."
-        >>> extractor.extract(text)
-        ['Python', 'scripting language']
-
-    In other words, descendant classes must implement an ``extract(text)`` method
+    Descendant classes must implement an ``extract(text)`` method
     that returns a list of noun phrases as strings.
     '''
 
@@ -53,16 +46,7 @@ class BaseNPExtractor(object):
 class BaseTokenizer(nltk.tokenize.api.TokenizerI):
 
     '''Abstract base class from which all Tokenizer classes inherit.
-
-    Descendant classes should implement an API like so: ::
-
-        >>> from text.tokenizers import MyTokenizer
-        >>> tokenizer = MyTokenizer()
-        >>> text = "I am a sentence."
-        >>> tokenizer.tokenize(text)
-        ['I', 'am', 'a', 'sentence.']
-
-    In other words, descendant classes must implement a ``tokenize(text)`` method
+    Descendant classes must implement a ``tokenize(text)`` method
     that returns a list of noun phrases as strings.
     '''
     @abstractmethod

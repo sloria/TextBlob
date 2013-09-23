@@ -9,6 +9,14 @@ Blob Classes
 .. automodule:: text.blob
     :members:
 
+.. _api_base_classes:
+
+Base Classes
+------------
+
+.. automodule:: text.base
+    :members:
+
 Tokenizers
 ----------
 
