@@ -1,7 +1,7 @@
 TextBlob: Simplified Text Processing
 ====================================
 
-.. image:: https://badge.fury.io/py/textblob.png?label=Ready
+.. image:: https://badge.fury.io/py/textblob.png
     :target: http://badge.fury.io/py/textblob
     :alt: Latest version
 
@@ -17,7 +17,7 @@ TextBlob: Simplified Text Processing
     :target: http://flattr.com/thing/1786153/sloriaTextBlob-on-GitHub
     :alt: Flattr Steve
 
-.. image:: https://badge.waffle.io/sloria/TextBlob.png
+.. image:: https://badge.waffle.io/sloria/TextBlob.png?label=Ready
     :target: https://waffle.io/sloria/TextBlob
     :alt: Issues in Ready
 
