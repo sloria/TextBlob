@@ -1,7 +1,7 @@
 TextBlob: Simplified Text Processing
 ====================================
 
-.. image:: https://badge.fury.io/py/textblob.png
+.. image:: https://badge.fury.io/py/textblob.png?label=Ready
     :target: http://badge.fury.io/py/textblob
     :alt: Latest version
 
