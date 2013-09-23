@@ -3,6 +3,7 @@
 which define the interface for descendant classes.
 '''
 from __future__ import absolute_import
+from abc import ABCMeta, abstractmethod
 from text.packages import nltk
 
 ##### POS TAGGERS #####
@@ -13,12 +14,14 @@ class BaseTagger(object):
     inherit from. All descendants must implement a
     `tag()` method.
     '''
+    __metaclass__ = ABCMeta
 
-    def tag(self, sentence, tokenize=True):
+    @abstractmethod
+    def tag(self, text, tokenize=True):
         '''Return a list of tuples of the form (word, tag)
         for a given set of text.
         '''
-        raise NotImplementedError('Must implement a tag() method')
+        return
 
 ##### NOUN PHRASE EXTRACTORS #####
 
@@ -37,10 +40,12 @@ class BaseNPExtractor(object):
     In other words, descendant classes must implement an ``extract(text)`` method
     that returns a list of noun phrases as strings.
     '''
+    __metaclass__ = ABCMeta
 
+    @abstractmethod
     def extract(self, text):
         '''Return a list of noun phrases (strings) for a body of text.'''
-        raise NotImplementedError('Must implement an extract(text) method')
+        return
 
 ##### TOKENIZERS #####
 
@@ -59,13 +64,15 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
     In other words, descendant classes must implement a ``tokenize(text)`` method
     that returns a list of noun phrases as strings.
     '''
+    __metaclass__ = ABCMeta
 
+    @abstractmethod
     def tokenize(self, text):
         '''Return a list of tokens (strings) for a body of text.
 
         :rtype: list
         '''
-        raise NotImplementedError('Must implement a tokenize(text) method')
+        return
 
     def itokenize(self, text, *args, **kwargs):
         '''Return a generator that generates tokens "on-demand".
@@ -88,6 +95,7 @@ class BaseSentimentAnalyzer(object):
     Should implement an ``analyze(text)`` method which returns either the
     results of analysis.
     '''
+    __metaclass__ = ABCMeta
 
     kind = DISCRETE
 
@@ -98,6 +106,7 @@ class BaseSentimentAnalyzer(object):
         # Train me
         self._trained = True
 
+    @abstractmethod
     def analyze(self, text):
         '''Return the result of of analysis. Typically returns either a
         tuple, float, or dictionary.'''
@@ -115,6 +124,9 @@ class BaseParser(object):
     descendants must implement a `parse()` method.
     '''
 
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
     def parse(self, text):
         '''Parses the text.'''
-        raise NotImplementedError("Must implement a parse() method.")
+        return

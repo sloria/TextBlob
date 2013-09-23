@@ -4,6 +4,7 @@ from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
 from text.packages import nltk
+from text.base import BaseNPExtractor
 from text.np_extractors import ConllExtractor
 from text.utils import filter_insignificant
 
@@ -41,6 +42,16 @@ constructs intended to enable clear programs on both a small and large scale.
         filtered = filter_insignificant(chunk.leaves())
         tags = [tag for word, tag in filtered]
         assert_true("DT" not in tags)
+
+
+class BadExtractor(BaseNPExtractor):
+    '''An extractor without an extract method. How useless.'''
+    pass
+
+@attr("py27_only")
+def test_cannot_instantiate_incomplete_extractor():
+    with assert_raises(TypeError):
+        BadExtractor()
 
 if __name__ == '__main__':
     unittest.main()

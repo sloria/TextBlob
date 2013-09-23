@@ -70,8 +70,8 @@ File Formats
     :members:
     :inherited-members:
 
-Wordnet Interface
------------------
+Wordnet
+-------
 
 .. automodule:: text.wordnet
 
