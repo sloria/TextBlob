@@ -18,6 +18,7 @@ from text.tokenizers import WordTokenizer, SentenceTokenizer
 from text.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
 from text.parsers import PatternParser
 from text.classifiers import NaiveBayesClassifier
+import text.wordnet as wn
 
 Synset = nltk.corpus.reader.Synset
 
@@ -892,14 +893,15 @@ class WordTest(TestCase):
 
     def test_synsets_with_pos_argument(self):
         w = tb.Word("work")
-        noun_syns = w.synsets(pos=tb.NOUN)
+        noun_syns = w.synsets(pos=wn.NOUN)
         for synset in noun_syns:
-            assert_equal(synset.pos, tb.NOUN)
+            assert_equal(synset.pos, wn.NOUN)
 
     def test_definitions(self):
         w = tb.Word("octopus")
         for definition in w.definitions():
             assert_true(isinstance(definition, basestring))
+
 
 class TestWordnetInterface(TestCase):
 
@@ -907,12 +909,12 @@ class TestWordnetInterface(TestCase):
         pass
 
     def test_synset(self):
-        syn = tb.Synset("dog.n.01")
+        syn = wn.Synset("dog.n.01")
         word = tb.Word("dog")
         assert_equal(word.synsets()[0], syn)
 
     def test_lemma(self):
-        lemma = tb.Lemma('eat.v.01.eat')
+        lemma = wn.Lemma('eat.v.01.eat')
         word = tb.Word("eat")
         assert_equal(word.synsets()[0].lemmas[0], lemma)
 

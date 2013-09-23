@@ -70,6 +70,11 @@ File Formats
     :members:
     :inherited-members:
 
+Wordnet Interface
+-----------------
+
+.. automodule:: text.wordnet
+
 Exceptions
 ----------
 .. module:: text.exceptions

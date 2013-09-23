@@ -111,7 +111,8 @@ You can access the synsets for a :class:`Word <text.blob.Word>` via the ``synset
 
 .. doctest::
 
-    >>> from text.blob import Word, VERB
+    >>> from text.blob import Word
+    >>> from text.wordnet import VERB
     >>> word = Word("octopus")
     >>> word.synsets()
     [Synset('octopus.n.01'), Synset('octopus.n.02')]
@@ -129,7 +130,7 @@ You can also create synsets directly.
 
 .. doctest::
 
-    >>> from text.blob import Synset
+    >>> from text.wordnet import Synset
     >>> octopus = Synset('octopus.n.02')
     >>> shrimp = Synset('shrimp.n.03')
     >>> octopus.path_similarity(shrimp)

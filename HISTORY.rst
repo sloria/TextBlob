@@ -3,6 +3,7 @@ Changelog
 
 0.7.0 (unreleased)
 ------------------
+- Wordnet integration. ``Word`` objects have a ``synsets()`` and ``definitions()`` method. The ``text.wordnet`` module allows you to create ``Synset`` and ``Lemma`` objects directly.
 - Move all English-specific code to its own module, ``text.en``.
 - Basic extensions framework in place. TextBlob has been refactored to make it easier to develop extensions.
 - *Backwards-incompatible*: All abstract base classes have been moved to the ``text.base`` module.

@@ -15,16 +15,6 @@ Example usage: ::
     (0.06666666666666667, 0.41904761904761906)
     >>> b.words[0].synsets()[0]
     Synset('simple.n.01')
-
-Also includes hooks into NLTK's Wordnet interface.
-
-.. data:: Synset
-
-    Synset constructor.
-
-.. data:: Lemma
-
-    Lemma constructor.
 '''
 from __future__ import unicode_literals, absolute_import
 import sys
@@ -50,11 +40,8 @@ from text.en import suggest
 from text.exceptions import MissingCorpusException
 
 # Wordnet interface
-wordnet = nltk.corpus.wordnet
-Synset = nltk.corpus.wordnet.synset
-Lemma = nltk.corpus.wordnet.lemma
-# Part of speech constants
-VERB, NOUN, ADJ, ADV = wordnet.VERB, wordnet.NOUN, wordnet.ADJ, wordnet.ADV
+# NOTE: text.wordnet is not imported so that the wordnet corpus can be lazy-loaded
+_wordnet = nltk.corpus.wordnet
 
 
 class Word(unicode):
@@ -143,7 +130,7 @@ class Word(unicode):
 
         :rtype: list of Synsets
         '''
-        return wordnet.synsets(self.string, pos)
+        return _wordnet.synsets(self.string, pos)
 
     def definitions(self, pos=None):
         '''Return a list of definitions for this word. Each definition
@@ -523,6 +510,7 @@ class BaseBlob(BlobComparableMixin):
         class_name = self.__class__.__name__
         return "{cls}({text})".format(cls=class_name,
                                         text=repr(self.raw))
+
     def __len__(self):
         '''Returns the length of the raw text.'''
         return len(self.raw)
