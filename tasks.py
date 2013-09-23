@@ -41,6 +41,11 @@ def build_docs(clean=False, browse=False):
         browse_docs()
 
 @task
+def build_readme():
+    run("rst2html.py README.rst > README.html", pty=True)
+    run("open README.html")
+
+@task
 def doctest():
     os.chdir(docs_dir)
     run("make doctest")

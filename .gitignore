@@ -51,3 +51,6 @@ pylintrc
 
 text/*.pickle
 text/en/*.pickle
+
+# Readme build
+README.html
