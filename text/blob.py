@@ -122,7 +122,26 @@ class Word(unicode):
             print(err)
             raise MissingCorpusException()
 
-    def synsets(self, pos=None):
+    @cached_property
+    def synsets(self):
+        '''The list of Synset objects for this Word.
+
+        :rtype: list of Synsets
+
+        .. versionadded:: 0.7.0
+        '''
+        return self.get_synsets(pos=None)
+
+    @cached_property
+    def definitions(self):
+        '''The list of definitions for this word. Each definition corresponds
+        to a synset.
+
+        .. versionadded:: 0.7.0
+        '''
+        return self.define(pos=None)
+
+    def get_synsets(self, pos=None):
         '''Return a list of Synset objects for this word.
 
         :param pos: A part-of-speech tag to filter upon. If ``None``, all
@@ -134,7 +153,7 @@ class Word(unicode):
         '''
         return _wordnet.synsets(self.string, pos)
 
-    def definitions(self, pos=None):
+    def define(self, pos=None):
         '''Return a list of definitions for this word. Each definition
         corresponds to a synset for this word.
 
@@ -143,7 +162,7 @@ class Word(unicode):
 
         .. versionadded:: 0.7.0
         '''
-        return [syn.definition for syn in self.synsets(pos=pos)]
+        return [syn.definition for syn in self.get_synsets(pos=pos)]
 
 
 class WordList(list):

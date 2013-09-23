@@ -107,23 +107,23 @@ Words can be lemmatized by accessing the ``lemma`` property.
 WordNet Integration
 -------------------
 
-You can access the synsets for a :class:`Word <text.blob.Word>` via the ``synsets()`` method, optionally passing in a part of speech.
+You can access the synsets for a :class:`Word <text.blob.Word>` via the ``synsets`` property or the ``get_synsets`` method, optionally passing in a part of speech.
 
 .. doctest::
 
     >>> from text.blob import Word
     >>> from text.wordnet import VERB
     >>> word = Word("octopus")
-    >>> word.synsets()
+    >>> word.synsets
     [Synset('octopus.n.01'), Synset('octopus.n.02')]
-    >>> Word("hack").synsets(pos=VERB)
+    >>> Word("hack").get_synsets(pos=VERB)
     [Synset('chop.v.05'), Synset('hack.v.02'), Synset('hack.v.03'), Synset('hack.v.04'), Synset('hack.v.05'), Synset('hack.v.06'), Synset('hack.v.07'), Synset('hack.v.08')]
 
-You can access the definitions for each synset via the ``definitions()`` method, which can also take an optional part-of-speech argument.
+You can access the definitions for each synset via the ``definitions`` property or the ``define()`` method, which can also take an optional part-of-speech argument.
 
 .. doctest::
 
-    >>> Word("octopus").definitions()
+    >>> Word("octopus").definitions
     ['tentacles of octopus prepared as food', 'bottom-living cephalopod having a soft oval body with eight long tentacles']
 
 You can also create synsets directly.
