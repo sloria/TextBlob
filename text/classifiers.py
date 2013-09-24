@@ -36,6 +36,7 @@ from text.packages import nltk
 from text.tokenizers import WordTokenizer
 from text.compat import basestring, u
 import text.formats as formats
+from text.utils import lowerstrip
 from text.decorators import cached_property
 
 ### Basic feature extractors ###
@@ -70,9 +71,22 @@ def basic_extractor(document, train_set):
         tokens = set([w.lower()
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
-        tokens = set((w.lower() for w in document))
+        tokens = set((lowerstrip(w, all=False) for w in document))
     features = dict([(u('contains({0})').format(w), (w in tokens))
                                             for w in word_features])
+    return features
+
+def contains_extractor(document):
+    '''A basic document feature extractor that returns a dict of words that
+    the document contains.
+    '''
+    tokenizer = WordTokenizer()
+    if isinstance(document, basestring):
+        tokens = set([w.lower()
+                    for w in tokenizer.itokenize(document, include_punc=False)])
+    else:
+        tokens = set((lowerstrip(w, all=False) for w in document))
+    features = dict( (u('contains({0})'.format(w)), True) for w in tokens )
     return features
 
 ##### CLASSIFIERS #####
@@ -140,7 +154,7 @@ class BaseClassifier(object):
         '''
         try:
             return self.feature_extractor(text, self.train_set)
-        except TypeError:
+        except (TypeError, AttributeError):
             return self.feature_extractor(text)
 
 
@@ -164,6 +178,11 @@ class NLTKClassifier(BaseClassifier):
                  feature_extractor=basic_extractor, format=None):
         super(NLTKClassifier, self).__init__(train_set, feature_extractor, format)
         self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
+
+    def __repr__(self):
+        class_name = self.__class__.__name__
+        return "<{cls} trained on {n} instances>".format(cls=class_name,
+                                                        n=len(self.train_set))
 
     @cached_property
     def classifier(self):
@@ -294,10 +313,11 @@ class NaiveBayesClassifier(NLTKClassifier):
         '''
         return self.classifier.show_most_informative_features(*args, **kwargs)
 
+
 class DecisionTreeClassifier(NLTKClassifier):
 
     '''A classifier based on the decision tree algorithm, as implemented in
-    NLTK
+    NLTK.
 
     :param train_set: The training set, either a list of tuples of the form
         ``(text, classification)`` or a filename. ``text`` may be either
@@ -314,7 +334,7 @@ class DecisionTreeClassifier(NLTKClassifier):
     nltk_class = nltk.classify.decisiontree.DecisionTreeClassifier
 
     def pprint(self, *args, **kwargs):
-        '''Return a string contaiing a pretty-printed version of this decision
+        '''Return a string containing a pretty-printed version of this decision
         tree. Each line in the string corresponds to a single decision tree node
         or leaf, and indentation is used to display the structure of the tree.
 
@@ -330,3 +350,102 @@ class DecisionTreeClassifier(NLTKClassifier):
         '''
         return self.classifier.pseudocode(*args, **kwargs)
 
+
+class PositiveNaiveBayesClassifier(NLTKClassifier):
+
+    '''A variant of the Naive Bayes Classifier that performs binary
+    classification with partially-labeled training sets, i.e. when only
+    one class is labeled and the other is not. Assuming a prior distribution
+    on the two labels, uses the unlabeled set to estimate the frequencies of
+    the features.
+
+    Example usage:
+    ::
+
+        >>> from text.classifiers import PositiveNaiveBayesClassifier
+        >>> sports_sentences = ['The team dominated the game',
+        ...                   'They lost the ball',
+        ...                   'The game was intense',
+        ...                   'The goalkeeper catched the ball',
+        ...                   'The other team controlled the ball']
+        >>> various_sentences = ['The President did not comment',
+        ...                        'I lost the keys',
+        ...                        'The team won the game',
+        ...                        'Sara has two kids',
+        ...                        'The ball went off the court',
+        ...                        'They had the ball for the whole game',
+        ...                        'The show is over']
+        >>> classifier = PositiveNaiveBayesClassifier(positive_set=sports_sentences,
+        ...                                           unlabeled_set=various_sentences)
+        >>> classifier.classify("My team lost the game")
+        True
+        >>> classifier.classify("And now for something completely different.")
+        False
+
+
+    :param positive_set: A collection of strings that have the positive label.
+    :param unlabeled_set: A collection of unlabeled strings.
+    :param feature_extractor: A feature extractor function.
+    :param positive_prob_prior: A prior estimate of the probability of the
+        label ``True``.
+
+    .. versionadded:: 0.7.0
+    '''
+
+    nltk_class = nltk.classify.PositiveNaiveBayesClassifier
+
+    def __init__(self, positive_set, unlabeled_set,
+                feature_extractor=contains_extractor,
+                positive_prob_prior=0.5):
+        self.feature_extractor = feature_extractor
+        self.positive_set = positive_set
+        self.unlabeled_set = unlabeled_set
+        self.positive_features = [self.extract_features(d)
+                                    for d in self.positive_set]
+        self.unlabeled_features = [self.extract_features(d)
+                                    for d in self.unlabeled_set]
+        self.positive_prob_prior = positive_prob_prior
+
+    def __repr__(self):
+        class_name = self.__class__.__name__
+        return "<{cls} trained on {n_pos} labeled and {n_unlabeled} unlabeled instances>"\
+                        .format(cls=class_name, n_pos=len(self.positive_set),
+                                n_unlabeled=len(self.unlabeled_set))
+
+    def train(self, *args, **kwargs):
+        '''Train the classifier with a labeled and unlabeled feature sets and return
+        the classifier. Takes the same arguments as the wrapped NLTK class.
+        This method is implicitly called when calling ``classify`` or
+        ``accuracy`` methods and is included only to allow passing in arguments
+        to the ``train`` method of the wrapped NLTK class.
+
+        :rtype: A classifier
+        '''
+        self.classifier = self.nltk_class.train(self.positive_features,
+                                                self.unlabeled_features,
+                                                self.positive_prob_prior)
+        return self.classifier
+
+    def update(self, new_positive_data=None,
+               new_unlabeled_data=None, positive_prob_prior=0.5,
+               *args, **kwargs):
+        '''Update the classifier with new data and re-trains the
+        classifier.
+
+        :param new_positive_data: List of new, labeled strings.
+        :param new_unlabeled_data: List of new, unlabeled strings.
+        '''
+        self.positive_prob_prior = positive_prob_prior
+        if new_positive_data:
+            self.positive_set += new_positive_data
+            self.positive_features += [self.extract_features(d)
+                                            for d in new_positive_data]
+        if new_unlabeled_data:
+            self.unlabeled_set += new_unlabeled_data
+            self.unlabeled_features += [self.extract_features(d)
+                                            for d in new_unlabeled_data]
+        self.classifier = self.nltk_class.train(self.positive_features,
+                                                self.unlabeled_features,
+                                                self.positive_prob_prior,
+                                                *args, **kwargs)
+        return True

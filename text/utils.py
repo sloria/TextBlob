@@ -5,6 +5,7 @@ import string
 
 PUNCTUATION_REGEX = re.compile('[{0}]'.format(re.escape(string.punctuation)))
 
+
 def strip_punc(s, all=False):
     '''Removes punctuation from a string.
 
@@ -17,6 +18,7 @@ def strip_punc(s, all=False):
     else:
         return s.strip().strip(string.punctuation)
 
+
 def lowerstrip(s, all=False):
     '''Makes text all lowercase and strips punctuation and whitespace.
 
@@ -25,6 +27,7 @@ def lowerstrip(s, all=False):
         the ends of the string.
     '''
     return strip_punc(s.lower().strip(), all=all)
+
 
 def tree2str(tree, concat=' '):
     '''Convert a nltk.tree.Tree to a string.

@@ -14,9 +14,9 @@ TextBlob: Simplified Text Processing
     :target: https://crate.io/packages/textblob/
     :alt: Number of PyPI downloads
 
-.. image:: http://api.flattr.com/button/flattr-badge-large.png
-    :target: http://flattr.com/thing/1786153/sloriaTextBlob-on-GitHub
-    :alt: Flattr Steve
+.. image:: https://badge.waffle.io/sloria/TextBlob.png?label=Ready
+     :target: https://waffle.io/sloria/TextBlob
+     :alt: Issues in Ready
 
 
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_

@@ -92,7 +92,8 @@ TextBlob loosely follows Vincent Driessen's `Successful Git Branching Model <htt
 Pull Requests
 ++++++++++++++
 
-1. Create a new local branch. ::
+1. Create a new local branch.
+::
 
     $ git checkout -b name-of-feature
 
@@ -104,7 +105,8 @@ Pull Requests
 
 3. Before submitting a pull request, check the following:
 
-- If the pull request adds functionality, it is tested and the docs should be updated.
+- If the pull request adds functionality, it is tested and the docs are updated.
+- If you've developed an extension, it is on the :ref:`Extensions List <extensions>`.
 - The pull request works on Python 2.6, 2.7, 3.3, and PyPy. Use ``tox`` to verify that it does.
 - You've added yourself to ``AUTHORS.rst``.
 

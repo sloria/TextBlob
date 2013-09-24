@@ -41,11 +41,12 @@ class WordTokenizer(BaseTokenizer):
             return [word if word.startswith("'") else strip_punc(word, all=False)
                     for word in tokens if strip_punc(word, all=False)]
 
+
 class SentenceTokenizer(BaseTokenizer):
 
     '''NLTK's sentence tokenizer (currently PunkSentenceTokenizer).
-    Uses an unsupervised algorithm to build a model for abbreviation owrds,
-    collocations, and words, collocations, and words, that start sentences,
+    Uses an unsupervised algorithm to build a model for abbreviation words,
+    collocations, and words that start sentences,
     then uses that to find sentence boundaries.
     Tweaked slightly to make it more robust to sentences with multiple
     punctuation at the end, e.g. "OMG! I am so LOL!!!"
