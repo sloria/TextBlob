@@ -370,7 +370,7 @@ class BaseBlob(BlobComparableMixin):
     def classify(self):
         '''Classify the blob using the blob's ``classifier``.'''
         if self.classifier is None:
-            raise NameError("This blob has no classfier. Train one first!")
+            raise NameError("This blob has no classifier. Train one first!")
         return self.classifier.classify(self.raw)
 
     @cached_property

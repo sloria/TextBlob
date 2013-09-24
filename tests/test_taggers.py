@@ -12,6 +12,7 @@ import text.taggers
 HERE = os.path.abspath(os.path.dirname(__file__))
 AP_MODEL_LOC = os.path.join(HERE, 'trontagger.pickle')
 
+
 class TestPatternTagger(unittest.TestCase):
 
     def setUp(self):
@@ -30,6 +31,7 @@ class TestPatternTagger(unittest.TestCase):
             ('than', 'IN'), ('complex', 'NN'), ('.', '.'),
             ('Complex', 'NNP'), ('is', 'VBZ'), ('better', 'RBR'),
             ('than', 'IN'), ('complicated', 'VBN'), ('.', '.')])
+
 
 @attr("py2_only")
 @attr("slow")
@@ -86,18 +88,20 @@ class TestPerceptronTagger(unittest.TestCase):
             ['Simple', 'is', 'better', 'than', 'complex', '.', 'Complex', 'is',
              'better', 'than', 'complicated', '.'])
 
-
     def test_loading_missing_file_raises_missing_corpus_exception(self):
         assert_raises(MissingCorpusException, self.tagger.load, 'missing.pickle')
+
 
 class BadTagger(BaseTagger):
     '''A tagger without a tag method. How useless.'''
     pass
 
+
 @attr("py27_only")
 def test_cannot_instantiate_incomplete_tagger():
     with assert_raises(TypeError):
         BadTagger()
+
 
 def _read_tagged(text, sep='|'):
     sentences = []

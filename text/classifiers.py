@@ -41,6 +41,7 @@ from text.decorators import cached_property
 
 ### Basic feature extractors ###
 
+
 def _get_words_from_dataset(dataset):
     '''Return a set of all words in a dataset.
 
@@ -57,6 +58,7 @@ def _get_words_from_dataset(dataset):
             all_words.extend(words)
     return set(all_words)
 
+
 def basic_extractor(document, train_set):
     '''A basic document feature extractor that returns a dict indicating
     what words in ``train_set`` are contained in ``document``.
@@ -72,9 +74,10 @@ def basic_extractor(document, train_set):
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
         tokens = set((lowerstrip(w, all=False) for w in document))
-    features = dict([(u('contains({0})').format(w), (w in tokens))
-                                            for w in word_features])
+    features = dict([(u('contains({0})').format(word), (word in tokens))
+                                            for word in word_features])
     return features
+
 
 def contains_extractor(document):
     '''A basic document feature extractor that returns a dict of words that
@@ -86,7 +89,7 @@ def contains_extractor(document):
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
         tokens = set((lowerstrip(w, all=False) for w in document))
-    features = dict( (u('contains({0})'.format(w)), True) for w in tokens )
+    features = dict((u('contains({0})'.format(w)), True) for w in tokens)
     return features
 
 ##### CLASSIFIERS #####
@@ -111,9 +114,9 @@ class BaseClassifier(object):
 
     def __init__(self, train_set, feature_extractor=basic_extractor, format=None):
         self.feature_extractor = feature_extractor
-        if isinstance(train_set, basestring): # train_set is a filename
+        if isinstance(train_set, basestring):  # train_set is a filename
             self.train_set = self._read_data(train_set, format)
-        else: # train_set is a list of tuples
+        else:  # train_set is a list of tuples
             self.train_set = train_set
         self.train_features = None
 
@@ -172,7 +175,7 @@ class NLTKClassifier(BaseClassifier):
 
     """
 
-    nltk_class = None # This must be a class within nltk.classify
+    nltk_class = None  # This must be a class within nltk.classify
 
     def __init__(self, train_set,
                  feature_extractor=basic_extractor, format=None):
@@ -189,7 +192,7 @@ class NLTKClassifier(BaseClassifier):
         '''The classifier.'''
         try:
             return self.train()
-        except AttributeError: # nltk_class has not been defined
+        except AttributeError:  # nltk_class has not been defined
             raise ValueError("NLTKClassifier must have a nltk_class"
                             " variable that is not None.")
 
@@ -253,7 +256,7 @@ class NLTKClassifier(BaseClassifier):
         try:
             self.classifier = self.nltk_class.train(self.train_features,
                                                     *args, **kwargs)
-        except AttributeError: # Descendant has not defined nltk_class
+        except AttributeError:  # Descendant has not defined nltk_class
             raise ValueError("NLTKClassifier must have a nltk_class"
                             " variable that is not None.")
         return True

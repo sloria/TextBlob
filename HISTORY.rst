@@ -7,6 +7,7 @@ Changelog
 - Move all English-specific code to its own module, ``text.en``.
 - Basic extensions framework in place. TextBlob has been refactored to make it easier to develop extensions.
 - Add ``text.classifiers.PositiveNaiveBayesClassifier``.
+- Update NLTK.
 - *Backwards-incompatible*: All abstract base classes have been moved to the ``text.base`` module.
 - *Backwards-incompatible*: ``PerceptronTagger`` will now be maintained as an extension, ``textblob-aptagger``. Instantiating a ``text.taggers.PerceptronTagger()`` will raise a ``DeprecationWarning``.
 
