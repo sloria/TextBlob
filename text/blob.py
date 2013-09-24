@@ -23,7 +23,7 @@ import string as pystring
 from collections import defaultdict
 
 from text.packages import nltk
-from text.decorators import cached_property
+from text.decorators import cached_property, requires_nltk_corpus
 from text.utils import lowerstrip, PUNCTUATION_REGEX
 from text.inflect import singularize as _singularize, pluralize as _pluralize
 from text.mixins import BlobComparableMixin
@@ -37,7 +37,7 @@ from text.sentiments import PatternAnalyzer
 from text.parsers import PatternParser
 from text.translate import Translator
 from text.en import suggest
-from text.exceptions import MissingCorpusException
+
 
 # Wordnet interface
 # NOTE: text.wordnet is not imported so that the wordnet corpus can be lazy-loaded
@@ -113,14 +113,11 @@ class Word(unicode):
         return Word(self.spellcheck()[0][0])
 
     @cached_property
+    @requires_nltk_corpus
     def lemma(self):
         '''Return the lemma for a word using WordNet's morphy function.'''
         lemmatizer = nltk.stem.WordNetLemmatizer()
-        try:
-            return lemmatizer.lemmatize(self.string)
-        except LookupError as err:
-            print(err)
-            raise MissingCorpusException()
+        return lemmatizer.lemmatize(self.string)
 
     @cached_property
     def synsets(self):

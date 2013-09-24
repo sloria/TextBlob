@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 '''Custom decorators.'''
 
+from __future__ import absolute_import
+from text.exceptions import MissingCorpusException
+
+
 class cached_property(object):
     '''A property that is only computed once per instance and then replaces
     itself with an ordinary attribute. Deleting the attribute resets the
@@ -14,6 +18,20 @@ class cached_property(object):
         self.func = func
 
     def __get__(self, obj, cls):
-        if obj is None: return self
+        if obj is None:
+            return self
         value = obj.__dict__[self.func.__name__] = self.func(obj)
         return value
+
+
+def requires_nltk_corpus(func):
+    '''Wraps a function that requires an NLTK corpus. If the corpus isn't found,
+    raise a MissingCorpusException.
+    '''
+    def decorated(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except LookupError as err:
+            print(err)
+            raise MissingCorpusException()
+    return decorated

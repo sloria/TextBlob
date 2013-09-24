@@ -6,8 +6,8 @@
 from __future__ import absolute_import
 from text.packages import nltk
 from text.utils import strip_punc
-from text.exceptions import MissingCorpusException
 from text.base import BaseTokenizer
+from text.decorators import requires_nltk_corpus
 
 
 class WordTokenizer(BaseTokenizer):
@@ -52,14 +52,11 @@ class SentenceTokenizer(BaseTokenizer):
     punctuation at the end, e.g. "OMG! I am so LOL!!!"
     '''
 
+    @requires_nltk_corpus
     def tokenize(self, text):
         '''Return a list of sentences.'''
         ret = []
-        try:
-            sentences = nltk.tokenize.sent_tokenize(text)  # Initial tokenization
-        except LookupError as err:
-            print(err)
-            raise MissingCorpusException()
+        sentences = nltk.tokenize.sent_tokenize(text)  # Initial tokenization
         # If there's only one sentence or string of text
         if len(sentences) <= 1:
             return sentences  # return the 1-element list

@@ -7,7 +7,7 @@ from __future__ import absolute_import
 from text.packages import nltk
 from text.en import sentiment as pattern_sentiment
 from text.tokenizers import WordTokenizer
-from text.exceptions import MissingCorpusException
+from text.decorators import requires_nltk_corpus
 from text.base import BaseSentimentAnalyzer, DISCRETE, CONTINUOUS
 
 
@@ -27,6 +27,7 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
         """
         return pattern_sentiment(text)
 
+
 class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
 
     '''Naive Bayes analyzer that is trained on a dataset of movie reviews.
@@ -41,15 +42,12 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         super(NaiveBayesAnalyzer, self).__init__()
         self._classifier = None
 
+    @requires_nltk_corpus
     def train(self):
         '''Train the Naive Bayes classifier on the movie review corpus.'''
         super(NaiveBayesAnalyzer, self).train()
-        try:
-            neg_ids = nltk.corpus.movie_reviews.fileids('neg')
-            pos_ids = nltk.corpus.movie_reviews.fileids('pos')
-        except LookupError as e:
-            print(e)
-            raise MissingCorpusException()
+        neg_ids = nltk.corpus.movie_reviews.fileids('neg')
+        pos_ids = nltk.corpus.movie_reviews.fileids('pos')
         neg_feats = [(self._extract_feats(
             nltk.corpus.movie_reviews.words(fileids=[f])), 'neg') for f in neg_ids]
         pos_feats = [(self._extract_feats(
@@ -73,4 +71,3 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         prob_dist = self._classifier.prob_classify(feats)
         # classification, p_pos, p_neg
         return prob_dist.max(), prob_dist.prob('pos'), prob_dist.prob("neg")
-

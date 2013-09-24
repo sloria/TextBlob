@@ -11,9 +11,11 @@ import pickle
 import text
 from text.packages import nltk
 from text.en import tag as pattern_tag
+from text.decorators import requires_nltk_corpus
 from text.exceptions import MissingCorpusException
 from text._perceptron import AveragedPerceptron
 from text.base import BaseTagger
+
 
 class PatternTagger(BaseTagger):
 
@@ -26,21 +28,19 @@ class PatternTagger(BaseTagger):
         '''Tag a string `sentence`.'''
         return pattern_tag(sentence, tokenize)
 
+
 class NLTKTagger(BaseTagger):
 
     '''Tagger that uses NLTK's standard TreeBank tagger.
     NOTE: Currently supported on Python 2 only, and requires numpy.
     '''
 
+    @requires_nltk_corpus
     def tag(self, sentence, tokenize=True):
         '''Tag a string `sentence`.'''
         if tokenize:
             sentence = nltk.tokenize.word_tokenize(sentence)
-        try:
-            tagged = nltk.tag.pos_tag(sentence)
-        except LookupError as e:
-            print(e)
-            raise MissingCorpusException()
+        tagged = nltk.tag.pos_tag(sentence)
         return tagged
 
 
@@ -140,7 +140,7 @@ class PerceptronTagger(BaseTagger):
             msg = ("Missing trontagger.pickle. Download it from the TextBlob "
                     "release page: https://github.com/sloria/TextBlob/releases"
                     " and add it to your textblob package "
-                    "directory: {0}".format(package_dir))
+                    "directory: {0}".format(os.path.join(package_dir, 'en')))
             raise MissingCorpusException(msg)
         self.model.weights, self.tagdict, self.classes = w_td_c
         self.model.classes = self.classes

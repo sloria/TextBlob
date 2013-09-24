@@ -1,27 +1,25 @@
 # -*- coding: utf-8 -*-
-
+'''Various noun phrase extractors.'''
 from __future__ import unicode_literals, absolute_import
 from text.packages import nltk
 from text.taggers import PatternTagger
-from text.exceptions import MissingCorpusException
+from text.decorators import requires_nltk_corpus
 from text.utils import tree2str, filter_insignificant
 from text.base import BaseNPExtractor
+
 
 class ChunkParser(nltk.ChunkParserI):
 
     def __init__(self):
         self._trained = False
 
+    @requires_nltk_corpus
     def train(self):
         '''Train the Chunker on the ConLL-2000 corpus.'''
-        try:
-            train_data = [[(t, c) for _, t, c in nltk.chunk.tree2conlltags(sent)]
-                          for sent in
-                          nltk.corpus.conll2000.chunked_sents('train.txt',
-                                                        chunk_types=['NP'])]
-        except LookupError as e:
-            print(e)
-            raise MissingCorpusException()
+        train_data = [[(t, c) for _, t, c in nltk.chunk.tree2conlltags(sent)]
+                      for sent in
+                      nltk.corpus.conll2000.chunked_sents('train.txt',
+                                                    chunk_types=['NP'])]
         unigram_tagger = nltk.UnigramTagger(train_data)
         self.tagger = nltk.BigramTagger(train_data, backoff=unigram_tagger)
         self._trained = True
@@ -104,12 +102,9 @@ class FastNPExtractor(BaseNPExtractor):
     def __init__(self):
         self._trained = False
 
+    @requires_nltk_corpus
     def train(self):
-        try:
-            train_data = nltk.corpus.brown.tagged_sents(categories='news')
-        except LookupError as e:
-            print(e)
-            raise MissingCorpusException()
+        train_data = nltk.corpus.brown.tagged_sents(categories='news')
         regexp_tagger = nltk.RegexpTagger([
             (r'^-?[0-9]+(.[0-9]+)?$', 'CD'),
             (r'(-|:|;)$', ':'),
