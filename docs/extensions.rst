@@ -19,12 +19,12 @@ Available extensions
 Languages
 ---------
 
-* `textblob-fr <https://github.com/sloria/textblob-fr>`_ (experimental): French
+* `textblob-fr <https://github.com/sloria/textblob-fr>`_: French
 
 Part-of-speech Taggers
 ----------------------
 
-* `textblob-aptagger <https://github.com/sloria/textblob-aptagger>`_ (experimental): A fast and accurate tagger based on the Averaged Perceptron.
+* `textblob-aptagger <https://github.com/sloria/textblob-aptagger>`_: A fast and accurate tagger based on the Averaged Perceptron.
 
 
 .. admonition:: Interested in creating an extension?
