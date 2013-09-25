@@ -3,10 +3,11 @@ Averaged perceptron classifier. Implementation geared for simplicity rather than
 efficiency.
 
 .. versionadded:: 0.6.3
+.. deprecated:: 0.7.0
+    Install the ``textblob-aptagger`` extension instead.
 """
 from collections import defaultdict
 import pickle
-import random
 
 
 class AveragedPerceptron(object):
@@ -82,19 +83,3 @@ class AveragedPerceptron(object):
         '''Load the pickled model weights.'''
         self.weights = pickle.load(open(path))
         return None
-
-
-def train(nr_iter, examples):
-    '''Return an averaged perceptron model trained on ``examples`` for
-    ``nr_iter`` iterations.
-    '''
-    model = AveragedPerceptron()
-    for i in range(nr_iter):
-        random.shuffle(examples)
-        for features, class_ in examples:
-            scores = model.predict(features)
-            guess, score = max(scores.items(), key=lambda i: i[1])
-            if guess != class_:
-                model.update(class_, guess, features)
-    model.average_weights()
-    return model

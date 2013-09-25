@@ -38,7 +38,6 @@ from text.parsers import PatternParser
 from text.translate import Translator
 from text.en import suggest
 
-
 # Wordnet interface
 # NOTE: text.wordnet is not imported so that the wordnet corpus can be lazy-loaded
 _wordnet = nltk.corpus.wordnet
@@ -731,6 +730,7 @@ class Blobber(object):
         '''
         return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
                         np_extractor=self.np_extractor, analyzer=self.analyzer,
+                        parser=self.parser,
                         classifier=self.classifier)
 
     def __repr__(self):
