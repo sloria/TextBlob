@@ -26,8 +26,8 @@ from text.packages import nltk
 from text.decorators import cached_property, requires_nltk_corpus
 from text.utils import lowerstrip, PUNCTUATION_REGEX
 from text.inflect import singularize as _singularize, pluralize as _pluralize
-from text.mixins import BlobComparableMixin
-from text.compat import unicode, basestring, python_2_unicode_compatible, u
+from text.mixins import BlobComparableMixin, StringlikeMixin
+from text.compat import unicode, basestring, python_2_unicode_compatible
 from text.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
                        BaseSentimentAnalyzer, BaseParser)
 from text.np_extractors import FastNPExtractor
@@ -46,7 +46,9 @@ _wordnet = nltk.corpus.wordnet
 
 class Word(unicode):
 
-    '''A simple word representation.'''
+    '''A simple word representation. Includes methods for inflection,
+    translation, and WordNet integration.
+    '''
 
     translator = Translator()
 
@@ -287,7 +289,7 @@ def _initialize_models(obj, tokenizer, pos_tagger,
 
 
 @python_2_unicode_compatible
-class BaseBlob(BlobComparableMixin):
+class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
@@ -525,50 +527,18 @@ class BaseBlob(BlobComparableMixin):
                 ret = ' '.join([ret, word])
         return self.__class__(ret)
 
-    def __repr__(self):
-        '''Returns a string representation for debugging.'''
-        class_name = self.__class__.__name__
-        return "{cls}({text})".format(cls=class_name,
-                                        text=repr(self.raw))
-
-    def __len__(self):
-        '''Returns the length of the raw text.'''
-        return len(self.raw)
-
-    def __str__(self):
-        '''Returns a string representation used in print statements
-        or str(my_blob).'''
-        return self.raw
-
-    def __unicode__(self):
-        '''Returns the unicode representation of the blob.'''
-        return u(self.raw)
-
-    def __iter__(self):
-        '''Makes the object iterable as if it were a string,
-        iterating through the raw string's characters.
-        '''
-        return iter(self.raw)
-
     def _cmpkey(self):
         '''Key used by ComparableMixin to implement all rich comparison
         operators.
         '''
         return self.raw
 
+    def _strkey(self):
+        '''Key used by StringlikeMixin to implement string methods.'''
+        return self.raw
+
     def __hash__(self):
         return hash(self._cmpkey())
-
-    def __getitem__(self, index):
-        '''Returns a  substring. If index is an integer, returns a Python
-        string of a single character. If a range is given, e.g. `blob[3:5]`,
-        a new instance of the class is returned.
-        '''
-        if isinstance(index, int):
-            return self.raw[index]  # Just return a single character
-        else:
-            # Return a new blob object
-            return self.__class__(self.raw[index])
 
     def __add__(self, other):
         '''Concatenates two text objects the same way Python strings are
@@ -578,95 +548,18 @@ class BaseBlob(BlobComparableMixin):
         - `other`: a string or a text object
         '''
         if isinstance(other, basestring):
-            return TextBlob(self.raw + other)
+            return self.__class__(self.raw + other)
         elif isinstance(other, BaseBlob):
-            return TextBlob(self.raw + other.raw)
+            return self.__class__(self.raw + other.raw)
         else:
             raise TypeError('Operands must be either strings or {0} objects'
                 .format(self.__class__.__name__))
-
-    def __contains__(self, sub):
-        '''Implements the `in` keyword like a Python string.'''
-        return sub in self.raw
-
-    def find(self, sub, start=0, end=sys.maxsize):
-        '''Behaves like the built-in str.find() method. Returns an integer,
-        the index of the first occurrence of the substring argument sub in the
-        sub-string given by [start:end].
-        '''
-        return self.raw.find(sub, start, end)
-
-    def rfind(self, sub, start=0, end=sys.maxsize):
-        '''Behaves like the built-in str.rfind() method. Returns an integer,
-        the index of he last (right-most) occurence of the substring argument
-        sub in the sub-sequence given by [start:end].
-        '''
-        return self.raw.rfind(sub, start, end)
-
-    def index(self, sub, start=0, end=sys.maxsize):
-        '''Like blob.find() but raise ValueError when the substring
-        is not found.
-        '''
-        return self.raw.index(sub, start, end)
-
-    def startswith(self, prefix, start=0, end=sys.maxsize):
-        """Returns True if the blob starts with the given prefix."""
-        return self.raw.startswith(prefix, start, end)
-
-    def endswith(self, suffix, start=0, end=sys.maxsize):
-        """Returns True if the blob ends with the given suffix."""
-        return self.raw.endswith(suffix, start, end)
-
-    # PEP8 aliases
-    starts_with = startswith
-    ends_with = endswith
-
-    def title(self):
-        """Returns a blob object with the text in title-case."""
-        return self.__class__(self.raw.title())
-
-    def format(self, *args, **kwargs):
-        """Perform a string formatting operation, like the built-in
-        `str.format(*args, **kwargs)`. Returns a blob object.
-        """
-        return self.__class__(self.raw.format(*args, **kwargs))
 
     def split(self, sep=None, maxsplit=sys.maxsize):
         """Behaves like the built-in str.split() except returns a
         WordList.
         """
-        return WordList(self.raw.split(sep, maxsplit))
-
-    def strip(self, chars=None):
-        """Behaves like the built-in str.strip([chars]) method. Returns
-        an object with leading and trailing whitespace removed.
-        """
-        return self.__class__(self.raw.strip(chars))
-
-    def upper(self):
-        """Like str.upper(), returns new object with all upper-cased characters.
-        """
-        return self.__class__(self.raw.upper())
-
-    def lower(self):
-        """Like str.lower(), returns new object with all lower-cased characters.
-        """
-        return self.__class__(self.raw.lower())
-
-    def join(self, iterable):
-        """Behaves like the built-in `str.join(iterable)` method, except
-        returns a blob object.
-
-        Returns a blob which is the concatenation of the strings or blobs
-        in the iterable.
-        """
-        return self.__class__(self.raw.join(iterable))
-
-    def replace(self, old, new, count=sys.maxsize):
-        """Return a new blob object with all the occurence of `old` replaced
-        by `new`.
-        """
-        return self.__class__(self.raw.replace(old, new, count))
+        return WordList(self._strkey().split(sep, maxsplit))
 
 
 class TextBlob(BaseBlob):
@@ -832,7 +725,7 @@ class Blobber(object):
 
     def __call__(self, text):
         '''Return a new TextBlob object with this Blobber's ``np_extractor``,
-        ``pos_tagger``, and ``tokenizer``.
+        ``pos_tagger``, ``tokenizer``, ``analyzer``, and ``classifier``.
 
         :returns: A new TextBlob.
         '''

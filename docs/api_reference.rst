@@ -8,6 +8,7 @@ Blob Classes
 
 .. automodule:: text.blob
     :members:
+    :inherited-members:
 
 .. _api_base_classes:
 
