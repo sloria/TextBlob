@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import sys
-from text.compat import basestring, u
+from text.compat import basestring, implements_to_string
 
 
 class ComparableMixin(object):
@@ -46,6 +46,7 @@ class BlobComparableMixin(ComparableMixin):
         return super(BlobComparableMixin, self)._compare(other, method)
 
 
+@implements_to_string
 class StringlikeMixin(object):
 
     '''Make blob objects behave like Python strings.
@@ -61,18 +62,14 @@ class StringlikeMixin(object):
         return "{cls}({text})".format(cls=class_name,
                                         text=repr(self._strkey()))
 
-    def __len__(self):
-        '''Returns the length of the raw text.'''
-        return len(self._strkey())
-
     def __str__(self):
         '''Returns a string representation used in print statements
         or str(my_blob).'''
         return self._strkey()
 
-    def __unicode__(self):
-        '''Returns the unicode representation of the blob.'''
-        return u(self._strkey())
+    def __len__(self):
+        '''Returns the length of the raw text.'''
+        return len(self._strkey())
 
     def __iter__(self):
         '''Makes the object iterable as if it were a string,

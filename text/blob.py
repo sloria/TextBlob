@@ -27,7 +27,7 @@ from text.decorators import cached_property, requires_nltk_corpus
 from text.utils import lowerstrip, PUNCTUATION_REGEX
 from text.inflect import singularize as _singularize, pluralize as _pluralize
 from text.mixins import BlobComparableMixin, StringlikeMixin
-from text.compat import unicode, basestring, python_2_unicode_compatible
+from text.compat import unicode, basestring
 from text.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
                        BaseSentimentAnalyzer, BaseParser)
 from text.np_extractors import FastNPExtractor
@@ -287,7 +287,6 @@ def _initialize_models(obj, tokenizer, pos_tagger,
     obj.classifier = classifier
 
 
-@python_2_unicode_compatible
 class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     '''An abstract base class that all text.blob classes will inherit from.
