@@ -1,14 +1,14 @@
 Changelog
 =========
 
-0.7.0 (unreleased)
+0.7.0 (2013-09-25)
 ------------------
 - Wordnet integration. ``Word`` objects have ``synsets`` and ``definitions`` properties. The ``text.wordnet`` module allows you to create ``Synset`` and ``Lemma`` objects directly.
 - Move all English-specific code to its own module, ``text.en``.
 - Basic extensions framework in place. TextBlob has been refactored to make it easier to develop extensions.
 - Add ``text.classifiers.PositiveNaiveBayesClassifier``.
 - Update NLTK.
-- Fix ``__str__`` behavior. ``print blob`` should now print expected output in both Python 2 and 3.
+- Fix ``__str__`` behavior. ``print(blob)`` should now print non-ascii text correctly in both Python 2 and 3.
 - *Backwards-incompatible*: All abstract base classes have been moved to the ``text.base`` module.
 - *Backwards-incompatible*: ``PerceptronTagger`` will now be maintained as an extension, ``textblob-aptagger``. Instantiating a ``text.taggers.PerceptronTagger()`` will raise a ``DeprecationWarning``.
 
