@@ -7,12 +7,11 @@ which define the interface for descendant classes.
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
 from text.packages import nltk
-from text.compat import add_metaclass
+from text.compat import with_metaclass
 
 ##### POS TAGGERS #####
 
-@add_metaclass(ABCMeta)
-class BaseTagger(object):
+class BaseTagger(with_metaclass(ABCMeta)):
 
     '''Abstract tagger class from which all taggers
     inherit from. All descendants must implement a
@@ -27,8 +26,7 @@ class BaseTagger(object):
 
 ##### NOUN PHRASE EXTRACTORS #####
 
-@add_metaclass(ABCMeta)
-class BaseNPExtractor(object):
+class BaseNPExtractor(with_metaclass(ABCMeta)):
 
     '''Abstract base class from which all NPExtractor classes inherit.
     Descendant classes must implement an ``extract(text)`` method
@@ -42,8 +40,7 @@ class BaseNPExtractor(object):
 
 ##### TOKENIZERS #####
 
-@add_metaclass(ABCMeta)
-class BaseTokenizer(nltk.tokenize.api.TokenizerI):
+class BaseTokenizer(with_metaclass(ABCMeta), nltk.tokenize.api.TokenizerI):
 
     '''Abstract base class from which all Tokenizer classes inherit.
     Descendant classes must implement a ``tokenize(text)`` method
@@ -71,8 +68,8 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI):
 DISCRETE = 'ds'
 CONTINUOUS = 'co'
 
-@add_metaclass(ABCMeta)
-class BaseSentimentAnalyzer(object):
+
+class BaseSentimentAnalyzer(with_metaclass(ABCMeta)):
 
     '''Abstract base class from which all sentiment analyzers inherit.
     Should implement an ``analyze(text)`` method which returns either the
@@ -99,8 +96,7 @@ class BaseSentimentAnalyzer(object):
 
 ##### PARSERS #####
 
-@add_metaclass(ABCMeta)
-class BaseParser(object):
+class BaseParser(with_metaclass(ABCMeta)):
 
     '''Abstract parser class from which all parsers inherit from. All
     descendants must implement a `parse()` method.

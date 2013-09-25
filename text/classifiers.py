@@ -34,7 +34,7 @@ Example Usage:
 from __future__ import absolute_import
 from text.packages import nltk
 from text.tokenizers import WordTokenizer
-from text.compat import basestring, u
+from text.compat import basestring
 import text.formats as formats
 from text.utils import lowerstrip
 from text.decorators import cached_property
@@ -74,7 +74,7 @@ def basic_extractor(document, train_set):
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
         tokens = set((lowerstrip(w, all=False) for w in document))
-    features = dict([(u('contains({0})').format(word), (word in tokens))
+    features = dict([(u'contains({0})'.format(word), (word in tokens))
                                             for word in word_features])
     return features
 
@@ -89,7 +89,7 @@ def contains_extractor(document):
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
         tokens = set((lowerstrip(w, all=False) for w in document))
-    features = dict((u('contains({0})'.format(w)), True) for w in tokens)
+    features = dict((u'contains({0})'.format(w), True) for w in tokens)
     return features
 
 ##### CLASSIFIERS #####

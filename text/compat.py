@@ -4,10 +4,6 @@ import sys
 PY2 = int(sys.version[0]) == 2
 
 if PY2:
-    def b(s):
-        return s
-    def u(s):
-        return unicode(s, "unicode_escape")
     from itertools import imap, izip
     import urllib2 as request
     from urllib import quote as urlquote
@@ -27,12 +23,7 @@ if PY2:
         cls.__unicode__ = cls.__str__
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
-
 else: # PY3
-    def b(s):
-        return s.encode("latin-1")
-    def u(s):
-        return s
     from urllib import request
     from urllib.parse import quote as urlquote
     text_type = str
@@ -47,15 +38,21 @@ else: # PY3
     implements_to_string = lambda x: x
 
 
-def add_metaclass(metaclass):
-    """Class decorator for creating a class with a metaclass.
-    From the six library.
-    """
-    def wrapper(cls):
-        orig_vars = cls.__dict__.copy()
-        orig_vars.pop('__dict__', None)
-        orig_vars.pop('__weakref__', None)
-        for slots_var in orig_vars.get('__slots__', ()):
-            orig_vars.pop(slots_var)
-        return metaclass(cls.__name__, cls.__bases__, orig_vars)
-    return wrapper
+def with_metaclass(meta, *bases):
+    '''Defines a metaclass.
+
+    Creates a dummy class with a dummy metaclass. When subclassed, the dummy
+    metaclass is used, which has a constructor that instantiates a
+    new class from the original parent. This ensures that the dummy class and
+    dummy metaclass are not in the inheritance tree.
+
+    Credit to Armin Ronacher.
+    '''
+    class metaclass(meta):
+        __call__ = type.__call__
+        __init__ = type.__init__
+        def __new__(cls, name, this_bases, d):
+            if this_bases is None:
+                return type.__new__(cls, name, (), d)
+            return meta(name, bases, d)
+    return metaclass('temporary_class', None, {})
