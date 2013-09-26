@@ -336,7 +336,7 @@ def _read(path, encoding="utf-8", comment=";;;"):
     if path:
         if type(path) in string_types and os.path.exists(path):
             # From file path.
-            f = open(path, 'rb')
+            f = open(path)
         elif type(path) in string_types:
             # From string.
             f = path.splitlines()
