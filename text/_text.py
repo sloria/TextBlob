@@ -6,13 +6,14 @@ Licence: BSD
 '''
 from __future__ import unicode_literals
 import string
+import codecs
 from itertools import chain
 import types
 import os
 import re
 from xml.etree import cElementTree
 
-from .compat import text_type, string_types, basestring, imap, unicode
+from .compat import text_type, basestring, imap, unicode, binary_type
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -20,31 +21,34 @@ except:
     MODULE = ""
 
 SLASH, WORD, POS, CHUNK, PNP, REL, ANCHOR, LEMMA = \
-        "&slash;", "word", "part-of-speech", "chunk", "preposition", "relation", "anchor", "lemma"
+    "&slash;", "word", "part-of-speech", "chunk", "preposition", "relation", "anchor", "lemma"
 
 
 # String functions
 def decode_string(v, encoding="utf-8"):
     """ Returns the given value as a Unicode string (if possible).
     """
-    if type(encoding) in string_types:
+    if isinstance(encoding, basestring):
         encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
-    if type(v) in string_types:
+    if isinstance(v, binary_type):
         for e in encoding:
-            try: return v.decode(*e)
+            try:
+                return v.decode(*e)
             except:
                 pass
         return v
-    return str(v)
+    return unicode(v)
+
 
 def encode_string(v, encoding="utf-8"):
     """ Returns the given value as a Python byte string (if possible).
     """
-    if type(encoding) in string_types:
+    if isinstance(encoding, basestring):
         encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
-    if type(v) in string_types:
+    if isinstance(v, unicode):
         for e in encoding:
-            try: return v.encode(*e)
+            try:
+                return v.encode(*e)
             except:
                 pass
         return v
@@ -52,6 +56,7 @@ def encode_string(v, encoding="utf-8"):
 
 decode_utf8 = decode_string
 encode_utf8 = encode_string
+
 
 def isnumeric(strg):
     try:
@@ -63,6 +68,7 @@ def isnumeric(strg):
 #--- LAZY DICTIONARY -------------------------------------------------------------------------------
 # A lazy dictionary is empty until one of its methods is called.
 # This way many instances (e.g., lexicons) can be created without using memory until used.
+
 
 class lazydict(dict):
 
@@ -259,7 +265,7 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
     for a, b in list(replace.items()):
         string = re.sub(a, b, string)
     # Handle Unicode quotes.
-    if type(string) in string_types:
+    if isinstance(string, unicode):
         string = unicode(string).replace("“", " “ ")\
                                 .replace("”", " ” ")\
                                 .replace("‘", " ‘ ")\
@@ -329,15 +335,16 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
 # Contextual rules are used to tag all words, based on the word's role in the sentence.
 # Named entity rules are used to discover proper nouns (NNP's).
 
+
 def _read(path, encoding="utf-8", comment=";;;"):
     """ Returns an iterator over the lines in the file at the given path,
         stripping comments and decoding each line to Unicode.
     """
     if path:
-        if type(path) in string_types and os.path.exists(path):
+        if isinstance(path, basestring) and os.path.exists(path):
             # From file path.
-            f = open(path)
-        elif type(path) in string_types:
+            f = open(path, 'r')
+        elif isinstance(path, basestring):
             # From string.
             f = path.splitlines()
         elif hasattr(path, "read"):
@@ -345,12 +352,15 @@ def _read(path, encoding="utf-8", comment=";;;"):
             f = path.read().splitlines()
         else:
             f = path
-        for line in f:
-            line = decode_utf8(line.strip())
-            if comment and line.startswith(comment):
+        for i, line in enumerate(f):
+            line = line.strip(codecs.BOM_UTF8) if i == 0 and isinstance(line, binary_type) else line
+            line = line.strip()
+            line = decode_utf8(line)
+            if not line or (comment and line.startswith(comment)):
                 continue
             yield line
     raise StopIteration
+
 
 class Lexicon(lazydict):
 
@@ -1201,13 +1211,13 @@ class Parser:
         if tokenize:
             s = self.find_tokens(s, **kwargs)
         if isinstance(s, (list, tuple)):
-            s = [type(s) in string_types and s.split(" ") or s for s in s]
-        if type(s) in string_types:
+            s = [isinstance(s, basestring) and s.split(" ") or s for s in s]
+        if isinstance(s, basestring):
             s = [s.split(" ") for s in s.split("\n")]
         # Unicode.
         for i in range(len(s)):
             for j in range(len(s[i])):
-                if type(s[i][j]) in string_types:
+                if isinstance(s[i][j], binary_type):
                     s[i][j] = decode_string(s[i][j], encoding)
             # Tagger (required by chunker, labeler & lemmatizer).
             if tags or chunks or relations or lemmata:
@@ -1267,7 +1277,7 @@ class TaggedString(unicode):
             For example: TaggedString("cat/NN/NP", tags=["word", "pos", "chunk"]).
         """
         # From a TaggedString:
-        if type(string) in string_types and hasattr(string, "tags"):
+        if isinstance(string, unicode) and hasattr(string, "tags"):
             tags, language = string.tags, string.language
         # From a TaggedString.split(TOKENS) list:
         if isinstance(string, list):
