@@ -331,12 +331,12 @@ def find_tokens(string, punctuation=PUNCTUATION, abbreviations=ABBREVIATIONS, re
 
 def _read(path, encoding="utf-8", comment=";;;"):
     """ Returns an iterator over the lines in the file at the given path,
-        strippping comments and decoding each line to Unicode.
+        stripping comments and decoding each line to Unicode.
     """
     if path:
         if type(path) in string_types and os.path.exists(path):
             # From file path.
-            f = open(path)
+            f = open(path, 'rb')
         elif type(path) in string_types:
             # From string.
             f = path.splitlines()
