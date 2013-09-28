@@ -13,7 +13,7 @@ import os
 import re
 from xml.etree import cElementTree
 
-from .compat import text_type, basestring, imap, unicode, binary_type
+from .compat import text_type, basestring, imap, unicode, binary_type, PY2
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -343,7 +343,10 @@ def _read(path, encoding="utf-8", comment=";;;"):
     if path:
         if isinstance(path, basestring) and os.path.exists(path):
             # From file path.
-            f = open(path, 'r')
+            if PY2:
+                f = codecs.open(path, 'r', encoding='utf-8')
+            else:
+                f = open(path, 'r', encoding='utf-8')
         elif isinstance(path, basestring):
             # From string.
             f = path.splitlines()

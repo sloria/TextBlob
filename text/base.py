@@ -2,7 +2,8 @@
 '''Abstract base classes for models (taggers, noun phrase extractors, etc.)
 which define the interface for descendant classes.
 
-.. versionadded:: 0.7.0
+.. versionchanged:: 0.7.0
+    All base classes are defined in the same module, ``text.base``.
 '''
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
@@ -15,7 +16,7 @@ class BaseTagger(with_metaclass(ABCMeta)):
 
     '''Abstract tagger class from which all taggers
     inherit from. All descendants must implement a
-    `tag()` method.
+    ``tag()`` method.
     '''
     @abstractmethod
     def tag(self, text, tokenize=True):
@@ -99,7 +100,7 @@ class BaseSentimentAnalyzer(with_metaclass(ABCMeta)):
 class BaseParser(with_metaclass(ABCMeta)):
 
     '''Abstract parser class from which all parsers inherit from. All
-    descendants must implement a `parse()` method.
+    descendants must implement a ``parse()`` method.
     '''
     @abstractmethod
     def parse(self, text):
