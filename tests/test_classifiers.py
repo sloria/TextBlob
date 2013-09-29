@@ -87,6 +87,9 @@ class TestNaiveBayesClassifier(unittest.TestCase):
 
     def test_accuracy(self):
         acc = self.classifier.accuracy(test_set)
+        for sent, class_ in test_set:
+            print sent
+            print self.classifier.classify(sent) == class_
         assert_true(isinstance(acc, float))
 
     def test_update(self):
@@ -209,15 +212,16 @@ class TestPositiveNaiveBayesClassifier(unittest.TestCase):
                           'They lost the ball',
                           'The game was intense',
                           'The goalkeeper catched the ball',
-                          'The other team controlled the ball']
+                          'The other team controlled the ball'
+                            'The ball went off the court',
+                           'They had the ball for the whole game']
 
         various_sentences = ['The President did not comment',
                                'I lost the keys',
                                'The team won the game',
                                'Sara has two kids',
-                               'The ball went off the court',
-                               'They had the ball for the whole game',
-                               'The show is over']
+                               'The show is over',
+                               'The cat ate the mouse.']
 
         self.classifier = PositiveNaiveBayesClassifier(positive_set=sports_sentences,
                                                         unlabeled_set=various_sentences)
@@ -277,14 +281,16 @@ def test_basic_extractor_with_list():
 def test_contains_extractor_with_string():
     text = "Simple is better than complex"
     features = contains_extractor(text)
-    assert_true(features['contains(simple)'])
+    assert_true(features["contains(Simple)"])
+    assert_false(features.get('contains(simple)', False))
     assert_true(features['contains(complex)'])
     assert_false(features.get("contains(derp)", False))
 
 def test_contains_extractor_with_list():
     text = ["Simple", "is", "better", "than", "complex"]
     features = contains_extractor(text)
-    assert_true(features['contains(simple)'])
+    assert_true(features['contains(Simple)'])
+    assert_false(features.get("contains(simple)", False))
     assert_true(features['contains(complex)'])
     assert_false(features.get("contains(derp)", False))
 

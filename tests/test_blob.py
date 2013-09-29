@@ -24,6 +24,7 @@ Synset = nltk.corpus.reader.Synset
 train = [
     ('I love this sandwich.', 'pos'),
     ('This is an amazing place!', 'pos'),
+    ("What a truly amazing dinner.", 'pos'),
     ('I feel very good about these beers.', 'pos'),
     ('This is my best work.', 'pos'),
     ("What an awesome view", 'pos'),

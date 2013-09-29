@@ -36,7 +36,7 @@ from text.packages import nltk
 from text.tokenizers import WordTokenizer
 from text.compat import basestring
 import text.formats as formats
-from text.utils import lowerstrip
+from text.utils import strip_punc
 from text.decorators import cached_property
 
 ### Basic feature extractors ###
@@ -70,10 +70,10 @@ def basic_extractor(document, train_set):
     tokenizer = WordTokenizer()
     word_features = _get_words_from_dataset(train_set)
     if isinstance(document, basestring):
-        tokens = set([w.lower()
+        tokens = set([strip_punc(w, all=False)
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
-        tokens = set((lowerstrip(w, all=False) for w in document))
+        tokens = set(strip_punc(w, all=False) for w in document)
     features = dict([(u'contains({0})'.format(word), (word in tokens))
                                             for word in word_features])
     return features
@@ -85,10 +85,10 @@ def contains_extractor(document):
     '''
     tokenizer = WordTokenizer()
     if isinstance(document, basestring):
-        tokens = set([w.lower()
+        tokens = set([strip_punc(w, all=False)
                     for w in tokenizer.itokenize(document, include_punc=False)])
     else:
-        tokens = set((lowerstrip(w, all=False) for w in document))
+        tokens = set((strip_punc(w, all=False) for w in document))
     features = dict((u'contains({0})'.format(w), True) for w in tokens)
     return features
 

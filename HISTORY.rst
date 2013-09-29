@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.7.1 (unreleased)
+------------------
+- Fix bug in feature extraction for ``NaiveBayesClassifier``.
+- ``basic_extractor`` is now case-sensitive.
+
 0.7.0 (2013-09-25)
 ------------------
 - Wordnet integration. ``Word`` objects have ``synsets`` and ``definitions`` properties. The ``text.wordnet`` module allows you to create ``Synset`` and ``Lemma`` objects directly.
