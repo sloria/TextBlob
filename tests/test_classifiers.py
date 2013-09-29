@@ -87,9 +87,6 @@ class TestNaiveBayesClassifier(unittest.TestCase):
 
     def test_accuracy(self):
         acc = self.classifier.accuracy(test_set)
-        for sent, class_ in test_set:
-            print sent
-            print self.classifier.classify(sent) == class_
         assert_true(isinstance(acc, float))
 
     def test_update(self):
