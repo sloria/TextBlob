@@ -1,10 +1,13 @@
 Changelog
 =========
 
-0.7.1 (unreleased)
+0.7.1 (2013-09-30)
 ------------------
+- Bugfix updates.
 - Fix bug in feature extraction for ``NaiveBayesClassifier``.
-- ``basic_extractor`` is now case-sensitive.
+- ``basic_extractor`` is now case-sensitive, e.g. contains(I) != contains(i)
+- Fix repr output when a TextBlob contains non-ascii characters.
+- Fix bug in part-of-speech tagging on Windows.
 
 0.7.0 (2013-09-25)
 ------------------
