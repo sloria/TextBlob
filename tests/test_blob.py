@@ -8,7 +8,7 @@ from unittest import TestCase, main
 from datetime import datetime
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from text.compat import PY2, unicode, basestring
+from text.compat import PY2, unicode, basestring, binary_type
 import text.blob as tb
 from text.packages import nltk
 from text.np_extractors import ConllExtractor, FastNPExtractor
@@ -131,8 +131,13 @@ class SentenceTest(TestCase):
         self.sentence = tb.Sentence(self.raw_sentence)
 
     def test_repr(self):
-        assert_equal(repr(self.sentence),
-                     "Sentence({0})".format(repr(self.raw_sentence)))
+        # In Py2, repr returns bytestring
+        if PY2:
+            assert_equal(repr(self.sentence),
+                        b"Sentence(\"{0}\")".format(binary_type(self.raw_sentence)))
+        # In Py3, returns text type string
+        else:
+            assert_equal(repr(self.sentence), 'Sentence("{0}")'.format(self.raw_sentence))
 
     def test_stripped_sentence(self):
         assert_equal(self.sentence.stripped,
@@ -334,7 +339,10 @@ is managed by the non-profit Python Software Foundation.'''
 
     def test_repr(self):
         blob1 = tb.TextBlob('lorem ipsum')
-        assert_equal(repr(blob1), "TextBlob({0})".format(repr('lorem ipsum')))
+        if PY2:
+            assert_equal(repr(blob1), b"TextBlob(\"{0}\")".format(binary_type('lorem ipsum')))
+        else:
+            assert_equal(repr(blob1), "TextBlob(\"{0}\")".format('lorem ipsum'))
 
     def test_cmp(self):
         blob1 = tb.TextBlob('lorem ipsum')
@@ -343,9 +351,9 @@ is managed by the non-profit Python Software Foundation.'''
 
         assert_true(blob1 == blob2)  # test ==
         assert_true(blob1 > blob3)  # test >
-        assert_true(blob1 >= blob3) # test >=
+        assert_true(blob1 >= blob3)  # test >=
         assert_true(blob3 < blob2)  # test <
-        assert_true(blob3 <= blob2) # test <=
+        assert_true(blob3 <= blob2)  # test <=
 
     def test_invalid_comparison(self):
         blob = tb.TextBlob("one")

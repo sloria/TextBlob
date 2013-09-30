@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import sys
-from text.compat import basestring, implements_to_string
+from text.compat import basestring, implements_to_string, PY2, binary_type
 
 
 class ComparableMixin(object):
@@ -59,8 +59,10 @@ class StringlikeMixin(object):
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
-        return "{cls}({text})".format(cls=class_name,
-                                        text=repr(self._strkey()))
+        text = self.__unicode__().encode("utf-8") if PY2 else str(self)
+        ret = '{cls}("{text}")'.format(cls=class_name,
+                                        text=text)
+        return binary_type(ret) if PY2 else ret
 
     def __str__(self):
         '''Returns a string representation used in print statements
