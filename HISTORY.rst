@@ -6,8 +6,9 @@ Changelog
 - Bugfix updates.
 - Fix bug in feature extraction for ``NaiveBayesClassifier``.
 - ``basic_extractor`` is now case-sensitive, e.g. contains(I) != contains(i)
-- Fix repr output when a TextBlob contains non-ascii characters.
-- Fix bug in part-of-speech tagging on Windows.
+- Fix ``repr`` output when a TextBlob contains non-ascii characters.
+- Fix part-of-speech tagging with ``PatternTagger`` on Windows.
+- Suppress warning about not having scikit-learn installed.
 
 0.7.0 (2013-09-25)
 ------------------

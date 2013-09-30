@@ -21,8 +21,11 @@ import sys
 import json
 import string as pystring
 from collections import defaultdict
+import warnings
 
-from text.packages import nltk
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore')
+    from text.packages import nltk
 from text.decorators import cached_property, requires_nltk_corpus
 from text.utils import lowerstrip, PUNCTUATION_REGEX
 from text.inflect import singularize as _singularize, pluralize as _pluralize
