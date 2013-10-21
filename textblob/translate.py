@@ -48,7 +48,7 @@ class Translator(object):
             source = source.encode('utf-8')
         escaped_source = urlquote(source, '')
         url = self.translate_url.format(from_lang, to_lang, escaped_source)
-        json5 = self._get_json5(url, host=host, type=type_)
+        json5 = self._get_json5(url, host=host, type_=type_)
         return self._unescape(self._get_translation_from_json5(json5))
 
     def detect(self, source, host=None, type_=None):
@@ -57,7 +57,7 @@ class Translator(object):
             source = source.encode('utf-8')
         escaped_source = urlquote(source, '')
         url = self.detect_url.format(escaped_source)
-        json5 = self._get_json5(url, host=host, type=type_)
+        json5 = self._get_json5(url, host=host, type_=type_)
         lang = self._get_language_from_json5(json5)
         return lang
 
