@@ -17,6 +17,7 @@ import sys
 from textblob.compat import PY2
 
 PY26 = PY2 and int(sys.version_info[1]) < 7
+PYPY = "PyPy" in sys.version
 
 
 def main():
@@ -44,6 +45,9 @@ def get_argv():
     if not PY2:
         # Exclude tests that only work on python2
         attr_conditions.append("not py2_only")
+    if PYPY:
+        # Exclude tests that don't work on PyPY
+        attr_conditions.append("not no_pypy")
     if "fast" in sys.argv:
         attr_conditions.append("not slow")
     if "no-internet" in sys.argv:

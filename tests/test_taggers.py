@@ -34,6 +34,7 @@ class TestPatternTagger(unittest.TestCase):
 
 
 @attr("slow")
+@attr("no_pypy")
 @attr("requires_numpy")
 class TestNLTKTagger(unittest.TestCase):
 
