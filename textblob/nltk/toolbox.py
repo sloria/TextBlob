@@ -219,7 +219,7 @@ class ToolboxData(StandardFormat):
     def _tree2etree(self, parent):
         from nltk.tree import Tree
 
-        root = Element(parent.label())
+        root = Element(parent.node)
         for child in parent:
             if isinstance(child, Tree):
                 root.append(self._tree2etree(child))

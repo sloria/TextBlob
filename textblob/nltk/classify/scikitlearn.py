@@ -41,7 +41,8 @@ try:
     from sklearn.feature_extraction import DictVectorizer
     from sklearn.preprocessing import LabelEncoder
 except ImportError:
-    pass
+    warn("scikit-learn is not installed."
+         " Try 'pip install scikit-learn'.")
 
 __all__ = ['SklearnClassifier']
 

@@ -164,7 +164,7 @@ class Word(unicode):
 
         .. versionadded:: 0.7.0
         '''
-        return [syn.definition() for syn in self.get_synsets(pos=pos)]
+        return [syn.definition for syn in self.get_synsets(pos=pos)]
 
 
 class WordList(list):

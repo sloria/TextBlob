@@ -54,9 +54,7 @@ class Tree(list):
         >>> t = Tree("(S (NP I) (VP (V saw) (NP him)))")
         >>> s == t
         True
-        >>> t[1][1].set_label('X')
-        >>> t[1][1].label()
-        'X'
+        >>> t[1][1].node = "X"
         >>> print(t)
         (S (NP I) (VP (V saw) (X him)))
         >>> t[0], t[1,1] = t[1,1], t[0]
@@ -68,9 +66,11 @@ class Tree(list):
         >>> len(t)
         2
 
-    The set_label() and label() methods allow individual constituents
-    to be labeled.  For example, syntax trees use this label to specify
-    phrase tags, such as "NP" and "VP".
+    Any other properties that a Tree defines are known as node
+    properties, and are used to add information about individual
+    hierarchical groupings.  For example, syntax trees use a NODE
+    property to label syntactic constituents with phrase tags, such as
+    "NP" and "VP".
 
     Several Tree methods use "tree positions" to specify
     children or descendants of a tree.  Tree positions are defined as
@@ -88,8 +88,8 @@ class Tree(list):
     Construct a new tree.  This constructor can be called in one
     of two ways:
 
-    - ``Tree(label, children)`` constructs a new tree with the
-        specified label and list of children.
+    - ``Tree(node, children)`` constructs a new tree with the
+        specified node value and list of children.
 
     - ``Tree(s)`` constructs a new tree by parsing the string ``s``.
         It is equivalent to calling the class method ``Tree.parse(s)``.
@@ -101,13 +101,13 @@ class Tree(list):
                                 "or a single string" % type(self).__name__)
             tree = type(self).parse(node_or_str)
             list.__init__(self, tree)
-            self._label = tree._label
+            self.node = tree.node
         elif isinstance(children, string_types):
             raise TypeError("%s() argument 2 should be a list, not a "
                             "string" % type(self).__name__)
         else:
             list.__init__(self, children)
-            self._label = node_or_str
+            self.node = node_or_str
 
     #////////////////////////////////////////////////////////////
     # Comparison operators
@@ -115,7 +115,7 @@ class Tree(list):
 
     def __eq__(self, other):
         return (self.__class__ is other.__class__ and
-                (self._label, list(self)) == (other._label, list(other)))
+                (self.node, list(self)) == (other.node, list(other)))
 
     def __lt__(self, other):
         if not isinstance(other, Tree):
@@ -124,7 +124,7 @@ class Tree(list):
             # so we need to be able to compare with non-trees:
             return self.__class__.__name__ < other.__class__.__name__
         elif self.__class__ is other.__class__:
-            return (self._label, list(self)) < (other._label, list(other))
+            return (self.node, list(self)) < (other.node, list(other))
         else:
             return self.__class__.__name__ < other.__class__.__name__
 
@@ -198,41 +198,6 @@ class Tree(list):
     # Basic tree operations
     #////////////////////////////////////////////////////////////
 
-    def _get_node(self):
-        """Outdated method to access the node value; use the label() method instead."""
-        raise NotImplementedError("Use label() to access a node label.")
-    def _set_node(self, value):
-        """Outdated method to set the node value; use the set_label() method instead."""
-        raise NotImplementedError("Use set_label() method to set a node label.")
-    node = property(_get_node, _set_node)
-
-    def label(self):
-        """
-        Return the node label of the tree.
-
-            >>> t = Tree('(S (NP (D the) (N dog)) (VP (V chased) (NP (D the) (N cat))))')
-            >>> t.label()
-            'S'
-
-        :return: the node label (typically a string)
-        :rtype: any
-        """
-        return self._label
-
-    def set_label(self, label):
-        """
-        Set the node label of the tree.
-
-            >>> t = Tree("(S (NP (D the) (N dog)) (VP (V chased) (NP (D the) (N cat))))")
-            >>> t.set_label("T")
-            >>> print(t)
-            (T (NP (D the) (N dog)) (VP (V chased) (NP (D the) (N cat))))
-
-        :param label: the node label (typically a string)
-        :type label: any
-        """
-        self._label = label
-
     def leaves(self):
         """
         Return the leaves of the tree.
@@ -266,7 +231,7 @@ class Tree(list):
             its leaves, omitting all intervening non-terminal nodes.
         :rtype: Tree
         """
-        return Tree(self.label(), self.leaves())
+        return Tree(self.node, self.leaves())
 
     def height(self):
         """
@@ -357,10 +322,10 @@ class Tree(list):
         :rtype: list(Production)
         """
 
-        if not isinstance(self._label, string_types):
+        if not isinstance(self.node, string_types):
             raise TypeError('Productions can only be generated from trees having node labels that are strings')
 
-        prods = [Production(Nonterminal(self._label), _child_names(self))]
+        prods = [Production(Nonterminal(self.node), _child_names(self))]
         for child in self:
             if isinstance(child, Tree):
                 prods += child.productions()
@@ -383,7 +348,7 @@ class Tree(list):
             if isinstance(child, Tree):
                 pos.extend(child.pos())
             else:
-                pos.append((child, self._label))
+                pos.append((child, self.node))
         return pos
 
     def leaf_treeposition(self, index):
@@ -518,12 +483,12 @@ class Tree(list):
         """
         if isinstance(tree, Tree):
             children = [cls.convert(child) for child in tree]
-            return cls(tree._label, children)
+            return cls(tree.node, children)
         else:
             return tree
 
     def copy(self, deep=False):
-        if not deep: return type(self)(self._label, self)
+        if not deep: return type(self)(self.node, self)
         else: return type(self).convert(self)
 
     def _frozen_class(self): return ImmutableTree
@@ -617,9 +582,9 @@ class Tree(list):
             if token[0] == open_b:
                 if len(stack) == 1 and len(stack[0][1]) > 0:
                     cls._parse_error(s, match, 'end-of-string')
-                label = token[1:].lstrip()
-                if parse_node is not None: label = parse_node(label)
-                stack.append((label, []))
+                node = token[1:].lstrip()
+                if parse_node is not None: node = parse_node(node)
+                stack.append((node, []))
             # End of a tree/subtree
             elif token == close_b:
                 if len(stack) == 1:
@@ -627,8 +592,8 @@ class Tree(list):
                         cls._parse_error(s, match, open_b)
                     else:
                         cls._parse_error(s, match, 'end-of-string')
-                label, children = stack.pop()
-                stack[-1][1].append(cls(label, children))
+                node, children = stack.pop()
+                stack[-1][1].append(cls(node, children))
             # Leaf node
             else:
                 if len(stack) == 1:
@@ -648,7 +613,7 @@ class Tree(list):
 
         # If the tree has an extra level with node='', then get rid of
         # it.  E.g.: "((S (NP ...) (VP ...)))"
-        if remove_empty_top_bracketing and tree._label == '' and len(tree) == 1:
+        if remove_empty_top_bracketing and tree.node == '' and len(tree) == 1:
             tree = tree[0]
         # return the tree.
         return tree
@@ -692,7 +657,7 @@ class Tree(list):
 
     def __repr__(self):
         childstr = ", ".join(unicode_repr(c) for c in self)
-        return '%s(%s, [%s])' % (type(self).__name__, unicode_repr(self._label), childstr)
+        return '%s(%s, [%s])' % (type(self).__name__, unicode_repr(self.node), childstr)
 
     def __str__(self):
         return self.pprint()
@@ -718,10 +683,10 @@ class Tree(list):
             return s
 
         # If it doesn't fit on one line, then write it on multi-lines.
-        if isinstance(self._label, string_types):
-            s = '%s%s%s' % (parens[0], self._label, nodesep)
+        if isinstance(self.node, string_types):
+            s = '%s%s%s' % (parens[0], self.node, nodesep)
         else:
-            s = '%s%s%s' % (parens[0], unicode_repr(self._label), nodesep)
+            s = '%s%s%s' % (parens[0], unicode_repr(self.node), nodesep)
         for child in self:
             if isinstance(child, Tree):
                 s += '\n'+' '*(indent+2)+child.pprint(margin, indent+2,
@@ -768,11 +733,11 @@ class Tree(list):
                 childstrs.append('%s' % child)
             else:
                 childstrs.append(unicode_repr(child))
-        if isinstance(self._label, string_types):
-            return '%s%s%s %s%s' % (parens[0], self._label, nodesep,
+        if isinstance(self.node, string_types):
+            return '%s%s%s %s%s' % (parens[0], self.node, nodesep,
                                     " ".join(childstrs), parens[1])
         else:
-            return '%s%s%s %s%s' % (parens[0], unicode_repr(self._label), nodesep,
+            return '%s%s%s %s%s' % (parens[0], unicode_repr(self.node), nodesep,
                                     " ".join(childstrs), parens[1])
 
 
@@ -782,7 +747,7 @@ class ImmutableTree(Tree):
         # Precompute our hash value.  This ensures that we're really
         # immutable.  It also means we only have to calculate it once.
         try:
-            self._hash = hash((self._label, tuple(self)))
+            self._hash = hash((self.node, tuple(self)))
         except (TypeError, ValueError):
             raise ValueError("%s: node value and children "
                              "must be immutable" % type(self).__name__)
@@ -814,14 +779,18 @@ class ImmutableTree(Tree):
     def __hash__(self):
         return self._hash
 
-    def set_label(self, value):
+    def _get_node(self):
+        """Get the node value"""
+        return self._node
+    def _set_node(self, value):
         """
-        Set the node label.  This will only succeed the first time the
-        node label is set, which should occur in ImmutableTree.__init__().
+        Set the node value.  This will only succeed the first time the
+        node value is set, which should occur in ImmutableTree.__init__().
         """
-        if hasattr(self, '_label'):
+        if hasattr(self, 'node'):
             raise ValueError('%s may not be modified' % type(self).__name__)
-        self._label = value
+        self._node = value
+    node = property(_get_node, _set_node)
 
 
 ######################################################################
@@ -1364,30 +1333,30 @@ class ProbabilisticTree(Tree, ProbabilisticMixIn):
     def __str__(self):
         return '%s (p=%.6g)' % (self.pprint(margin=60), self.prob())
     def copy(self, deep=False):
-        if not deep: return type(self)(self._label, self, prob=self.prob())
+        if not deep: return type(self)(self.node, self, prob=self.prob())
         else: return type(self).convert(self)
     @classmethod
     def convert(cls, val):
         if isinstance(val, Tree):
             children = [cls.convert(child) for child in val]
             if isinstance(val, ProbabilisticMixIn):
-                return cls(val._label, children, prob=val.prob())
+                return cls(val.node, children, prob=val.prob())
             else:
-                return cls(val._label, children, prob=1.0)
+                return cls(val.node, children, prob=1.0)
         else:
             return val
 
     def __eq__(self, other):
         return (self.__class__ is other.__class__ and
-                (self._label, list(self), self.prob()) ==
-                (other._label, list(other), other.prob()))
+                (self.node, list(self), self.prob()) ==
+                (other.node, list(other), other.prob()))
 
     def __lt__(self, other):
         if not isinstance(other, Tree):
             raise_unorderable_types("<", self, other)
         if self.__class__ is other.__class__:
-            return ((self._label, list(self), self.prob()) <
-                    (other._label, list(other), other.prob()))
+            return ((self.node, list(self), self.prob()) <
+                    (other.node, list(other), other.prob()))
         else:
             return self.__class__.__name__ < other.__class__.__name__
 
@@ -1397,7 +1366,7 @@ class ImmutableProbabilisticTree(ImmutableTree, ProbabilisticMixIn):
     def __init__(self, node_or_str, children=None, **prob_kwargs):
         ImmutableTree.__init__(self, node_or_str, children)
         ProbabilisticMixIn.__init__(self, **prob_kwargs)
-        self._hash = hash((self._label, tuple(self), self.prob()))
+        self._hash = hash((self.node, tuple(self), self.prob()))
 
     # We have to patch up these methods to make them work right:
     def _frozen_class(self): return ImmutableProbabilisticTree
@@ -1406,16 +1375,16 @@ class ImmutableProbabilisticTree(ImmutableTree, ProbabilisticMixIn):
     def __str__(self):
         return '%s [%s]' % (self.pprint(margin=60), self.prob())
     def copy(self, deep=False):
-        if not deep: return type(self)(self._label, self, prob=self.prob())
+        if not deep: return type(self)(self.node, self, prob=self.prob())
         else: return type(self).convert(self)
     @classmethod
     def convert(cls, val):
         if isinstance(val, Tree):
             children = [cls.convert(child) for child in val]
             if isinstance(val, ProbabilisticMixIn):
-                return cls(val._label, children, prob=val.prob())
+                return cls(val.node, children, prob=val.prob())
             else:
-                return cls(val._label, children, prob=1.0)
+                return cls(val.node, children, prob=1.0)
         else:
             return val
 
@@ -1424,7 +1393,7 @@ def _child_names(tree):
     names = []
     for child in tree:
         if isinstance(child, Tree):
-            names.append(Nonterminal(child._label))
+            names.append(Nonterminal(child.node))
         else:
             names.append(child)
     return names
@@ -1493,7 +1462,7 @@ def demo():
     print(t.__repr__())
 
     print("Display tree properties:")
-    print(t.label())         # tree's constituent type
+    print(t.node)           # tree's constituent type
     print(t[0])             # tree's first child
     print(t[1])             # tree's second child
     print(t.height())
@@ -1543,7 +1512,7 @@ def demo():
     print()
 
     # Demonstrate tree nodes containing objects other than strings
-    t.set_label(('test', 3))
+    t.node = ('test', 3)
     print(t)
 
 __all__ = ['ImmutableProbabilisticTree', 'ImmutableTree', 'ProbabilisticMixIn',
