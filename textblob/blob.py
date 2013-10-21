@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Wrappers for various units of text, including the main ``TextBlob``,
-``Word``, and ``WordList`` classes.
+'''Wrappers for various units of text, including the main
+:class:`TextBlob <textblob.blob.TextBlob>`, :class:`Word <textblob.blob.Word>`,
+and :class:`WordList <textblob.blob.WordList>` classes.
 Example usage: ::
 
-    >>> from text.blob import TextBlob
+    >>> from textblob import TextBlob
     >>> b = TextBlob("Simple is better than complex.")
     >>> b.tags
     [(u'Simple', u'NN'), (u'is', u'VBZ'), (u'better', u'JJR'), (u'than', u'IN'), (u'complex', u'NN')]
@@ -15,6 +16,9 @@ Example usage: ::
     (0.06666666666666667, 0.41904761904761906)
     >>> b.words[0].synsets()[0]
     Synset('simple.n.01')
+
+.. versionchanged:: 0.8.0
+    These classes are now imported from ``textblob`` rather than ``text.blob``.
 '''
 from __future__ import unicode_literals, absolute_import
 import sys
@@ -39,7 +43,7 @@ from textblob.translate import Translator
 from textblob.en import suggest
 
 # Wordnet interface
-# NOTE: text.wordnet is not imported so that the wordnet corpus can be lazy-loaded
+# NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
 _wordnet = nltk.corpus.wordnet
 
 
@@ -289,21 +293,21 @@ def _initialize_models(obj, tokenizer, pos_tagger,
 
 class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
-    '''An abstract base class that all text.blob classes will inherit from.
+    '''An abstract base class that all textblob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
     basic dunder and string methods for making objects like Python strings.
 
     :param text: A string.
     :param tokenizer: (optional) A tokenizer instance. If ``None``,
-        defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+        defaults to :class:`WordTokenizer() <textblob.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
-        defaults to :class:`FastNPExtractor() <text.en.np_extractors.FastNPExtractor>`.
+        defaults to :class:`FastNPExtractor() <textblob.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``,
-        defaults to :class:`PatternTagger <text.en.taggers.PatternTagger>`.
+        defaults to :class:`PatternTagger <textblob.en.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``,
-        defaults to :class:`PatternAnalyzer <text.en.sentiments.PatternAnalyzer>`.
+        defaults to :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
-        :class:`PatternParser <text.en.parsers.PatternParser>`.
+        :class:`PatternParser <textblob.en.parsers.PatternParser>`.
     :param classifier: A classifier.
 
     .. versionchanged:: 0.6.0
@@ -343,7 +347,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
     @cached_property
     def tokens(self):
         '''Return a list of tokens, using this blob's tokenizer object
-        (defaults to :class:`WordTokenizer <text.tokenizers.WordTokenizer>`).
+        (defaults to :class:`WordTokenizer <textblob.tokenizers.WordTokenizer>`).
         '''
         return WordList(self.tokenizer.tokenize(self.raw))
 
@@ -567,13 +571,13 @@ class TextBlob(BaseBlob):
 
     :param text: A string.
     :param tokenizer: (optional) A tokenizer instance. If ``None``, defaults to
-        :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+        :class:`WordTokenizer() <textblob.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
-        defaults to :class:`FastNPExtractor() <text.en.np_extractors.FastNPExtractor>`.
+        defaults to :class:`FastNPExtractor() <textblob.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to
-        :class:`PatternTagger <text.en.taggers.PatternTagger>`.
+        :class:`PatternTagger <textblob.en.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to
-        :class:`PatternAnalyzer <text.en.sentiments.PatternAnalyzer>`.
+        :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param classifier: (optional) A classifier.
     """
 
@@ -686,9 +690,9 @@ class Blobber(object):
 
     Usage:
 
-        >>> from text.blob import Blobber
-        >>> from text.taggers import NLTKTagger
-        >>> from text.tokenizers import SentenceTokenizer
+        >>> from textblob import Blobber
+        >>> from textblob.taggers import NLTKTagger
+        >>> from textblob.tokenizers import SentenceTokenizer
         >>> tb = Blobber(pos_tagger=NLTKTagger(), tokenizer=SentenceTokenizer())
         >>> blob1 = tb("This is one blob.")
         >>> blob2 = tb("This blob has the same tagger and tokenizer.")
@@ -696,15 +700,15 @@ class Blobber(object):
         True
 
     :param tokenizer: (optional) A tokenizer instance. If ``None``,
-        defaults to :class:`WordTokenizer() <text.tokenizers.WordTokenizer>`.
+        defaults to :class:`WordTokenizer() <textblob.tokenizers.WordTokenizer>`.
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
-        defaults to :class:`FastNPExtractor() <text.np_extractors.FastNPExtractor>`.
+        defaults to :class:`FastNPExtractor() <textblob.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``,
-        defaults to :class:`PatternTagger <text.taggers.PatternTagger>`.
+        defaults to :class:`PatternTagger <textblob.en.taggers.PatternTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``,
-        defaults to :class:`PatternAnalyzer <text.sentiments.PatternAnalyzer>`.
+        defaults to :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
-        :class:`PatternParser <text.parsers.PatternParser>`.
+        :class:`PatternParser <textblob.en.parsers.PatternParser>`.
     :param classifier: A classifier.
 
     .. versionadded:: 0.4.0

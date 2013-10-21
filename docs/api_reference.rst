@@ -6,7 +6,7 @@ API Reference
 Blob Classes
 ------------
 
-.. automodule:: text.blob
+.. automodule:: textblob.blob
     :members:
     :inherited-members:
 
@@ -15,27 +15,27 @@ Blob Classes
 Base Classes
 ------------
 
-.. automodule:: text.base
+.. automodule:: textblob.base
     :members:
 
 Tokenizers
 ----------
 
-.. automodule:: text.tokenizers
+.. automodule:: textblob.tokenizers
     :members:
     :inherited-members:
 
 POS Taggers
 -----------
 
-.. automodule:: text.en.taggers
+.. automodule:: textblob.en.taggers
     :members:
     :inherited-members:
 
 Noun Phrase Extractors
 ----------------------
 
-.. automodule:: text.en.np_extractors
+.. automodule:: textblob.en.np_extractors
     :members: BaseNPExtractor, ConllExtractor, FastNPExtractor
     :inherited-members:
 
@@ -43,7 +43,7 @@ Noun Phrase Extractors
 Sentiment Analyzers
 -------------------
 
-.. automodule:: text.en.sentiments
+.. automodule:: textblob.en.sentiments
     :members:
     :inherited-members:
 
@@ -51,7 +51,7 @@ Sentiment Analyzers
 Parsers
 -------
 
-.. automodule:: text.en.parsers
+.. automodule:: textblob.en.parsers
     :members:
     :inherited-members:
 
@@ -60,14 +60,14 @@ Parsers
 Classifiers
 -----------
 
-.. automodule:: text.classifiers
+.. automodule:: textblob.classifiers
     :members:
     :inherited-members:
 
 Blobber
 -------
 
-.. autoclass:: text.blob.Blobber
+.. autoclass:: textblob.blob.Blobber
     :members:
     :special-members:
     :exclude-members: __weakref__
@@ -75,20 +75,20 @@ Blobber
 File Formats
 ------------
 
-.. automodule:: text.formats
+.. automodule:: textblob.formats
     :members:
     :inherited-members:
 
 Wordnet
 -------
 
-.. automodule:: text.wordnet
+.. automodule:: textblob.wordnet
 
 Exceptions
 ----------
-.. module:: text.exceptions
+.. module:: textblob.exceptions
 
-.. autoexception:: text.exceptions.MissingCorpusException
+.. autoexception:: textblob.exceptions.MissingCorpusException
 
 
 

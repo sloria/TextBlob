@@ -104,7 +104,7 @@ setup(
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
     install_requires=['PyYAML'],
-    packages=find_packages(exclude=('test*', 'text.nltk.test')),
+    packages=find_packages(exclude=('test*', 'textblob.nltk.test')),
     include_package_data=True,
     package_data={
         "textblob.en": ["*.txt", "*.xml"]

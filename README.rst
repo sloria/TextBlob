@@ -26,7 +26,7 @@ Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>
 
 .. code-block:: python
 
-    from text.blob import TextBlob
+    from textblob import TextBlob
 
     text = '''
     The titular threat of The Blob has always struck me as the ultimate movie

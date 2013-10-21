@@ -5,7 +5,7 @@ TextBlob's basic features. Use this script if you only intend to use
 TextBlob's default models. If you want to use other models, use
 download_corpora.py. Modify for your own needs.
 '''
-from text.packages import nltk
+from textblob.packages import nltk
 
 REQUIRED_CORPORA = [
     'brown',  # Required for FastNPExtractor

@@ -3,7 +3,7 @@
 which define the interface for descendant classes.
 
 .. versionchanged:: 0.7.0
-    All base classes are defined in the same module, ``text.base``.
+    All base classes are defined in the same module, ``textblob.base``.
 '''
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod

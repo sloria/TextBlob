@@ -12,9 +12,9 @@ First, the import.
 
 .. doctest::
 
-    >>> from text.blob import TextBlob
+    >>> from textblob import TextBlob
 
-Let's create our first :class:`TextBlob <text.blob.TextBlob>`.
+Let's create our first :class:`TextBlob <textblob.TextBlob>`.
 
 .. doctest::
 
@@ -67,7 +67,7 @@ You can break TextBlobs into words or sentences.
     >>> zen.words
     WordList([u'Beautiful', u'is', u'better', u'than', u'ugly', u'Explicit', u'is', u'better', u'than', u'implicit', u'Simple', u'is', u'better', u'than', u'complex'])
     >>> zen.sentences
-    [Sentence('Beautiful is better than ugly.'), Sentence('Explicit is better than implicit.'), Sentence('Simple is better than complex.')]
+    [Sentence("Beautiful is better than ugly."), Sentence("Explicit is better than implicit."), Sentence("Simple is better than complex.")]
 
 ``Sentence`` objects have the same properties and methods as TextBlobs.
 
@@ -82,7 +82,7 @@ For more advanced tokenization, see the :ref:`Advanced Usage <advanced>` guide.
 Words Inflection and Lemmatization
 ----------------------------------
 
-Each word in ``TextBlob.words`` or ``Sentence.words`` is a :class:`Word <text.blob.Word>`
+Each word in ``TextBlob.words`` or ``Sentence.words`` is a :class:`Word <textblob.Word>`
 object (a subclass of ``unicode``) with useful methods, e.g. for word inflection.
 
 .. doctest::
@@ -99,7 +99,7 @@ Words can be lemmatized by accessing the ``lemma`` property.
 
 .. doctest::
 
-    >>> from text.blob import Word
+    >>> from textblob import Word
     >>> w = Word("octopi")
     >>> w.lemma
     'octopus'
@@ -107,12 +107,12 @@ Words can be lemmatized by accessing the ``lemma`` property.
 WordNet Integration
 -------------------
 
-You can access the synsets for a :class:`Word <text.blob.Word>` via the ``synsets`` property or the ``get_synsets`` method, optionally passing in a part of speech.
+You can access the synsets for a :class:`Word <textblob.Word>` via the ``synsets`` property or the ``get_synsets`` method, optionally passing in a part of speech.
 
 .. doctest::
 
-    >>> from text.blob import Word
-    >>> from text.wordnet import VERB
+    >>> from textblob import Word
+    >>> from textblob.wordnet import VERB
     >>> word = Word("octopus")
     >>> word.synsets
     [Synset('octopus.n.01'), Synset('octopus.n.02')]
@@ -130,7 +130,7 @@ You can also create synsets directly.
 
 .. doctest::
 
-    >>> from text.wordnet import Synset
+    >>> from textblob.wordnet import Synset
     >>> octopus = Synset('octopus.n.02')
     >>> shrimp = Synset('shrimp.n.03')
     >>> octopus.path_similarity(shrimp)
@@ -141,7 +141,7 @@ For more information on the WordNet API, see the NLTK documentation on the `Word
 WordLists
 ---------
 
-A :class:`WordList <text.blob.WordList>` is just a Python list with additional methods.
+A :class:`WordList <textblob.WordList>` is just a Python list with additional methods.
 
 .. doctest::
 
@@ -166,7 +166,7 @@ Use the ``correct()`` method to attempt spelling correction.
 
 .. doctest::
 
-    >>> from text.blob import Word
+    >>> from textblob import Word
     >>> w = Word('falibility')
     >>> w.spellcheck()
     [(u'fallibility', 1.0)]
@@ -213,7 +213,7 @@ TextBlobs can be translated between languages.
 
     >>> en_blob = TextBlob(u"Simple is better than complex.")
     >>> en_blob.translate(to="es")
-    TextBlob(u'Simple es mejor que complejo .')
+    TextBlob("Simple es mejor que complejo .")
 
 If no source language is specified, TextBlob will attempt to detect the language. You can specify the source language explicitly, like so.
 
@@ -221,7 +221,7 @@ If no source language is specified, TextBlob will attempt to detect the language
 
     >>> chinese_blob = TextBlob(u"美丽优于丑陋")
     >>> chinese_blob.translate(from_lang="zh-CN", to='en')
-    TextBlob(u'Beautiful is better than ugly')
+    TextBlob("Beautiful is better than ugly")
 
 You can also attempt to detect a TextBlob's language using ``TextBlob.detect_language()``.
 
@@ -259,14 +259,14 @@ You can use Python's substring syntax.
 .. doctest::
 
     >>> zen[0:19]
-    TextBlob('Beautiful is better')
+    TextBlob("Beautiful is better")
 
 You can use common string methods.
 
 .. doctest::
 
     >>> zen.upper()
-    TextBlob('BEAUTIFUL IS BETTER THAN UGLY. EXPLICIT ...BETTER THAN COMPLEX.')
+    TextBlob("BEAUTIFUL IS BETTER THAN UGLY. EXPLICIT IS BETTER THAN IMPLICIT. SIMPLE IS BETTER THAN COMPLEX.")
     >>> zen.find("Simple")
     65
 
@@ -286,7 +286,7 @@ You can concatenate and interpolate TextBlobs and strings.
 .. doctest::
 
     >>> apple_blob + ' and ' + banana_blob
-    TextBlob('apples and bananas')
+    TextBlob("apples and bananas")
     >>> u"{0} and {1}".format(apple_blob, banana_blob)
     u'apples and bananas'
 

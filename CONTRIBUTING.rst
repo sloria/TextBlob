@@ -56,11 +56,11 @@ Extensions are packages with the name ``textblob-something``, where "something" 
 Model Extensions
 ++++++++++++++++
 
-To create a new extension for a part-of-speech tagger, sentiment analyzer, noun phrase extractor, classifier, tokenizer, or parser, simply create a module that has a class that implements the correct interface from ``text.base``. For example, a tagger might look like this:
+To create a new extension for a part-of-speech tagger, sentiment analyzer, noun phrase extractor, classifier, tokenizer, or parser, simply create a module that has a class that implements the correct interface from ``textblob.base``. For example, a tagger might look like this:
 
 .. code-block:: python
 
-    from text.base import BaseTagger
+    from textblob.base import BaseTagger
 
     class MyTagger(BaseTagger):
         def tag(self, text):

@@ -3,7 +3,7 @@
 '''Downloads the necessary NLTK models and corpora required to support
 all of TextBlob's features. Modify for your own needs.
 '''
-from text.packages import nltk
+from textblob.packages import nltk
 
 REQUIRED_CORPORA = [
     'brown',  # Required for FastNPExtractor

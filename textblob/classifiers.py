@@ -5,8 +5,8 @@ methods.
 Example Usage:
 ::
 
-    >>> from text.blob import TextBlob
-    >>> from text.classifiers import NaiveBayesClassifier
+    >>> from textblob import TextBlob
+    >>> from textblob.classifiers import NaiveBayesClassifier
     >>> train = [
     ...     ('I love this sandwich.', 'pos'),
     ...     ('This is an amazing place!', 'pos'),
