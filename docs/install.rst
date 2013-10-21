@@ -57,6 +57,32 @@ To get the latest development version of TextBlob, run
 
     $ pip install -U git+https://github.com/sloria/TextBlob.git@dev
 
+
+Migrating from older versions (<=0.7.1)
+---------------------------------------
+
+As of TextBlob 0.8.0, TextBlob's core package was renamed to ``textblob``, whereas earlier versions used a package called ``text``. Therefore, migrating to newer versions should be as simple as rewriting your imports, like so:
+
+New:
+::
+
+    from textblob import TextBlob, Word, Blobber
+    from textblob.classifiers import NaiveBayesClassifier
+    from textblob.taggers import NLTKTagger
+
+Old:
+::
+
+    from text.blob import TextBlob, Word, Blobber
+    from text.classifiers import NaiveBayesClassifier
+    from text.taggers import NLTKTagger
+
+
+.. admonition:: Note
+
+    You can still import from ``text``, but this will raise a ``DeprecationWarning``. The ``text`` package will be removed in later versions.
+
+
 Python
 ++++++
 
