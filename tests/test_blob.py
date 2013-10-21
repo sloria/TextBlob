@@ -906,11 +906,12 @@ class WordTest(TestCase):
         w = tb.Word("work")
         noun_syns = w.get_synsets(pos=wn.NOUN)
         for synset in noun_syns:
-            assert_equal(synset.pos, wn.NOUN)
+            assert_equal(synset.pos(), wn.NOUN)
 
     def test_definitions(self):
         w = tb.Word("octopus")
         for definition in w.definitions:
+            print(type(definition))
             assert_true(isinstance(definition, basestring))
 
     def test_define(self):
@@ -933,7 +934,7 @@ class TestWordnetInterface(TestCase):
     def test_lemma(self):
         lemma = wn.Lemma('eat.v.01.eat')
         word = tb.Word("eat")
-        assert_equal(word.synsets[0].lemmas[0], lemma)
+        assert_equal(word.synsets[0].lemmas()[0], lemma)
 
 
 class BlobberTest(TestCase):
