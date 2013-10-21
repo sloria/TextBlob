@@ -16,7 +16,7 @@ class Translator(object):
 
     Usage:
     ::
-        >>> from text.translate import Translator
+        >>> from textblob.translate import Translator
         >>> t = Translator()
         >>> t.translate('hello', from_lang='en', to_lang='fr')
         u'bonjour'
@@ -42,22 +42,22 @@ class Translator(object):
     headers = {'User-Agent': ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) '
             'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19')}
 
-    def translate(self, source, from_lang='en', to_lang='en'):
+    def translate(self, source, from_lang='en', to_lang='en', host=None, type_=None):
         '''Translate the source text from one language to another.'''
         if PY2:
             source = source.encode('utf-8')
         escaped_source = urlquote(source, '')
         url = self.translate_url.format(from_lang, to_lang, escaped_source)
-        json5 = self._get_json5(url)
+        json5 = self._get_json5(url, host=host, type=type_)
         return self._unescape(self._get_translation_from_json5(json5))
 
-    def detect(self, source):
+    def detect(self, source, host=None, type_=None):
         '''Detect the source text's language.'''
         if PY2:
             source = source.encode('utf-8')
         escaped_source = urlquote(source, '')
         url = self.detect_url.format(escaped_source)
-        json5 = self._get_json5(url)
+        json5 = self._get_json5(url, host=host, type=type_)
         lang = self._get_language_from_json5(json5)
         return lang
 
@@ -78,8 +78,10 @@ class Translator(object):
             pos = m.end()
         return result
 
-    def _get_json5(self, url):
+    def _get_json5(self, url, host=None, type_=None):
         req = request.Request(url=url, headers=self.headers)
+        if host or type:
+            req.set_proxy(host=host, type=type_)
         r = request.urlopen(req)
         content = r.read()
         return content.decode('utf-8')
