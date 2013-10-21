@@ -4,6 +4,8 @@ Changelog
 0.8.0 (unreleased)
 ------------------
 - Renamed package to ``textblob``. This avoids clashes with other namespaces called `text`. TextBlob should now be imported with ``from textblob import TextBlob``.
+- Update pattern resources for improved parser accuracy.
+- Update NLTK.
 
 0.7.1 (2013-09-30)
 ------------------

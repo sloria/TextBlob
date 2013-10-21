@@ -1,3 +1,7 @@
+;;;   
+;;;   The contextual rules are based on Brill's rule based tagger v1.14,
+;;;   trained on Brown corpus and Penn Treebank.
+;;;   
 IN VB PREVTAG PRP
 NN VB PREVTAG TO
 VBP VB PREV1OR2OR3TAG MD

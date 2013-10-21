@@ -1,9 +1,51 @@
+;;;   
+;;;   The lexicon was taken from Brill's rule based tagger v1.14,
+;;;   trained on Brown corpus and Penn Treebank.
+;;;   
+;;;   Eric Brill (1992). A simple rule-based part of speech tagger.
+;;;   In Proceedings of the workshop on Speech and Natural Language (pp. 112-116).
+;;;   Association for Computational Linguistics.
+;;;   
+;;;   Copyright 1993 by the Massachusetts Institute of Technology and the
+;;;   University of Pennsylvania. All rights reserved. MIT license.
+;;;   
+;;;   Additional words were added from the Twitter Part-of-Speech Annotated Data,
+;;;   available under the Creative Commons Attribution 3.0 Unported license ("CC-BY").
+;;;   Carnegie Mellon University. http://www.ark.cs.cmu.edu/TweetNLP
+;;;   
+;;;   Kevin Gimpel, Nathan Schneider, Brendan O'Connor, et al. (2011).
+;;;   Part-of-Speech Tagging for Twitter: Annotation, Features, and Experiments.
+;;;   In Proceedings of the Annual Meeting of the ACL, Portland, OR, June 2011.
+;;;   
 ! .
+!! .
+!!! .
+!!!! .
+!!!!! .
+!!!!!! .
+!!!!!!! .
+!!!!!!!! .
+!. .
+!? .
 " "
-“ "
-” "
 # #
+#1 CD
+#2 CD
+#GLEE NNP
+#Glee NNP
+#celtics NNPS
+#fail NN
+#fb NNP
+#glee NNP
+#howcome VB
+#lakers NNPS
+#shoutout NN
+#teamceltics NNPS
+#teamlakers NNPS
+#win NN
 $ $
+$200 CD
+$25 CD
 % NN
 %... :
 %CHG NN
@@ -13,6 +55,8 @@ $ $
 '' ''
 ''$ $
 ''. NN
+', ,
+'. .
 '/''... :
 '/POS... :
 '13 CD
@@ -56,6 +100,7 @@ $ $
 '89s NNS
 '90s NNS
 '92 CD
+': :
 'A NN
 'All DT
 'Are VBP
@@ -184,12 +229,15 @@ $ $
 've VBP
 'way RB
 'we'd MD
-(!) SYM
 ( (
+(!) SYM
 (3/26 1991)
 (9/9 1991)
+(: SYM
+(@ SYM
 ) )
 ). SYM
+): SYM
 * SYM
 + SYM
 , ,
@@ -302,6 +350,8 @@ $ $
 -RRB- )
 -Samuel NNP
 -Yr. NN
+-_- SYM
+-__- SYM
 -aminometha NN
 -axis NN
 -c NN
@@ -311,6 +361,10 @@ $ $
 .'crack NN
 .. .
 ... :
+.... :
+..... :
+...... :
+........ :
 .01 CD
 .02 CD
 .025 CD
@@ -352,20 +406,91 @@ $ $
 .9.82 CD
 .9.92 CD
 .90 CD
+.: :
 .Not RB
 .fundamentally RB
 .to TO
 .what WDT
 / CC
+0 CD
+0-1 CD
+09 CD
+1 CD
+1,000 CD
+1-0 CD
+1/2 CD
+10 CD
+10.27 CD
+106 CD
+11 CD
+12 CD
+15 CD
+17 CD
+17th CD
+1st JJ
+2 IN
+20 CD
+2008 CD
+2010 CD
+2011 CD
+21st JJ
+26 CD
+27 CD
+27th CD
+29 CD
+2day NN
+2nd CD
+3 CD
+30 CD
+31 CD
+4 IN
+40 CD
+48 CD
+4th CD
+5 CD
+6 CD
+7 CD
+7:30 CD
+8 CD
+8:30 CD
+9 CD
 : :
+:( SYM
+:) SYM
+:)) SYM
+:-P SYM
+:/ SYM
 :35.3 CD
+:: :
+:D SYM
+:P SYM
 ; :
+;) SYM
+;-) SYM
 < SYM
+<3 SYM
+<333 SYM
 = SYM
+=) SYM
 ======================================ll NN
+=D SYM
+=] SYM
 > SYM
 ? .
+?! .
+?!? .
+?? .
+??!! .
+??? .
+???? .
 @ IN
+@BarackObama NNP
+@DailySexTips NNP
+@NICKIMINAJ NNP
+@NickiMinaj NNP
+@justinbieber NNP
+@kylieminogue NNP
+@youtube NNP
 A DT
 A$ $
 A&E NNP
@@ -533,6 +658,7 @@ AGS NNP
 AH-64 NN
 AH6 CD
 AHEAD RB
+AHHHHH UH
 AHSC NNP
 AIA NNP
 AIB NNP
@@ -563,6 +689,7 @@ ALAMCO NNP
 ALBERTA NNP
 ALCEE NNP
 ALCOHOL NNP
+ALERT NN
 ALII NNP
 ALL PDT
 ALLIANCE NNP
@@ -1215,6 +1342,7 @@ Ah-ah UH
 Ahah UH
 Ahead RB
 Ahern NNP
+Ahh UH
 Ahlerich NNP
 Ahm PRP
 Ahmad NNP
@@ -2767,7 +2895,9 @@ Aware JJ
 Awareness NN
 Away RB
 Awe NN
+Awesome JJ
 Awkwardly RB
+Awww UH
 Ax NNP
 Axa NNP
 Axa-Midi NNP
@@ -2931,6 +3061,7 @@ BIO-RAD NNP
 BIOTECHNOLOGY NN
 BIP NNP
 BIRDS NNS
+BITCH NN
 BK NNP
 BL NNP
 BLACK JJ
@@ -3024,6 +3155,7 @@ BUSH NNP
 BUSINESS NN
 BUSINESSLAND NNP
 BUSY JJ
+BUT CC
 BUY-OUT NN
 BUYERS NNS
 BUYING NN
@@ -4661,6 +4793,7 @@ Bosak NNP
 Bosch NNP
 Bosco NNP
 Boseki NNP
+Bosh NNP
 Bosis NNP
 Bosket NNP
 Boskin NNP
@@ -5107,6 +5240,7 @@ Bromagen NNP
 Bromfield NNP
 Bromley NNP
 Bromwich NNP
+Bron NNP
 Bronces NNP
 Bronco NNP
 Broncos NNP
@@ -5571,6 +5705,7 @@ CALLS NNPS
 CAMBREX NNP
 CAMPAIGN NNP
 CAMPEAU NNP
+CAN VB
 CANADA NNP
 CANADIAN JJ
 CANCER NNP
@@ -5611,6 +5746,7 @@ CCK NNP
 CCK-related JJ
 CCT NNP
 CD NNP
+CD+DVD NN
 CD-4 NNP
 CD-I NNP
 CD-ROM NNP
@@ -6062,6 +6198,7 @@ Camry NNP
 Camrys NNPS
 Camusfearna NNP
 Can MD
+Can't VB
 Canaan NNP
 Canada NNP
 Canada-Newfoundland NNP
@@ -6088,6 +6225,7 @@ Candace NNP
 Candela NNP
 Candice NNP
 Candid JJ
+Candidate NN
 Candidates NNS
 Candide NNP
 Candle NNP
@@ -6914,6 +7052,7 @@ Chicago-centric JJ
 Chicago-style JJ
 Chicagoan NNP
 Chicagoans NNPS
+Chick NN
 Chickasaws NNPS
 Chicken NNP
 Chickens NNS
@@ -8898,6 +9037,7 @@ DIAL-A-PIANO-LESSON NNP
 DIALING VBG
 DIAPER NN
 DIASONICS NNP
+DID VB
 DIED VBD
 DIET NNP
 DIFFERENCE NNP
@@ -8927,6 +9067,7 @@ DLC NNP
 DLINE NN
 DLJ NNP
 DLX NNP
+DM VB
 DM1,200 CD
 DM10,000 CD
 DM100 CD
@@ -8957,12 +9098,15 @@ DOLLAR'S NN
 DOLLARS NNPS
 DON'T NNP
 DONORS NNS
+DONT VB
 DOONESBURY NNP
 DOORS NNS
 DOS NNP
 DOT NNP
 DOW NNP
+DOWN RB
 DOWNEY NNP
+DOWNLOAD VB
 DOWNSIZING NN
 DPC NNP
 DPL NNP
@@ -9517,6 +9661,7 @@ Demands NNS
 Demented JJ
 Demery NNP
 Demetrius NNP
+Demi NNP
 Deminex NNP
 Demisch NNP
 Demler NNP
@@ -10422,6 +10567,7 @@ Drobnick NNP
 Drobny NNP
 Drogerias NNP
 Drogoul NNP
+Droid NNP
 Droll NNP
 Dromey NNP
 Dronk NNP
@@ -10779,6 +10925,7 @@ EUMMELIHS NNP
 EURODOLLARS NNS
 EUROP NNP
 EUROPE NNP
+EVER RB
 EVEREX NNP
 EVERYONE NN
 EWC NN
@@ -11632,6 +11779,7 @@ Etienne-Emile NNP
 Etruscan JJ
 Etsuko NNP
 Etsuro NNP
+Etsy NNP
 Ettore NNP
 Etudes NNP
 Etzioni NNP
@@ -11827,6 +11975,7 @@ Exchequer NNP
 Exchnage NNP
 Excise-tax JJ
 Excision NN
+Excited JJ
 Excitement NN
 Exclaimed VBD
 Excluded VBN
@@ -12017,6 +12166,7 @@ FAST-FOOD NN
 FATHER NN
 FAX NNP
 FAXM NNP
+FB NNP
 FBI NNP
 FCB\ NNP
 FCB\/Leber NNP
@@ -12123,6 +12273,7 @@ FSX NNP
 FT NNP
 FT-SE NNP
 FTC NNP
+FUCK NN
 FUND NNP
 FUNDS NNS
 FUTURES NNS
@@ -12142,6 +12293,7 @@ Fabrics NNP
 Fabrri NNP
 Fabulous NNP
 Face NNP
+Facebook NNP
 Faced VBN
 Faces NNPS
 Facetious NNP
@@ -12195,6 +12347,7 @@ Fairview NNP
 Fairy NNP
 Faith NNP
 Faithful NN
+Fake JJ
 Fakty NNP
 Falb NNP
 Falco NNP
@@ -13533,6 +13686,7 @@ GMr NN
 GNP NNP
 GNP-based JJ
 GO VB
+GOD UH
 GOLD NN
 GOLDEN NNP
 GOLF NN
@@ -13600,6 +13754,7 @@ Gaechinger NNP
 Gaelic JJ
 Gaetan NNP
 Gaffney NNP
+Gaga NNP
 Gagarin NNP
 Gagliardini NNP
 Gagne NNP
@@ -14393,6 +14548,7 @@ Goodis NNP
 Goodison NNP
 Goodkind NNP
 Goodman NNP
+Goodmorning UH
 Goodrich NNP
 Goods NNP
 Goodson NNP
@@ -14401,6 +14557,7 @@ Goodwills NNPS
 Goodwin NNP
 Goody UH
 Goodyear NNP
+Google NNP
 Goolick NN
 Goose NNP
 Gorbachev NNP
@@ -14800,6 +14957,7 @@ Growers NNPS
 Growing VBG
 Grows VBZ
 Growth NN
+GrubHub NNP
 Grubb NNP
 Gruber NNP
 Gruberova NNP
@@ -15015,7 +15173,9 @@ H.V. NNP
 H.W. NNP
 H/NNP.A. NN
 H2Owner NNP
+HA UH
 HAD VBD
+HAHAHA UH
 HAL NNP
 HALE NNP
 HALT NNP
@@ -15026,7 +15186,9 @@ HAPPY JJ
 HARD JJ
 HAS VBZ
 HASTINGS NNP
+HATER NN
 HATS NNS
+HAVE VB
 HAWLEY NNP
 HBJ NNP
 HBO NNP
@@ -15133,6 +15295,7 @@ HUD-related JJ
 HUD-subsidized JJ
 HUD-supervised JJ
 HUDSON NNP
+HUGE JJ
 HUGO NNP
 HUGO'S NNP
 HUH NNP
@@ -15211,6 +15374,8 @@ Hagood NNP
 Hagoshrim NNP
 Hague NNP
 Hagura NNP
+Haha UH
+Hahaha UH
 Hahn NNP
 Hahnemann NNP
 Haig NNP
@@ -15671,6 +15836,7 @@ Hazlitt NNP
 Hazy NNP
 Hazzard NNP
 He PRP
+He's VBZ
 Head NNP
 Headed VBN
 Heading VBG
@@ -16283,6 +16449,7 @@ Holidays NNS
 Holien NNP
 Holies NNPS
 Holiness NN
+Holla UH
 Holland NNP
 Hollandale NNP
 Hollander NNP
@@ -16347,6 +16514,7 @@ Homes NNP
 Homestake NNP
 Homestead NNP
 Homewood NNP
+Homework NN
 Homicide NNP
 Homma NNP
 Homo NN
@@ -16613,6 +16781,7 @@ Humberto NNP
 Humble NNP
 Humboldt NNP
 Hume NNP
+Humidity NN
 Humiliation NN
 Humility NNP
 Hummerstone NNP
@@ -16735,7 +16904,11 @@ Hypothesizing VBG
 Hyun NNP
 Hyundai NNP
 I PRP
+I'd MD
+I'll MD
+I'm VBP
 I'm-coming-down-your-throat JJ
+I've VBP
 I-5 NNP
 I-75 NN
 I-880 NN
@@ -17018,6 +17191,7 @@ Ilotycin NNP
 Ilva NNP
 Ilyushin NN
 Ilyushins NNPS
+Im VBP
 Image NN
 Image-processing NN
 Images NNP
@@ -17033,6 +17207,7 @@ Imbrium NNP
 Imelda NNP
 Imhoff NNP
 Imitation NN
+Imma VBP
 Immaculate NNP
 Immanuel NNP
 Immediate NNP
@@ -17873,6 +18048,7 @@ Jacquette NNP
 Jacuzzi NNP
 Jacuzzis NNS
 Jadwiga NNP
+Jaeger NNP
 Jaffe NNP
 Jaffray NNP
 Jagan NNP
@@ -18431,6 +18607,8 @@ KLUC NNP
 KLUC-FM NNP
 KMW NNP
 KN NNP
+KNOW VB
+KOBE NNP
 KODAK NNP
 KOFY NNP
 KOFY-FM NNP
@@ -19029,6 +19207,7 @@ Kissick NNP
 Kissin NNP
 Kissing VBG
 Kissinger NNP
+Kit NN
 Kita NNP
 Kitada NNP
 Kitamura NNP
@@ -19275,6 +19454,7 @@ Korps NNP
 Korra NNP
 Kors NNP
 Kortunov NNP
+Kory NNP
 Kos NNP
 Kosan NNP
 Kosar NNP
@@ -19528,6 +19708,7 @@ LAND NNP
 LANDOR NNP
 LARGEST JJS
 LASHED VBD
+LAST JJ
 LATE JJ
 LATE-BREAKING JJ
 LATEST JJS
@@ -19565,6 +19746,7 @@ LICENSE NN
 LIES VBZ
 LIFETIME NNP
 LIKE IN
+LIL NNP
 LIMB NN
 LIMITED JJ
 LIN NNP
@@ -19575,20 +19757,25 @@ LINTAS NNP
 LISA NNP
 LIT NNP
 LITORIGIN NN
+LIVE JJ
 LIVERPOOL NNP
 LIVESTOCK NNP
 LJH NNP
 LJN NNP
 LLerena NNP
 LM NNP
+LMAO UH
+LMBO UH
 LME NNP
 LMEYER NNP
+LMFAO UH
 LOAN NNP
 LOBBIES VBZ
 LOBSTERS NNS
 LOC NNP
 LOCKHEED NNP
 LOGIC NNP
+LOL UH
 LONDON NNP
 LONG-TERM JJ
 LONGS NNP
@@ -19601,6 +19788,7 @@ LOSS\ NN
 LOT NNP
 LOTUS NNP
 LOUIS NNP
+LOVE VB
 LOW RB
 LOWER JJR
 LP NNP
@@ -19714,6 +19902,7 @@ Laing NNP
 Laird NNP
 Lake NNP
 Lakeland NNP
+Laker NNP
 Lakers NNP
 Lakes NNPS
 Lakeshore NNP
@@ -20006,6 +20195,7 @@ Le NNP
 LeBaron NNP
 LeBoutillier NNP
 LeBow NNP
+LeBron NNP
 LeBrun NNP
 LeCarre NNP
 LeCave NNP
@@ -20075,6 +20265,7 @@ Leblanc NNP
 Leblang NNP
 Lebo NNP
 Lebow NNP
+Lebron NNP
 LecTec NNP
 Lech NNP
 Leche NNP
@@ -20274,10 +20465,12 @@ Lestoil NNP
 Lesutis NNP
 Leszek NNP
 Let VB
+Let's VB
 Letch NNP
 Lethal NNP
 Lethcoe NNP
 Letitia NNP
+Lets VB
 Lett NNP
 Letter NNP
 Letterman NNP
@@ -20394,6 +20587,7 @@ Liechtenstein NNP
 Lied NNP
 Lien NN
 Lieppe NNP
+Lies NN
 Lieut NN
 Lieutenant NNP
 Lieutenant-Colonel NNP
@@ -20626,6 +20820,7 @@ Llewellyn NNP
 Llosa NNP
 Lloyd NNP
 Lloyds NNP
+Lmao UH
 Lo NNP
 Lo-Jack NNP
 LoSpam NNP
@@ -20702,6 +20897,7 @@ Lois NNP
 Lojack NNP
 Lok NNP
 Lokey NNP
+Lol UH
 Lola NNP
 Lolita NNP
 Lollipops NNS
@@ -21251,6 +21447,7 @@ MISUSE NNP
 MIServer NNP
 MIT NNP
 MITI NNP
+MJ NNP
 MK-Ferguson NNP
 MKI NNP
 MLD NNP
@@ -21318,6 +21515,7 @@ MX NNP
 MX-6 NNP
 MX-6s NNPS
 MX-missile NN
+MY DT
 MYERSON NNP
 MYSTERY NNP
 M\*A\*S\*H NNP
@@ -22652,6 +22850,7 @@ Mephistopheles NNP
 Meps NNP
 MeraBank NNP
 Merabank NNP
+Merapi NNP
 Merc NNP
 Mercantile NNP
 Mercantilists NNS
@@ -23925,6 +24124,7 @@ NEKOOSA NNP
 NESB NNP
 NET JJ
 NETWORK NN
+NEVER RB
 NEW JJ
 NEWHALL NNP
 NEWS NN
@@ -23941,6 +24141,7 @@ NHL NNP
 NHTSA NNP
 NIAGARA NNP
 NICHOLS NNP
+NIGHT NN
 NIH NNP
 NIH-appointed JJ
 NJ NNP
@@ -23968,6 +24169,7 @@ NORIEGA'S NNP
 NORTH NNP
 NORTHEAST NN
 NORTHERN NNP
+NOT RB
 NOT-GUILTY JJ
 NOTE NN
 NOTES NNS
@@ -24007,6 +24209,8 @@ NUS NNP
 NV NNP
 NW NNP
 NWA NNP
+NY NNP
+NYC NNP
 NYSE NNP
 NYU NNP
 NZ$ $
@@ -24465,6 +24669,7 @@ Nickel-iron JJ
 Nickelodeon NNP
 Nickelson NNP
 Nickerson NNP
+Nicki NNP
 Nicklaus NNP
 Nickle NNP
 Nickles NNP
@@ -24491,6 +24696,7 @@ Nietzsche NNP
 Nigel NNP
 Niger NNP
 Nigeria NNP
+Nigga NN
 Nigger NN
 Niggertown NNP
 Night NNP
@@ -24960,6 +25166,7 @@ O.T. NNP
 OAS NNP
 OBE NNP
 OBERMAIER NNP
+OBTS NNP
 OBrion NNP
 OCC NNP
 OCC-member JJ
@@ -24974,6 +25181,7 @@ OEL NNP
 OEP NNP
 OEX NNP
 OF IN
+OFF IN
 OFFENSIVE JJ
 OFFERED NNP
 OFFICER NN
@@ -24994,6 +25202,7 @@ OLE NNP
 OLYMPIA NNP
 OMB NNP
 OME NNP
+OMG UH
 ON IN
 ONCE RB
 ONE CD
@@ -25053,6 +25262,7 @@ Oat NNP
 Oatnut NNP
 Oats NNPS
 Ob-Irtysh NNP
+Obama NNP
 Obedience NN
 Obelisk NNP
 Oberhausen NNP
@@ -25291,6 +25501,7 @@ Omani JJ
 Omar NNP
 Omega NNP
 OmegaSource NNP
+Omg UH
 Omission NN
 Omni NNP
 OmniBank NNP
@@ -25753,6 +25964,8 @@ PARTICIPATED VBD
 PARTNER NN
 PARTNERS NNS
 PARTNERSHIP NNP
+PARTS NN
+PARTY NNP
 PASOK NNP
 PATCO NNP
 PATH NNP
@@ -27802,6 +28015,7 @@ Prominent JJ
 Promise NNP
 Promised JJ
 Promises VBZ
+Promo NN
 Promoters NNP
 Promotion NNP
 Promotional JJ
@@ -28332,6 +28546,7 @@ RICOed JJ
 RICOing NN
 RID VB
 RIGHTS NNS
+RIP UH
 RISC NNP
 RISC-based JJ
 RISE NN
@@ -28353,6 +28568,7 @@ RNAs NNS
 ROARED VBD
 ROBERT NNP
 RODE VBD
+ROFLMAO UH
 ROGERS NNP
 ROK NNP
 ROME NNP
@@ -29412,6 +29628,7 @@ Rightly RB
 Rights NNP
 Rigid JJ
 Rigoletto NNP
+Rihanna NNP
 Riiiing UH
 Riklis NNP
 Riley NNP
@@ -30044,6 +30261,7 @@ S.S.R. NNP
 S.W. NNP
 S.p NNP
 S.p.A. NNP
+S/O VB
 SA NNP
 SA-12 NN
 SAAMI NNP
@@ -30150,6 +30368,7 @@ SHEVARDNADZE NNP
 SHIBUMI NNP
 SHIELD NNP
 SHIPPING NNP
+SHIT NN
 SHOPPE NNP
 SHOPPERS NNS
 SHOPS NNS
@@ -30159,6 +30378,7 @@ SHORTAGE NN
 SHOULD MD
 SHOWY JJ
 SHUN VBP
+SHUT VB
 SHUTTLE NN
 SHV NNP
 SIA NNP
@@ -30170,6 +30390,7 @@ SIERRA NNP
 SIGNAL NN
 SIGNALED VBN
 SIGNED VBN
+SILLY JJ
 SIMPLIFYING VBG
 SINCE IN
 SISAL NNP
@@ -30215,6 +30436,7 @@ SOFTWARE NNP
 SOME DT
 SONG NNP
 SONGsters NNS
+SORRY JJ
 SOS NNP
 SOUTH NNP
 SOUTHERN NNP
@@ -31396,6 +31618,7 @@ Sextet NNP
 Sexton NN
 Sextuor NNP
 Sexual NNP
+Sexy JJ
 Seydoux NNP
 Seymour NNP
 Seynes NNP
@@ -31655,6 +31878,7 @@ Shirley NNP
 Shirt NNP
 Shirwen NNP
 Shiseido NNP
+Shit NN
 Shitts NNP
 Shiu-Lok NNP
 Shivering VBG
@@ -31718,6 +31942,7 @@ Shouldering VBG
 Shoup NNP
 Shoupe NNP
 Shout VB
+Shoutout VB
 Show NNP
 ShowBiz NNP
 Showa NNP
@@ -32013,6 +32238,7 @@ Sisulu NNP
 Sit VB
 Sitco NNP
 Site NNP
+Sites NNS
 Sithe NNP
 Siti NNP
 Sitter NNP
@@ -33884,6 +34110,7 @@ T-38 NN
 T-45 NNP
 T-72 NN
 T-Max NNP
+T-Mobile NNP
 T-bill NN
 T-bills NNS
 T-bond JJ
@@ -33953,6 +34180,7 @@ TEXAS NNP
 TGS NNP
 THACHER NNP
 THAN IN
+THANK VB
 THANKS NNS
 THAT WDT
 THC NNP
@@ -33961,6 +34189,8 @@ THERE'S VB
 THF NNP
 THIDIU NNP
 THIEVES NNS
+THINK VB
+THIS PRP
 THOSE DT
 THR NNP
 THREAT NN
@@ -34008,6 +34238,7 @@ TRAVEL NN
 TRAVELS VBZ
 TRC NNP
 TREASURY NNP
+TREAT NN
 TREATING VBG
 TREND-SETTER NN
 TRIAD NNP
@@ -34631,6 +34862,7 @@ Thanksgiving NNP
 Thant NNP
 Tharp NNP
 That DT
+That's VBZ
 That-a-way RB
 Thatcher NNP
 Thatcher-style JJ
@@ -34704,6 +34936,7 @@ Thesis NN
 Thevenot NNP
 Thevenow NNP
 They PRP
+They're VB
 Thi NNP
 Thiebaud NNP
 Thief NN
@@ -34742,6 +34975,7 @@ Thirty-six CD
 Thirty-three NNP
 This DT
 Thistle NNP
+Tho RB
 Thom NNP
 Thoma NNP
 Thomae NNP
@@ -34992,6 +35226,7 @@ Tobias NNP
 Tobin NNP
 Tobishima NNP
 Tobruk NNP
+Toby NNP
 Toccata NNP
 Toch NNP
 Tockman NNP
@@ -35545,6 +35780,7 @@ Trusthouse NNP
 Truth NN
 Try VB
 Trygve NNP
+Tryin VBG
 Trying VBG
 Tryon NNP
 Tsai NNP
@@ -35656,6 +35892,7 @@ Tuxapoka NNP
 Twain NNP
 Twaron NNP
 Tweed NNP
+Tweet VB
 Twelve CD
 Twenties NNP
 Twentieth NNP
@@ -35682,6 +35919,7 @@ Twinkies NNPS
 Twins NNP
 Twinsburg NNP
 Twist NN
+Twitter NNP
 Two CD
 Two-Head NNP
 Two-Stem JJ
@@ -36134,6 +36372,7 @@ Upson NNP
 Upstairs NN
 Uptick NN
 Upton NNP
+Ur VBP
 Ural NNP
 Urals NNPS
 Uranium NNP
@@ -36652,6 +36891,7 @@ Vinnicum NNP
 Vinnin NNP
 Vinogradoff NNP
 Vinson NNP
+Vintage NN
 Viola NNP
 Violence NNP
 Violent JJ
@@ -36869,6 +37109,7 @@ WAC NNP
 WACS NNPS
 WAFA NNP
 WAGE NN
+WAIT VB
 WALL NNP
 WANES VBZ
 WANT VBP
@@ -36933,6 +37174,7 @@ WINDOW NN
 WINS VBZ
 WINSTON-SALEM NNP
 WIN\ NNP
+WIT IN
 WITH IN
 WITHHELD VBN
 WITHHOLDING NN
@@ -37264,6 +37506,7 @@ Wayne NNP
 Ways NNPS
 Wazir NNP
 We PRP
+We'll MD
 We've NN
 Weak JJ
 Weaken VB
@@ -37518,6 +37761,7 @@ Whampoa NNP
 Wharf NNP
 Wharton NNP
 What WP
+What's VBZ
 Whatever WDT
 Whatman NNP
 Wheat NNP
@@ -37544,6 +37788,7 @@ When WRB
 Whence WRB
 Whenever WRB
 Where WRB
+Where's VBZ
 Whereas IN
 Wherefore NN
 Wherever WRB
@@ -37607,6 +37852,7 @@ Whittle NNP
 Whittlesey NNP
 Whiz NNP
 Who WP
+Who's VBZ
 Whoa UH
 Whoever WP
 Whole JJ
@@ -38074,6 +38320,7 @@ X-tend NN
 X. NNP
 XA2000 NNP
 XCEL NNP
+XD SYM
 XFI NNP
 XIII NNP
 XJ6 NNP
@@ -38134,6 +38381,7 @@ YEEECH UH
 YEEEEEECH UH
 YES NNP
 YMCA NNP
+YO UH
 YOM NNP
 YORK NNP
 YORK'S NNP
@@ -38141,6 +38389,7 @@ YOU PRP
 YOU'RE PRP
 YOUNG JJ
 YOUR JJ
+YUP UH
 YWCA NNP
 Yaaba NNP
 Yacht NNP
@@ -38149,6 +38398,7 @@ Yachtsman NNP
 Yacos NNP
 Yaddo NNP
 Yaffe NNP
+Yahoo NNP
 Yahwe NNP
 Yair NNP
 Yak NNP
@@ -38162,6 +38412,7 @@ Yale NNP
 Yale-Army NNP
 Yale-New NNP
 Yalies NNS
+Yall PRP
 Yalobusha NNP
 Yalta NNP
 Yamabe NNP
@@ -38337,7 +38588,9 @@ Yoshizawa NNP
 Yosi NNP
 Yost NNP
 You PRP
+You're VBP
 You've NN
+YouTube NNP
 Young NNP
 Young-Jin NNP
 Youngberg NNP
@@ -38378,6 +38631,7 @@ Yum-Yum NNP
 Yumiko NNP
 Yun NNP
 Yunian NNP
+Yup UH
 Yuppie NNP
 Yuppies NNS
 Yuppily RB
@@ -38604,6 +38858,8 @@ Zygmunt NNP
 \*\*\* SYM
 ] )
 ]* NN
+]: SYM
+^_^ SYM
 ` ``
 `` ``
 ``... :
@@ -38833,6 +39089,7 @@ absurdist JJ
 absurdities NNS
 absurdity NN
 absurdly RB
+abt IN
 abundance NN
 abundant JJ
 abundantly RB
@@ -39653,6 +39910,7 @@ agronomist NN
 aground RB
 ague NN
 ah UH
+aha UH
 ahdawam UH
 ahead RB
 ahem UH
@@ -39678,7 +39936,9 @@ aiming VBG
 aimless JJ
 aimlessly RB
 aims VBZ
+ain't VB
 ain't-it-great-to-be-a-Texan JJ
+aint VBZ
 air NN
 air-cargo NN
 air-cell JJ
@@ -40021,6 +40281,7 @@ already-shaky JJ
 already-sizable JJ
 already-strained JJ
 already-tense JJ
+alright UH
 also RB
 also-ran NN
 altar NN
@@ -40763,6 +41024,7 @@ apostles NNS
 apostolic JJ
 apothecary NN
 apotheosis NN
+app NN
 appall VBP
 appalled VBN
 appalling JJ
@@ -41021,6 +41283,7 @@ area-sales JJ
 area-wide JJ
 areas NNS
 areaways NNS
+aren't VB
 arena NN
 arenas NNS
 areosol NN
@@ -41766,6 +42029,7 @@ avant FW
 avant-garde JJ
 avarice NN
 avaricious JJ
+avatar NN
 avec NNP
 avenge VB
 avenger NN
@@ -41871,8 +42135,10 @@ b-Current JJ
 b-Includes VBZ
 b-Percent NN
 b-Week NN
+b-day NN
 b-plane NN
 b-reflects VBZ
+b/c IN
 ba-a-a UH
 babbino FW
 babbiting NN
@@ -42458,6 +42724,7 @@ bayonets NNS
 bays NNS
 bazaar NN
 bazaars NNS
+bc IN
 bd NNS
 be VB
 be'greenlined VBN
@@ -43013,6 +43280,7 @@ bide VB
 bided VBN
 bids NNS
 bids... :
+bieber NNP
 bien FW
 biennial JJ
 biennium NN
@@ -43437,6 +43705,7 @@ blocking VBG
 blocks NNS
 blocky JJ
 blocs NNS
+blog NN
 bloke NN
 blokes NNS
 blond JJ
@@ -44266,6 +44535,7 @@ bristled VBD
 bristles VBZ
 bristling VBG
 brittle JJ
+bro NN
 broach VB
 broached VBN
 broad JJ
@@ -44377,10 +44647,12 @@ browny JJ
 browny-haired JJ
 brows NNS
 browse VB
+browser NN
 browsing VBG
 browsing. NN
 brucellosis NN
 bruddah FW
+bruh NN
 bruinish JJ
 bruise NN
 bruised VBN
@@ -45741,6 +46013,7 @@ cellular-telephone JJ
 celluloids NNS
 cellulose NN
 celluloses NNS
+celtics NNPS
 cement NN
 cement-and-glass JJ
 cement-makers NNS
@@ -46237,6 +46510,7 @@ chili NN
 chill NN
 chilled VBN
 chillier NN
+chillin VBG
 chilling VBG
 chillingly RB
 chills NNS
@@ -46361,6 +46635,7 @@ chousin VBG
 chow NN
 chowder NN
 chowders NNS
+chris NNP
 christen VB
 christened VBD
 christening NN
@@ -46926,6 +47201,7 @@ clutter NN
 cluttered VBN
 cm NN
 cm. NN
+cnt VB
 co-anchor NN
 co-anchored VBN
 co-author NN
@@ -48124,12 +48400,14 @@ congestion NN
 congestive JJ
 conglomerate NN
 conglomerates NNS
+congrats NN
 congratulate VBP
 congratulated VBN
 congratulating NN
 congratulation NN
 congratulations NNS
 congratulatory JJ
+congratz NN
 congregate VB
 congregated VBD
 congregation NN
@@ -48681,6 +48959,7 @@ cookie-and-cracker JJ
 cookie-cutter NN
 cookies NNS
 cooking NN
+cookoo UH
 cooks NNS
 cookware NN
 cool JJ
@@ -49002,6 +49281,7 @@ could MD
 could'nt NN
 coulda NN
 couldn't MD
+couldnt MD
 council NN
 councilman NN
 councilor NN
@@ -49688,7 +49968,8 @@ crunched VBD
 crunches NNS
 crunchier JJR
 crunching VBG
-crunchy JJcrupper NN
+crunchy JJ
+crupper NN
 crus NN
 crusade NN
 crusaded VBN
@@ -49887,6 +50168,7 @@ curved JJ
 curves NNS
 curving VBG
 curvy JJ
+cus IN
 cushion NN
 cushioned VBN
 cushioning NN
@@ -49953,6 +50235,8 @@ cutting-edge JJ
 cutting-tools NNS
 cuttings NNS
 cuvees NNS
+cuz IN
+cya VB
 cyanide NN
 cyanide-laced JJ
 cycads NNS
@@ -50062,6 +50346,7 @@ damaging JJ
 dame NN
 damed VBD
 daminozide NN
+damm UH
 dammed VBD
 dammed-up VBN
 dammit UH
@@ -50153,6 +50438,7 @@ dashed VBN
 dashes NNS
 dashing VBG
 dastardly JJ
+dat DT
 data NNS
 data-base JJ
 data-capture JJ
@@ -51488,6 +51774,7 @@ dice NNS
 dicendi FW
 dichondra NN
 dichotomy NN
+dick NN
 dicker VB
 dickered VBD
 dickering NN
@@ -51515,6 +51802,7 @@ diddling VBG
 dideoxyinosine NN
 didn VBD
 didn't VBD
+didnt VBD
 die VB
 die-dead NN
 die-hard JJ
@@ -51535,6 +51823,7 @@ diethylstilbestrol NN
 dieting NN
 diets NNS
 diety NN
+diff NN
 differ VBP
 differed VBD
 difference NN
@@ -51737,6 +52026,7 @@ dirtier JJR
 dirtier-running JJ
 dirtiest JJS
 dirty JJ
+dis DT
 disabilities NNS
 disability NN
 disable VB
@@ -52450,6 +52740,8 @@ doe NN
 doer NN
 doers NNS
 does VBZ
+doesn't VBZ
+doesnt VBZ
 doffing VBG
 dog NN
 dog-and-pony NN
@@ -52573,9 +52865,11 @@ donnybrook NN
 donor NN
 donors NNS
 dons VBZ
+dont VB
 donut NN
 donut-sales JJ
 doo NN
+dood NN
 doodads NNS
 doom NN
 doomed VBN
@@ -52907,6 +53201,7 @@ drink NN
 drinkable JJ
 drinker NN
 drinkers NNS
+drinkin VB
 drinking NN
 drinking-water NN
 drinks NNS
@@ -53092,6 +53387,7 @@ duct NN
 ducts NNS
 ductwork NN
 dud NN
+dude NN
 dudgeon NN
 duds NNS
 due JJ
@@ -53109,6 +53405,7 @@ duffer NN
 duffers NNS
 dug VBD
 dugout NN
+duh UH
 duke NN
 dulcet JJ
 dull JJ
@@ -53148,6 +53445,7 @@ dungeons NNS
 dunk NN
 dunked VBD
 dunks VBZ
+dunno VBP
 duo NN
 duodenal JJ
 duopoly RB
@@ -53803,6 +54101,7 @@ eluted VBN
 elution NN
 em PRP
 emaciated VBN
+email NN
 emanated VBD
 emanating VBG
 emanation NN
@@ -54187,6 +54486,7 @@ engineering-services NNS
 engineers NNS
 engineless JJ
 engines NNS
+english NNP
 engorged VBN
 engorgement NN
 engrave VB
@@ -54865,6 +55165,7 @@ evolve VB
 evolved VBN
 evolves VBZ
 evolving VBG
+ewww UH
 ex FW
 ex-Attorney NNP
 ex-Beecham JJ
@@ -55921,6 +56222,7 @@ faulty JJ
 fauna NNS
 fauteuil FW
 faux FW
+fav JJ
 favor NN
 favorable JJ
 favorableness NN
@@ -55930,6 +56232,7 @@ favored VBN
 favorer NN
 favoring VBG
 favorite JJ
+favorited VBD
 favorites NNS
 favoritism NN
 favors VBZ
@@ -57062,6 +57365,8 @@ flyers NNS
 flying VBG
 flying-mount NN
 flyways NNS
+fml UH
+fo IN
 foal NN
 foals NNS
 foam NN
@@ -57149,6 +57454,7 @@ fondness NN
 font NN
 fontanel NN
 fonts NNS
+foo NN
 food NN
 food-aid JJ
 food-canning NN
@@ -57977,6 +58283,8 @@ ft. NN
 fuchsia NN
 fuck VB
 fucken JJ
+fuckin JJ
+fucking JJ
 fucks NNS
 fuddy-duddy JJ
 fudge VB
@@ -59041,6 +59349,7 @@ goofed VBD
 goofiness NN
 goofing VBG
 goofy JJ
+googled VBD
 goons NNS
 goooolick NN
 goose NN
@@ -59070,6 +59379,7 @@ gossiping VBG
 gossips NNS
 gossipy JJ
 got VBD
+gotcha VBP
 gothic JJ
 gotta VB
 gotten VBN
@@ -59418,6 +59728,7 @@ greeters NNS
 greeting NN
 greetings NNS
 greets VBZ
+greetz NNS
 gregarious JJ
 grenade NN
 grenades NNS
@@ -59597,6 +59908,7 @@ growth-suppressing JJ
 growth... :
 growths NNS
 growthy JJ
+grtz NNS
 grub NN
 grubby JJ
 grubs NNS
@@ -59803,6 +60115,7 @@ gyro-stabilized JJ
 gyros NNS
 gyroscopes NNS
 h NN
+h8 VB
 ha UH
 habe FW
 habeas NNS
@@ -59841,6 +60154,9 @@ haggardly RB
 haggle VB
 haggling VBG
 hagglings NNS
+haha UH
+hahah UH
+hahaha UH
 hail NN
 hailed VBD
 hailing VBG
@@ -59977,6 +60293,7 @@ hallelujahs NNS
 hallmark NN
 hallmarks NNS
 hallowed JJ
+halloween NNP
 halls NNS
 hallucinating VBG
 hallucinations NNS
@@ -60352,7 +60669,9 @@ have-not JJ
 have-nots NNS
 have... :
 haven NN
+haven't VB
 havens NNS
+havent VB
 haves NNS
 havin VBG
 having VBG
@@ -60387,6 +60706,7 @@ hazelnuts NNS
 hazes NNS
 hazy JJ
 he PRP
+he's VBZ
 he-goes-or-I-go JJ
 he-man NN
 head NN
@@ -60602,6 +60922,7 @@ heftiest JJS
 hefty JJ
 hegemonic JJ
 hegemony NN
+hehe UH
 heifers NNS
 heighborhoods NNS
 height NN
@@ -60787,6 +61108,7 @@ hexametaphosphate NN
 hexameter NN
 hey UH
 heyday NN
+hi UH
 hi-fi NN
 hi-graders NNS
 hi-tech JJ
@@ -61144,6 +61466,7 @@ hockey NN
 hocking VBG
 hodge-podge NN
 hodgepodge NN
+hoe NN
 hoes NNS
 hog NN
 hogging VBG
@@ -61274,7 +61597,9 @@ homey JJ
 homicidal JJ
 homicide NN
 homicides NNS
+homie NN
 homier JJR
+homies NNS
 homilies NNS
 homing JJ
 homo-hatred NN
@@ -61598,6 +61923,7 @@ hp NN
 hp. NN
 hr NN
 hr. NN
+http://bit.ly/ NNP
 hub NN
 hub-and-spoke JJ
 hubba UH
@@ -61892,12 +62218,18 @@ hysterical JJ
 hysterically RB
 hysteron-proteron NN
 hytt PRP
-i NN
+i PRP
+i'm VBP
+i've VBP
 i-th NN
 i.d NN
 i.d. NN
 i.e. FW
 i860 NN
+iMac NNP
+iPad NNP
+iPhone NNP
+iPod NNP
 iambic JJ
 ibuprofen NN
 ice NN
@@ -61974,6 +62306,7 @@ idiotic JJ
 idiotically RB
 idiots NNS
 idiotypes NNS
+idk VBP
 idle JJ
 idled VBN
 idleness NN
@@ -62011,6 +62344,8 @@ ignores VBZ
 ignoring VBG
 iguana JJ
 iguanas NNS
+iight UH
+iit PRP
 ij NN
 ikey-kikey JJ
 ileum NN
@@ -62076,6 +62411,8 @@ illustrative JJ
 illustrator NN
 illustrators NNS
 illustrious JJ
+im VBP
+ima VBP
 image NN
 image-building JJ
 image-making NN
@@ -62119,6 +62456,7 @@ imitation-woodgrain NN
 imitations NNS
 imitative JJ
 imitators NNS
+imma VBP
 immaculate JJ
 immanent JJ
 immaterial JJ
@@ -63644,6 +63982,7 @@ internationally RB
 internationals NNS
 interne FW
 interned VBN
+internet NN
 interning VBG
 internist NN
 internists NNS
@@ -63992,10 +64331,6 @@ ionizing VBG
 ionosphere NN
 ions NNS
 iota NN
-iMac NNP
-iPad NNP
-iPod NNP
-iPhone NNP
 ip NN
 ipso FW
 irate JJ
@@ -64097,6 +64432,7 @@ islands NNS
 isle NN
 isms NNS
 isn't VBZ
+isnt VBZ
 isocyanate NN
 isocyanate-labeled NN
 isolate VB
@@ -64129,6 +64465,9 @@ ist FW
 isthmus NN
 it PRP
 it'controlled PRP|JJ
+it'd MD
+it'll MD
+it's VBZ
 it'so UH
 it-wit NN
 it... :
@@ -64153,7 +64492,9 @@ its PRP$
 itself PRP
 itty-bitty JJ
 ity NN
+it’s VBZ
 iuvabit FW
+ive VBP
 ivory NN
 ivory-inlay NN
 ivory-tower JJ
@@ -64301,6 +64642,8 @@ jitters NNS
 jittery JJ
 jiu-jitsu FW
 jiving VBG
+jk UH
+jkaay UH
 job NN
 job-boosters NNS
 job-classification NN
@@ -64506,6 +64849,7 @@ jury NN
 jury-duty NN
 jury-rigged VBD
 jury-tampering JJ
+jus RB
 just RB
 just-announced JJ
 just-completed JJ
@@ -64529,6 +64873,7 @@ justified VBN
 justifies VBZ
 justify VB
 justifying VBG
+justin NNP
 justitia NN
 justly RB
 justness NN
@@ -64776,6 +65121,7 @@ knitted VBN
 knitting VBG
 knitwear NN
 knives NNS
+kno VB
 knob NN
 knobby-knuckled JJ
 knobs NNS
@@ -64950,6 +65296,7 @@ laissez-faire FW
 laity NN
 lak IN
 lake NN
+lakers NNPS
 lakes NNS
 lamb NN
 lambaste VB
@@ -65366,6 +65713,7 @@ leaving VBG
 leaving... :
 leavings NNS
 lebensraum NN
+lebron NNP
 lecher NN
 lecherous JJ
 lectern NN
@@ -65385,6 +65733,7 @@ leeches NNS
 leered VBD
 leering VBG
 leery JJ
+leet JJ
 leeway NN
 left VBN
 left-centerfield JJ
@@ -65465,6 +65814,7 @@ leisurely JJ
 leitmotif NN
 leitmotiv FW
 lemmas NNS
+lemme VBP
 lemmings NNS
 lemon NN
 lemon-lime JJ
@@ -65576,6 +65926,7 @@ lessons NNS
 lessor NN
 lest IN
 let VB
+let's VB
 let's-give-it-a-year JJ
 let's-make-your-house-our-club JJ
 let-down NNS
@@ -65819,6 +66170,7 @@ likens VBZ
 likes VBZ
 likewise RB
 liking NN
+lil JJ
 lilac JJ
 lilacs NNS
 lilies NNS
@@ -66061,6 +66413,9 @@ living-room NN
 livres FW
 lizard NN
 lizards NNS
+lmao UH
+lmaoo UH
+lmfao UH
 lo UH
 load NN
 load-shedding NNS
@@ -66198,6 +66553,7 @@ loin NN
 loincloth NN
 loins NNS
 loitering NN
+lol UH
 lolling VBG
 lollipop NN
 lone JJ
@@ -66319,6 +66675,7 @@ look-see NN
 lookalike JJ
 looked VBD
 lookee-loos NNS
+lookin VBG
 looking VBG
 lookit NN
 lookout NN
@@ -66673,6 +67030,7 @@ lusts NNS
 lusty JJ
 lute NN
 lutihaw FW
+luv NN
 luxuriance NN
 luxuries NNS
 luxuriosly-upholstered JJ
@@ -66714,6 +67072,7 @@ macaque JJ
 macaroni NNS
 macaroni-and-cheese NN
 macaw NN
+macbook NNP
 machete NN
 machetes NNS
 machikin FW
@@ -66908,6 +67267,7 @@ makes VBZ
 makeshift JJ
 makeshifts NNS
 makeup NN
+makin VBG
 making VBG
 makings NNS
 maku FW
@@ -67974,6 +68334,7 @@ mews NN
 mezzo NN
 mg NN
 mg. NN
+miami NNP
 miasma NN
 miasmal JJ
 mica NN
@@ -68414,6 +68775,7 @@ minority NN
 minority-internship JJ
 minority-owned JJ
 minors NNS
+mins NN
 minstrel NN
 minstrels NNS
 mint NN
@@ -68648,6 +69010,7 @@ mm NN
 mm. NN
 mnemonic JJ
 mo NN
+mo-tivation NN
 moan VB
 moaned VBD
 moaning VBG
@@ -69299,6 +69662,7 @@ muffler NN
 mufflers NNS
 muffs NNS
 mufti NN
+mufuggah NN
 mug NN
 mugged VBN
 muggers NNS
@@ -69610,6 +69974,7 @@ nagged VBD
 nagging JJ
 naggings NNS
 nags NNS
+nah UH
 nahce JJ
 nail NN
 nailed VBN
@@ -69753,6 +70118,7 @@ navigator NN
 navigators NNS
 navy NN
 navy-blue JJ
+naw UH
 nawt RB
 nawth NN
 nay RB
@@ -70140,6 +70506,7 @@ niece NN
 nieces NNS
 nifty JJ
 niger NN
+nigga NN
 niggardly JJ
 nigger NN
 niggers NNS
@@ -70809,6 +71176,7 @@ nooks NNS
 noon NN
 noontime NN
 noose NN
+nope UH
 nor CC
 noradrenalin NN
 norethandrolone NN
@@ -71486,6 +71854,7 @@ oily JJ
 oink UH
 ointment NN
 oiticica NN
+ok UH
 okay JJ
 oks VBZ
 ol JJ
@@ -71537,6 +71906,7 @@ omelette NN
 omen NN
 omens NNS
 omeprazole NN
+omg UH
 ominous JJ
 ominously RB
 omission NN
@@ -74123,6 +74493,7 @@ pianos NNS
 piasters NNS
 piazza NN
 piazzas NNS
+pic NN
 picayune JJ
 pick VB
 pick-up JJ
@@ -74157,6 +74528,7 @@ picnickers NNS
 picnics NNS
 pico NN
 picocassette NN
+pics NNS
 pictorial JJ
 pictorially RB
 picture NN
@@ -74330,6 +74702,7 @@ piroghi NNS
 pirogues NNS
 pirouette NN
 piss VB
+pissed VBN
 pistachio JJ
 pistils NNS
 pistol NN
@@ -74685,6 +75058,7 @@ plutonium-recovery JJ
 ply VBP
 plying VBG
 plywood NN
+pm NN
 pneumatic JJ
 pneumocystis NN
 pneumonia NN
@@ -75293,6 +75667,7 @@ powpow NN
 powwow NN
 pox NN
 pp. NNS
+ppl NN
 pr NN
 practicability NN
 practicable JJ
@@ -79560,6 +79935,7 @@ return. NN
 returned VBD
 returning VBG
 returns NNS
+retweet NN
 reunifed VBN
 reunification NN
 reunion NN
@@ -82186,6 +82562,7 @@ shavings NNS
 shawl NN
 shawls NNS
 she PRP
+she's VBZ
 shea NN
 sheaf NN
 shear NN
@@ -82324,6 +82701,7 @@ shirtwaist NN
 shish NN
 shit NN
 shit-sick JJ
+shitt NN
 shiver NN
 shivered VBD
 shivering VBG
@@ -82932,6 +83310,7 @@ sired VBN
 siren JJ
 sirens NNS
 sirloin NN
+sis NN
 sister NN
 sister-in-law NN
 sisters NNS
@@ -83961,6 +84340,7 @@ sonority NN
 sonorous JJ
 sons NNS
 sons-in-law NNS
+soo IN
 soon RB
 soon-to-be JJ
 soon-to-be-sold JJ
@@ -84491,6 +84871,7 @@ sportsmen NNS
 sportswear NN
 sportswriter NN
 sporty JJ
+sposed JJ
 spot NN
 spot-checking NN
 spot-market JJ
@@ -85122,6 +85503,7 @@ stewards NNS
 stewardship NN
 stewed JJ
 stews NNS
+stfu UH
 stick VB
 stick-and-carrot NN
 sticker NN
@@ -85629,6 +86011,7 @@ strophe NN
 stropped VBD
 stropping VBG
 strove VBD
+strt VB
 struck VBD
 structively RB
 structural JJ
@@ -87556,6 +87939,7 @@ tetragonal JJ
 tetrahalides NNS
 tetrasodium NN
 teutonic JJ
+texas NNP
 text NN
 text-form NN
 text-lookup NN
@@ -87575,6 +87959,7 @@ texture NN
 textured JJ
 textures NNS
 th DT
+tha DT
 thallium NN
 than IN
 than... :
@@ -87587,12 +87972,15 @@ thanking VBG
 thankless JJ
 thanks NNS
 thanksgiving NN
+thanx NN
 thar RB
 that IN
+that's VBZ
 that'ugly JJ
 that... :
 thatched-roof JJ
 thatches NNS
+thats VBZ
 thatt IN
 thaw NN
 thaw'em VB
@@ -87703,6 +88091,7 @@ therapist NN
 therapists NNS
 therapy NN
 there EX
+there's EX
 thereabouts RB
 thereafter RB
 thereby RB
@@ -87749,7 +88138,7 @@ thespian JJ
 thespians NNS
 thet DT
 they PRP
-they'll PRP|MD
+they'll MD
 thiamin NN
 thick JJ
 thick-skulled JJ
@@ -88081,6 +88470,7 @@ thrusting VBG
 thrusts NNS
 thruway NN
 thruways RB
+tht PRP
 thud NN
 thudding VBG
 thuds NNS
@@ -88116,6 +88506,7 @@ thwart VB
 thwarted VBN
 thwarting VBG
 thwump NN
+thx NN
 thy JJ
 thynke VBP
 thyratron NN
@@ -88197,6 +88588,7 @@ tightly RB
 tightness NN
 tightrope NN
 tigress NN
+til IN
 tile NN
 tile-roofed JJ
 tiled JJ
@@ -88247,6 +88639,7 @@ timeless JJ
 timelier JJR
 timeliness NN
 timely JJ
+timeout NN
 timeouts NNS
 timepiece NN
 timer NN
@@ -88348,6 +88741,7 @@ titre FW
 tits NNS
 titter NN
 titters NNS
+titties NNS
 titular JJ
 to TO
 to'life NN
@@ -88461,6 +88855,7 @@ tonic NN
 tonics NNS
 toniest JJS
 tonight RB
+tonite NN
 tonnage NN
 tonnages NNS
 tons NNS
@@ -88560,6 +88955,7 @@ torments VBZ
 torn VBN
 tornado NN
 tornadoes NNS
+toronto NNP
 torpedo VB
 torpedoed VBN
 torpedoes NNS
@@ -89311,6 +89707,7 @@ trousers-pockets NNS
 trout NN
 trove NN
 trowel NN
+tru JJ
 truant JJ
 truce NN
 truck NN
@@ -89383,6 +89780,7 @@ truths NNS
 try VB
 tryin NN
 trying VBG
+tryna VBG
 tryouts NNS
 tryst NN
 tsh NN
@@ -89537,6 +89935,8 @@ tweaking VBG
 tweed NN
 tweeds NNS
 tweedy JJ
+tweet NN
+tweeted VBD
 tweety-bird JJ
 tweezed VBN
 tweezers NNS
@@ -89620,6 +90020,7 @@ twisty JJ
 twitch NN
 twitched VBD
 twitching VBG
+twitter NNP
 twittered VBD
 twittering VBG
 two CD
@@ -89773,6 +90174,7 @@ ubiquitousness NN
 ubiquity NN
 udders NNS
 udon FW
+ugh UH
 uglier JJR
 ugliness NN
 ugly JJ
@@ -91045,6 +91447,7 @@ upland JJ
 uplands NNS
 uplift NN
 uplifting JJ
+uploaded VBD
 upmarket JJ
 upon IN
 upped VBD
@@ -91106,6 +91509,7 @@ upward RB
 upward-mobile JJ
 upwardly RB
 upwards RB
+ur DT
 uranium NN
 uranium-mining NN
 uranium-recovery JJ
@@ -91911,6 +92315,8 @@ vying VBG
 w IN
 w-i-d-e NN
 w. JJ
+w/ IN
+w8 VB
 wacky JJ
 wad NN
 wad-working NN
@@ -91968,7 +92374,7 @@ wait-and-see JJ
 waited VBD
 waiter NN
 waiters NNS
-waitin NN
+waitin VBG
 waiting VBG
 waitress NN
 waitresses NNS
@@ -92170,6 +92576,7 @@ washings NNS
 washload NN
 washouts NNS
 wasn't NN
+wasnt VBD
 wasp NN
 waspish JJ
 waspishly RB
@@ -92192,6 +92599,7 @@ wastes NNS
 wastewater NN
 wasting VBG
 wastrel NN
+wat PRP
 watch VB
 watch-spring JJ
 watchdog NN
@@ -92287,6 +92695,8 @@ wayside NN
 wayward JJ
 wayward-looking JJ
 we PRP
+we'll MD
+we're VB
 we're-all-in-this-together JJ
 we'uns NNS
 we-Japanese JJ
@@ -92542,6 +92952,7 @@ wells NNS
 wellspring NN
 welter NN
 welts NNS
+wen RB
 went VBD
 wept VBD
 were VBD
@@ -92577,10 +92988,12 @@ whammy NN
 wharf NN
 wharves NNS
 what WP
+what's VBZ
 what's-his-name NN
 what-nots NNS
 what-will-T WP|MD|NP
 whatever WDT
+whats VB
 whatsoever RB
 wheare WRB
 wheat NN
@@ -92737,6 +93150,7 @@ whizzed VBD
 whizzes NNS
 whizzing VBG
 who WP
+who's VBP
 who... :
 whodunnit UH
 whodunnit-style JJ
@@ -92838,6 +93252,7 @@ wife NN
 wife-to-be NN
 wife\/mother NN
 wifely JJ
+wifi NN
 wig NN
 wiggier JJR
 wiggle NN
@@ -93091,6 +93506,7 @@ women's-rights JJ
 women-owned JJ
 women-trodden JJ
 won VBD
+won't MD
 won-lost JJ
 wonder NN
 wonder-working JJ
@@ -93153,6 +93569,7 @@ woolly-headed JJ
 woolly-minded JJ
 woolworkers NNS
 woomera NN
+wooo UH
 wooooosh NN
 woos VBZ
 woozy JJ
@@ -93308,6 +93725,7 @@ would MD
 would-be JJ
 woulda MD
 wouldbe JJ
+wouldn't ND
 wound NN
 wounded VBN
 wounding VBG
@@ -93315,6 +93733,7 @@ wounds NNS
 wove VBD
 woven VBN
 woven-root JJ
+wow UH
 wowed VBD
 wows VBZ
 wrack NN
@@ -93426,8 +93845,10 @@ wry-faced JJ
 wryly RB
 wryness NN
 wt NN
+wtf UH
 wth IN
 wtih NN
+wud MD
 wuh VBP
 wus RB
 wynne VB
@@ -93437,6 +93858,7 @@ x-There EX
 x-Year-to-date JJ
 x-ray NN
 x-rays NN
+xD SYM
 xenon NN
 xenophobia NN
 xenophobic JJ
@@ -93448,6 +93870,7 @@ y NNP
 y'all PRP
 y'know VB
 ya NN
+ya'll PRP
 yacht NN
 yachtel NN
 yachtels NNS
@@ -93459,6 +93882,7 @@ yachtsmen NNS
 yahoos NNS
 yakking VBG
 yaks NNS
+yall PRP
 yank VB
 yanked VBD
 yanking VBG
@@ -93477,6 +93901,7 @@ yawn NN
 yawning VBG
 yawns NNS
 yaws NNS
+yay UH
 yb NN
 yc NN
 yd. NN
@@ -93545,6 +93970,7 @@ yen-denominated JJ
 yen-support JJ
 yenta NN
 yes UH
+yess UH
 yesteday NN
 yesterday NN
 yesteryear NN
@@ -93571,6 +93997,7 @@ yj NN
 yl NN
 ym NN
 ymg NN
+yo UH
 yo-yo NN
 yodel NN
 yodeling VBG
@@ -93587,7 +94014,10 @@ yongst JJS
 yore PRP$
 yori FW
 you PRP
+you'll MD
+you're VBP
 you'uns NNS
+you've VBP
 you-know NN
 you-know-what NN
 young JJ
@@ -93606,6 +94036,7 @@ yourselves PRP
 youth NN
 youthful JJ
 youths NNS
+youtube NNP
 yow NN
 yp NN
 yr NN
@@ -93614,6 +94045,7 @@ yrs. NNS
 ys VBZ
 yt NN
 yttrium-containing JJ
+yu PRP
 yuan NN
 yucca NN
 yuh PRP
@@ -93698,3 +94130,8 @@ zur FW
 { (
 } )
 }... :
+£ £
+– ,
+“ "
+” "
+♥ SYM
