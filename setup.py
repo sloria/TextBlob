@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 import os
+import re
 import subprocess
-import text
 
 try:
     from setuptools import setup, find_packages
@@ -34,6 +36,24 @@ except ImportError:
         return out
 
     find_packages = _find_packages
+
+def find_version(fname):
+    '''Attempts to find the version number in the file names fname.
+    Raises RuntimeError if not found.
+    '''
+    version = ''
+    with open(fname, 'r') as fp:
+        reg = re.compile(r'__version__ = [\'"]([^\'"]*)[\'"]')
+        for line in fp:
+            m = reg.match(line)
+            if m:
+                version = m.group(1)
+                break
+    if not version:
+        raise RuntimeError('Cannot find version information')
+    return version
+
+__version__ = find_version("textblob/__init__.py")
 
 PUBLISH_CMD = "python setup.py register sdist bdist_wheel upload"
 TEST_PUBLISH_CMD = 'python setup.py register -r test sdist bdist_wheel upload -r test'
@@ -74,7 +94,7 @@ def read(fname):
 
 setup(
     name='textblob',
-    version=text.__version__,
+    version=__version__,
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
     long_description=(read("README.rst") + '\n\n' +
@@ -87,7 +107,7 @@ setup(
     packages=find_packages(exclude=('test*', 'text.nltk.test')),
     include_package_data=True,
     package_data={
-        "text.en": ["*.txt", "*.xml"]
+        "textblob.en": ["*.txt", "*.xml"]
     },
     classifiers=(
         'Development Status :: 4 - Beta',

@@ -3,8 +3,8 @@ import unittest
 from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
 
-from text.decorators import requires_nltk_corpus
-from text.exceptions import MissingCorpusException
+from textblob.decorators import requires_nltk_corpus
+from textblob.exceptions import MissingCorpusException
 
 
 class Tokenizer(object):

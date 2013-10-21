@@ -14,7 +14,7 @@ When there's no Internet
 from __future__ import unicode_literals
 import nose
 import sys
-from text.compat import PY2
+from textblob.compat import PY2
 
 PY26 = PY2 and int(sys.version_info[1]) < 7
 
@@ -26,7 +26,7 @@ def main():
 
 
 def get_argv():
-    args = [sys.argv[0],'--exclude', 'nltk']
+    args = [sys.argv[0], "tests", '--exclude', 'nltk']
     attr_conditions = []  # Use nose's attribselect plugin to filter tests
     if "force-all" in sys.argv:
         # Don't exclude any tests

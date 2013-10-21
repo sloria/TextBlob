@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import unittest
 from nose.tools import *  # PEP8 asserts
-from text.tokenizers import WordTokenizer, SentenceTokenizer
+
+from textblob.tokenizers import WordTokenizer, SentenceTokenizer
 
 class TestWordTokenizer(unittest.TestCase):
 

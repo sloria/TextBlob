@@ -2,7 +2,8 @@ from __future__ import unicode_literals
 import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from text.sentiments import PatternAnalyzer, NaiveBayesAnalyzer, DISCRETE, CONTINUOUS
+
+from textblob.sentiments import PatternAnalyzer, NaiveBayesAnalyzer, DISCRETE, CONTINUOUS
 
 
 class TestPatternSentiment(unittest.TestCase):

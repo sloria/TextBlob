@@ -3,10 +3,10 @@ import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
-from text.packages import nltk
-from text.base import BaseNPExtractor
-from text.np_extractors import ConllExtractor
-from text.utils import filter_insignificant
+from textblob.packages import nltk
+from textblob.base import BaseNPExtractor
+from textblob.np_extractors import ConllExtractor
+from textblob.utils import filter_insignificant
 
 
 class TestConllExtractor(unittest.TestCase):

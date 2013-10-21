@@ -3,11 +3,11 @@ import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
-from text.packages import nltk
-from text.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
+from textblob.packages import nltk
+from textblob.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
                               basic_extractor, contains_extractor, NLTKClassifier,
                               PositiveNaiveBayesClassifier)
-from text.compat import unicode
+from textblob.compat import unicode
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, 'data.csv')

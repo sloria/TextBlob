@@ -6,18 +6,21 @@ from __future__ import unicode_literals
 import json
 from unittest import TestCase, main
 from datetime import datetime
+import warnings
+
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from text.compat import PY2, unicode, basestring, binary_type
-import text.blob as tb
-from text.packages import nltk
-from text.np_extractors import ConllExtractor, FastNPExtractor
-from text.taggers import NLTKTagger, PatternTagger
-from text.tokenizers import WordTokenizer, SentenceTokenizer
-from text.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
-from text.parsers import PatternParser
-from text.classifiers import NaiveBayesClassifier
-import text.wordnet as wn
+
+from textblob.compat import PY2, unicode, basestring, binary_type
+import textblob as tb
+from textblob.packages import nltk
+from textblob.np_extractors import ConllExtractor, FastNPExtractor
+from textblob.taggers import NLTKTagger, PatternTagger
+from textblob.tokenizers import WordTokenizer, SentenceTokenizer
+from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
+from textblob.parsers import PatternParser
+from textblob.classifiers import NaiveBayesClassifier
+import textblob.wordnet as wn
 
 Synset = nltk.corpus.reader.Synset
 
@@ -984,7 +987,6 @@ class BlobberTest(TestCase):
         b = tb.Blobber(classifier=classifier)
         blob = b("I am so amazing")
         assert_equal(blob.classify(), 'pos')
-
 
 def is_blob(obj):
     return isinstance(obj, tb.TextBlob)

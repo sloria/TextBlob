@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 import unittest
 from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
-from text.translate import Translator
-from text.compat import unicode
+
+from textblob.translate import Translator
+from textblob.compat import unicode
 
 @attr('requires_internet')
 class TestTranslator(unittest.TestCase):

@@ -4,10 +4,10 @@ import os
 import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-from text.exceptions import MissingCorpusException
 
-from text.base import BaseTagger
-import text.taggers
+from textblob.exceptions import MissingCorpusException
+from textblob.base import BaseTagger
+import textblob.taggers
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 AP_MODEL_LOC = os.path.join(HERE, 'trontagger.pickle')
@@ -18,11 +18,11 @@ class TestPatternTagger(unittest.TestCase):
     def setUp(self):
         self.text = ("Simple is better than complex. "
                     "Complex is better than complicated.")
-        self.tagger = text.taggers.PatternTagger()
+        self.tagger = textblob.taggers.PatternTagger()
 
     def test_init(self):
-        tagger = text.taggers.PatternTagger()
-        assert_true(isinstance(tagger, text.taggers.BaseTagger))
+        tagger = textblob.taggers.PatternTagger()
+        assert_true(isinstance(tagger, textblob.taggers.BaseTagger))
 
     def test_tag(self):
         tags = self.tagger.tag(self.text)
@@ -40,7 +40,7 @@ class TestNLTKTagger(unittest.TestCase):
     def setUp(self):
         self.text = ("Simple is better than complex. "
                     "Complex is better than complicated.")
-        self.tagger = text.taggers.NLTKTagger()
+        self.tagger = textblob.taggers.NLTKTagger()
 
     def test_tag(self):
         tags = self.tagger.tag(self.text)
@@ -58,11 +58,11 @@ class TestPerceptronTagger(unittest.TestCase):
     def setUp(self):
         self.text = ("Simple is better than complex. "
                      "Complex is better than complicated.")
-        self.tagger = text.taggers.PerceptronTagger(load=False)
+        self.tagger = textblob.taggers.PerceptronTagger(load=False)
 
     def test_init(self):
-        tagger = text.taggers.PerceptronTagger(load=False)
-        assert_true(isinstance(tagger, text.taggers.BaseTagger))
+        tagger = textblob.taggers.PerceptronTagger(load=False)
+        assert_true(isinstance(tagger, textblob.taggers.BaseTagger))
 
     def test_train(self):
         sentences = _read_tagged(_wsj_train)

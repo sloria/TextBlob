@@ -4,8 +4,8 @@ import unittest
 import logging
 from nose.tools import *  # PEP8 asserts
 
-from text import formats
-from text.compat import unicode
+from textblob import formats
+from textblob.compat import unicode
 
 logging.basicConfig(level=logging.DEBUG)
 HERE = os.path.abspath(os.path.dirname(__file__))

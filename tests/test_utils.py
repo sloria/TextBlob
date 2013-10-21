@@ -3,7 +3,7 @@
 from unittest import TestCase
 from nose.tools import *  # PEP8 asserts
 
-from text.utils import lowerstrip, strip_punc
+from textblob.utils import lowerstrip, strip_punc
 
 class UtilsTests(TestCase):
     def setUp(self):

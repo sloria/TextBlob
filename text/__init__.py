@@ -1,7 +1,14 @@
-import os
+# -*- coding: utf-8 -*-
+'''text module for backwards compatibility. Importing
+``text`` is now deprecated.
 
-__version__ = '0.7.1'
-__license__  = 'MIT'
-__author__ = "Steven Loria"
+.. deprecated:: 0.8.0
+    Import ``textblob`` instead.
+'''
+from __future__ import absolute_import
+import warnings
 
-PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
+warnings.warn("Importing text is deprecated. Import textblob instead.",
+                category=DeprecationWarning)
+
+from textblob import *
