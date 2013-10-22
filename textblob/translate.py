@@ -80,7 +80,7 @@ class Translator(object):
 
     def _get_json5(self, url, host=None, type_=None):
         req = request.Request(url=url, headers=self.headers)
-        if host or type:
+        if host or type_:
             req.set_proxy(host=host, type=type_)
         r = request.urlopen(req)
         content = r.read()
