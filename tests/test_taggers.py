@@ -5,7 +5,7 @@ import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
-from textblob.exceptions import MissingCorpusException
+from textblob.exceptions import DeprecationError
 from textblob.base import BaseTagger
 import textblob.taggers
 
@@ -56,41 +56,10 @@ class TestNLTKTagger(unittest.TestCase):
 
 class TestPerceptronTagger(unittest.TestCase):
 
-    def setUp(self):
-        self.text = ("Simple is better than complex. "
-                     "Complex is better than complicated.")
-        self.tagger = textblob.taggers.PerceptronTagger(load=False)
-
-    def test_init(self):
-        tagger = textblob.taggers.PerceptronTagger(load=False)
-        assert_true(isinstance(tagger, textblob.taggers.BaseTagger))
-
-    def test_train(self):
-        sentences = _read_tagged(_wsj_train)
-        nr_iter = 5
-        self.tagger.train(sentences, nr_iter=nr_iter)
-        nr_words = sum(len(words) for words, tags in sentences)
-        # Check that the model has 'ticked over' once per instance
-        assert_equal(nr_words * nr_iter, self.tagger.model.i)
-        # Check that the tagger has a class for every seen tag
-        tag_set = set()
-        for _, tags in sentences:
-            tag_set.update(tags)
-        assert_equal(len(tag_set), len(self.tagger.model.classes))
-        for tag in tag_set:
-            assert_true(tag in self.tagger.model.classes)
-
-    @attr("slow")
-    def test_tag(self):
-        self.tagger.load(AP_MODEL_LOC)
-        tokens = self.tagger.tag(self.text)
-        assert_equal([w for w, t in tokens],
-            ['Simple', 'is', 'better', 'than', 'complex', '.', 'Complex', 'is',
-             'better', 'than', 'complicated', '.'])
-
-    def test_loading_missing_file_raises_missing_corpus_exception(self):
-        assert_raises(MissingCorpusException, self.tagger.load, 'missing.pickle')
-
+    @attr("py27_only")
+    def test_init_raises_deprecation_error(self):
+        with assert_raises(DeprecationError):
+            textblob.taggers.PerceptronTagger(load=False)
 
 class BadTagger(BaseTagger):
     '''A tagger without a tag method. How useless.'''

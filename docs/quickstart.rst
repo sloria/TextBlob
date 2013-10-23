@@ -102,7 +102,7 @@ Words can be lemmatized by accessing the ``lemma`` property.
     >>> from textblob import Word
     >>> w = Word("octopi")
     >>> w.lemma
-    'octopus'
+    u'octopus'
 
 WordNet Integration
 -------------------
@@ -124,7 +124,7 @@ You can access the definitions for each synset via the ``definitions`` property 
 .. doctest::
 
     >>> Word("octopus").definitions
-    ['tentacles of octopus prepared as food', 'bottom-living cephalopod having a soft oval body with eight long tentacles']
+    [u'tentacles of octopus prepared as food', u'bottom-living cephalopod having a soft oval body with eight long tentacles']
 
 You can also create synsets directly.
 

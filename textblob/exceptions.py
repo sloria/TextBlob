@@ -22,3 +22,7 @@ class MissingCorpusException(TextBlobException):
 
     def __init__(self, message=MISSING_CORPUS_MESSAGE, *args, **kwargs):
         super(MissingCorpusException, self).__init__(message, *args, **kwargs)
+
+class DeprecationError(TextBlobException):
+    '''Raised when user uses a deprecated feature.'''
+    pass
