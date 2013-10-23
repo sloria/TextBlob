@@ -39,7 +39,7 @@ Now we'll create a Naive Bayes classifier, passing the training data into the co
 
 .. doctest::
 
-    >>> from text.classifiers import NaiveBayesClassifier
+    >>> from textblob.classifiers import NaiveBayesClassifier
     >>> cl = NaiveBayesClassifier(train)
 
 .. _data_files:

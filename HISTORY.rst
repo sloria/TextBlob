@@ -7,7 +7,7 @@ Changelog
 - Update pattern resources for improved parser accuracy.
 - Update NLTK.
 - Allow Translator to connect to proxy server.
-- PerceptronTagger completely deprecated. Install the ``textblob-aptagger`` instead.
+- PerceptronTagger completely deprecated. Install the ``textblob-aptagger`` extension instead.
 
 0.7.1 (2013-09-30)
 ------------------
