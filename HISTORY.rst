@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.8.0 (unreleased)
+0.8.0 (2013-10-23)
 ------------------
 - *Backwards-incompatible*: Renamed package to ``textblob``. This avoids clashes with other namespaces called `text`. TextBlob should now be imported with ``from textblob import TextBlob``.
 - Update pattern resources for improved parser accuracy.
