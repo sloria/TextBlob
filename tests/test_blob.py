@@ -311,6 +311,11 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(len(blob.sentences), 19)
         assert_true(isinstance(blob.sentences[0], tb.Sentence))
 
+    def test_senences_with_space_before_punctuation(self):
+        text = "Uh oh. This sentence might cause some problems. : Now we're ok."
+        b = tb.TextBlob(text)
+        assert_equal(len(b.sentences), 3)
+
     def test_sentiment_of_foreign_text(self):
         blob = tb.TextBlob(u'Nous avons cherch\xe9 un motel dans la r\xe9gion de '
             'Madison, mais les motels ne sont pas nombreux et nous avons '

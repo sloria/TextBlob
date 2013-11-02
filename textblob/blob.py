@@ -25,6 +25,7 @@ import sys
 import json
 import string as pystring
 from collections import defaultdict
+import logging
 
 from textblob.packages import nltk
 from textblob.decorators import cached_property, requires_nltk_corpus
@@ -45,6 +46,7 @@ from textblob.en import suggest
 # Wordnet interface
 # NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
 _wordnet = nltk.corpus.wordnet
+logger = logging.getLogger(__name__)
 
 
 class Word(unicode):
@@ -640,9 +642,17 @@ class TextBlob(BaseBlob):
         for sent in sentences:
             # Compute the start and end indices of the sentence
             # within the blob
-            start_index = self.raw.index(sent, char_index)
-            char_index += len(sent)
-            end_index = start_index + len(sent)
+            try:
+                start_index = self.raw.index(sent, char_index)
+                char_index += len(sent)
+                end_index = start_index + len(sent)
+            except ValueError:
+                logger.warn("Detected sentence with multiple punctuation marks "
+                            "at the end. This may make the start and end indices "
+                            "inaccurate.")
+                start_index = None
+                end_index = None
+                char_index = 0
             # Sentences share the same models as their parent blob
             s = Sentence(sent, start_index=start_index, end_index=end_index,
                 tokenizer=self.tokenizer, np_extractor=self.np_extractor,
