@@ -117,6 +117,12 @@ class Word(unicode):
         '''
         return Word(self.spellcheck()[0][0])
 
+    @cached_property
+    @requires_nltk_corpus
+    def lemma(self):
+        '''For backwards compatibility'''
+        return self.lemmatize(self.string)
+
     @requires_nltk_corpus
     def lemmatize(self, pos=None):
         '''Return the lemma for a word using WordNet's morphy function.'''
