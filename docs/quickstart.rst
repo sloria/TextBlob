@@ -95,7 +95,7 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     >>> sentence.words[-1].pluralize()
     'levels'
 
-Words can be lemmatized by accessing the ``lemmatize`` method.
+Words can be lemmatized by calling the ``lemmatize`` method.
 
 .. doctest::
 

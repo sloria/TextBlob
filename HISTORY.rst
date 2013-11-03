@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.8.1 (unreleased)
+------------------
+- Add ``Word.lemmatize()`` method that allows passing in a part-of-speech argument.
+
 0.8.0 (2013-10-23)
 ------------------
 - *Backwards-incompatible*: Renamed package to ``textblob``. This avoids clashes with other namespaces called `text`. TextBlob should now be imported with ``from textblob import TextBlob``.

@@ -122,13 +122,20 @@ class Word(unicode):
     @cached_property
     @requires_nltk_corpus
     def lemma(self):
-        '''For backwards compatibility'''
-        return self.lemmatize()
+        '''Return the lemma of this word using Wordnet's morphy function.
+        '''
+        return self.lemmatize(pos=None)
 
     @requires_nltk_corpus
     def lemmatize(self, pos=None):
-        '''Return the lemma for a word using WordNet's morphy function.'''
-        if (pos == None):
+        '''Return the lemma for a word using WordNet's morphy function.
+
+        :param pos: Part of speech to filter upon. If `None`, defaults to
+            ``_wordnet.NOUN``.
+
+        .. versionadded:: 0.8.1
+        '''
+        if pos is None:
             pos = _wordnet.NOUN
         lemmatizer = nltk.stem.WordNetLemmatizer()
         return lemmatizer.lemmatize(self.string, pos)
