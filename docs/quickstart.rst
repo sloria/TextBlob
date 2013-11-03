@@ -95,14 +95,17 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
     >>> sentence.words[-1].pluralize()
     'levels'
 
-Words can be lemmatized by accessing the ``lemma`` property.
+Words can be lemmatized by accessing the ``lemmatize`` method.
 
 .. doctest::
 
     >>> from textblob import Word
     >>> w = Word("octopi")
-    >>> w.lemma
+    >>> w.lemmatize()
     u'octopus'
+    >>> w = Word("went")
+    >>> w.lemmatize("v")
+    u'go'
 
 WordNet Integration
 -------------------

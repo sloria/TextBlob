@@ -122,9 +122,16 @@ class Word(unicode):
     @cached_property
     @requires_nltk_corpus
     def lemma(self):
+        '''For backwards compatibility'''
+        return self.lemmatize()
+
+    @requires_nltk_corpus
+    def lemmatize(self, pos=None):
         '''Return the lemma for a word using WordNet's morphy function.'''
+        if (pos == None):
+            pos = _wordnet.NOUN
         lemmatizer = nltk.stem.WordNetLemmatizer()
-        return lemmatizer.lemmatize(self.string)
+        return lemmatizer.lemmatize(self.string, pos)
 
     @cached_property
     def synsets(self):
@@ -255,7 +262,7 @@ class WordList(list):
 
     def lemmatize(self):
         '''Return the lemma of each word in this WordList.'''
-        return self.__class__([word.lemma for word in self])
+        return self.__class__([word.lemmatize() for word in self])
 
 
 def _validated_param(obj, name, base_class, default, base_class_name=None):

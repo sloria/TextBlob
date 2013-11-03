@@ -895,11 +895,13 @@ class WordTest(TestCase):
         assert_true(isinstance(correct, tb.Word))
 
     @attr('slow')
-    def test_lemma(self):
+    def test_lemmatize(self):
         w = tb.Word("cars")
-        assert_equal(w.lemma, "car")
+        assert_equal(w.lemmatize(), "car")
         w = tb.Word("wolves")
-        assert_equal(w.lemma, "wolf")
+        assert_equal(w.lemmatize(), "wolf")
+        w = tb.Word("went")
+        assert_equal(w.lemmatize("v"), "go")
 
 
     def test_synsets(self):
