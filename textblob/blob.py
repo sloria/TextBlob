@@ -118,7 +118,7 @@ class Word(unicode):
         return Word(self.spellcheck()[0][0])
 
     @requires_nltk_corpus
-    def lemma(self, pos=None):
+    def lemmatize(self, pos=None):
         '''Return the lemma for a word using WordNet's morphy function.'''
         if (pos == None):
           pos = _wordnet.NOUN
@@ -254,7 +254,7 @@ class WordList(list):
 
     def lemmatize(self):
         '''Return the lemma of each word in this WordList.'''
-        return self.__class__([word.lemma for word in self])
+        return self.__class__([word.lemmatize() for word in self])
 
 
 def _validated_param(obj, name, base_class, default, base_class_name=None):
