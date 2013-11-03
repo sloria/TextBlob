@@ -895,6 +895,8 @@ class WordTest(TestCase):
         assert_equal(w.lemma, "car")
         w = tb.Word("wolves")
         assert_equal(w.lemma, "wolf")
+        w = tb.Word("went")
+        assert_equal(w.lemma("v"), "go")
 
 
     def test_synsets(self):

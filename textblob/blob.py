@@ -117,12 +117,11 @@ class Word(unicode):
         '''
         return Word(self.spellcheck()[0][0])
 
-    @cached_property
     @requires_nltk_corpus
-    def lemma(self):
+    def lemma(self, pos=_wordnet.NOUN):
         '''Return the lemma for a word using WordNet's morphy function.'''
         lemmatizer = nltk.stem.WordNetLemmatizer()
-        return lemmatizer.lemmatize(self.string)
+        return lemmatizer.lemmatize(self.string, pos)
 
     @cached_property
     def synsets(self):
