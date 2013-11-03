@@ -121,7 +121,7 @@ class Word(unicode):
     def lemmatize(self, pos=None):
         '''Return the lemma for a word using WordNet's morphy function.'''
         if (pos == None):
-          pos = _wordnet.NOUN
+            pos = _wordnet.NOUN
         lemmatizer = nltk.stem.WordNetLemmatizer()
         return lemmatizer.lemmatize(self.string, pos)
 
