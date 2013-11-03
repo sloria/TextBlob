@@ -121,7 +121,7 @@ class Word(unicode):
     @requires_nltk_corpus
     def lemma(self):
         '''For backwards compatibility'''
-        return self.lemmatize(self.string)
+        return self.lemmatize()
 
     @requires_nltk_corpus
     def lemmatize(self, pos=None):
