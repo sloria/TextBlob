@@ -12,4 +12,4 @@ Contributors (chronological)
 
 - Pete Keen `@peterkeen <https://github.com/peterkeen>`_
 - Matthew Honnibal `@syllog1sm <https://github.com/syllog1sm>`_
-
+- Roman Yankovsky `@RomanYankovsky <https://github.com/RomanYankovsky>`_
