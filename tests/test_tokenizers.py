@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
+from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
 
 from textblob.tokenizers import WordTokenizer, SentenceTokenizer
@@ -41,7 +42,7 @@ class TestSentenceTokenizer(unittest.TestCase):
         assert_equal(self.tokenizer.tokenize(self.text),
             ["Beautiful is better than ugly.", "Simple is better than complex."])
 
-    @unittest.skip("This is a known problem with the sentence tokenizer. Skipping for now.")
+    @attr("skip")  # This is a known problem with the sentence tokenizer.
     def test_tokenize_with_multiple_punctuation(self):
         text = "Hello world. How do you do?! My name's Steve..."
         assert_equal(self.tokenizer.tokenize(text),

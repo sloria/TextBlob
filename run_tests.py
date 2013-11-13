@@ -54,6 +54,9 @@ def get_argv():
         # Exclude tests that require internet
         attr_conditions.append("not requires_internet")
 
+    # Skip tests with the "skip" attribute
+    attr_conditions.append("not skip")
+
     attr_expression = " and ".join(attr_conditions)
     if attr_expression:
         args.extend(["-A", attr_expression])
