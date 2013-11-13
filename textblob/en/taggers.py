@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Parts-of-speech tagger implementations.'''
 from __future__ import absolute_import
-import random
-import logging
-import os.path
-from collections import defaultdict
-import pickle
 
-import textblob
 from textblob.packages import nltk
 from textblob.en import tag as pattern_tag
 from textblob.decorators import requires_nltk_corpus

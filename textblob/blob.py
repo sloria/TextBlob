@@ -656,17 +656,9 @@ class TextBlob(BaseBlob):
         for sent in sentences:
             # Compute the start and end indices of the sentence
             # within the blob
-            try:
-                start_index = self.raw.index(sent, char_index)
-                char_index += len(sent)
-                end_index = start_index + len(sent)
-            except ValueError:
-                logger.warn("Detected sentence with multiple punctuation marks "
-                            "at the end. This may make the start and end indices "
-                            "inaccurate.")
-                start_index = None
-                end_index = None
-                char_index = 0
+            start_index = self.raw.index(sent, char_index)
+            char_index += len(sent)
+            end_index = start_index + len(sent)
             # Sentences share the same models as their parent blob
             s = Sentence(sent, start_index=start_index, end_index=end_index,
                 tokenizer=self.tokenizer, np_extractor=self.np_extractor,

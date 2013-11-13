@@ -260,7 +260,7 @@ is managed by the non-profit Python Software Foundation.'''
         self.short_blob = tb.TextBlob(self.short)
 
     def test_init(self):
-        blob = tb.TextBlob('Wow I love this place. It really rocks my socks!!!')
+        blob = tb.TextBlob('Wow I love this place. It really rocks my socks!')
         assert_equal(len(blob.sentences), 2)
         assert_equal(blob.sentences[1].stripped, 'it really rocks my socks')
         assert_equal(blob.string, blob.raw)
@@ -576,16 +576,6 @@ is managed by the non-profit Python Software Foundation.'''
         wl = tb.WordList(l)
         assert_equal(tb.TextBlob(' ').join(l), tb.TextBlob('explicit is better'))
         assert_equal(tb.TextBlob(' ').join(wl), tb.TextBlob('explicit is better'))
-
-    def test_multiple_punctuation_at_end_of_sentence(self):
-        '''Test sentences that have multiple punctuation marks
-        at the end of the sentence.'''
-        blob = tb.TextBlob('Get ready! This has an ellipses...')
-        assert_equal(len(blob.sentences), 2)
-        assert_equal(blob.sentences[1].raw, 'This has an ellipses...')
-        blob2 = tb.TextBlob('OMG! I am soooo LOL!!!')
-        assert_equal(len(blob2.sentences), 2)
-        assert_equal(blob2.sentences[1].raw, 'I am soooo LOL!!!')
 
     @attr('slow')
     def test_blob_noun_phrases(self):

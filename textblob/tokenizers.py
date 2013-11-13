@@ -49,31 +49,10 @@ class SentenceTokenizer(BaseTokenizer):
     Uses an unsupervised algorithm to build a model for abbreviation words,
     collocations, and words that start sentences,
     then uses that to find sentence boundaries.
-    Tweaked slightly to make it more robust to sentences with multiple
-    punctuation at the end, e.g. "OMG! I am so LOL!!!"
     '''
 
     @requires_nltk_corpus
     def tokenize(self, text):
         '''Return a list of sentences.'''
-        ret = []
-        sentences = nltk.tokenize.sent_tokenize(text)  # Initial tokenization
-        # If there's only one sentence or string of text
-        if len(sentences) <= 1:
-            return sentences  # return the 1-element list
-        else:
-            for i, sentence in enumerate(sentences):
-                # Sometimes the NLTK tokenizer misses some punctuation when
-                # there are multiple punctuations, e.g. with ellipses ("...")
-                # or multiple exclamation points ("!!!")
-                try:
-                    next_token = sentences[i + 1]
-                except IndexError:
-                    # Continue if the last token is a punctuation
-                    if len(sentence) <= 1:
-                        continue
-                # If the next token is 1 character, assume it's a punctuation
-                if len(next_token) == 1:
-                    sentence = "".join([sentence, next_token]) # append the extra punctuation
-                ret.append(sentence)
-        return ret
+        sentences = nltk.tokenize.sent_tokenize(text)
+        return [s for s in sentences]
