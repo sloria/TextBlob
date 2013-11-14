@@ -54,5 +54,4 @@ class SentenceTokenizer(BaseTokenizer):
     @requires_nltk_corpus
     def tokenize(self, text):
         '''Return a list of sentences.'''
-        sentences = nltk.tokenize.sent_tokenize(text)
-        return [s for s in sentences]
+        return nltk.tokenize.sent_tokenize(text)

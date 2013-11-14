@@ -3,7 +3,9 @@ Changelog
 
 0.8.1 (unreleased)
 ------------------
+- Fix bug that caused ``ValueError`` upon sentence tokenization. This removes modifications made to the NLTK sentence tokenizer.
 - Add ``Word.lemmatize()`` method that allows passing in a part-of-speech argument.
+
 
 0.8.0 (2013-10-23)
 ------------------
