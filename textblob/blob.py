@@ -49,7 +49,7 @@ _wordnet = nltk.corpus.wordnet
 logger = logging.getLogger(__name__)
 
 def _penn_to_wordnet(tag):
-    '''Converts the corpus tag into a Wordnet tag.'''
+    '''Converts a Penn corpus tag into a Wordnet tag.'''
     if tag in ("NN", "NNS", "NNP", "NNPS"):
         return _wordnet.NOUN
     if tag in ("JJ", "JJR", "JJS"):
