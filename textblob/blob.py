@@ -48,6 +48,17 @@ from textblob.en import suggest
 _wordnet = nltk.corpus.wordnet
 logger = logging.getLogger(__name__)
 
+def _penn_to_wordnet(tag):
+    '''Converts the corpus tag into a Wordnet tag.'''
+    if tag in ("NN", "NNS", "NNP", "NNPS"):
+        return _wordnet.NOUN
+    if tag in ("JJ", "JJR", "JJS"):
+        return _wordnet.ADJ
+    if tag in ("VB", "VBD", "VBG", "VBN", "VBP", "VBZ"):
+        return _wordnet.VERB
+    if tag in ("RB", "RBR", "RBS"):
+        return _wordnet.ADV
+    return None
 
 class Word(unicode):
 
@@ -73,18 +84,6 @@ class Word(unicode):
 
     def __str__(self):
         return self.string
-
-    def _penn_to_wordnet(self, tag):
-        '''Converts the corpus tag into a Wordnet tag.'''
-        if tag in ("NN", "NNS", "NNP", "NNPS"):
-            return _wordnet.NOUN
-        if tag in ("JJ", "JJR", "JJS"):
-            return _wordnet.ADJ
-        if tag in ("VB", "VBD", "VBG", "VBN", "VBP", "VBZ"):
-            return _wordnet.VERB
-        if tag in ("RB", "RBR", "RBS"):
-            return _wordnet.ADV
-        return None
 
     def singularize(self):
         '''Return the singular version of the word as a string.'''
@@ -136,7 +135,7 @@ class Word(unicode):
     def lemma(self):
         '''Return the lemma of this word using Wordnet's morphy function.
         '''
-        tag = self._penn_to_wordnet(self.pos_tag) if (self.pos_tag is not None) else None
+        tag = _penn_to_wordnet(self.pos_tag) if (self.pos_tag is not None) else None
         return self.lemmatize(pos=tag)
 
     @requires_nltk_corpus
