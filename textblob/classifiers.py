@@ -70,12 +70,12 @@ def basic_extractor(document, train_set):
     tokenizer = WordTokenizer()
     word_features = _get_words_from_dataset(train_set)
     if isinstance(document, basestring):
-        tokens = set([strip_punc(w, all=False)
-                    for w in tokenizer.itokenize(document, include_punc=False)])
+        tokens = set((strip_punc(w, all=False)
+                    for w in tokenizer.itokenize(document, include_punc=False)))
     else:
         tokens = set(strip_punc(w, all=False) for w in document)
-    features = dict([(u'contains({0})'.format(word), (word in tokens))
-                                            for word in word_features])
+    features = dict(((u'contains({0})'.format(word), (word in tokens))
+                                            for word in word_features))
     return features
 
 
