@@ -25,7 +25,7 @@ import sys
 import json
 import string as pystring
 from collections import defaultdict
-import logging
+from itertools import chain
 
 from textblob.packages import nltk
 from textblob.decorators import cached_property, requires_nltk_corpus
@@ -46,7 +46,6 @@ from textblob.en import suggest
 # Wordnet interface
 # NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
 _wordnet = nltk.corpus.wordnet
-logger = logging.getLogger(__name__)
 
 def _penn_to_wordnet(tag):
     '''Converts a Penn corpus tag into a Wordnet tag.'''
@@ -633,9 +632,9 @@ class TextBlob(BaseBlob):
         '''
         # NLTK's word tokenizer expects sentences as input, so tokenize the
         # blob into sentences before tokenizing to words
-        words = []
-        for sent in self.sentences:
-            words.extend(WordTokenizer().tokenize(sent.raw, include_punc=False))
+        tok = WordTokenizer()
+        words = chain.from_iterable(tok.itokenize(sent.raw, include_punc=False)
+                                    for sent in self.sentences)
         return WordList(words)
 
     @property

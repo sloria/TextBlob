@@ -4,6 +4,7 @@ Changelog
 0.8.2 (unreleased)
 ------------------
 - Fix bug in spelling correction that stripped some punctuation.
+- Make ``TextBlob.words`` more memory-efficient.
 
 0.8.1 (2013-11-16)
 ------------------
