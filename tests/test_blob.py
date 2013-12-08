@@ -783,6 +783,13 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob3.correct(), "The meaning of life is 42.0.")
         blob4 = tb.TextBlob("?")
         assert_equal(blob4.correct(), "?")
+        # From a user-submitted bug
+        text = "Before you embark on any of this journey, write a quick " + \
+                "high-level test that demonstrates the slowness. " + \
+                "You may need to introduce some minimum set of data to " + \
+                "reproduce a significant enough slowness."
+        blob5 = tb.TextBlob(text)
+        assert_equal(blob5.correct(), text)
 
     def test_parse(self):
         blob = tb.TextBlob("And now for something completely different.")

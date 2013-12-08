@@ -545,16 +545,27 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
         :rtype: BaseBlob
         '''
-        tok = WordTokenizer()
-        corrected = (Word(w).correct() for w in tok.tokenize(self.raw, include_punc=True))
-        # Separate each token with a space unless the token is a punctuation
-        ret = ''
-        for i, word in enumerate(corrected):
-            # Avoid an extra space at the beginning
-            if word in pystring.punctuation or i == 0:
-                ret = ''.join([ret, word])
-            else:
-                ret = ' '.join([ret, word])
+        def join_tokens(tokens):
+            ret = ''
+            # Separate each token with a space unless the token is a punctuation
+            for i, word in enumerate(tokens):
+                # Avoid an extra space at the beginning
+                if word in pystring.punctuation or i == 0:
+                    ret = ''.join([ret, word])
+                else:
+                    ret = ' '.join([ret, word])
+            return ret
+
+        def correct_sentence(sent):
+            '''Spell-corrects a sentence.'''
+            word_tok = WordTokenizer()
+            corrected = (Word(w).correct() for w in word_tok.tokenize(sent,
+                                                                include_punc=True))
+            return join_tokens(corrected)
+        # First tokenize to sentence, then correct words within each sentence.
+        sentence_tok = SentenceTokenizer()
+        sentences = sentence_tok.itokenize(self.raw)
+        ret = join_tokens([correct_sentence(sent) for sent in sentences])
         return self.__class__(ret)
 
     def _cmpkey(self):
@@ -656,10 +667,7 @@ class TextBlob(BaseBlob):
         return self.to_json()
 
     def _create_sentence_objects(self):
-        '''Returns a list of Sentence objects given
-        a list of sentence strings. Attempts to handle sentences that
-        have more than one punctuation mark at the end of the sentence.
-        Examples: "An ellipses is no problem..." or "This is awesome!!!"
+        '''Returns a list of Sentence objects from the raw text.
         '''
         sent_tokenizer = SentenceTokenizer()
         sentence_objects = []
