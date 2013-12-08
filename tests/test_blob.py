@@ -749,7 +749,7 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(translated, "Esta es una frase.")
         es_blob = tb.TextBlob("Esta es una frase.")
         to_en = es_blob.translate(from_lang="es", to="en")
-        assert_equal(to_en, "This is a phrase .")
+        assert_equal(to_en, "This is a sentence.")
 
     @attr("requires_internet")
     def test_translate_non_ascii(self):
