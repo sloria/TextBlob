@@ -7,6 +7,7 @@ if PY2:
     from itertools import imap, izip
     import urllib2 as request
     from urllib import quote as urlquote
+    from urllib import urlencode
     text_type = unicode
     binary_type = str
     string_types = (str, unicode)
@@ -26,6 +27,7 @@ if PY2:
 else: # PY3
     from urllib import request
     from urllib.parse import quote as urlquote
+    from urllib.parse import urlencode
     text_type = str
     binary_type = bytes
     string_types = (str,)

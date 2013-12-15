@@ -54,3 +54,6 @@ text/en/*.pickle
 
 # Readme build
 README.html
+
+.ipynb_checkpoints/
+*.ipynb
