@@ -7,8 +7,7 @@ Language detection added by Steven Loria.
 '''
 from __future__ import absolute_import
 import re
-import json
-from textblob.compat import PY2, request, urlquote, urlencode
+from textblob.compat import PY2, request, urlencode
 
 
 class Translator(object):
@@ -36,8 +35,7 @@ class Translator(object):
     detection_pattern = re.compile(
             r".*?\,\"([a-z]{2}(\-\w{2})?)\"\,.*?", flags=re.S)
 
-    translate_url = "http://translate.google.com/translate_a/t"
-    detect_url = "http://translate.google.com/translate_a/t?client=t&ie=UTF-8&oe=UTF-8&text={0}"
+    url = "http://translate.google.com/translate_a/t"
 
     headers = {'User-Agent': ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) '
             'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19')}
@@ -48,7 +46,7 @@ class Translator(object):
             source = source.encode('utf-8')
         data = {"client": "t", "ie": "UTF-8", "oe": "UTF-8",
                 "sl": from_lang, "tl": to_lang, "text": source}
-        json5 = self._get_json5(self.translate_url, host=host, type_=type_, data=data)
+        json5 = self._get_json5(self.url, host=host, type_=type_, data=data)
         return self._get_translation_from_json5(json5)
 
     def detect(self, source, host=None, type_=None):
@@ -56,7 +54,7 @@ class Translator(object):
         if PY2:
             source = source.encode('utf-8')
         data = {"client": "t", "ie": "UTF-8", "oe": "UTF-8", "text": source}
-        json5 = self._get_json5(self.detect_url, host=host, type_=type_, data=data)
+        json5 = self._get_json5(self.url, host=host, type_=type_, data=data)
         lang = self._get_language_from_json5(json5)
         return lang
 
@@ -78,7 +76,7 @@ class Translator(object):
         return self._unescape(result)
 
     def _get_json5(self, url, host=None, type_=None, data=None):
-        encoded_data = urlencode(data)
+        encoded_data = urlencode(data).encode("utf-8")
         req = request.Request(url=url, headers=self.headers, data=encoded_data)
         if host or type_:
             req.set_proxy(host=host, type=type_)

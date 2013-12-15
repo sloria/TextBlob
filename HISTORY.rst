@@ -3,8 +3,9 @@ Changelog
 
 0.8.2 (unreleased)
 ------------------
-- Fix bug in spelling correction that stripped some punctuation.
+- Fix bug in spelling correction that stripped some punctuation (Issue #48).
 - Make ``TextBlob.words`` more memory-efficient.
+- Translator now sends POST instead of GET requests. This allows for larger bodies of text to be translated (Issue #49).
 
 0.8.1 (2013-11-16)
 ------------------
