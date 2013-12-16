@@ -43,16 +43,15 @@ class TestNLTKClassifier(unittest.TestCase):
     def setUp(self):
         self.bad_classifier = BadNLTKClassifier(train_set)
 
-    @attr("py27_only")
     def test_raises_value_error_without_nltk_class(self):
-        with assert_raises(ValueError):
-            self.bad_classifier.classifier
+        assert_raises(ValueError,
+            lambda: self.bad_classifier.classifier)
 
-        with assert_raises(ValueError):
-            self.bad_classifier.train(train_set)
+        assert_raises(ValueError,
+            lambda: self.bad_classifier.train(train_set))
 
-        with assert_raises(ValueError):
-            self.bad_classifier.update([("This is no good.", 'negative')])
+        assert_raises(ValueError,
+            lambda: self.bad_classifier.update([("This is no good.", 'negative')]))
 
 
 class TestNaiveBayesClassifier(unittest.TestCase):
@@ -154,10 +153,9 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         training_sentence = cl.train_set[0][0]
         assert_true(isinstance(training_sentence, unicode))
 
-    @attr("py27_only")
     def test_init_with_bad_format_specifier(self):
-        with assert_raises(ValueError):
-            NaiveBayesClassifier(CSV_FILE, format='unknown')
+        assert_raises(ValueError,
+            lambda: NaiveBayesClassifier(CSV_FILE, format='unknown'))
 
     def test_repr(self):
         assert_equal(repr(self.classifier),

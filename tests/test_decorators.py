@@ -14,11 +14,9 @@ class Tokenizer(object):
         raise LookupError
 
 
-@attr("py27_only")
 def test_decorator_raises_missing_corpus_exception():
     t = Tokenizer()
-    with assert_raises(MissingCorpusException):
-        t.tag('hello world')
+    assert_raises(MissingCorpusException, lambda: t.tag('hello world'))
 
 if __name__ == '__main__':
     unittest.main()

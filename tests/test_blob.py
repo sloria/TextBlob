@@ -300,11 +300,9 @@ is managed by the non-profit Python Software Foundation.'''
             tb.WordList(('am', 'eating', 'a', 'pizza'))
         ])
 
-    @attr("py27_only")
     def test_clean_html(self):
         html = '<b>Python</b> is a widely used <a href="/wiki/General-purpose_programming_language" title="General-purpose programming language">general-purpose</a>, <a href="/wiki/High-level_programming_language" title="High-level programming language">high-level programming language</a>.'
-        with assert_raises(NotImplementedError):
-            tb.TextBlob(html, clean_html=True)
+        assert_raises(NotImplementedError, lambda: tb.TextBlob(html, clean_html=True))
 
     def test_sentences(self):
         blob = self.blob
@@ -680,16 +678,12 @@ is managed by the non-profit Python Software Foundation.'''
         b2 = tb.TextBlob("Faces have values")
         assert_true(b1.sentiment[0] > b2.sentiment[0])
 
-    @attr('py27_only')
     def test_bad_init(self):
-        with assert_raises(TypeError):
-            tb.TextBlob(['bad'])
-        with assert_raises(ValueError):
-            tb.TextBlob("this is fine",
-                        np_extractor="this is not fine")
-        with assert_raises(ValueError):
-            tb.TextBlob("this is fine",
-                        pos_tagger="this is not fine")
+        assert_raises(TypeError, lambda: tb.TextBlob(['bad']))
+        assert_raises(ValueError, lambda: tb.TextBlob("this is fine",
+                                            np_extractor="this is not fine"))
+        assert_raises(ValueError, lambda: tb.TextBlob("this is fine",
+                                            pos_tagger="this is not fine"))
 
     def test_in(self):
         blob = tb.TextBlob('Beautiful is better than ugly. ')
@@ -795,20 +789,19 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob("And now for something completely different.")
         assert_equal(blob.parse(), PatternParser().parse(blob.string))
 
-    @attr("py27_only")
     def test_passing_bad_init_params(self):
         tagger = PatternTagger()
-        with assert_raises(ValueError):
-            tb.TextBlob("blah", parser=tagger)
-        with assert_raises(ValueError):
-            tb.TextBlob("blah", np_extractor=tagger)
-        with assert_raises(ValueError):
-            tb.TextBlob("blah", tokenizer=tagger)
-        with assert_raises(ValueError):
-            tb.TextBlob("blah", analyzer=tagger)
+        assert_raises(ValueError,
+            lambda: tb.TextBlob("blah", parser=tagger))
+        assert_raises(ValueError,
+            lambda: tb.TextBlob("blah", np_extractor=tagger))
+        assert_raises(ValueError,
+            lambda: tb.TextBlob("blah", tokenizer=tagger))
+        assert_raises(ValueError,
+            lambda: tb.TextBlob("blah", analyzer=tagger))
         analyzer = PatternAnalyzer
-        with assert_raises(ValueError):
-            tb.TextBlob("blah", pos_tagger=analyzer)
+        assert_raises(ValueError,
+            lambda: tb.TextBlob("blah", pos_tagger=analyzer))
 
     def test_classify(self):
         blob = tb.TextBlob("This is an amazing library. What an awesome classifier!",
@@ -817,11 +810,11 @@ is managed by the non-profit Python Software Foundation.'''
         for s in blob.sentences:
             assert_equal(s.classify(), 'pos')
 
-    @attr("py27_only")
     def test_classify_without_classifier(self):
         blob = tb.TextBlob("This isn't gonna be good")
-        with assert_raises(NameError):
-            blob.classify()
+        assert_raises(NameError,
+            lambda: blob.classify())
+
 
 class WordTest(TestCase):
 

@@ -48,10 +48,10 @@ class BadExtractor(BaseNPExtractor):
     '''An extractor without an extract method. How useless.'''
     pass
 
-@attr("py27_only")
+
 def test_cannot_instantiate_incomplete_extractor():
-    with assert_raises(TypeError):
-        BadExtractor()
+    assert_raises(TypeError,
+        lambda: BadExtractor())
 
 if __name__ == '__main__':
     unittest.main()
