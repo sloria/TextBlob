@@ -405,14 +405,14 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob('Simple is better than complex. '
                             'Complex is better than complicated.')
         assert_equal(blob.pos_tags, [
-            ('Simple', 'NN'),
+            ('Simple', 'JJ'),
             ('is', 'VBZ'),
             ('better', 'JJR'),
             ('than', 'IN'),
-            ('complex', 'NN'),
+            ('complex', 'JJ'),
             ('Complex', 'NNP'),
             ('is', 'VBZ'),
-            ('better', 'RBR'),
+            ('better', 'JJR'),
             ('than', 'IN'),
             ('complicated', 'VBN'),
             ])
