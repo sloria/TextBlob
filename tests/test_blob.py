@@ -207,6 +207,9 @@ class SentenceTest(TestCase):
         blob = tb.Sentence("I havv bad speling.")
         assert_true(isinstance(blob.correct(), tb.Sentence))
         assert_equal(blob.correct(), tb.Sentence("I have bad spelling."))
+        blob = tb.Sentence("I havv \ngood speling.")
+        assert_true(isinstance(blob.correct(), tb.Sentence))
+        assert_equal(blob.correct(), tb.Sentence("I have \ngood spelling."))
 
     @attr('requires_internet')
     def test_translate_detects_language_by_default(self):
@@ -784,6 +787,11 @@ is managed by the non-profit Python Software Foundation.'''
                 "reproduce a significant enough slowness."
         blob5 = tb.TextBlob(text)
         assert_equal(blob5.correct(), text)
+        text = "Word list!  :\n" + \
+                "\t* spelling\n" + \
+                "\t* well"
+        blob6 = tb.TextBlob(text)
+        assert_equal(blob6.correct(), text)
 
     def test_parse(self):
         blob = tb.TextBlob("And now for something completely different.")
