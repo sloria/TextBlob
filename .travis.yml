@@ -6,6 +6,6 @@ python:
 # Install dependencies
 install:
     - "pip install -U ."
-    - "python download_corpora.py"
+    - "sudo python download_corpora.py"
 # Run tests
 script: "python run_tests.py"
