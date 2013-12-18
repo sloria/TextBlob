@@ -1389,6 +1389,8 @@ class Spelling(lazydict):
             return [(w, 1.0)] # I
         if w in PUNCTUATION:
             return [(w, 1.0)] # .?!
+        if w in string.whitespace:
+            return [(w, 1.0)] # \n
         if w.replace(".", "").isdigit():
             return [(w, 1.0)] # 1.5
         candidates = self._known([w]) \
