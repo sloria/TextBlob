@@ -4,6 +4,7 @@ Changelog
 0.8.2 (unreleased)
 ------------------
 - Fix bug in spelling correction that stripped some punctuation (Issue #48).
+- Various improvements to spelling correction: preserves whitespace characters (Issue #12); handle contractions and punctuation between words. Thanks @davidnk.
 - Make ``TextBlob.words`` more memory-efficient.
 - Translator now sends POST instead of GET requests. This allows for larger bodies of text to be translated (Issue #49).
 - Update pattern tagger for better accuracy.
