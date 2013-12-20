@@ -3,6 +3,10 @@ python:
     - "2.6"
     - "2.7"
     - "3.3"
+before_install:
+    - "cd ~"
+    - "wget https://s3.amazonaws.com/textblob/nltk_data.tar.gz"
+    - "tar -xzvf nltk_data.tar.gz"
 # Install dependencies
 install:
     - "pip install -U ."
