@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.8.2 (unreleased)
+0.8.2 (2013-12-21)
 ------------------
 - Fix bug in spelling correction that stripped some punctuation (Issue #48).
 - Various improvements to spelling correction: preserves whitespace characters (Issue #12); handle contractions and punctuation between words. Thanks @davidnk.
