@@ -4,6 +4,8 @@
 .. versionadded:: 0.5.0
 """
 from __future__ import absolute_import
+from collections import namedtuple
+
 from textblob.packages import nltk
 from textblob.en import sentiment as pattern_sentiment
 from textblob.tokenizers import WordTokenizer
@@ -16,27 +18,29 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
     '''Sentiment analyzer that uses the same implementation as the
     pattern library. Returns results as a tuple of the form:
 
-    ``(polarity, subjectivity)``
+    ``Sentiment(polarity, subjectivity)``
     '''
 
     kind = CONTINUOUS
+    RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
 
     def analyze(self, text):
         """Return the sentiment as a tuple of the form:
         ``(polarity, subjectivity)``
         """
-        return pattern_sentiment(text)
+        return self.RETURN_TYPE(*pattern_sentiment(text))
 
 
 class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
 
     '''Naive Bayes analyzer that is trained on a dataset of movie reviews.
-    Returns results as a tuple of the form:
+    Returns results as a named tuple of the form:
 
-    ``(classification, pos_probability, neg_probability)``
+    ``Sentiment(classification, p_pos, p_neg)``
     '''
 
     kind = DISCRETE
+    RETURN_TYPE = namedtuple('Sentiment', ['classification', 'p_pos', 'p_neg'])
 
     def __init__(self):
         super(NaiveBayesAnalyzer, self).__init__()
@@ -70,4 +74,8 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         feats = self._extract_feats(filtered)
         prob_dist = self._classifier.prob_classify(feats)
         # classification, p_pos, p_neg
-        return prob_dist.max(), prob_dist.prob('pos'), prob_dist.prob("neg")
+        return self.RETURN_TYPE(
+            classification=prob_dist.max(),
+            p_pos=prob_dist.prob('pos'),
+            p_neg=prob_dist.prob("neg")
+        )

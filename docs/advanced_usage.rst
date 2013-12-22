@@ -14,7 +14,7 @@ The ``textblob.sentiments`` module contains two sentiment analysis implementatio
 
 The default implementation is ``PatternAnalyzer``, but you can override the analyzer by passing another implementation into a TextBlob's constructor.
 
-For instance, the ``NaiveBayesAnalyzer`` returns its result as a tuple of the form: ``(classification, pos_probability, neg_probability)``.
+For instance, the ``NaiveBayesAnalyzer`` returns its result as a namedtuple of the form: ``Sentiment(classification, p_pos, p_neg)``.
 
 ::
 
@@ -22,7 +22,7 @@ For instance, the ``NaiveBayesAnalyzer`` returns its result as a tuple of the fo
     >>> from textblob.sentiments import NaiveBayesAnalyzer
     >>> blob = TextBlob("I love this library", analyzer=NaiveBayesAnalyzer())
     >>> blob.sentiment
-    ('pos', 0.7996209910191279, 0.2003790089808724)
+    Sentiment(classification='pos', p_pos=0.7996209910191279, p_neg=0.2003790089808724)
 
 Tokenizers
 ----------

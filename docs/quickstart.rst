@@ -28,7 +28,7 @@ Part-of-speech tags can be accessed through the ``tags`` property.
 .. doctest::
 
     >>> wiki.tags
-    [(u'Python', u'NNP'), (u'is', u'VBZ'), (u'a', u'DT'), (u'high-level', u'NN'), (u'general-purpose', u'JJ'), (u'programming', u'NN'), (u'language', u'NN')]
+    [(u'Python', u'NNP'), (u'is', u'VBZ'), (u'a', u'DT'), (u'high-level', u'JJ'), (u'general-purpose', u'JJ'), (u'programming', u'NN'), (u'language', u'NN')]
 
 Noun Phrase Extraction
 ----------------------
@@ -43,15 +43,15 @@ Similarly, noun phrases are accessed through the ``noun_phrases`` property.
 Sentiment Analysis
 ------------------
 
-The ``sentiment`` property returns the a tuple of the form ``(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.
+The ``sentiment`` property returns a namedtuple of the form ``Sentiment(polarity, subjectivity)``. The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.
 
 .. doctest::
 
     >>> testimonial = TextBlob("Textblob is amazingly simple to use. What great fun!")
     >>> testimonial.sentiment
-    (0.39166666666666666, 0.4357142857142857)
-
-You can also access the scores from the ``blob.polarity`` and ``blob.subjectivity`` properties.
+    Sentiment(polarity=0.39166666666666666, subjectivity=0.4357142857142857)
+    >>> testimonial.sentiment.polarity
+    0.39166666666666666
 
 
 Tokenization

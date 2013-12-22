@@ -1,8 +1,8 @@
 import os
 
-__version__ = '0.8.2'
+__version__ = '0.8.3-dev'
 __license__  = 'MIT'
-__author__ = "Steven Loria"
+__author__ = 'Steven Loria'
 
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 

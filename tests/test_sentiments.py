@@ -17,8 +17,12 @@ class TestPatternSentiment(unittest.TestCase):
     def test_analyze(self):
         p1 = "I feel great this morning."
         n1 = "This is a terrible car."
-        assert_true(self.analyzer.analyze(p1)[0] > 0)
-        assert_true(self.analyzer.analyze(n1)[0] < 0)
+        p1_result = self.analyzer.analyze(p1)
+        n1_result = self.analyzer.analyze(n1)
+        assert_true(p1_result[0] > 0)
+        assert_true(n1_result[0] < 0)
+        assert_equal(p1_result.polarity, p1_result[0])
+        assert_equal(p1_result.subjectivity, p1_result[1])
 
 
 class TestNaiveBayesAnalyzer(unittest.TestCase):
@@ -41,6 +45,10 @@ class TestNaiveBayesAnalyzer(unittest.TestCase):
         # 3rd item is probability that it is negative
         assert_true(isinstance(p1_result[2], float))
         assert_about_equal(p1_result[1] + p1_result[2], 1)
+        assert_equal(p1_result.classification, p1_result[0])
+        assert_equal(p1_result.p_pos, p1_result[1])
+        assert_equal(p1_result.p_neg, p1_result[2])
+
 
 def assert_about_equal(first, second, places=4):
     return assert_equal(round(first, places), second)

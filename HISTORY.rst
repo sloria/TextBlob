@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.8.3 (unreleased)
+------------------
+- Sentiment analyzers return namedtuples, e.g. ``Sentiment(polarity=0.12, subjectivity=0.34)``.
+
 0.8.2 (2013-12-21)
 ------------------
 - Fix bug in spelling correction that stripped some punctuation (Issue #48).
