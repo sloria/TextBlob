@@ -4,9 +4,10 @@ from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
 from textblob.packages import nltk
+from textblob.tokenizers import WordTokenizer
 from textblob.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
                               basic_extractor, contains_extractor, NLTKClassifier,
-                              PositiveNaiveBayesClassifier)
+                              PositiveNaiveBayesClassifier, _get_words_from_dataset)
 from textblob.compat import unicode
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -296,6 +297,14 @@ def custom_extractor(document):
         feat_name = "last_letter({0})".format(tok[-1])
         feats[feat_name] = True
     return feats
+
+def test_get_words_from_dataset():
+    tok = WordTokenizer()
+    all_words = []
+    for words, _ in train_set:
+        all_words.extend(tok.itokenize(words, include_punc=False))
+    assert_equal(_get_words_from_dataset(train_set), set(all_words))
+
 
 if __name__ == '__main__':
     unittest.main()

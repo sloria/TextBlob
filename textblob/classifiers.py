@@ -32,6 +32,8 @@ Example Usage:
 .. versionadded:: 0.6.0
 '''
 from __future__ import absolute_import
+from itertools import chain
+
 from textblob.packages import nltk
 from textblob.tokenizers import WordTokenizer
 from textblob.compat import basestring
@@ -49,13 +51,14 @@ def _get_words_from_dataset(dataset):
         ``words`` is either a string of a list of tokens.
     '''
     tokenizer = WordTokenizer()
-    all_words = []
-    for words, classification in dataset:
-        # Words may either be a string or an iterable
+    # Words may be either a string or a list of tokens. Return an iterator
+    # of tokens accordingly
+    def tokenize(words):
         if isinstance(words, basestring):
-            all_words.extend(tokenizer.itokenize(words, include_punc=False))
+            return tokenizer.itokenize(words, include_punc=False)
         else:
-            all_words.extend(words)
+            return (w for w in words)
+    all_words = chain.from_iterable(tokenize(words) for words, _ in dataset)
     return set(all_words)
 
 
