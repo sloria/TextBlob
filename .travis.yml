@@ -9,6 +9,7 @@ before_install:
 # Install dependencies
 install:
     - "pip install -U ."
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install sphinx; fi
 # Run tests
 script:
     - "python run_tests.py"
