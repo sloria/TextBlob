@@ -16,17 +16,17 @@ from textblob.base import BaseSentimentAnalyzer, DISCRETE, CONTINUOUS
 class PatternAnalyzer(BaseSentimentAnalyzer):
 
     '''Sentiment analyzer that uses the same implementation as the
-    pattern library. Returns results as a tuple of the form:
+    pattern library. Returns results as a named tuple of the form:
 
     ``Sentiment(polarity, subjectivity)``
     '''
-
     kind = CONTINUOUS
+    #: Return type declaration
     RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
 
     def analyze(self, text):
-        """Return the sentiment as a tuple of the form:
-        ``(polarity, subjectivity)``
+        """Return the sentiment as a named tuple of the form:
+        ``Sentiment(polarity, subjectivity)``.
         """
         return self.RETURN_TYPE(*pattern_sentiment(text))
 
@@ -35,11 +35,11 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
 
     '''Naive Bayes analyzer that is trained on a dataset of movie reviews.
     Returns results as a named tuple of the form:
-
     ``Sentiment(classification, p_pos, p_neg)``
     '''
 
     kind = DISCRETE
+    #: Return type declaration
     RETURN_TYPE = namedtuple('Sentiment', ['classification', 'p_pos', 'p_neg'])
 
     def __init__(self):
@@ -63,17 +63,16 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         return dict([(word, True) for word in words])
 
     def analyze(self, text):
-        """Return the sentiment as a tuple of the form:
-        ``(classification, pos_probability, neg_probability)``
+        """Return the sentiment as a named tuple of the form:
+        ``Sentiment(classification, p_pos, p_neg)``
         """
         # Lazily train the classifier
         super(NaiveBayesAnalyzer, self).analyze(text)
         tokenizer = WordTokenizer()
-        tokens = tokenizer.tokenize(text, include_punc=False)
-        filtered = [t.lower() for t in tokens if len(t) >= 3]
+        tokens = tokenizer.itokenize(text, include_punc=False)
+        filtered = (t.lower() for t in tokens if len(t) >= 3)
         feats = self._extract_feats(filtered)
         prob_dist = self._classifier.prob_classify(feats)
-        # classification, p_pos, p_neg
         return self.RETURN_TYPE(
             classification=prob_dist.max(),
             p_pos=prob_dist.prob('pos'),
