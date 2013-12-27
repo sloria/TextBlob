@@ -176,7 +176,8 @@ class NLTKClassifier(BaseClassifier):
 
     """
 
-    nltk_class = None  # This must be a class within nltk.classify
+    #: The NLTK class to be wrapped. Must be a class within nltk.classify
+    nltk_class = None
 
     def __init__(self, train_set,
                  feature_extractor=basic_extractor, format=None):
@@ -416,6 +417,7 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
                         .format(cls=class_name, n_pos=len(self.positive_set),
                                 n_unlabeled=len(self.unlabeled_set))
 
+    # Override
     def train(self, *args, **kwargs):
         '''Train the classifier with a labeled and unlabeled feature sets and return
         the classifier. Takes the same arguments as the wrapped NLTK class.
@@ -453,3 +455,27 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
                                                 self.positive_prob_prior,
                                                 *args, **kwargs)
         return True
+
+
+class MaxEntClassifier(NLTKClassifier):
+    __doc__ = nltk.classify.maxent.MaxentClassifier.__doc__
+    nltk_class = nltk.classify.maxent.MaxentClassifier
+
+    def prob_classify(self, text):
+        '''Return the label probability distribution for classifying a string
+        of text.
+
+        Example:
+        ::
+
+            >>> classifier = MaxEntClassifier(train_data)
+            >>> prob_dist = classifier.prob_classify("I feel happy this morning.")
+            >>> prob_dist.max()
+            'positive'
+            >>> prob_dist.prob("positive")
+            0.7
+
+        :rtype: nltk.probability.DictionaryProbDist
+        '''
+        feats = self.extract_features(text)
+        return self.classifier.prob_classify(feats)

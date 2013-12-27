@@ -16,8 +16,6 @@ def is_generator(obj):
 
 class TestWordTokenizer(unittest.TestCase):
 
-    '''An example unit test case.'''
-
     def setUp(self):
         self.tokenizer = WordTokenizer()
         self.text = "Python is a high-level programming language."

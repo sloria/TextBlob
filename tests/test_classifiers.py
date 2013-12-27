@@ -7,7 +7,8 @@ from textblob.packages import nltk
 from textblob.tokenizers import WordTokenizer
 from textblob.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
                               basic_extractor, contains_extractor, NLTKClassifier,
-                              PositiveNaiveBayesClassifier, _get_words_from_dataset)
+                              PositiveNaiveBayesClassifier, _get_words_from_dataset,
+                              MaxEntClassifier)
 from textblob.compat import unicode
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -199,6 +200,24 @@ class TestDecisionTreeClassifier(unittest.TestCase):
     def test_repr(self):
         assert_equal(repr(self.classifier),
             "<DecisionTreeClassifier trained on {0} instances>".format(len(train_set)))
+
+
+@attr('slow')
+class TestMaxEntClassifier(unittest.TestCase):
+
+    def setUp(self):
+        self.classifier = MaxEntClassifier(train_set)
+
+    def test_classify(self):
+        res = self.classifier.classify("I feel happy this morning")
+        assert_equal(res, 'positive')
+        assert_equal(len(self.classifier.train_set), len(train_set))
+
+    def test_prob_classify(self):
+        res = self.classifier.prob_classify("I feel happy this morning")
+        assert_equal(res.max(), 'positive')
+        assert_true(res.prob("positive") > res.prob("negative"))
+
 
 
 class TestPositiveNaiveBayesClassifier(unittest.TestCase):
