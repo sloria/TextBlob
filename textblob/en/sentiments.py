@@ -8,7 +8,7 @@ from collections import namedtuple
 
 from textblob.packages import nltk
 from textblob.en import sentiment as pattern_sentiment
-from textblob.tokenizers import WordTokenizer
+from textblob.tokenizers import word_tokenize
 from textblob.decorators import requires_nltk_corpus
 from textblob.base import BaseSentimentAnalyzer, DISCRETE, CONTINUOUS
 
@@ -68,8 +68,7 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
         """
         # Lazily train the classifier
         super(NaiveBayesAnalyzer, self).analyze(text)
-        tokenizer = WordTokenizer()
-        tokens = tokenizer.itokenize(text, include_punc=False)
+        tokens = word_tokenize(text, include_punc=False)
         filtered = (t.lower() for t in tokens if len(t) >= 3)
         feats = self._extract_feats(filtered)
         prob_dist = self._classifier.prob_classify(feats)
