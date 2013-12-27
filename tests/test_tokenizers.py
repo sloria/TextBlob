@@ -4,6 +4,15 @@ from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
 
 from textblob.tokenizers import WordTokenizer, SentenceTokenizer, word_tokenize, sent_tokenize
+from textblob.compat import PY2
+
+
+def is_generator(obj):
+    if PY2:
+        return hasattr(obj, 'next')
+    else:
+        return hasattr(obj, '__next__')
+
 
 class TestWordTokenizer(unittest.TestCase):
 
@@ -33,7 +42,7 @@ class TestWordTokenizer(unittest.TestCase):
 
     def test_word_tokenize(self):
         tokens = word_tokenize(self.text)
-        assert_true(hasattr(tokens, 'next'))  # It's a generator
+        assert_true(is_generator(tokens))
         assert_equal(list(tokens), self.tokenizer.tokenize(self.text))
 
 
@@ -65,7 +74,7 @@ class TestSentenceTokenizer(unittest.TestCase):
 
     def test_sent_tokenize(self):
         tokens = sent_tokenize(self.text)
-        assert_true(hasattr(tokens, 'next'))  # It's a generator
+        assert_true(is_generator(tokens))  # It's a generator
         assert_equal(list(tokens), self.tokenizer.tokenize(self.text))
 
 if __name__ == '__main__':

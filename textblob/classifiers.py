@@ -103,9 +103,9 @@ class BaseClassifier(object):
     :param train_set: The training set, either a list of tuples of the form
         ``(text, classification)`` or a filename. ``text`` may be either
         a string or an iterable.
-    :param feature_extractor: A feature extractor function that takes one or
+    :param function feature_extractor: A feature extractor function that takes one or
         two arguments: ``document`` and ``train_set``.
-    :param format: If ``train_set`` is a filename, the file format, e.g.
+    :param str format: If ``train_set`` is a filename, the file format, e.g.
         ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
         file format.
 
@@ -155,6 +155,7 @@ class BaseClassifier(object):
 
         :rtype: dictionary of features
         '''
+        # Feature extractor may take 1 or two arguments
         try:
             return self.feature_extractor(text, self.train_set)
         except (TypeError, AttributeError):
@@ -222,7 +223,7 @@ class NLTKClassifier(BaseClassifier):
     def classify(self, text):
         '''Classifies the text.
 
-        :param text: A string of text.
+        :param str text: A string of text.
         '''
         text_features = self.extract_features(text)
         return self.classifier.classify(text_features)
