@@ -4,6 +4,7 @@
 .. versionadded:: 0.4.0
 '''
 from __future__ import absolute_import
+from itertools import chain
 
 from textblob.packages import nltk
 from textblob.utils import strip_punc
@@ -43,6 +44,7 @@ class WordTokenizer(BaseTokenizer):
                     for word in tokens if strip_punc(word, all=False)]
 
 
+
 class SentenceTokenizer(BaseTokenizer):
 
     '''NLTK's sentence tokenizer (currently PunkSentenceTokenizer).
@@ -55,3 +57,19 @@ class SentenceTokenizer(BaseTokenizer):
     def tokenize(self, text):
         '''Return a list of sentences.'''
         return nltk.tokenize.sent_tokenize(text)
+
+#: Convenience function for tokenizing sentences
+sent_tokenize = SentenceTokenizer().itokenize
+
+_word_tokenizer = WordTokenizer()  # Singleton word tokenizer
+def word_tokenize(text, include_punc=True, *args, **kwargs):
+    """Convenience function for tokenizing text into words.
+
+    NOTE: NLTK's word tokenizer expects sentences as input, so the text will be
+    tokenized to sentences before being tokenized to words.
+    """
+    words = chain.from_iterable(
+        _word_tokenizer.itokenize(sentence, include_punc=include_punc,
+                                *args, **kwargs)
+        for sentence in sent_tokenize(text))
+    return words

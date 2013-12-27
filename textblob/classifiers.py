@@ -35,7 +35,7 @@ from __future__ import absolute_import
 from itertools import chain
 
 from textblob.packages import nltk
-from textblob.tokenizers import WordTokenizer
+from textblob.tokenizers import word_tokenize
 from textblob.compat import basestring
 import textblob.formats as formats
 from textblob.utils import strip_punc
@@ -50,12 +50,11 @@ def _get_words_from_dataset(dataset):
     :param dataset: A list of tuples of the form ``(words, label)`` where
         ``words`` is either a string of a list of tokens.
     '''
-    tokenizer = WordTokenizer()
     # Words may be either a string or a list of tokens. Return an iterator
     # of tokens accordingly
     def tokenize(words):
         if isinstance(words, basestring):
-            return tokenizer.itokenize(words, include_punc=False)
+            return word_tokenize(words, include_punc=False)
         else:
             return (w for w in words)
     all_words = chain.from_iterable(tokenize(words) for words, _ in dataset)
@@ -70,11 +69,10 @@ def basic_extractor(document, train_set):
     :param train_set: Training data set, a list of tuples of the form
         ``(words, label)``.
     '''
-    tokenizer = WordTokenizer()
     word_features = _get_words_from_dataset(train_set)
     if isinstance(document, basestring):
         tokens = set((strip_punc(w, all=False)
-                    for w in tokenizer.itokenize(document, include_punc=False)))
+                    for w in word_tokenize(document, include_punc=False)))
     else:
         tokens = set(strip_punc(w, all=False) for w in document)
     features = dict(((u'contains({0})'.format(word), (word in tokens))
@@ -86,10 +84,9 @@ def contains_extractor(document):
     '''A basic document feature extractor that returns a dict of words that
     the document contains.
     '''
-    tokenizer = WordTokenizer()
     if isinstance(document, basestring):
         tokens = set([strip_punc(w, all=False)
-                    for w in tokenizer.itokenize(document, include_punc=False)])
+                    for w in word_tokenize(document, include_punc=False)])
     else:
         tokens = set((strip_punc(w, all=False) for w in document))
     features = dict((u'contains({0})'.format(w), True) for w in tokens)

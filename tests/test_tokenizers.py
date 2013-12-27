@@ -3,7 +3,7 @@ import unittest
 from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
 
-from textblob.tokenizers import WordTokenizer, SentenceTokenizer
+from textblob.tokenizers import WordTokenizer, SentenceTokenizer, word_tokenize, sent_tokenize
 
 class TestWordTokenizer(unittest.TestCase):
 
@@ -31,6 +31,11 @@ class TestWordTokenizer(unittest.TestCase):
         assert_equal(next(gen), "Python")
         assert_equal(next(gen), "is")
 
+    def test_word_tokenize(self):
+        tokens = word_tokenize(self.text)
+        assert_true(hasattr(tokens, 'next'))  # It's a generator
+        assert_equal(list(tokens), self.tokenizer.tokenize(self.text))
+
 
 class TestSentenceTokenizer(unittest.TestCase):
 
@@ -57,6 +62,11 @@ class TestSentenceTokenizer(unittest.TestCase):
         gen = self.tokenizer.itokenize(self.text)
         assert_equal(next(gen), "Beautiful is better than ugly.")
         assert_equal(next(gen), "Simple is better than complex.")
+
+    def test_sent_tokenize(self):
+        tokens = sent_tokenize(self.text)
+        assert_true(hasattr(tokens, 'next'))  # It's a generator
+        assert_equal(list(tokens), self.tokenizer.tokenize(self.text))
 
 if __name__ == '__main__':
     unittest.main()

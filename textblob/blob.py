@@ -36,7 +36,7 @@ from textblob.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
                        BaseSentimentAnalyzer, BaseParser)
 from textblob.np_extractors import FastNPExtractor
 from textblob.taggers import PatternTagger
-from textblob.tokenizers import WordTokenizer, SentenceTokenizer
+from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
 from textblob.sentiments import PatternAnalyzer
 from textblob.parsers import PatternParser
 from textblob.translate import Translator
@@ -368,7 +368,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         If you want to include punctuation characters, access the ``tokens``
         property.
         '''
-        return WordList(WordTokenizer().itokenize(self.raw, include_punc=False))
+        return WordList(word_tokenize(self.raw, include_punc=False))
 
     @cached_property
     def tokens(self):
@@ -612,12 +612,7 @@ class TextBlob(BaseBlob):
         If you want to include punctuation characters, access the ``tokens``
         property.
         '''
-        # NLTK's word tokenizer expects sentences as input, so tokenize the
-        # blob into sentences before tokenizing to words
-        tok = WordTokenizer()
-        words = chain.from_iterable(tok.itokenize(sent.raw, include_punc=False)
-                                    for sent in self.sentences)
-        return WordList(words)
+        return WordList(word_tokenize(self.raw, include_punc=False))
 
     @property
     def raw_sentences(self):
@@ -650,9 +645,8 @@ class TextBlob(BaseBlob):
     def _create_sentence_objects(self):
         '''Returns a list of Sentence objects from the raw text.
         '''
-        sent_tokenizer = SentenceTokenizer()
         sentence_objects = []
-        sentences = sent_tokenizer.itokenize(self.raw)
+        sentences = sent_tokenize(self.raw)
         char_index = 0  # Keeps track of character index within the blob
         for sent in sentences:
             # Compute the start and end indices of the sentence
