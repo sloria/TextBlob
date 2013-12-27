@@ -104,7 +104,7 @@ Words can be lemmatized by calling the ``lemmatize`` method.
     >>> w.lemmatize()
     u'octopus'
     >>> w = Word("went")
-    >>> w.lemmatize("v")
+    >>> w.lemmatize("v")  # Pass in part of speech (verb)
     u'go'
 
 WordNet Integration

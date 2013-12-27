@@ -7,6 +7,7 @@ Changelog
 - Memory usage improvements to NaiveBayesAnalyzer and basic_extractor (default feature extractor for classifiers module).
 - Add ``textblob.tokenizers.sent_tokenize`` and ``textblob.tokenizers.word_tokenize`` convenience functions.
 - Add ``textblob.classifiers.MaxEntClassifer``.
+- Improved NLTKTagger.
 
 0.8.2 (2013-12-21)
 ------------------

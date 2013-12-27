@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from textblob.packages import nltk
 from textblob.en import tag as pattern_tag
 from textblob.decorators import requires_nltk_corpus
+from textblob.tokenizers import word_tokenize
 from textblob.exceptions import DeprecationError
 from textblob.base import BaseTagger
 
@@ -16,9 +17,9 @@ class PatternTagger(BaseTagger):
     (http://www.clips.ua.ac.be/pattern).
     '''
 
-    def tag(self, sentence, tokenize=True):
-        '''Tag a string `sentence`.'''
-        return pattern_tag(sentence, tokenize)
+    def tag(self, text, tokenize=True):
+        '''Tag a string `text`.'''
+        return pattern_tag(text, tokenize)
 
 
 class NLTKTagger(BaseTagger):
@@ -28,11 +29,11 @@ class NLTKTagger(BaseTagger):
     '''
 
     @requires_nltk_corpus
-    def tag(self, sentence, tokenize=True):
-        '''Tag a string `sentence`.'''
+    def tag(self, text, tokenize=True):
+        '''Tag a string `text`.'''
         if tokenize:
-            sentence = nltk.tokenize.word_tokenize(sentence)
-        tagged = nltk.tag.pos_tag(sentence)
+            text = list(word_tokenize(text))
+        tagged = nltk.tag.pos_tag(text)
         return tagged
 
 

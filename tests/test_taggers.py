@@ -48,7 +48,7 @@ class TestNLTKTagger(unittest.TestCase):
         assert_equal(tags,
             [('Simple', 'NNP'), ('is', 'VBZ'),
             ('better', 'JJR'), ('than', 'IN'),
-            ('complex.', 'NNP'), ('Complex', 'NNP'),
+            ('complex', 'JJ'), ('.', '.'), ('Complex', 'NNP'),
             ('is', 'VBZ'), ('better', 'JJR'),
             ('than', 'IN'), ('complicated', 'JJ'), ('.', '.')])
 
