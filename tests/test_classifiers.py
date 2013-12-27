@@ -201,7 +201,7 @@ class TestDecisionTreeClassifier(unittest.TestCase):
         assert_equal(repr(self.classifier),
             "<DecisionTreeClassifier trained on {0} instances>".format(len(train_set)))
 
-
+@attr('requires_numpy')
 @attr('slow')
 class TestMaxEntClassifier(unittest.TestCase):
 
