@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.8.3 (unreleased)
+0.8.3 (2013-12-29)
 ------------------
 - Sentiment analyzers return namedtuples, e.g. ``Sentiment(polarity=0.12, subjectivity=0.34)``.
 - Memory usage improvements to NaiveBayesAnalyzer and basic_extractor (default feature extractor for classifiers module).

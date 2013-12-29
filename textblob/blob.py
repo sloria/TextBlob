@@ -24,7 +24,6 @@ from __future__ import unicode_literals, absolute_import
 import sys
 import json
 from collections import defaultdict
-from itertools import chain
 
 from textblob.packages import nltk
 from textblob.decorators import cached_property, requires_nltk_corpus
