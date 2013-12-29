@@ -2,6 +2,7 @@
 '''Custom decorators.'''
 
 from __future__ import absolute_import
+from functools import wraps
 from textblob.exceptions import MissingCorpusException
 
 
@@ -28,6 +29,7 @@ def requires_nltk_corpus(func):
     '''Wraps a function that requires an NLTK corpus. If the corpus isn't found,
     raise a MissingCorpusException.
     '''
+    @wraps(func)
     def decorated(*args, **kwargs):
         try:
             return func(*args, **kwargs)
