@@ -76,6 +76,13 @@ class WordListTest(TestCase):
         else:
             assert_equal(repr(wl), "WordList(['Beautiful', 'is', 'better'])")
 
+    def test_slice_repr(self):
+        wl = tb.WordList(['Beautiful', 'is', 'better'])
+        if PY2:
+            assert_equal(repr(wl[:2]), "WordList([u'Beautiful', u'is'])")
+        else:
+            assert_equal(repr(wl[:2]), "WordList(['Beautiful', 'is'])")
+
     def test_str(self):
         wl = tb.WordList(self.words)
         assert_equal(str(wl), str(self.words))

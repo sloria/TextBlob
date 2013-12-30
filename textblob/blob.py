@@ -209,14 +209,7 @@ class WordList(list):
     def __repr__(self):
         '''Returns a string representation for debugging.'''
         class_name = self.__class__.__name__
-        # String representation of words
-        strings = [unicode(w) for w in self._collection]
-        if len(self) > 60:
-            return '{cls}({beginning}...{end})'.format(cls=class_name,
-                                                beginning=strings[:3],
-                                                end=strings[-3:])
-        else:
-            return '{cls}({lst})'.format(cls=class_name, lst=strings)
+        return '{cls}({lst})'.format(cls=class_name, lst=repr(self._collection))
 
     def __getitem__(self, key):
         '''Returns a string at the given index.'''

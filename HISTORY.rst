@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.8.4 (unreleased)
+------------------
+- Fix display (``__repr__``) of WordList slices on Python 3.
+
 0.8.3 (2013-12-29)
 ------------------
 - Sentiment analyzers return namedtuples, e.g. ``Sentiment(polarity=0.12, subjectivity=0.34)``.
