@@ -38,7 +38,7 @@ Similarly, noun phrases are accessed through the ``noun_phrases`` property.
 .. doctest::
 
     >>> wiki.noun_phrases
-    WordList([u'python'])
+    WordList(['python'])
 
 Sentiment Analysis
 ------------------
@@ -65,7 +65,7 @@ You can break TextBlobs into words or sentences.
     ...                "Explicit is better than implicit. "
     ...                "Simple is better than complex.")
     >>> zen.words
-    WordList([u'Beautiful', u'is', u'better', u'than', u'ugly', u'Explicit', u'is', u'better', u'than', u'implicit', u'Simple', u'is', u'better', u'than', u'complex'])
+    WordList(['Beautiful', 'is', 'better', 'than', 'ugly', 'Explicit', 'is', 'better', 'than', 'implicit', 'Simple', 'is', 'better', 'than', 'complex'])
     >>> zen.sentences
     [Sentence("Beautiful is better than ugly."), Sentence("Explicit is better than implicit."), Sentence("Simple is better than complex.")]
 
@@ -89,7 +89,7 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
 
     >>> sentence = TextBlob('Use 4 spaces per indentation level.')
     >>> sentence.words
-    WordList([u'Use', u'4', u'spaces', u'per', u'indentation', u'level'])
+    WordList(['Use', '4', 'spaces', 'per', 'indentation', 'level'])
     >>> sentence.words[2].singularize()
     'space'
     >>> sentence.words[-1].pluralize()
@@ -150,9 +150,9 @@ A :class:`WordList <textblob.WordList>` is just a Python list with additional me
 
     >>> animals = TextBlob("cat dog octopus")
     >>> animals.words
-    WordList([u'cat', u'dog', u'octopus'])
+    WordList(['cat', 'dog', 'octopus'])
     >>> animals.words.pluralize()
-    WordList([u'cats', u'dogs', u'octopodes'])
+    WordList(['cats', 'dogs', 'octopodes'])
 
 Spelling Correction
 -------------------
@@ -302,8 +302,7 @@ The ``TextBlob.ngrams()`` method returns a list of tuples of `n` successive word
 
     >>> blob = TextBlob("Now is better than never.")
     >>> blob.ngrams(n=3)
-    [WordList([u'Now', u'is', u'better']), WordList([u'is', u'better', u'than']), WordList([u'better', u'than', u'never'])]
-
+    [WordList(['Now', 'is', 'better']), WordList(['is', 'better', 'than']), WordList(['better', 'than', 'never'])]
 
 
 Get Start and End Indices of Sentences
