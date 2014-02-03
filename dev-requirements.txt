@@ -4,3 +4,4 @@ sphinx
 PyYAML
 wheel
 invoke
+mock

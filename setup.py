@@ -122,6 +122,6 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
         "Topic :: Text Processing :: Linguistic",
     ),
-    tests_require=['nose'],
+    tests_require=['nose', 'mock'],
     keywords=["textblob", "nlp", 'linguistics', 'nltk', 'pattern']
 )
