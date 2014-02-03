@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.8.4 (unreleased)
+0.8.4 (2014-02-02)
 ------------------
 - Fix display (``__repr__``) of WordList slices on Python 3.
 - Add download_corpora module. Corpora must now be downloaded using ``python -m textblob.download_corpora``.
