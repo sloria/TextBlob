@@ -66,7 +66,7 @@ Get it now
 ::
 
     $ pip install -U textblob
-    $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
+    $ python -m textblob.download_corpora
 
 Ready to dive in? Go on to the :ref:`Quickstart guide <quickstart>`.
 

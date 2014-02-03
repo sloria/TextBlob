@@ -8,23 +8,16 @@ Installing/Upgrading From the PyPI
 ::
 
     $ pip install -U textblob
-    $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora.py | python
+    $ python -m textblob.download_corpora
 
 This will install TextBlob and download the necessary NLTK corpora.
 
 .. admonition:: Downloading the minimum corpora
 
-    If you only intend to use TextBlob's default models (no model overrides), then you can use the ``download_corpora_lite.py`` script instead. This downloads only those corpora needed for basic functionality.
+    If you only intend to use TextBlob's default models (no model overrides), you can pass the ``lite`` argument. This downloads only those corpora needed for basic functionality.
     ::
 
-        $ curl https://raw.github.com/sloria/TextBlob/master/download_corpora_lite.py | python
-
-.. admonition:: If you don't have pip
-
-    If you don't have ``pip`` (you should), run this first: ::
-
-        $ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
-
+        $ python -m textblob.download_corpora lite
 
 From Source
 -----------
@@ -93,6 +86,10 @@ Dependencies
 ++++++++++++
 
 PyYAML is TextBlob's only external dependency. It will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``. A vendorized version of NLTK_ is bundled internally.
+
+.. note::
+
+    If you already have NLTK installed, TextBlob will use your local version instead of the bundled version.
 
 Some features, such as the maximum entropy classifier, require `numpy`_, but it is not required for basic usage.
 
