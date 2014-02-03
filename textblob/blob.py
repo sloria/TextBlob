@@ -275,17 +275,17 @@ class WordList(list):
 
 
 def _validated_param(obj, name, base_class, default, base_class_name=None):
-    '''Validates a parameter passed to __init__. Makes sure that obj is
+    """Validates a parameter passed to __init__. Makes sure that obj is
     the correct class. Return obj if it's not None or falls back to default
 
     :param obj: The object passed in.
     :param name: The name of the parameter.
     :param base_class: The class that obj must inherit from.
     :param default: The default object to fall back upon if obj is None.
-    '''
+    """
     base_class_name = base_class_name if base_class_name else base_class.__name__
     if obj is not None and not isinstance(obj, base_class):
-        raise ValueError("{name} must be an instance of {cls}"
+        raise ValueError('{name} must be an instance of {cls}'
                          .format(name=name, cls=base_class_name))
     return obj or default
 
