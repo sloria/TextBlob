@@ -9,7 +9,7 @@ before_install:
     - "tar -xzvf nltk_data.tar.gz -C ~"
 # Install dependencies
 install:
-    - "pip install numpy"
+    - if [[ $TRAVIS_PYTHON_VERSION != 'pypy' ]]; then pip install numpy; fi
     - "pip install -U ."
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install sphinx; fi
 # Run tests
