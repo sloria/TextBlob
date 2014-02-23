@@ -3,7 +3,8 @@ Changelog
 
 0.9.0 (unreleased)
 ------------------
-- *Backwards-incompatible*: Completely deprecate ``import text.blob``.
+- *Backwards-incompatible*: Completely deprecate ``import text.blob``. You should ``import textblob`` instead.
+- *Backwards-incompatible*: Completely deprecate ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
 - Improved docs.
 
 

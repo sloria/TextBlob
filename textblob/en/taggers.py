@@ -6,7 +6,6 @@ from textblob.packages import nltk
 from textblob.en import tag as pattern_tag
 from textblob.decorators import requires_nltk_corpus
 from textblob.tokenizers import word_tokenize
-from textblob.exceptions import DeprecationError
 from textblob.base import BaseTagger
 
 
@@ -35,25 +34,3 @@ class NLTKTagger(BaseTagger):
             text = list(word_tokenize(text))
         tagged = nltk.tag.pos_tag(text)
         return tagged
-
-
-class PerceptronTagger(BaseTagger):
-
-    '''Greedy Averaged Perceptron tagger, as implemented by Matthew Honnibal.
-    Requires that ``trontagger.pickle`` exists in the text/en package directory.
-    The pickle file can be obtained from the Github Releases page for TextBlob.
-
-    .. note::
-        This class is deprecated as of version ``0.7.0``. It is now maintained
-        as a TextBlob extension, ``textblob-aptagger``.
-
-    .. deprecated:: 0.7.0
-        Install the ``textblob-aptagger`` extension instead.
-    '''
-
-    def __init__(self, load=True):
-        raise DeprecationError("PerceptronTagger is deprecated. Use "
-                        " the textblob-aptagger extension instead")
-
-    def tag(self, sentence, tokenize=True):
-        pass

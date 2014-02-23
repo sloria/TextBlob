@@ -5,7 +5,6 @@ import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
-from textblob.exceptions import DeprecationError
 from textblob.base import BaseTagger
 import textblob.taggers
 
@@ -53,19 +52,10 @@ class TestNLTKTagger(unittest.TestCase):
             ('than', 'IN'), ('complicated', 'JJ'), ('.', '.')])
 
 
-class TestPerceptronTagger(unittest.TestCase):
-
-    def test_init_raises_deprecation_error(self):
-        assert_raises(DeprecationError,
-            lambda: textblob.taggers.PerceptronTagger(load=False))
-
-
-class BadTagger(BaseTagger):
-    '''A tagger without a tag method. How useless.'''
-    pass
-
-
 def test_cannot_instantiate_incomplete_tagger():
+    class BadTagger(BaseTagger):
+        '''A tagger without a tag method. How useless.'''
+        pass
     assert_raises(TypeError, lambda: BadTagger())
 
 if __name__ == '__main__':
