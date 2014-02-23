@@ -3,6 +3,8 @@ Changelog
 
 0.9.0 (unreleased)
 ------------------
+- *Backwards-incompatible*: Completely deprecate ``import text.blob``.
+- Improved docs.
 
 
 0.8.4 (2014-02-02)
