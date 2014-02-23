@@ -28,23 +28,14 @@ Questions, Feature Requests, Bug Reports, and Feedback. . .
 Setting Up for Local Development
 ++++++++++++++++++++++++++++++++
 
-1. Fork TextBlob_ on Github.
-2. Clone your fork::
+1. Fork TextBlob_ on Github. ::
 
-    $ git clone git@github.com/yourusername/textblob.git
+    $ git clone https://github.com/sloria/TextBlob.git
+    $ cd TextBlob
 
-3. It is recommended that you use virtualenv to keep your environment clean. If you have `virtualenv`_  and `virtualenvwrapper`_, run ::
-
-    $ mkvirtualenv textblob
-    $ cd textblob
-    $ workon textblob
-
-4. Install the development requirements. ::
+3. Install development requirements. ::
 
     $ pip install -r dev-requirements.txt
-
-.. _virtualenv: http://www.virtualenv.org/en/latest/
-.. _virtualenvwrapper: http://virtualenvwrapper.readthedocs.org/en/latest/
 
 .. _extension-development:
 

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.9.0 (unreleased)
+------------------
+
+
 0.8.4 (2014-02-02)
 ------------------
 - Fix display (``__repr__``) of WordList slices on Python 3.
