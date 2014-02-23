@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-import os
 import re
-import subprocess
 
 from setuptools import setup, find_packages
+
+REQUIREMENTS = ['PyYAML']
+TEST_REQUIREMENTS = ['nose', 'mock']
+
 
 def find_version(fname):
     '''Attempts to find the version number in the file names fname.
@@ -25,37 +26,6 @@ def find_version(fname):
 
 __version__ = find_version("textblob/__init__.py")
 
-PUBLISH_CMD = "python setup.py register sdist bdist_wheel upload"
-TEST_PUBLISH_CMD = 'python setup.py register -r test sdist bdist_wheel upload -r test'
-TEST_CMD = 'python run_tests.py'
-
-if 'publish' in sys.argv:
-    try:
-        __import__('wheel')
-    except ImportError:
-        print("wheel required. Run `pip install wheel`.")
-        sys.exit(1)
-    status = subprocess.call(PUBLISH_CMD, shell=True)
-    sys.exit(status)
-
-if 'publish_test' in sys.argv:
-    try:
-        __import__('wheel')
-    except ImportError:
-        print("wheel required. Run `pip install wheel`.")
-        sys.exit(1)
-    status = subprocess.call(TEST_PUBLISH_CMD, shell=True)
-    sys.exit()
-
-if 'run_tests' in sys.argv:
-    try:
-        __import__('nose')
-    except ImportError:
-        print('nose required. Run `pip install nose`.')
-        sys.exit(1)
-
-    status = subprocess.call(TEST_CMD, shell=True)
-    sys.exit(status)
 
 def read(fname):
     with open(fname) as fp:
@@ -73,7 +43,7 @@ setup(
     author='Steven Loria',
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
-    install_requires=['PyYAML'],
+    install_requires=REQUIREMENTS,
     packages=find_packages(exclude=('test*', 'textblob.nltk.test')),
     include_package_data=True,
     package_data={
@@ -92,6 +62,6 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
         "Topic :: Text Processing :: Linguistic",
     ),
-    tests_require=['nose', 'mock'],
+    tests_require=TEST_REQUIREMENTS,
     keywords=["textblob", "nlp", 'linguistics', 'nltk', 'pattern']
 )

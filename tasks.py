@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
+import sys
 from invoke import task, run
 
 docs_dir = 'docs'
@@ -49,3 +52,16 @@ def readme():
 def doctest():
     os.chdir(docs_dir)
     run("make doctest")
+
+@task
+def publish(test=False):
+    """Publish to the cheeseshop."""
+    try:
+        __import__('wheel')
+    except ImportError:
+        print("wheel required. Run `pip install wheel`.")
+        sys.exit(1)
+    if test:
+        run('python setup.py register -r test sdist bdist_wheel upload -r test')
+    else:
+        run("python setup.py register sdist bdist_wheel upload")

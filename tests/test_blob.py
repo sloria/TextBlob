@@ -6,7 +6,6 @@ from __future__ import unicode_literals
 import json
 from unittest import TestCase, main
 from datetime import datetime
-import warnings
 
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
