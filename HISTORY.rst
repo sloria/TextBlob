@@ -3,9 +3,11 @@ Changelog
 
 0.9.0 (unreleased)
 ------------------
+
 - *Backwards-incompatible*: Completely deprecate ``import text.blob``. You should ``import textblob`` instead.
 - *Backwards-incompatible*: Completely deprecate ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
 - Improved docs.
+- Tested on Python 3.4.
 
 
 0.8.4 (2014-02-02)
