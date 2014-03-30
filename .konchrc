@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+import konch
+from textblob import TextBlob, Blobber
+
+konch.config({
+    'context': {
+        'tb': TextBlob,
+        'Blobber': Blobber
+    },
+    'prompt': '>>> ',
+})

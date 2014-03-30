@@ -85,4 +85,4 @@ class Translator(object):
         return content.decode('utf-8')
 
     def _unescape(self, text):
-        return re.sub(r"\\.?", lambda x:eval('"%s"'%x.group(0)), text)
+        return re.sub(r"\\.?", lambda x: eval('"%s"' % x.group(0)), text)
