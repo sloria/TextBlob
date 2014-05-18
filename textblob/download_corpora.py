@@ -31,13 +31,11 @@ ALL_CORPORA = MIN_CORPORA + ADDITIONAL_CORPORA
 
 def download_lite():
     for each in MIN_CORPORA:
-        print('Downloading "{0}"'.format(each))
         nltk.download(each)
 
 
 def download_all():
     for each in ALL_CORPORA:
-        print('Downloading "{0}"'.format(each))
         nltk.download(each)
 
 
