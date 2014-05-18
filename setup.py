@@ -106,6 +106,7 @@ setup(
     install_requires=['PyYAML'],
     packages=find_packages(exclude=('test*', 'textblob.nltk.test')),
     include_package_data=True,
+    zip_safe=False,
     package_data={
         "textblob.en": ["*.txt", "*.xml"]
     },
