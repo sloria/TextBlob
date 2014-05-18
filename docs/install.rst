@@ -19,6 +19,15 @@ This will install TextBlob and download the necessary NLTK corpora.
 
         $ python -m textblob.download_corpora lite
 
+With conda
+----------
+
+TextBlob is also available as a `conda <http://conda.pydata.org/>`_ package. To install with ``conda``, run ::
+
+    $ conda config --add channels https://conda.binstar.org/sloria
+    $ conda install textblob
+    $ python -m textblob.download_corpora
+
 From Source
 -----------
 
