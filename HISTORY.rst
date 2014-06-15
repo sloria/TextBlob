@@ -4,6 +4,7 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Fix bug that raised a `SyntaxError` when translating text with non-ascii characters on Python 3.
 - *Backwards-incompatible*: Completely deprecate ``import text.blob``. You should ``import textblob`` instead.
 - *Backwards-incompatible*: Completely deprecate ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
 - Improved docs.

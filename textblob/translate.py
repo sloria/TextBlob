@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Translator module that uses the Google Translate API.
 
 Adapted from Terry Yin's google-translate-python.
 Language detection added by Steven Loria.
-'''
+"""
 from __future__ import absolute_import
 import re
 from textblob.compat import PY2, request, urlencode
@@ -12,7 +12,7 @@ from textblob.compat import PY2, request, urlencode
 
 class Translator(object):
 
-    '''A language translator and detector.
+    """A language translator and detector.
 
     Usage:
     ::
@@ -22,7 +22,7 @@ class Translator(object):
         u'bonjour'
         >>> t.detect("hola")
         u'es'
-    '''
+    """
 
     string_pattern = r"\"(([^\"\\]|\\.)*)\""
     translation_pattern = re.compile(
@@ -31,9 +31,9 @@ class Translator(object):
                            + string_pattern + r"\,"
                            + string_pattern + r"\,"
                            + string_pattern
-                        +r"\]")
+                        + r"\]")
     detection_pattern = re.compile(
-            r".*?\,\"([a-z]{2}(\-\w{2})?)\"\,.*?", flags=re.S)
+        r".*?\,\"([a-z]{2}(\-\w{2})?)\"\,.*?", flags=re.S)
 
     url = "http://translate.google.com/translate_a/t"
 
@@ -41,7 +41,7 @@ class Translator(object):
             'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19')}
 
     def translate(self, source, from_lang='en', to_lang='en', host=None, type_=None):
-        '''Translate the source text from one language to another.'''
+        """Translate the source text from one language to another."""
         if PY2:
             source = source.encode('utf-8')
         data = {"client": "t", "ie": "UTF-8", "oe": "UTF-8",
@@ -50,7 +50,7 @@ class Translator(object):
         return self._get_translation_from_json5(json5)
 
     def detect(self, source, host=None, type_=None):
-        '''Detect the source text's language.'''
+        """Detect the source text's language."""
         if PY2:
             source = source.encode('utf-8')
         data = {"client": "t", "ie": "UTF-8", "oe": "UTF-8", "text": source}
@@ -65,7 +65,7 @@ class Translator(object):
         return match.group(1)
 
     def _get_translation_from_json5(self, content):
-        result = ""
+        result = u""
         pos = 2
         while True:
             m = self.translation_pattern.match(content, pos)
@@ -76,13 +76,13 @@ class Translator(object):
         return self._unescape(result)
 
     def _get_json5(self, url, host=None, type_=None, data=None):
-        encoded_data = urlencode(data).encode("utf-8")
+        encoded_data = urlencode(data).encode('utf-8')
         req = request.Request(url=url, headers=self.headers, data=encoded_data)
         if host or type_:
             req.set_proxy(host=host, type=type_)
-        r = request.urlopen(req)
-        content = r.read()
+        resp = request.urlopen(req)
+        content = resp.read()
         return content.decode('utf-8')
 
     def _unescape(self, text):
-        return re.sub(r"\\.?", lambda x: eval('"%s"' % x.group(0)), text)
+        return re.sub("\\.?", lambda x: eval('"%s"' % x.group(0)), text)
