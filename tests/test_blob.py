@@ -871,7 +871,7 @@ class WordTest(TestCase):
 
     @attr('requires_internet')
     def test_translate_without_from_lang(self):
-        assert_equal(tb.Word('hola').translate(), tb.Word('hi there'))
+        assert_true(tb.Word('hola').translate() in (tb.Word('hello'), tb.Word('hi there')))
 
     @attr('requires_internet')
     def test_detect_language(self):
