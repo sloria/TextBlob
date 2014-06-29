@@ -74,7 +74,7 @@ class Translator(object):
                 break
             result += m.group(1)
             pos = m.end()
-        return self._unescape(result)
+        return _unescape(result)
 
     def _get_json5(self, url, host=None, type_=None, data=None):
         encoded_data = urlencode(data).encode('utf-8')
@@ -85,7 +85,10 @@ class Translator(object):
         content = resp.read()
         return content.decode('utf-8')
 
-    def _unescape(self, text):
-        pattern = r'\\{1,2}u[0-9a-fA-F]{4}'
-        decode = lambda x: codecs.getdecoder('unicode_escape')(x.group())[0]
-        return re.sub(pattern, decode, text)
+
+def _unescape(text):
+    """Unescape unicode character codes within a string.
+    """
+    pattern = r'\\{1,2}u[0-9a-fA-F]{4}'
+    decode = lambda x: codecs.getdecoder('unicode_escape')(x.group())[0]
+    return re.sub(pattern, decode, text)

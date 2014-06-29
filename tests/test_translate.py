@@ -6,7 +6,7 @@ from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
 import mock
 
-from textblob.translate import Translator
+from textblob.translate import Translator, _unescape
 from textblob.compat import unicode
 
 class TestTranslator(unittest.TestCase):
@@ -70,6 +70,11 @@ class TestTranslator(unittest.TestCase):
         json5 = '[[["This is a sentence.","This is a sentence.","",""]],,"en",,,,,,[["en"]],0]'
         lang = self.translator._get_language_from_json5(json5)
         assert_equal(lang, "en")
+
+
+def test_unescape():
+    assert_equal(_unescape('and'), 'and')
+    assert_equal(_unescape('\u0026'), '&')
 
 if __name__ == '__main__':
     unittest.main()
