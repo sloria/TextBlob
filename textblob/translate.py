@@ -7,6 +7,7 @@ Language detection added by Steven Loria.
 """
 from __future__ import absolute_import
 import re
+import codecs
 from textblob.compat import PY2, request, urlencode
 
 
@@ -85,4 +86,6 @@ class Translator(object):
         return content.decode('utf-8')
 
     def _unescape(self, text):
-        return re.sub("\\.?", lambda x: eval('"%s"' % x.group(0)), text)
+        pattern = r'\\{1,2}u[0-9a-fA-F]{4}'
+        decode = lambda x: codecs.getdecoder('unicode_escape')(x.group())[0]
+        return re.sub(pattern, decode, text)

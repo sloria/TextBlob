@@ -765,6 +765,12 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(translated, "Beautiful is better than ugly")
 
     @attr("requires_internet")
+    def test_translate_unicode_escape(self):
+        blob = tb.TextBlob("Jenner & Block LLP")
+        translated = blob.translate(from_lang="en", to="en")
+        assert_equal(translated, "Jenner & Block LLP")
+
+    @attr("requires_internet")
     def test_detect(self):
         es_blob = tb.TextBlob("Hola")
         assert_equal(es_blob.detect_language(), "es")
