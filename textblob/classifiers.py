@@ -81,9 +81,9 @@ def basic_extractor(document, train_set):
 
 
 def contains_extractor(document):
-    '''A basic document feature extractor that returns a dict of words that
+    """A basic document feature extractor that returns a dict of words that
     the document contains.
-    '''
+    """
     if isinstance(document, basestring):
         tokens = set([strip_punc(w, all=False)
                     for w in word_tokenize(document, include_punc=False)])
