@@ -40,6 +40,9 @@ class NaiveBayesAnalyzer(BaseSentimentAnalyzer):
     """Naive Bayes analyzer that is trained on a dataset of movie reviews.
     Returns results as a named tuple of the form:
     ``Sentiment(classification, p_pos, p_neg)``
+
+    :param callable feature_extractor: Function that returns a dictionary of
+        features, given a list of words.
     """
 
     kind = DISCRETE
