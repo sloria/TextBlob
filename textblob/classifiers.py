@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Various classifier implementations. Also includes basic feature extractor
+"""Various classifier implementations. Also includes basic feature extractor
 methods.
 
 Example Usage:
@@ -30,7 +30,7 @@ Example Usage:
     neg
 
 .. versionadded:: 0.6.0
-'''
+"""
 from __future__ import absolute_import
 from itertools import chain
 
@@ -60,6 +60,13 @@ def _get_words_from_dataset(dataset):
     all_words = chain.from_iterable(tokenize(words) for words, _ in dataset)
     return set(all_words)
 
+def _get_document_tokens(document):
+    if isinstance(document, basestring):
+        tokens = set((strip_punc(w, all=False)
+                    for w in word_tokenize(document, include_punc=False)))
+    else:
+        tokens = set(strip_punc(w, all=False) for w in document)
+    return tokens
 
 def basic_extractor(document, train_set):
     """A basic document feature extractor that returns a dict indicating
@@ -70,11 +77,7 @@ def basic_extractor(document, train_set):
         ``(words, label)``.
     """
     word_features = _get_words_from_dataset(train_set)
-    if isinstance(document, basestring):
-        tokens = set((strip_punc(w, all=False)
-                    for w in word_tokenize(document, include_punc=False)))
-    else:
-        tokens = set(strip_punc(w, all=False) for w in document)
+    tokens = _get_document_tokens(document)
     features = dict(((u'contains({0})'.format(word), (word in tokens))
                                             for word in word_features))
     return features
@@ -84,11 +87,7 @@ def contains_extractor(document):
     """A basic document feature extractor that returns a dict of words that
     the document contains.
     """
-    if isinstance(document, basestring):
-        tokens = set([strip_punc(w, all=False)
-                    for w in word_tokenize(document, include_punc=False)])
-    else:
-        tokens = set((strip_punc(w, all=False) for w in document))
+    tokens = _get_document_tokens(document)
     features = dict((u'contains({0})'.format(w), True) for w in tokens)
     return features
 
