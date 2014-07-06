@@ -56,19 +56,19 @@ def _get_words_from_dataset(dataset):
         if isinstance(words, basestring):
             return word_tokenize(words, include_punc=False)
         else:
-            return (w for w in words)
+            return words
     all_words = chain.from_iterable(tokenize(words) for words, _ in dataset)
     return set(all_words)
 
 
 def basic_extractor(document, train_set):
-    '''A basic document feature extractor that returns a dict indicating
+    """A basic document feature extractor that returns a dict indicating
     what words in ``train_set`` are contained in ``document``.
 
     :param document: The text to extract features from. Can be a string or an iterable.
-    :param train_set: Training data set, a list of tuples of the form
+    :param list train_set: Training data set, a list of tuples of the form
         ``(words, label)``.
-    '''
+    """
     word_features = _get_words_from_dataset(train_set)
     if isinstance(document, basestring):
         tokens = set((strip_punc(w, all=False)
@@ -95,22 +95,21 @@ def contains_extractor(document):
 ##### CLASSIFIERS #####
 
 class BaseClassifier(object):
-
-    '''Abstract classifier class from which all classifers inherit. At a
+    """Abstract classifier class from which all classifers inherit. At a
     minimum, descendant classes must implement a ``classify`` method and have
     a ``classifier`` property.
 
     :param train_set: The training set, either a list of tuples of the form
         ``(text, classification)`` or a filename. ``text`` may be either
         a string or an iterable.
-    :param function feature_extractor: A feature extractor function that takes one or
+    :param callable feature_extractor: A feature extractor function that takes one or
         two arguments: ``document`` and ``train_set``.
     :param str format: If ``train_set`` is a filename, the file format, e.g.
         ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
         file format.
 
     .. versionadded:: 0.6.0
-    '''
+    """
 
     def __init__(self, train_set, feature_extractor=basic_extractor, format=None):
         self.feature_extractor = feature_extractor
@@ -121,9 +120,9 @@ class BaseClassifier(object):
         self.train_features = None
 
     def _read_data(self, dataset, format=None):
-        '''Reads a data file and returns and iterable that can be used
+        """Reads a data file and returns and iterable that can be used
         as testing or training data.
-        '''
+        """
         # Attempt to detect file format if "format" isn't specified
         if not format:
             format_class = formats.detect(dataset)

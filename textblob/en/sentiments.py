@@ -32,6 +32,7 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
 
 
 def _default_feature_extractor(words):
+    """Default feature extractor for the NaiveBayesAnalyzer."""
     return dict(((word, True) for word in words))
 
 
