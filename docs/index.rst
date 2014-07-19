@@ -57,7 +57,6 @@ Features
 - `n`-grams
 - Word inflection (pluralization and singularization) and lemmatization
 - Spelling correction
-- JSON serialization
 - Add new models or languages through extensions
 - WordNet integration
 

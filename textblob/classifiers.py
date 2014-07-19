@@ -153,7 +153,7 @@ class BaseClassifier(object):
 
         :rtype: dictionary of features
         '''
-        # Feature extractor may take 1 or two arguments
+        # Feature extractor may take one or two arguments
         try:
             return self.feature_extractor(text, self.train_set)
         except (TypeError, AttributeError):

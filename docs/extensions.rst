@@ -20,6 +20,7 @@ Languages
 ---------
 
 * `textblob-fr <https://github.com/sloria/textblob-fr>`_: French
+* `textblob-de <https://github.com/markuskiller/textblob-de>`_: German
 
 Part-of-speech Taggers
 ----------------------

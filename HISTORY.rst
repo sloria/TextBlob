@@ -8,6 +8,7 @@ Changelog
 - Fix bug that showed "double-escaped" unicode characters in translator output (issue #56). Thanks Evan Dempsey.
 - *Backwards-incompatible*: Completely deprecate ``import text.blob``. You should ``import textblob`` instead.
 - *Backwards-incompatible*: Completely deprecate ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
+- Updated English sentiment corpus.
 - Add ``feature_extractor`` parameter to ``NaiveBayesAnalyzer``.
 - Improved docs.
 - Tested on Python 3.4.
