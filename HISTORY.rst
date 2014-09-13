@@ -11,6 +11,7 @@ Changelog
 - *Backwards-incompatible*: Rename ``TextBlobException`` to ``TextBlobError`` and ``MissingCorpusException`` to ``MissingCorpusError``.
 - Updated English sentiment corpus.
 - Add ``feature_extractor`` parameter to ``NaiveBayesAnalyzer``.
+- Change ``BaseClassifier.detect`` from a ``staticmethod`` to a ``classmethod``.
 - Improved docs.
 - Tested on Python 3.4.
 

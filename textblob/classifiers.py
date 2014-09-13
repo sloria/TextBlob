@@ -119,7 +119,7 @@ class BaseClassifier(object):
         self.train_features = None
 
     def _read_data(self, dataset, format=None):
-        """Reads a data file and returns and iterable that can be used
+        """Reads a data file and returns an iterable that can be used
         as testing or training data.
         """
         # Attempt to detect file format if "format" isn't specified
