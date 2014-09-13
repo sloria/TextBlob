@@ -4,7 +4,7 @@ from nose.plugins.attrib import attr
 from nose.tools import *  # PEP8 asserts
 
 from textblob.decorators import requires_nltk_corpus
-from textblob.exceptions import MissingCorpusException
+from textblob.exceptions import MissingCorpusError
 
 
 class Tokenizer(object):
@@ -16,7 +16,7 @@ class Tokenizer(object):
 
 def test_decorator_raises_missing_corpus_exception():
     t = Tokenizer()
-    assert_raises(MissingCorpusException, lambda: t.tag('hello world'))
+    assert_raises(MissingCorpusError, lambda: t.tag('hello world'))
 
 if __name__ == '__main__':
     unittest.main()

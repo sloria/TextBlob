@@ -6,8 +6,9 @@ Changelog
 
 - Fix bug that raised a `SyntaxError` when translating text with non-ascii characters on Python 3.
 - Fix bug that showed "double-escaped" unicode characters in translator output (issue #56). Thanks Evan Dempsey.
-- *Backwards-incompatible*: Completely deprecate ``import text.blob``. You should ``import textblob`` instead.
-- *Backwards-incompatible*: Completely deprecate ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
+- *Backwards-incompatible*: Completely remove ``import text.blob``. You should ``import textblob`` instead.
+- *Backwards-incompatible*: Completely remove ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
+- *Backwards-incompatible*: Rename ``TextBlobException`` to ``TextBlobError`` and ``MissingCorpusException`` to ``MissingCorpusError``.
 - Updated English sentiment corpus.
 - Add ``feature_extractor`` parameter to ``NaiveBayesAnalyzer``.
 - Improved docs.

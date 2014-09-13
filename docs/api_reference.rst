@@ -88,5 +88,7 @@ Exceptions
 ----------
 .. module:: textblob.exceptions
 
-.. autoexception:: textblob.exceptions.MissingCorpusException
+.. autoexception:: textblob.exceptions.TextBlobError
+.. autoexception:: textblob.exceptions.MissingCorpusError
+.. autoexception:: textblob.exceptions.DeprecationError
 .. autoexception:: textblob.exceptions.TranslatorError
