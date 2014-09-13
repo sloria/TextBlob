@@ -7,7 +7,9 @@ which define the interface for descendant classes.
 '''
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
-from textblob.packages import nltk
+
+import nltk
+
 from textblob.compat import with_metaclass
 
 ##### POS TAGGERS #####

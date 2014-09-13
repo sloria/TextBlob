@@ -3,7 +3,8 @@ import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.tokenizers import WordTokenizer
 from textblob.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
                               basic_extractor, contains_extractor, NLTKClassifier,

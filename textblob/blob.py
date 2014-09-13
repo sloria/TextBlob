@@ -25,7 +25,8 @@ import sys
 import json
 from collections import defaultdict
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.decorators import cached_property, requires_nltk_corpus
 from textblob.utils import lowerstrip, PUNCTUATION_REGEX
 from textblob.inflect import singularize as _singularize, pluralize as _pluralize
@@ -190,7 +191,7 @@ class Word(unicode):
 
         .. versionadded:: 0.7.0
         '''
-        return [syn.definition for syn in self.get_synsets(pos=pos)]
+        return [syn.definition() for syn in self.get_synsets(pos=pos)]
 
 
 class WordList(list):
