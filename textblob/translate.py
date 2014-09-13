@@ -9,6 +9,7 @@ from __future__ import absolute_import
 import re
 import codecs
 from textblob.compat import PY2, request, urlencode
+from textblob.exceptions import TranslatorError
 
 
 class Translator(object):
@@ -54,6 +55,8 @@ class Translator(object):
         """Detect the source text's language."""
         if PY2:
             source = source.encode('utf-8')
+        if len(source) < 3:
+            raise TranslatorError('Must provide a string with at least 3 characters.')
         data = {"client": "t", "ie": "UTF-8", "oe": "UTF-8", "text": source}
         json5 = self._get_json5(self.url, host=host, type_=type_, data=data)
         lang = self._get_language_from_json5(json5)

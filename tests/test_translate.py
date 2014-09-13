@@ -97,6 +97,9 @@ class TestTranslator(unittest.TestCase):
         translated = self.translator.translate(text, from_lang="en", to_lang="en")
         assert_equal(translated, "Jenner & Block LLP")
 
+    def test_detect_requires_more_than_two_characters(self):
+        assert_raises(TranslatorError, lambda: self.translator.detect('f'))
+        assert_raises(TranslatorError, lambda: self.translator.detect('fo'))
 
     def test_get_language_from_json5(self):
         json5 = '[[["This is a sentence.","This is a sentence.","",""]],,"en",,,,,,[["en"]],0]'

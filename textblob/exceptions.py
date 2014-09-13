@@ -7,22 +7,26 @@ To download the necessary data, simply run
 
     python -m textblob.download_corpora
 
-Or use the NLTK downloader to download the missing data: http://nltk.org/data.html
+or use the NLTK downloader to download the missing data: http://nltk.org/data.html
 If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
 """
 
 class TextBlobException(Exception):
-    '''A TextBlob-related exception.'''
+    """A TextBlob-related exception."""
+    pass
 
 class MissingCorpusException(TextBlobException):
-
-    '''Exception thrown when a user tries to use a feature that requires a
+    """Exception thrown when a user tries to use a feature that requires a
     dataset or model that the user does not have on their system.
-    '''
+    """
 
     def __init__(self, message=MISSING_CORPUS_MESSAGE, *args, **kwargs):
         super(MissingCorpusException, self).__init__(message, *args, **kwargs)
 
 class DeprecationError(TextBlobException):
-    '''Raised when user uses a deprecated feature.'''
+    """Raised when user uses a deprecated feature."""
+    pass
+
+class TranslatorError(TextBlobException):
+    """Raised when an error occurs during language translation or detection."""
     pass
