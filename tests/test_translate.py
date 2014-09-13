@@ -8,6 +8,7 @@ import mock
 
 from textblob.translate import Translator, _unescape
 from textblob.compat import unicode
+from textblob.exceptions import TranslatorError
 
 class TestTranslator(unittest.TestCase):
 
@@ -31,7 +32,7 @@ class TestTranslator(unittest.TestCase):
         assert_true(mock_get_json5.called_once)
 
     @mock.patch('textblob.translate.Translator._get_json5')
-    def test_detect(self, mock_get_json5):
+    def test_detect_parses_json5(self, mock_get_json5):
         mock_get_json5.return_value = unicode('[[["This is a sentence",'
             '"This is a sentence","",""]],,"en",,,,,,[["en"]],4]')
         lang = self.translator.detect(self.sentence)
@@ -57,6 +58,11 @@ class TestTranslator(unittest.TestCase):
         lang2 = self.translator.detect("Hola")
         assert_equal(lang2, "es")
 
+    @attr("requires_internet")
+    def test_detect(self):
+        assert_equal(self.translator.detect('Hola'), "es")
+        assert_equal(self.translator.detect('Hello'), "en")
+
     @attr('requires_internet')
     def test_detect_non_ascii(self):
         lang = self.translator.detect(unicode("关于中文维基百科"))
@@ -65,6 +71,32 @@ class TestTranslator(unittest.TestCase):
         assert_equal(lang2, "bg")
         lang3 = self.translator.detect(unicode("Избранная статья"))
         assert_equal(lang3, "ru")
+
+    @attr("requires_internet")
+    def test_translate(self):
+        text = "This is a sentence."
+        translated = self.translator.translate(text, to_lang="es")
+        assert_equal(translated, "Esta es una frase.")
+        es_text = "Esta es una frase."
+        to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
+        assert_equal(to_en, "This is a sentence.")
+
+    @attr("requires_internet")
+    def test_translate_non_ascii(self):
+        text = unicode("ذات سيادة كاملة")
+        translated = self.translator.translate(text, from_lang='ar', to_lang='en')
+        assert_equal(translated, "Fully sovereign")
+
+        text2 = unicode("美丽优于丑陋")
+        translated = self.translator.translate(text2, from_lang="zh-CN", to_lang='en')
+        assert_equal(translated, "Beautiful is better than ugly")
+
+    @attr("requires_internet")
+    def test_translate_unicode_escape(self):
+        text = "Jenner & Block LLP"
+        translated = self.translator.translate(text, from_lang="en", to_lang="en")
+        assert_equal(translated, "Jenner & Block LLP")
+
 
     def test_get_language_from_json5(self):
         json5 = '[[["This is a sentence.","This is a sentence.","",""]],,"en",,,,,,[["en"]],0]'

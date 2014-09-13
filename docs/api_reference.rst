@@ -89,7 +89,4 @@ Exceptions
 .. module:: textblob.exceptions
 
 .. autoexception:: textblob.exceptions.MissingCorpusException
-
-
-
-
+.. autoexception:: textblob.exceptions.TranslatorError
