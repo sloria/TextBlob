@@ -33,9 +33,14 @@ Setting Up for Local Development
     $ git clone https://github.com/sloria/TextBlob.git
     $ cd TextBlob
 
-3. Install development requirements. ::
+2. Install development requirements. It is highly recommended that you use a virtualenv. ::
 
+    # After activating your virtualenv
     $ pip install -r dev-requirements.txt
+
+3. Install TextBlob in develop mode. ::
+
+   $ python setup.py develop
 
 .. _extension-development:
 
@@ -98,7 +103,7 @@ Pull Requests
 
 - If the pull request adds functionality, it is tested and the docs are updated.
 - If you've developed an extension, it is on the :ref:`Extensions List <extensions>`.
-- The pull request works on Python 2.6, 2.7, 3.3, and PyPy. Use ``tox`` to verify that it does.
+- The pull request works on Python 2.6, 2.7, 3.3, 3.4, and PyPy. Use ``tox`` to verify that it does.
 - You've added yourself to ``AUTHORS.rst``.
 
 4. Submit a pull request to the ``sloria:dev`` branch.
@@ -122,7 +127,7 @@ To get test coverage reports (must have coverage installed): ::
 
     $ python run_tests.py cover
 
-To run tests on Python 2.6, 2.7, and 3.3 virtual environments (must have each interpreter installed): ::
+To run tests on Python 2.6, 2.7, 3.3, and 3.4 virtual environments (must have each interpreter installed): ::
 
     $ tox
 

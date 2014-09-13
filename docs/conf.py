@@ -29,6 +29,9 @@ sys.path.append(os.path.abspath("_themes"))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest']
 
+primary_domain = 'py'
+default_role = 'py:obj'
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+
 from invoke import task, run
 
 docs_dir = 'docs'
@@ -11,13 +12,6 @@ build_dir = os.path.join(docs_dir, '_build')
 def test():
     run("python run_tests.py", pty=True)
 
-@task
-def deps():
-    print("Vendorizing nltk...")
-    run("git clone https://github.com/nltk/nltk.git")
-    run("rm -rf text/nltk")
-    run("mv nltk/nltk text/")
-    run("rm -rf nltk")
 
 @task
 def clean():
@@ -31,9 +25,21 @@ def clean():
 def clean_docs():
     run("rm -rf %s" % build_dir)
 
+
 @task
 def browse_docs():
-    run("open %s" % os.path.join(build_dir, 'index.html'))
+    platform = str(sys.platform).lower()
+    command_map = {
+        'darwin': 'open ',
+        'linux': 'idle ',
+        'win32': '',
+    }
+    cmd = command_map.get(platform)
+    if cmd:
+        run("{0}{1}".format(cmd, os.path.join(build_dir, 'index.html')))
+    else:
+        print('Unsure how to open the built file on this operating system.')
+        sys.exit(1)
 
 @task
 def docs(clean=False, browse=False):
