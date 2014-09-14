@@ -98,8 +98,8 @@ class JSON(BaseFormat):
         """Return an iterable object from the JSON data."""
         return [(d['text'], d['label']) for d in self.dict]
 
-    @staticmethod
-    def detect(stream):
+    @classmethod
+    def detect(cls, stream):
         """Return True if stream is valid JSON."""
         try:
             json.loads(stream)
