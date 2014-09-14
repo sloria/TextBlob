@@ -33,25 +33,25 @@ The ``words`` and ``sentences`` properties are helpers that use the ``textblob.t
 
 You can use other tokenizers, such as those provided by NLTK, by passing them into the ``TextBlob`` constructor then accessing the ``tokens`` property.
 
-::
+.. doctest::
 
     >>> from textblob import TextBlob
     >>> from nltk.tokenize import TabTokenizer
     >>> tokenizer = TabTokenizer()
     >>> blob = TextBlob("This is\ta rather tabby\tblob.", tokenizer=tokenizer)
     >>> blob.tokens
-    WordList(["This is", "a rather tabby", "blob."])
+    WordList(['This is', 'a rather tabby', 'blob.'])
 
 You can also use the ``tokenize([tokenizer])`` method.
 
-::
+.. doctest::
 
     >>> from textblob import TextBlob
     >>> from nltk.tokenize import BlanklineTokenizer
     >>> tokenizer = BlanklineTokenizer()
     >>> blob = TextBlob("A token\n\nof appreciation")
     >>> blob.tokenize(tokenizer)
-    WordList([u'A token', u'of appreciation'])
+    WordList(['A token', 'of appreciation'])
 
 Noun Phrase Chunkers
 --------------------
@@ -63,14 +63,14 @@ and ``textblob.np_extractors.ConllExtractor``, which uses the CoNLL 2000 corpus 
 
 You can change the chunker implementation (or even use your own) by explicitly passing an instance of a noun phrase extractor to a TextBlob's constructor.
 
-::
+.. doctest::
 
     >>> from textblob import TextBlob
     >>> from textblob.np_extractors import ConllExtractor
     >>> extractor = ConllExtractor()
     >>> blob = TextBlob("Python is a high-level programming language.", np_extractor=extractor)
     >>> blob.noun_phrases
-    WordList([u'python', u'high-level programming language'])
+    WordList(['python', 'high-level programming language'])
 
 POS Taggers
 -----------
