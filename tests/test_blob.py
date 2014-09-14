@@ -8,7 +8,7 @@ from unittest import TestCase, main
 from datetime import datetime
 import mock
 
-from nose.tools import *  # PEP8 asserts
+from nose.tools import *  # noqa (PEP8 asserts)
 from nose.plugins.attrib import attr
 import nltk
 

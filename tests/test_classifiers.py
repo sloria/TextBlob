@@ -14,6 +14,7 @@ from textblob.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
                               MaxEntClassifier)
 from textblob import formats
 from textblob.compat import unicode
+from textblob.exceptions import FormatError
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, 'data.csv')
@@ -151,6 +152,7 @@ class TestNaiveBayesClassifier(unittest.TestCase):
 
     def test_init_with_custom_format(self):
         redis_train = [('I like turtles', 'pos'), ('I hate turtles', 'neg')]
+
         class MockRedisFormat(formats.BaseFormat):
             def __init__(self, client, port):
                 self.client = client
@@ -168,6 +170,11 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         cl = NaiveBayesClassifier(mock_redis, format='redis', port=1234)
         assert_equal(cl.train_set, redis_train)
 
+    def test_data_with_no_available_format(self):
+        mock_fp = mock.Mock()
+        mock_fp.read.return_value = ''
+
+        assert_raises(FormatError, lambda: NaiveBayesClassifier(mock_fp))
 
     def test_accuracy_on_a_csv_file(self):
         with open(CSV_FILE) as fp:

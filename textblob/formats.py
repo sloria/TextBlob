@@ -4,6 +4,7 @@
 
 from __future__ import absolute_import
 from textblob.compat import PY2, csv, OrderedDict
+from textblob.utils import is_filelike
 import json
 
 DEFAULT_ENCODING = 'utf-8'
@@ -119,6 +120,8 @@ def detect(fp, max_read=1024):
     formats. Return the format class that was detected. If no format is
     detected, return ``None``.
     """
+    if not is_filelike(fp):
+        return None
     for Format in _registry.values():
         if Format.detect(fp.read(max_read)):
             fp.seek(0)

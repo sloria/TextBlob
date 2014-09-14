@@ -34,3 +34,7 @@ class DeprecationError(TextBlobError):
 class TranslatorError(TextBlobError):
     """Raised when an error occurs during language translation or detection."""
     pass
+
+class FormatError(TextBlobError):
+    """Raised if a data file with an unsupported format is passed to a classifier."""
+    pass

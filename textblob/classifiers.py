@@ -36,11 +36,12 @@ from itertools import chain
 
 import nltk
 
-from textblob.tokenizers import word_tokenize
 from textblob.compat import basestring
-import textblob.formats as formats
-from textblob.utils import strip_punc, is_filelike
 from textblob.decorators import cached_property
+from textblob.exceptions import FormatError
+from textblob.tokenizers import word_tokenize
+from textblob.utils import strip_punc, is_filelike
+import textblob.formats as formats
 
 ### Basic feature extractors ###
 
@@ -131,6 +132,9 @@ class BaseClassifier(object):
         # Attempt to detect file format if "format" isn't specified
         if not format:
             format_class = formats.detect(dataset)
+            if not format_class:
+                raise FormatError('Could not automatically detect format for the given '
+                                  'data source.')
         else:
             registry = formats.get_registry()
             if format not in registry.keys():
