@@ -170,7 +170,7 @@ class Word(unicode):
         return self.define(pos=None)
 
     def get_synsets(self, pos=None):
-        '''Return a list of Synset objects for this word.
+        """Return a list of Synset objects for this word.
 
         :param pos: A part-of-speech tag to filter upon. If ``None``, all
             synsets for all parts of speech will be loaded.
@@ -178,11 +178,11 @@ class Word(unicode):
         :rtype: list of Synsets
 
         .. versionadded:: 0.7.0
-        '''
+        """
         return _wordnet.synsets(self.string, pos)
 
     def define(self, pos=None):
-        '''Return a list of definitions for this word. Each definition
+        """Return a list of definitions for this word. Each definition
         corresponds to a synset for this word.
 
         :param pos: A part-of-speech tag to filter upon. If ``None``, definitions
@@ -190,12 +190,11 @@ class Word(unicode):
         :rtype: List of strings
 
         .. versionadded:: 0.7.0
-        '''
+        """
         return [syn.definition() for syn in self.get_synsets(pos=pos)]
 
 
 class WordList(list):
-
     """A list-like collection of words."""
 
     def __init__(self, collection):
@@ -312,8 +311,7 @@ def _initialize_models(obj, tokenizer, pos_tagger,
 
 
 class BaseBlob(StringlikeMixin, BlobComparableMixin):
-
-    '''An abstract base class that all textblob classes will inherit from.
+    """An abstract base class that all textblob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
     basic dunder and string methods for making objects like Python strings.
 
@@ -332,8 +330,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     .. versionchanged:: 0.6.0
         ``clean_html`` parameter deprecated, as it was in NLTK.
-    '''
-
+    """
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
     tokenizer = WordTokenizer()
@@ -358,27 +355,27 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     @cached_property
     def words(self):
-        '''Return a list of word tokens. This excludes punctuation characters.
+        """Return a list of word tokens. This excludes punctuation characters.
         If you want to include punctuation characters, access the ``tokens``
         property.
 
         :returns: A :class:`WordList <WordList>` of word tokens.
-        '''
+        """
         return WordList(word_tokenize(self.raw, include_punc=False))
 
     @cached_property
     def tokens(self):
-        '''Return a list of tokens, using this blob's tokenizer object
+        """Return a list of tokens, using this blob's tokenizer object
         (defaults to :class:`WordTokenizer <textblob.tokenizers.WordTokenizer>`).
-        '''
+        """
         return WordList(self.tokenizer.tokenize(self.raw))
 
     def tokenize(self, tokenizer=None):
-        '''Return a list of tokens, using ``tokenizer``.
+        """Return a list of tokens, using ``tokenizer``.
 
         :param tokenizer: (optional) A tokenizer object. If None, defaults to
             this blob's default tokenizer.
-        '''
+        """
         t = tokenizer if tokenizer is not None else self.tokenizer
         return WordList(t.tokenize(self.raw))
 
@@ -420,23 +417,23 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     @cached_property
     def subjectivity(self):
-        '''Return the subjectivity score as a float within the range [0.0, 1.0]
+        """Return the subjectivity score as a float within the range [0.0, 1.0]
         where 0.0 is very objective and 1.0 is very subjective.
 
         :rtype: float
-        '''
+        """
         return PatternAnalyzer().analyze(self.raw)[1]
 
     @cached_property
     def noun_phrases(self):
-        '''Returns a list of noun phrases for this blob.'''
+        """Returns a list of noun phrases for this blob."""
         return WordList([phrase.strip().lower()
                         for phrase in self.np_extractor.extract(self.raw)
                         if len(phrase) > 1])
 
     @cached_property
     def pos_tags(self):
-        '''Returns an list of tuples of the form (word, POS tag).
+        """Returns an list of tuples of the form (word, POS tag).
 
         Example:
         ::
@@ -445,7 +442,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
                     ('Thursday', 'NNP'), ('morning', 'NN')]
 
         :rtype: list of tuples
-        '''
+        """
         return [(Word(word, pos_tag=t), unicode(t))
                 for word, t in self.pos_tagger.tag(self.raw)
                 if not PUNCTUATION_REGEX.match(unicode(t))]
@@ -454,8 +451,8 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     @cached_property
     def word_counts(self):
-        '''Dictionary of word frequencies in this text.
-        '''
+        """Dictionary of word frequencies in this text.
+        """
         counts = defaultdict(int)
         stripped_words = [lowerstrip(word) for word in self.words]
         for word in stripped_words:
@@ -464,8 +461,8 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     @cached_property
     def np_counts(self):
-        '''Dictionary of noun phrase frequencies in this text.
-        '''
+        """Dictionary of noun phrase frequencies in this text.
+        """
         counts = defaultdict(int)
         for phrase in self.noun_phrases:
             counts[phrase] += 1
@@ -583,7 +580,6 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
 
 class TextBlob(BaseBlob):
-
     """A general text block, meant for larger bodies of text (esp. those
     containing sentences). Inherits from :class:`BaseBlob <BaseBlob>`.
 
@@ -664,8 +660,7 @@ class TextBlob(BaseBlob):
 
 
 class Sentence(BaseBlob):
-
-    '''A sentence within a TextBlob. Inherits from :class:`BaseBlob <BaseBlob>`.
+    """A sentence within a TextBlob. Inherits from :class:`BaseBlob <BaseBlob>`.
 
     :param sentence: A string, the raw sentence.
     :param start_index: An int, the index where this sentence begins
@@ -673,7 +668,7 @@ class Sentence(BaseBlob):
     :param end_index: An int, the index where this sentence ends in
                         a TextBlob. If not given, defaults to the
                         length of the sentence - 1.
-    '''
+    """
 
     def __init__(self, sentence, start_index=0, end_index=None, *args, **kwargs):
         super(Sentence, self).__init__(sentence, *args, **kwargs)
@@ -697,8 +692,7 @@ class Sentence(BaseBlob):
 
 
 class Blobber(object):
-
-    '''A factory for TextBlobs that all share the same tagger,
+    """A factory for TextBlobs that all share the same tagger,
     tokenizer, parser, classifier, and np_extractor.
 
     Usage:
@@ -725,7 +719,7 @@ class Blobber(object):
     :param classifier: A classifier.
 
     .. versionadded:: 0.4.0
-    '''
+    """
 
     np_extractor = FastNPExtractor()
     pos_tagger = PatternTagger()
@@ -739,11 +733,11 @@ class Blobber(object):
                             parser, classifier)
 
     def __call__(self, text):
-        '''Return a new TextBlob object with this Blobber's ``np_extractor``,
+        """Return a new TextBlob object with this Blobber's ``np_extractor``,
         ``pos_tagger``, ``tokenizer``, ``analyzer``, and ``classifier``.
 
         :returns: A new :class:`TextBlob <TextBlob>`.
-        '''
+        """
         return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
                         np_extractor=self.np_extractor, analyzer=self.analyzer,
                         parser=self.parser,
