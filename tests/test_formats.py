@@ -28,9 +28,10 @@ class TestFormats(unittest.TestCase):
         assert_equal(format, formats.JSON)
 
     def test_available(self):
-        assert_true('csv' in formats.AVAILABLE.keys())
-        assert_true('json' in formats.AVAILABLE.keys())
-        assert_true('tsv' in formats.AVAILABLE.keys())
+        registry = formats.get_registry()
+        assert_true('csv' in registry.keys())
+        assert_true('json' in registry.keys())
+        assert_true('tsv' in registry.keys())
 
 class TestDelimitedFormat(unittest.TestCase):
 
@@ -95,6 +96,31 @@ class TestJSON(unittest.TestCase):
         first = data[0]
         text, label = first[0], first[1]
         assert_true(isinstance(text, unicode))
+
+class CustomFormat(formats.BaseFormat):
+    def to_iterable():
+        return [
+            ('I like turtles', 'pos'),
+            ('I hate turtles', 'neg')
+        ]
+    @classmethod
+    def detect(cls, stream):
+        return True
+
+
+class TestRegistry(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_register(self):
+        registry = formats.get_registry()
+        assert_not_in(CustomFormat, registry.values())
+
+        formats.register('trt', CustomFormat)
+
+        assert_in(CustomFormat, registry.values())
+        assert_in('trt', registry.keys())
+
 
 if __name__ == '__main__':
     unittest.main()

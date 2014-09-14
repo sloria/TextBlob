@@ -107,7 +107,7 @@ class JSON(BaseFormat):
         except ValueError:
             return False
 
-AVAILABLE = {
+_registry = {
     'csv': CSV,
     'json': JSON,
     'tsv': TSV
@@ -118,9 +118,21 @@ def detect(fp, max_read=1024):
     formats. Return the format class that was detected. If no format is
     detected, return ``None``.
     """
-    for Format in AVAILABLE.values():
+    for Format in _registry.values():
         if Format.detect(fp.read(max_read)):
             fp.seek(0)
             return Format
         fp.seek(0)
     return None
+
+def get_registry():
+    """Return a dictionary of registered formats."""
+    return _registry
+
+def register(name, format_class):
+    """Register a new format.
+
+    :param str name: The name that will be used to refer to the format, e.g. 'csv'
+    :param type format_class: The format class to register.
+    """
+    get_registry()[name] = format_class

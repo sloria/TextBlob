@@ -127,9 +127,10 @@ class BaseClassifier(object):
         if not format:
             format_class = formats.detect(dataset)
         else:
-            if format not in formats.AVAILABLE.keys():
+            registry = formats.get_registry()
+            if format not in registry.keys():
                 raise ValueError("'{0}' format not supported.".format(format))
-            format_class = formats.AVAILABLE[format]
+            format_class = registry[format]
         return format_class(dataset).to_iterable()
 
     @cached_property
