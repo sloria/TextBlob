@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import unittest
-import logging
-from nose.tools import *  # PEP8 asserts
+from nose.tools import *  # noqa (PEP8 asserts)
 
 from textblob import formats
 from textblob.compat import unicode
@@ -114,7 +113,7 @@ class TestRegistry(unittest.TestCase):
 
     def test_register(self):
         registry = formats.get_registry()
-        assert_not_in(CustomFormat, registry.values())
+        assert_false(CustomFormat in registry.values())
 
         formats.register('trt', CustomFormat)
 
