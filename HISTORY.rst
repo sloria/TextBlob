@@ -10,6 +10,8 @@ Changelog
 - *Backwards-incompatible*: Completely remove ``import text.blob``. You should ``import textblob`` instead.
 - *Backwards-incompatible*: Completely remove ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
 - *Backwards-incompatible*: Rename ``TextBlobException`` to ``TextBlobError`` and ``MissingCorpusException`` to ``MissingCorpusError``.
+- *Backwards-incompatible*: ``Format`` classes are passed a file object rather than a file path.
+- *Backwards-incompatible*: If training a classifier with data from a file, you must pass a file object (rather than a file path).
 - Updated English sentiment corpus.
 - Add ``feature_extractor`` parameter to ``NaiveBayesAnalyzer``.
 - Change ``BaseClassifier.detect`` from a ``staticmethod`` to a ``classmethod``.

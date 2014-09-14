@@ -67,11 +67,12 @@ JSON files should be formatted like so:
         {"text": "I do not like this restaurant", "label": "neg"}
     ]
 
-You can then pass the filename into the constructor.
+You can then pass the opened file into the constructor.
 
 ::
 
-    >>> cl = NaiveBayesClassifier("train.json", format="json")
+    >>> with open('train.json', 'r') as fp:
+    ...     cl = NaiveBayesClassifier(fp, format="json")
 
 Classifying Text
 ================
@@ -130,9 +131,9 @@ To compute the accuracy on our test set, use the ``accuracy(test_data)`` method.
     >>> cl.accuracy(test)
     0.8333333333333334
 
-.. admonition:: Note
+.. note::
 
-    You can also pass in a filename into the ``accuracy`` method. The file can be in any of the formats listed in the :ref:`Loading Data <data_files>` section.
+    You can also pass in a file object into the ``accuracy`` method. The file can be in any of the formats listed in the :ref:`Loading Data <data_files>` section.
 
 Use the ``show_informative_features()`` method to display a listing of the most informative features.
 

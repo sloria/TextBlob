@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""File formats for training and testing data."""
+"""File formats for training and testing data.
+"""
 
 from __future__ import absolute_import
 from textblob.compat import PY2, csv
@@ -10,14 +11,17 @@ DEFAULT_ENCODING = 'utf-8'
 class BaseFormat(object):
     """Interface for format classes.
 
-    :param str fname: A filepath.
+    :param File fp: A file-like object.
+
+    .. versionchanged:: 0.9.0
+        Constructor receives a file pointer rather than a file path.
     """
-    def __init__(self, fname):
+    def __init__(self, fp):
         pass
 
     def to_iterable(self):
         """Return an iterable object from the data."""
-        raise NotImplementedError("Must implement a 'to_iterable' method.")
+        raise NotImplementedError('Must implement a "to_iterable" method.')
 
     @classmethod
     def detect(cls, stream):
@@ -27,22 +31,21 @@ class BaseFormat(object):
         .. versionchanged:: 0.9.0
             Changed from a static method to a class method.
         """
-        raise NotImplementedError("Must implement a 'detect' class method.")
+        raise NotImplementedError('Must implement a "detect" class method.')
 
 class DelimitedFormat(BaseFormat):
     """A general character-delimited format."""
 
     delimiter = ","
 
-    def __init__(self, fname):
-        super(DelimitedFormat, self).__init__(fname)
-        with open(fname, 'r') as fp:
-            if PY2:
-                reader = csv.reader(fp, delimiter=self.delimiter,
-                                    encoding=DEFAULT_ENCODING)
-            else:
-                reader = csv.reader(fp, delimiter=self.delimiter)
-            self.data = [row for row in reader]
+    def __init__(self, fp):
+        BaseFormat.__init__(self, fp)
+        if PY2:
+            reader = csv.reader(fp, delimiter=self.delimiter,
+                                encoding=DEFAULT_ENCODING)
+        else:
+            reader = csv.reader(fp, delimiter=self.delimiter)
+        self.data = [row for row in reader]
 
     def to_iterable(self):
         """Return an iterable object from the data."""
@@ -87,10 +90,9 @@ class JSON(BaseFormat):
             {"text": "I hate this car.", "label": "neg"}
         ]
     """
-    def __init__(self, fname):
-        super(JSON, self).__init__(fname)
-        with open(fname, "r") as fp:
-            self.dict = json.load(fp)
+    def __init__(self, fp):
+        BaseFormat.__init__(self, fp)
+        self.dict = json.load(fp)
 
     def to_iterable(self):
         """Return an iterable object from the JSON data."""
@@ -111,14 +113,14 @@ AVAILABLE = {
     'tsv': TSV
 }
 
-def detect(filename, max_read=1024):
+def detect(fp, max_read=1024):
     """Attempt to detect a file's format, trying each of the supported
     formats. Return the format class that was detected. If no format is
     detected, return ``None``.
     """
-    with open(filename, 'r') as fp:
-        for Format in AVAILABLE.values():
-            if Format.detect(fp.read(max_read)):
-                return Format
+    for Format in AVAILABLE.values():
+        if Format.detect(fp.read(max_read)):
             fp.seek(0)
+            return Format
+        fp.seek(0)
     return None
