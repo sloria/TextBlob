@@ -30,7 +30,7 @@ Part-of-speech tags can be accessed through the :meth:`tags <TextBlob.tags>` pro
 .. doctest::
 
     >>> wiki.tags
-    [(u'Python', u'NNP'), (u'is', u'VBZ'), (u'a', u'DT'), (u'high-level', u'JJ'), (u'general-purpose', u'JJ'), (u'programming', u'NN'), (u'language', u'NN')]
+    [('Python', 'NNP'), ('is', 'VBZ'), ('a', 'DT'), ('high-level', 'JJ'), ('general-purpose', 'JJ'), ('programming', 'NN'), ('language', 'NN')]
 
 Noun Phrase Extraction
 ----------------------
@@ -104,10 +104,10 @@ Words can be lemmatized by calling the :meth:`lemmatize <Word.lemmatize>` method
     >>> from textblob import Word
     >>> w = Word("octopi")
     >>> w.lemmatize()
-    u'octopus'
+    'octopus'
     >>> w = Word("went")
     >>> w.lemmatize("v")  # Pass in part of speech (verb)
-    u'go'
+    'go'
 
 WordNet Integration
 -------------------
@@ -129,7 +129,7 @@ You can access the definitions for each synset via the :meth:`definitions <Word.
 .. doctest::
 
     >>> Word("octopus").definitions
-    [u'tentacles of octopus prepared as food', u'bottom-living cephalopod having a soft oval body with eight long tentacles']
+    ['tentacles of octopus prepared as food', 'bottom-living cephalopod having a soft oval body with eight long tentacles']
 
 You can also create synsets directly.
 
@@ -174,7 +174,7 @@ Use the :meth:`correct() <TextBlob.correct>` method to attempt spelling correcti
     >>> from textblob import Word
     >>> w = Word('falibility')
     >>> w.spellcheck()
-    [(u'fallibility', 1.0)]
+    [('fallibility', 1.0)]
 
 Spelling correction is based on Peter Norvig's "How to Write a Spelling Corrector"[#]_ as implemented in the pattern library. It is about 70% accurate [#]_.
 
@@ -234,7 +234,7 @@ You can also attempt to detect a TextBlob's language using :meth:`TextBlob.detec
 
     >>> b = TextBlob(u"بسيط هو أفضل من مجمع")
     >>> b.detect_language()
-    u'ar'
+    'ar'
 
 As a reference, language codes can be found `here <https://developers.google.com/translate/v2/using_rest#language-params>`_.
 
@@ -292,8 +292,8 @@ You can concatenate and interpolate TextBlobs and strings.
 
     >>> apple_blob + ' and ' + banana_blob
     TextBlob("apples and bananas")
-    >>> u"{0} and {1}".format(apple_blob, banana_blob)
-    u'apples and bananas'
+    >>> "{0} and {1}".format(apple_blob, banana_blob)
+    'apples and bananas'
 
 `n`-grams
 ---------

@@ -6,7 +6,8 @@
 from __future__ import absolute_import
 from collections import namedtuple
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.en import sentiment as pattern_sentiment
 from textblob.tokenizers import word_tokenize
 from textblob.decorators import requires_nltk_corpus

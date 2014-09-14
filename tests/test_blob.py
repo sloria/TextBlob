@@ -10,10 +10,10 @@ import mock
 
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
+import nltk
 
 from textblob.compat import PY2, unicode, basestring, binary_type
 import textblob as tb
-from textblob.packages import nltk
 from textblob.np_extractors import ConllExtractor, FastNPExtractor
 from textblob.taggers import NLTKTagger, PatternTagger
 from textblob.tokenizers import WordTokenizer, SentenceTokenizer
@@ -921,7 +921,7 @@ class WordTest(TestCase):
         w = tb.Word("work")
         noun_syns = w.get_synsets(pos=wn.NOUN)
         for synset in noun_syns:
-            assert_equal(synset.pos, wn.NOUN)
+            assert_equal(synset.pos(), wn.NOUN)
 
     def test_definitions(self):
         w = tb.Word("octopus")
@@ -949,7 +949,7 @@ class TestWordnetInterface(TestCase):
     def test_lemma(self):
         lemma = wn.Lemma('eat.v.01.eat')
         word = tb.Word("eat")
-        assert_equal(word.synsets[0].lemmas[0], lemma)
+        assert_equal(word.synsets[0].lemmas()[0], lemma)
 
 
 class BlobberTest(TestCase):

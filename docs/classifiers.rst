@@ -12,6 +12,7 @@ Loading Data and Creating a Classifier
 
 First we'll create some training and test data.
 
+
 .. doctest::
 
     >>> train = [
@@ -89,10 +90,10 @@ You can get the label probability distribution with the ``prob_classify(text)`` 
     >>> prob_dist = cl.prob_classify("This one's a doozy.")
     >>> prob_dist.max()
     'pos'
-    >>> prob_dist.prob("pos")
-    0.6311475409836074
-    >>> prob_dist.prob("neg")
-    0.3688524590163936
+    >>> round(prob_dist.prob("pos"), 2)
+    0.63
+    >>> round(prob_dist.prob("neg"), 2)
+    0.37
 
 Classifying TextBlobs
 =====================
@@ -137,12 +138,12 @@ Use the ``show_informative_features()`` method to display a listing of the most 
 
 .. doctest::
 
-    >>> cl.show_informative_features(5)
+    >>> cl.show_informative_features(5)  # doctest: +SKIP
     Most Informative Features
                 contains(my) = True              neg : pos    =      1.7 : 1.0
                 contains(an) = False             neg : pos    =      1.6 : 1.0
-                 contains(I) = False             pos : neg    =      1.4 : 1.0
                  contains(I) = True              neg : pos    =      1.4 : 1.0
+                 contains(I) = False             pos : neg    =      1.4 : 1.0
                 contains(my) = False             pos : neg    =      1.3 : 1.0
 
 Updating Classifiers with New Data
@@ -183,8 +184,8 @@ For example, let's create a feature extractor that just uses the first and last 
     ...     feats["first({0})".format(first_word)] = True
     ...     feats["last({0})".format(last_word)] = False
     ...     return feats
-    >>> end_word_extractor("I feel happy")
-    {'first(I)': True, 'last(happy)': False}
+    >>> features = end_word_extractor("I feel happy")
+    >>> assert features == {'last(happy)': False, 'first(I)': True}
 
 We can then use the feature extractor in a classifier by passing it as the second argument of the constructor.
 

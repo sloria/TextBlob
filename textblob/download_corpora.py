@@ -13,7 +13,7 @@ option: ::
 
 """
 import sys
-from textblob.packages import nltk
+import nltk
 
 MIN_CORPORA = [
     'brown',  # Required for FastNPExtractor

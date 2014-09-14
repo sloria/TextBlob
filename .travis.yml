@@ -11,9 +11,9 @@ before_install:
 install:
     - "pip install numpy"
     - "pip install -U ."
-    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install sphinx; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then pip install sphinx; fi
 # Run tests
 script:
     - "python run_tests.py"
-    # Run doctests against py27
-    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then cd docs && make doctest; fi
+    # Run doctests against py34
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then cd docs && make doctest; fi

@@ -3,7 +3,8 @@ import unittest
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.base import BaseNPExtractor
 from textblob.np_extractors import ConllExtractor
 from textblob.utils import filter_insignificant

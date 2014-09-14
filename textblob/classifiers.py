@@ -34,7 +34,8 @@ Example Usage:
 from __future__ import absolute_import
 from itertools import chain
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.tokenizers import word_tokenize
 from textblob.compat import basestring
 import textblob.formats as formats

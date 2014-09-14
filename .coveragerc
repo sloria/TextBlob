@@ -1,10 +1,8 @@
 [run]
 include =
-    text*
+    textblob*
 omit =
     # Vendorized dependencies
-    *nltk*
-    *yaml*
     *unicodecsv*
     # Pattern.en code
     text/en/__init__.py

@@ -2,7 +2,8 @@
 '''Parts-of-speech tagger implementations.'''
 from __future__ import absolute_import
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.en import tag as pattern_tag
 from textblob.decorators import requires_nltk_corpus
 from textblob.tokenizers import word_tokenize
