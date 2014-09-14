@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import os
 import unittest
+
+import mock
 from nose.tools import *  # PEP8 asserts
 from nose.plugins.attrib import attr
-
 import nltk
 
 from textblob.tokenizers import WordTokenizer
@@ -10,6 +12,7 @@ from textblob.classifiers import (NaiveBayesClassifier, DecisionTreeClassifier,
                               basic_extractor, contains_extractor, NLTKClassifier,
                               PositiveNaiveBayesClassifier, _get_words_from_dataset,
                               MaxEntClassifier)
+from textblob import formats
 from textblob.compat import unicode
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -145,6 +148,26 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         assert_equal(cl.classify("I feel happy this morning"), 'pos')
         training_sentence = cl.train_set[0][0]
         assert_true(isinstance(training_sentence, unicode))
+
+    def test_init_with_custom_format(self):
+        redis_train = [('I like turtles', 'pos'), ('I hate turtles', 'neg')]
+        class MockRedisFormat(formats.BaseFormat):
+            def __init__(self, client, port):
+                self.client = client
+                self.port = port
+
+            @classmethod
+            def detect(cls, stream):
+                return True
+
+            def to_iterable(self):
+                return redis_train
+
+        formats.register('redis', MockRedisFormat)
+        mock_redis = mock.Mock()
+        cl = NaiveBayesClassifier(mock_redis, format='redis', port=1234)
+        assert_equal(cl.train_set, redis_train)
+
 
     def test_accuracy_on_a_csv_file(self):
         with open(CSV_FILE) as fp:

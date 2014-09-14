@@ -100,18 +100,23 @@ class BaseClassifier(object):
     a ``classifier`` property.
 
     :param train_set: The training set, either a list of tuples of the form
-        ``(text, classification)`` or a file pointer. ``text`` may be either
+        ``(text, classification)`` or a file-like object. ``text`` may be either
         a string or an iterable.
     :param callable feature_extractor: A feature extractor function that takes one or
         two arguments: ``document`` and ``train_set``.
     :param str format: If ``train_set`` is a filename, the file format, e.g.
         ``"csv"`` or ``"json"``. If ``None``, will attempt to detect the
         file format.
+    :param kwargs: Additional keyword arguments are passed to the constructor
+        of the :class:`Format <textblob.formats.BaseFormat>` class used to
+        read the data. Only applies when a file-like object is passed as
+        ``train_set``.
 
     .. versionadded:: 0.6.0
     """
 
-    def __init__(self, train_set, feature_extractor=basic_extractor, format=None):
+    def __init__(self, train_set, feature_extractor=basic_extractor, format=None, **kwargs):
+        self.format_kwargs = kwargs
         self.feature_extractor = feature_extractor
         if is_filelike(train_set):
             self.train_set = self._read_data(train_set, format)
@@ -131,7 +136,7 @@ class BaseClassifier(object):
             if format not in registry.keys():
                 raise ValueError("'{0}' format not supported.".format(format))
             format_class = registry[format]
-        return format_class(dataset).to_iterable()
+        return format_class(dataset, **self.format_kwargs).to_iterable()
 
     @cached_property
     def classifier(self):
@@ -178,8 +183,8 @@ class NLTKClassifier(BaseClassifier):
     nltk_class = None
 
     def __init__(self, train_set,
-                 feature_extractor=basic_extractor, format=None):
-        super(NLTKClassifier, self).__init__(train_set, feature_extractor, format)
+                 feature_extractor=basic_extractor, format=None, **kwargs):
+        super(NLTKClassifier, self).__init__(train_set, feature_extractor, format, **kwargs)
         self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
 
     def __repr__(self):
@@ -396,7 +401,7 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
 
     def __init__(self, positive_set, unlabeled_set,
                 feature_extractor=contains_extractor,
-                positive_prob_prior=0.5):
+                positive_prob_prior=0.5, **kwargs):
         self.feature_extractor = feature_extractor
         self.positive_set = positive_set
         self.unlabeled_set = unlabeled_set

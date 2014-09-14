@@ -9,14 +9,15 @@ import json
 DEFAULT_ENCODING = 'utf-8'
 
 class BaseFormat(object):
-    """Interface for format classes.
+    """Interface for format classes. Individual formats can decide on the
+    composition and meaning of ``**kwargs``.
 
     :param File fp: A file-like object.
 
     .. versionchanged:: 0.9.0
         Constructor receives a file pointer rather than a file path.
     """
-    def __init__(self, fp):
+    def __init__(self, fp, **kwargs):
         pass
 
     def to_iterable(self):
@@ -38,8 +39,8 @@ class DelimitedFormat(BaseFormat):
 
     delimiter = ","
 
-    def __init__(self, fp):
-        BaseFormat.__init__(self, fp)
+    def __init__(self, fp, **kwargs):
+        BaseFormat.__init__(self, fp, **kwargs)
         if PY2:
             reader = csv.reader(fp, delimiter=self.delimiter,
                                 encoding=DEFAULT_ENCODING)
@@ -90,8 +91,8 @@ class JSON(BaseFormat):
             {"text": "I hate this car.", "label": "neg"}
         ]
     """
-    def __init__(self, fp):
-        BaseFormat.__init__(self, fp)
+    def __init__(self, fp, **kwargs):
+        BaseFormat.__init__(self, fp, **kwargs)
         self.dict = json.load(fp)
 
     def to_iterable(self):
