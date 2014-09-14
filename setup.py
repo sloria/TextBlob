@@ -43,7 +43,7 @@ setup(
     author_email='sloria1@gmail.com',
     url='https://github.com/sloria/TextBlob',
     install_requires=REQUIREMENTS,
-    packages=find_packages(exclude=('test*', 'textblob.nltk.test')),
+    packages=find_packages(exclude=('test*', )),
     include_package_data=True,
     zip_safe=False,
     package_data={

@@ -94,12 +94,10 @@ TextBlob supports Python >=2.6 or >=3.3.
 Dependencies
 ++++++++++++
 
-TextBlob depends on PyYAML and NLTK 3. These packages will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``.
+TextBlob depends on NLTK 3. NLTK will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``.
 
 Some features, such as the maximum entropy classifier, require `numpy`_, but it is not required for basic usage.
 
 .. _numpy: http://www.numpy.org/
 
 .. _NLTK: http://nltk.org/
-
-
