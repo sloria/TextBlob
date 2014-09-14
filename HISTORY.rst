@@ -14,7 +14,7 @@ Changelog
 - *Backwards-incompatible*: If training a classifier with data from a file, you must pass a file object (rather than a file path).
 - Updated English sentiment corpus.
 - Add ``feature_extractor`` parameter to ``NaiveBayesAnalyzer``.
-- Add ``textblob.formats.get_registry()`` and ``textblob.formats.register()``.
+- Add ``textblob.formats.get_registry()`` and ``textblob.formats.register()`` which allows users to register custom data source formats.
 - Change ``BaseClassifier.detect`` from a ``staticmethod`` to a ``classmethod``.
 - Improved docs.
 - Tested on Python 3.4.

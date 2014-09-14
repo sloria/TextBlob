@@ -47,11 +47,11 @@ import textblob.formats as formats
 
 
 def _get_words_from_dataset(dataset):
-    '''Return a set of all words in a dataset.
+    """Return a set of all words in a dataset.
 
     :param dataset: A list of tuples of the form ``(words, label)`` where
         ``words`` is either a string of a list of tokens.
-    '''
+    """
     # Words may be either a string or a list of tokens. Return an iterator
     # of tokens accordingly
     def tokenize(words):

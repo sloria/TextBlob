@@ -1,5 +1,23 @@
 # -*- coding: utf-8 -*-
 """File formats for training and testing data.
+
+Includes a registry of valid file formats. New file formats can be added to the
+registry like so: ::
+
+    from textblob import formats
+
+    class PipeDelimitedFormat(formats.DelimitedFormat):
+        delimiter = '|'
+
+    formats.register('psv', PipeDelimitedFormat)
+
+Once a format has been registered, classifiers will be read data files with
+that format. ::
+
+    from textblob.classifiers import NaiveBayesAnalyzer
+
+    with open('training_data.psv', 'r') as fp:
+        cl = NaiveBayesAnalyzer(fp, format='psv')
 """
 
 from __future__ import absolute_import
@@ -76,7 +94,6 @@ class CSV(DelimitedFormat):
 class TSV(DelimitedFormat):
     """TSV format. Assumes each row is of the form ``text\tlabel``.
     """
-
     delimiter = "\t"
 
 
