@@ -3,7 +3,7 @@
 """
 
 from __future__ import absolute_import
-from textblob.compat import PY2, csv
+from textblob.compat import PY2, csv, OrderedDict
 import json
 
 DEFAULT_ENCODING = 'utf-8'
@@ -108,11 +108,11 @@ class JSON(BaseFormat):
         except ValueError:
             return False
 
-_registry = {
-    'csv': CSV,
-    'json': JSON,
-    'tsv': TSV
-}
+_registry = OrderedDict([
+    ('csv', CSV),
+    ('json', JSON),
+    ('tsv', TSV),
+])
 
 def detect(fp, max_read=1024):
     """Attempt to detect a file's format, trying each of the supported

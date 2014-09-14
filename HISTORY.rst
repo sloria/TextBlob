@@ -4,7 +4,7 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
-- TextBlob now depends on NLTK 3. The vendorized version of NLTK is removed.
+- TextBlob now depends on NLTK 3. The vendorized version of NLTK has been removed.
 - Fix bug that raised a `SyntaxError` when translating text with non-ascii characters on Python 3.
 - Fix bug that showed "double-escaped" unicode characters in translator output (issue #56). Thanks Evan Dempsey.
 - *Backwards-incompatible*: Completely remove ``import text.blob``. You should ``import textblob`` instead.
