@@ -6,14 +6,14 @@ from __future__ import unicode_literals
 import json
 from unittest import TestCase, main
 from datetime import datetime
-import warnings
+import mock
 
-from nose.tools import *  # PEP8 asserts
+from nose.tools import *  # noqa (PEP8 asserts)
 from nose.plugins.attrib import attr
+import nltk
 
 from textblob.compat import PY2, unicode, basestring, binary_type
 import textblob as tb
-from textblob.packages import nltk
 from textblob.np_extractors import ConllExtractor, FastNPExtractor
 from textblob.taggers import NLTKTagger, PatternTagger
 from textblob.tokenizers import WordTokenizer, SentenceTokenizer
@@ -203,8 +203,9 @@ class SentenceTest(TestCase):
     def test_string_equality(self):
         assert_equal(self.sentence, 'Any place with frites and Belgian beer has my vote.')
 
-    @attr("requires_internet")
-    def test_translate(self):
+    @mock.patch('textblob.translate.Translator.translate')
+    def test_translate(self, mock_translate):
+        mock_translate.return_value = 'Esta es una frase.'
         blob = tb.Sentence("This is a sentence.")
         translated = blob.translate(to="es")
         assert_true(isinstance(translated, tb.Sentence))
@@ -218,10 +219,17 @@ class SentenceTest(TestCase):
         assert_true(isinstance(blob.correct(), tb.Sentence))
         assert_equal(blob.correct(), tb.Sentence("I have \ngood spelling."))
 
-    @attr('requires_internet')
-    def test_translate_detects_language_by_default(self):
-        blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
-        assert_equal(blob.translate(), "With full sovereignty")
+    @mock.patch('textblob.translate.Translator._get_translation_from_json5')
+    @mock.patch('textblob.translate.Translator._get_language_from_json5')
+    @mock.patch('textblob.translate.Translator._get_json5')
+    @mock.patch('textblob.translate.Translator.detect')
+    def test_translate_detects_language_by_default(self, mock_detect,
+            mock_get_json5, mock_get_language, mock_get_translation):
+        mock_get_language.return_value = 'ar'
+        mock_get_translation.return_value = 'Fully sovereign'
+        text = unicode("ذات سيادة كاملة")
+        blob = tb.TextBlob(text)
+        assert_true(mock_detect.called_once_with(text))
 
 
 class TextBlobTest(TestCase):
@@ -745,37 +753,24 @@ is managed by the non-profit Python Software Foundation.'''
         # Pass in the TabTokenizer
         assert_equal(blob.tokenize(tokenizer), tb.WordList(["This is", "text."]))
 
-    @attr("requires_internet")
-    def test_translate(self):
+    @mock.patch('textblob.translate.Translator.translate')
+    def test_translate(self, mock_translate):
+        mock_translate.return_value = 'Esta es una frase.'
         blob = tb.TextBlob("This is a sentence.")
         translated = blob.translate(to="es")
         assert_true(isinstance(translated, tb.TextBlob))
         assert_equal(translated, "Esta es una frase.")
+        mock_translate.return_value = 'This is a sentence.'
         es_blob = tb.TextBlob("Esta es una frase.")
         to_en = es_blob.translate(from_lang="es", to="en")
         assert_equal(to_en, "This is a sentence.")
 
-    @attr("requires_internet")
-    def test_translate_non_ascii(self):
-        blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
-        translated = blob.translate(from_lang="ar", to="en")
-        assert_equal(translated, "With full sovereignty")
-
-        chinese_blob = tb.TextBlob(unicode("美丽优于丑陋"))
-        translated = chinese_blob.translate(from_lang="zh-CN", to='en')
-        assert_equal(translated, "Beautiful is better than ugly")
-
-    @attr("requires_internet")
-    def test_detect(self):
+    @mock.patch('textblob.translate.Translator.detect')
+    def test_detect(self, mock_detect):
+        mock_detect.return_value = 'es'
         es_blob = tb.TextBlob("Hola")
         assert_equal(es_blob.detect_language(), "es")
-        en_blob = tb.TextBlob("Hello")
-        assert_equal(en_blob.detect_language(), "en")
-
-    @attr("requires_internet")
-    def test_detect_non_ascii(self):
-        blob = tb.TextBlob(unicode("ذات سيادة كاملة"))
-        assert_equal(blob.detect_language(), "ar")
+        assert_true(mock_detect.called_once_with('Hola'))
 
     def test_correct(self):
         blob = tb.TextBlob("I havv bad speling.")
@@ -865,16 +860,19 @@ class WordTest(TestCase):
         assert_equal(self.cat.lower(), "cat")
         assert_equal(self.cat[0:2], 'ca')
 
-    @attr('requires_internet')
-    def test_translate(self):
+    @mock.patch('textblob.translate.Translator.translate')
+    def test_translate(self, mock_translate):
+        mock_translate.return_value = 'gato'
         assert_equal(tb.Word("cat").translate(to="es"), "gato")
 
-    @attr('requires_internet')
-    def test_translate_without_from_lang(self):
-        assert_equal(tb.Word('hola').translate(), tb.Word('hello'))
+    @mock.patch('textblob.translate.Translator.translate')
+    def test_translate_without_from_lang(self, mock_translate):
+        mock_translate.return_value = 'hi'
+        assert_equal(tb.Word('hola').translate(), 'hi')
 
-    @attr('requires_internet')
-    def test_detect_language(self):
+    @mock.patch('textblob.translate.Translator.detect')
+    def test_detect_language(self, mock_detect):
+        mock_detect.return_value = 'fr'
         assert_equal(tb.Word("bonjour").detect_language(), 'fr')
 
     def test_spellcheck(self):
@@ -923,7 +921,7 @@ class WordTest(TestCase):
         w = tb.Word("work")
         noun_syns = w.get_synsets(pos=wn.NOUN)
         for synset in noun_syns:
-            assert_equal(synset.pos, wn.NOUN)
+            assert_equal(synset.pos(), wn.NOUN)
 
     def test_definitions(self):
         w = tb.Word("octopus")
@@ -951,7 +949,7 @@ class TestWordnetInterface(TestCase):
     def test_lemma(self):
         lemma = wn.Lemma('eat.v.01.eat')
         word = tb.Word("eat")
-        assert_equal(word.synsets[0].lemmas[0], lemma)
+        assert_equal(word.synsets[0].lemmas()[0], lemma)
 
 
 class BlobberTest(TestCase):

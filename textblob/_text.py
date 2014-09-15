@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-'''This file is adapted from the pattern library.
+"""This file is adapted from the pattern library.
 
 URL: http://www.clips.ua.ac.be/pages/pattern-web
 Licence: BSD
-'''
+"""
 from __future__ import unicode_literals
 import string
 import codecs

@@ -14,10 +14,6 @@ TextBlob: Simplified Text Processing
     :target: https://crate.io/packages/textblob/
     :alt: Number of PyPI downloads
 
-.. image:: https://badge.waffle.io/sloria/TextBlob.png?label=Ready
-     :target: https://waffle.io/sloria/TextBlob
-     :alt: Issues in Ready
-
 
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
 
@@ -70,7 +66,6 @@ Features
 - `n`-grams
 - Word inflection (pluralization and singularization) and lemmatization
 - Spelling correction
-- JSON serialization
 - Add new models or languages through extensions
 - WordNet integration
 

@@ -14,3 +14,4 @@ Contributors (chronological)
 - Matthew Honnibal `@syllog1sm <https://github.com/syllog1sm>`_
 - Roman Yankovsky `@RomanYankovsky <https://github.com/RomanYankovsky>`_
 - David Karesh `@davidnk <https://github.com/davidnk>`_
+- Evan Dempsey `@evandempsey <https://github.com/evandempsey>`_

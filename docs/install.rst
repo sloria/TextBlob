@@ -94,16 +94,10 @@ TextBlob supports Python >=2.6 or >=3.3.
 Dependencies
 ++++++++++++
 
-PyYAML is TextBlob's only external dependency. It will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``. A vendorized version of NLTK_ is bundled internally.
-
-.. note::
-
-    If you already have NLTK installed, TextBlob will use your local version instead of the bundled version.
+TextBlob depends on NLTK 3. NLTK will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``.
 
 Some features, such as the maximum entropy classifier, require `numpy`_, but it is not required for basic usage.
 
 .. _numpy: http://www.numpy.org/
 
 .. _NLTK: http://nltk.org/
-
-

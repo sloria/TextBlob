@@ -20,31 +20,26 @@ In Particular
 Questions, Feature Requests, Bug Reports, and Feedback. . .
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-. . .should all be reported on the `Github Issue Tracker`_ . For a nicer interface, check out the `TextBlob waffle.io board`_.
+. . .should all be reported on the `Github Issue Tracker`_ .
 
-.. _TextBlob waffle.io board: https://waffle.io/sloria/TextBlob
 .. _`Github Issue Tracker`: https://github.com/sloria/TextBlob/issues?state=open
 
 Setting Up for Local Development
 ++++++++++++++++++++++++++++++++
 
-1. Fork TextBlob_ on Github.
-2. Clone your fork::
+1. Fork TextBlob_ on Github. ::
 
-    $ git clone git@github.com/yourusername/textblob.git
+    $ git clone https://github.com/sloria/TextBlob.git
+    $ cd TextBlob
 
-3. It is recommended that you use virtualenv to keep your environment clean. If you have `virtualenv`_  and `virtualenvwrapper`_, run ::
+2. Install development requirements. It is highly recommended that you use a virtualenv. ::
 
-    $ mkvirtualenv textblob
-    $ cd textblob
-    $ workon textblob
-
-4. Install the development requirements. ::
-
+    # After activating your virtualenv
     $ pip install -r dev-requirements.txt
 
-.. _virtualenv: http://www.virtualenv.org/en/latest/
-.. _virtualenvwrapper: http://virtualenvwrapper.readthedocs.org/en/latest/
+3. Install TextBlob in develop mode. ::
+
+   $ python setup.py develop
 
 .. _extension-development:
 
@@ -107,7 +102,7 @@ Pull Requests
 
 - If the pull request adds functionality, it is tested and the docs are updated.
 - If you've developed an extension, it is on the :ref:`Extensions List <extensions>`.
-- The pull request works on Python 2.6, 2.7, 3.3, and PyPy. Use ``tox`` to verify that it does.
+- The pull request works on Python 2.6, 2.7, 3.3, 3.4, and PyPy. Use ``tox`` to verify that it does.
 - You've added yourself to ``AUTHORS.rst``.
 
 4. Submit a pull request to the ``sloria:dev`` branch.
@@ -131,7 +126,7 @@ To get test coverage reports (must have coverage installed): ::
 
     $ python run_tests.py cover
 
-To run tests on Python 2.6, 2.7, and 3.3 virtual environments (must have each interpreter installed): ::
+To run tests on Python 2.6, 2.7, 3.3, and 3.4 virtual environments (must have each interpreter installed): ::
 
     $ tox
 

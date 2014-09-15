@@ -16,7 +16,7 @@ directly.
 
     Lemma constructor.
 '''
-from textblob.packages import nltk
+import nltk
 
 wordnet = nltk.corpus.wordnet
 Synset = nltk.corpus.wordnet.synset

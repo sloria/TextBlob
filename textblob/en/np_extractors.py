@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 '''Various noun phrase extractors.'''
 from __future__ import unicode_literals, absolute_import
-from textblob.packages import nltk
+
+import nltk
+
 from textblob.taggers import PatternTagger
 from textblob.decorators import requires_nltk_corpus
 from textblob.utils import tree2str, filter_insignificant
@@ -69,7 +71,7 @@ class ConllExtractor(BaseNPExtractor):
             # noun phrase tree
             phrases = [_normalize_tags(filter_insignificant(each,
                        self.INSIGNIFICANT_SUFFIXES)) for each in parsed
-                       if isinstance(each, nltk.tree.Tree) and each.node
+                       if isinstance(each, nltk.tree.Tree) and each.label()
                        == 'NP' and len(filter_insignificant(each)) >= 1
                        and _is_match(each, cfg=self.CFG)]
             nps = [tree2str(phrase) for phrase in phrases]

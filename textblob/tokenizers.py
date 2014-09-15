@@ -6,15 +6,15 @@
 from __future__ import absolute_import
 from itertools import chain
 
-from textblob.packages import nltk
+import nltk
+
 from textblob.utils import strip_punc
 from textblob.base import BaseTokenizer
 from textblob.decorators import requires_nltk_corpus
 
 
 class WordTokenizer(BaseTokenizer):
-
-    '''NLTK's recommended word tokenizer (currently the TreeBankTokenizer).
+    """NLTK's recommended word tokenizer (currently the TreeBankTokenizer).
     Uses regular expressions to tokenize text. Assumes text has already been
     segmented into sentences.
 
@@ -23,7 +23,7 @@ class WordTokenizer(BaseTokenizer):
     * split standard contractions, e.g. don't -> do n't
     * split commas and single quotes
     * separate periods that appear at the end of line
-    '''
+    """
 
     def tokenize(self, text, include_punc=True):
         '''Return a list of word tokens.
@@ -44,14 +44,12 @@ class WordTokenizer(BaseTokenizer):
                     for word in tokens if strip_punc(word, all=False)]
 
 
-
 class SentenceTokenizer(BaseTokenizer):
-
-    '''NLTK's sentence tokenizer (currently PunkSentenceTokenizer).
+    """NLTK's sentence tokenizer (currently PunkSentenceTokenizer).
     Uses an unsupervised algorithm to build a model for abbreviation words,
     collocations, and words that start sentences,
     then uses that to find sentence boundaries.
-    '''
+    """
 
     @requires_nltk_corpus
     def tokenize(self, text):

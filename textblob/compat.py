@@ -2,6 +2,7 @@
 import sys
 
 PY2 = int(sys.version[0]) == 2
+PY26 = PY2 and int(sys.version_info[1]) < 7
 
 if PY2:
     from itertools import imap, izip
@@ -16,11 +17,15 @@ if PY2:
     imap = imap
     izip = izip
     import unicodecsv as csv
+    if PY26:
+        from .ordereddict import OrderedDict
+    else:
+        from collections import OrderedDict
 
     def implements_to_string(cls):
-        '''Class decorator that renames __str__ to __unicode__ and
+        """Class decorator that renames __str__ to __unicode__ and
         modifies __str__ that returns utf-8.
-        '''
+        """
         cls.__unicode__ = cls.__str__
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
@@ -36,12 +41,13 @@ else: # PY3
     imap = map
     izip = zip
     import csv
+    from collections import OrderedDict
 
     implements_to_string = lambda x: x
 
 
 def with_metaclass(meta, *bases):
-    '''Defines a metaclass.
+    """Defines a metaclass.
 
     Creates a dummy class with a dummy metaclass. When subclassed, the dummy
     metaclass is used, which has a constructor that instantiates a
@@ -49,7 +55,7 @@ def with_metaclass(meta, *bases):
     dummy metaclass are not in the inheritance tree.
 
     Credit to Armin Ronacher.
-    '''
+    """
     class metaclass(meta):
         __call__ = type.__call__
         __init__ = type.__init__

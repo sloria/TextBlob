@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 import unittest
-import logging
-from nose.tools import *  # PEP8 asserts
+from nose.tools import *  # noqa (PEP8 asserts)
 
 from textblob import formats
 from textblob.compat import unicode
 
-logging.basicConfig(level=logging.DEBUG)
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, 'data.csv')
 JSON_FILE = os.path.join(HERE, "data.json")
@@ -19,17 +17,20 @@ class TestFormats(unittest.TestCase):
         pass
 
     def test_detect_csv(self):
-        format = formats.detect(CSV_FILE)
+        with open(CSV_FILE) as fp:
+            format = formats.detect(fp)
         assert_equal(format, formats.CSV)
 
     def test_detect_json(self):
-        format = formats.detect(JSON_FILE)
+        with open(JSON_FILE) as fp:
+            format = formats.detect(fp)
         assert_equal(format, formats.JSON)
 
     def test_available(self):
-        assert_true('csv' in formats.AVAILABLE.keys())
-        assert_true('json' in formats.AVAILABLE.keys())
-        assert_true('tsv' in formats.AVAILABLE.keys())
+        registry = formats.get_registry()
+        assert_true('csv' in registry.keys())
+        assert_true('json' in registry.keys())
+        assert_true('tsv' in registry.keys())
 
 class TestDelimitedFormat(unittest.TestCase):
 
@@ -47,7 +48,8 @@ class TestDelimitedFormat(unittest.TestCase):
 class TestCSV(unittest.TestCase):
 
     def test_read_from_filename(self):
-        data = formats.CSV(CSV_FILE)
+        with open(CSV_FILE) as fp:
+            data = formats.CSV(fp)
 
     def test_detect(self):
         with open(CSV_FILE, 'r') as fp:
@@ -59,8 +61,9 @@ class TestCSV(unittest.TestCase):
 
 class TestTSV(unittest.TestCase):
 
-    def test_read_from_filename(self):
-        data = formats.TSV(TSV_FILE)
+    def test_read_from_file_object(self):
+        with open(TSV_FILE) as fp:
+            data = formats.TSV(fp)
 
     def test_detect(self):
         with open(TSV_FILE, 'r') as fp:
@@ -73,8 +76,9 @@ class TestTSV(unittest.TestCase):
 
 class TestJSON(unittest.TestCase):
 
-    def test_read_from_filename(self):
-        formats.JSON(JSON_FILE)
+    def test_read_from_file_object(self):
+        with open(JSON_FILE) as fp:
+            formats.JSON(fp)
 
     def test_detect(self):
         with open(JSON_FILE, 'r') as fp:
@@ -85,12 +89,37 @@ class TestJSON(unittest.TestCase):
             assert_false(formats.JSON.detect(stream))
 
     def test_to_iterable(self):
-        d = formats.JSON(JSON_FILE)
-        logging.debug(d.dict)
+        with open(JSON_FILE) as fp:
+            d = formats.JSON(fp)
         data = d.to_iterable()
         first = data[0]
         text, label = first[0], first[1]
         assert_true(isinstance(text, unicode))
+
+class CustomFormat(formats.BaseFormat):
+    def to_iterable():
+        return [
+            ('I like turtles', 'pos'),
+            ('I hate turtles', 'neg')
+        ]
+    @classmethod
+    def detect(cls, stream):
+        return True
+
+
+class TestRegistry(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_register(self):
+        registry = formats.get_registry()
+        assert_false(CustomFormat in registry.values())
+
+        formats.register('trt', CustomFormat)
+
+        assert_true(CustomFormat in registry.values())
+        assert_true('trt' in registry.keys())
+
 
 if __name__ == '__main__':
     unittest.main()

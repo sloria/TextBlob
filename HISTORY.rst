@@ -1,6 +1,25 @@
 Changelog
 =========
 
+0.9.0 (2014-09-15)
+------------------
+
+- TextBlob now depends on NLTK 3. The vendorized version of NLTK has been removed.
+- Fix bug that raised a `SyntaxError` when translating text with non-ascii characters on Python 3.
+- Fix bug that showed "double-escaped" unicode characters in translator output (issue #56). Thanks Evan Dempsey.
+- *Backwards-incompatible*: Completely remove ``import text.blob``. You should ``import textblob`` instead.
+- *Backwards-incompatible*: Completely remove ``PerceptronTagger``. Install ``textblob-aptagger`` instead.
+- *Backwards-incompatible*: Rename ``TextBlobException`` to ``TextBlobError`` and ``MissingCorpusException`` to ``MissingCorpusError``.
+- *Backwards-incompatible*: ``Format`` classes are passed a file object rather than a file path.
+- *Backwards-incompatible*: If training a classifier with data from a file, you must pass a file object (rather than a file path).
+- Updated English sentiment corpus.
+- Add ``feature_extractor`` parameter to ``NaiveBayesAnalyzer``.
+- Add ``textblob.formats.get_registry()`` and ``textblob.formats.register()`` which allows users to register custom data source formats.
+- Change ``BaseClassifier.detect`` from a ``staticmethod`` to a ``classmethod``.
+- Improved docs.
+- Tested on Python 3.4.
+
+
 0.8.4 (2014-02-02)
 ------------------
 - Fix display (``__repr__``) of WordList slices on Python 3.
