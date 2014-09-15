@@ -83,6 +83,7 @@ Wordnet
 -------
 
 .. automodule:: textblob.wordnet
+    :members:
 
 Exceptions
 ----------
