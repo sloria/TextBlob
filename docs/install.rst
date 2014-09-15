@@ -80,11 +80,6 @@ Old:
     from text.taggers import NLTKTagger
 
 
-.. note::
-
-    You can still import from ``text``, but this will raise a ``DeprecationWarning``. The ``text`` package will be removed in later versions.
-
-
 Python
 ++++++
 
