@@ -117,8 +117,8 @@ class TestRegistry(unittest.TestCase):
 
         formats.register('trt', CustomFormat)
 
-        assert_in(CustomFormat, registry.values())
-        assert_in('trt', registry.keys())
+        assert_true(CustomFormat in registry.values())
+        assert_true('trt' in registry.keys())
 
 
 if __name__ == '__main__':
