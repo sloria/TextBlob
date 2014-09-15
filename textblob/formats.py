@@ -11,7 +11,7 @@ registry like so: ::
 
     formats.register('psv', PipeDelimitedFormat)
 
-Once a format has been registered, classifiers will be read data files with
+Once a format has been registered, classifiers will be able to read data files with
 that format. ::
 
     from textblob.classifiers import NaiveBayesAnalyzer

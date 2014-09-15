@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.9.0 (unreleased)
+0.9.0 (2014-09-15)
 ------------------
 
 - TextBlob now depends on NLTK 3. The vendorized version of NLTK has been removed.
