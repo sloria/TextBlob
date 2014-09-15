@@ -27,8 +27,8 @@ Release v\ |version|. (:ref:`Changelog`)
     '''
 
     blob = TextBlob(text)
-    blob.tags           # [(u'The', u'DT'), (u'titular', u'JJ'),
-                        #  (u'threat', u'NN'), (u'of', u'IN'), ...]
+    blob.tags           # [('The', 'DT'), ('titular', 'JJ'),
+                        #  ('threat', 'NN'), ('of', 'IN'), ...]
 
     blob.noun_phrases   # WordList(['titular threat', 'blob',
                         #            'ultimate movie monster',
