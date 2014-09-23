@@ -11,7 +11,7 @@ TextBlob: Simplified Text Processing
     :alt: Travis-CI
 
 .. image:: https://pypip.in/d/textblob/badge.png
-    :target: https://crate.io/packages/textblob/
+    :target: https://warehouse.python.org/project/textblob/
     :alt: Number of PyPI downloads
 
 
