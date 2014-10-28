@@ -10,7 +10,7 @@ Installing/Upgrading From the PyPI
     $ pip install -U textblob
     $ python -m textblob.download_corpora
 
-This will install TextBlob and download the necessary NLTK corpora.
+This will install TextBlob and download the necessary NLTK corpora. If you need to change the default install directory set the environment variable NLTK_DATA.
 
 .. admonition:: Downloading the minimum corpora
 
