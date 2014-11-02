@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import unittest
 
 from nose.plugins.attrib import attr
-from nose.tools import *  # PEP8 asserts
+from nose.tools import *  # noqa (PEP8 asserts)
 import mock
 
 from textblob.translate import Translator, _unescape
@@ -73,7 +73,7 @@ class TestTranslator(unittest.TestCase):
         assert_equal(lang3, "ru")
 
     @attr("requires_internet")
-    def test_translate(self):
+    def test_translate_text(self):
         text = "This is a sentence."
         translated = self.translator.translate(text, to_lang="es")
         assert_equal(translated, "Esta es una frase.")
@@ -85,7 +85,7 @@ class TestTranslator(unittest.TestCase):
     def test_translate_non_ascii(self):
         text = unicode("ذات سيادة كاملة")
         translated = self.translator.translate(text, from_lang='ar', to_lang='en')
-        assert_equal(translated, "Fully sovereign")
+        assert_equal(translated, "With full sovereignty")
 
         text2 = unicode("美丽优于丑陋")
         translated = self.translator.translate(text2, from_lang="zh-CN", to_lang='en')
