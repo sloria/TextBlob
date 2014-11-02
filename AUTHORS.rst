@@ -15,3 +15,4 @@ Contributors (chronological)
 - Roman Yankovsky `@RomanYankovsky <https://github.com/RomanYankovsky>`_
 - David Karesh `@davidnk <https://github.com/davidnk>`_
 - Evan Dempsey `@evandempsey <https://github.com/evandempsey>`_
+- Wesley Childs `@mrchilds <https://github.com/mrchilds>`_
