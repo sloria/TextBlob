@@ -216,9 +216,9 @@ TextBlobs can be translated between languages.
 
 .. doctest::
 
-    >>> en_blob = TextBlob(u"Simple is better than complex.")
-    >>> en_blob.translate(to="es")
-    TextBlob("Simple es mejor que complejo .")
+    >>> en_blob = TextBlob(u'Simple is better than complex.')
+    >>> en_blob.translate(to='es')
+    TextBlob("Simple es mejor que complejo.")
 
 If no source language is specified, TextBlob will attempt to detect the language. You can specify the source language explicitly, like so.
 
