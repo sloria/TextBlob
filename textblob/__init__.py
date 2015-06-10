@@ -1,6 +1,6 @@
 import os
 
-__version__ = '0.9.0'
+__version__ = '0.9.1dev'
 __license__ = 'MIT'
 __author__ = 'Steven Loria'
 
