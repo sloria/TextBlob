@@ -1,0 +1,4 @@
+
+sphinx
+PyYAML
+sphinx-issues==0.2.0
