@@ -343,14 +343,17 @@ class DecisionTreeClassifier(NLTKClassifier):
 
     nltk_class = nltk.classify.decisiontree.DecisionTreeClassifier
 
-    def pprint(self, *args, **kwargs):
+    def pretty_format(self, *args, **kwargs):
         """Return a string containing a pretty-printed version of this decision
         tree. Each line in the string corresponds to a single decision tree node
         or leaf, and indentation is used to display the structure of the tree.
 
         :rtype: str
         """
-        return self.classifier.pp(*args, **kwargs)
+        return self.classifier.pretty_format(*args, **kwargs)
+
+    # Backwards-compat
+    pprint = pretty_format
 
     def pseudocode(self, *args, **kwargs):
         """Return a string representation of this decision tree that expresses

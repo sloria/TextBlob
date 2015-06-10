@@ -231,9 +231,11 @@ class TestDecisionTreeClassifier(unittest.TestCase):
         code = self.classifier.pseudocode()
         assert_true("if" in code)
 
-    def test_pp(self):
+    def test_pretty_format(self):
         pp = self.classifier.pprint(width=60)
+        pf = self.classifier.pretty_format(width=60)
         assert_true(isinstance(pp, unicode))
+        assert_equal(pp, pf)
 
     def test_repr(self):
         assert_equal(repr(self.classifier),

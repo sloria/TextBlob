@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.9.1 (unreleased)
+------------------
+
+- Fix ``DecisionTreeClassifier.pprint`` for compatibility with nltk>=3.0.2.
+
 0.9.0 (2014-09-15)
 ------------------
 
