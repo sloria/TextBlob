@@ -93,7 +93,7 @@ Project Links
 -------------
 
 - Docs: https://textblob.readthedocs.org/
-- Changelog: http://textblob.readthedocs.org/en/latest/changelog.html
+- Changelog: https://textblob.readthedocs.org/en/latest/changelog.html
 - PyPI: https://pypi.python.org/pypi/TextBlob
 - Issues: https://github.com/sloria/TextBlob/issues
 
