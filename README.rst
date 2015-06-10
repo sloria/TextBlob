@@ -10,11 +10,6 @@ TextBlob: Simplified Text Processing
     :target: https://travis-ci.org/sloria/TextBlob
     :alt: Travis-CI
 
-.. image:: https://pypip.in/d/textblob/badge.png
-    :target: https://warehouse.python.org/project/textblob/
-    :alt: Number of PyPI downloads
-
-
 Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
 
 `TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more.
@@ -94,6 +89,13 @@ Requirements
 
 - Python >= 2.6 or >= 3.3
 
+Project Links
+-------------
+
+- Docs: https://textblob.readthedocs.org/
+- Changelog: http://textblob.readthedocs.org/en/latest/changelog.html
+- PyPI: https://pypi.python.org/pypi/TextBlob
+- Issues: https://github.com/sloria/TextBlob/issues
 
 License
 -------
