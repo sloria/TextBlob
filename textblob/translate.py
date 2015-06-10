@@ -32,7 +32,7 @@ class Translator(object):
     headers = {'User-Agent': ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) '
             'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19')}
 
-    def translate(self, source, from_lang='en', to_lang='en', host=None, type_=None):
+    def translate(self, source, from_lang=None, to_lang='en', host=None, type_=None):
         """Translate the source text from one language to another."""
         if PY2:
             source = source.encode('utf-8')
