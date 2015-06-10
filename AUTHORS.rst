@@ -16,3 +16,4 @@ Contributors (chronological)
 - David Karesh `@davidnk <https://github.com/davidnk>`_
 - Evan Dempsey `@evandempsey <https://github.com/evandempsey>`_
 - Wesley Childs `@mrchilds <https://github.com/mrchilds>`_
+- Jeff Schnurr '@jschnurr <https://github.com/jschnurr>'
