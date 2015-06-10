@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# vi: set ft=python :
 import konch
 from textblob import TextBlob, Blobber, Word, Sentence
 
@@ -10,4 +11,5 @@ konch.config({
         'Sentence': Sentence,
     },
     'prompt': '>>> ',
+    'ipy_autoreload': True,
 })

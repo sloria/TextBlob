@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import webbrowser
 
 from invoke import task, run
 
@@ -28,18 +29,8 @@ def clean_docs():
 
 @task
 def browse_docs():
-    platform = str(sys.platform).lower()
-    command_map = {
-        'darwin': 'open ',
-        'linux': 'idle ',
-        'win32': '',
-    }
-    cmd = command_map.get(platform)
-    if cmd:
-        run("{0}{1}".format(cmd, os.path.join(build_dir, 'index.html')))
-    else:
-        print('Unsure how to open the built file on this operating system.')
-        sys.exit(1)
+    path = os.path.join(build_dir, 'index.html')
+    webbrowser.open_new_tab(path)
 
 @task
 def docs(clean=False, browse=False):
@@ -50,9 +41,10 @@ def docs(clean=False, browse=False):
         browse_docs()
 
 @task
-def readme():
+def readme(browse=False):
     run("rst2html.py README.rst > README.html", pty=True)
-    run("open README.html")
+    if browse:
+        webbrowser.open_new_tab('README.html')
 
 @task
 def doctest():

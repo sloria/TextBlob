@@ -8,9 +8,9 @@ TEST_REQUIREMENTS = ['nose', 'mock']
 
 
 def find_version(fname):
-    '''Attempts to find the version number in the file names fname.
+    """Attempts to find the version number in the file names fname.
     Raises RuntimeError if not found.
-    '''
+    """
     version = ''
     with open(fname, 'r') as fp:
         reg = re.compile(r'__version__ = [\'"]([^\'"]*)[\'"]')
@@ -36,8 +36,7 @@ setup(
     version=__version__,
     description='Simple, Pythonic text processing. Sentiment analysis, '
                 'POS tagging, noun phrase parsing, and more.',
-    long_description=(read("README.rst") + '\n\n' +
-                        read("HISTORY.rst")),
+    long_description=read("README.rst"),
     license=read("LICENSE"),
     author='Steven Loria',
     author_email='sloria1@gmail.com',
