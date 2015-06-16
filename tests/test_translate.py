@@ -63,6 +63,12 @@ class TestTranslator(unittest.TestCase):
         to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
         assert_equal(to_en, "Hello, my name is Adrian! How are you? I'm fine")
 
+    @attr("requires internet")
+    def test_translate_missing_from_language_auto_detects(self):
+        text = u"Ich besorge das Bier"
+        translated = self.translator.translate(text, to_lang="en")
+        assert_equal(translated, u"I'll get the beer")
+
     @attr("requires_internet")
     def test_translate_text(self):
         text = "This is a sentence."
