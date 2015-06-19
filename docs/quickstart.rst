@@ -221,6 +221,7 @@ TextBlobs can be translated between languages.
     TextBlob("Simple es mejor que complejo.")
 
 If no source language is specified, TextBlob will attempt to detect the language. You can specify the source language explicitly, like so.
+Raises TranslatorError if the TextBlob cannot be translated into the requested language.
 
 .. doctest::
 
