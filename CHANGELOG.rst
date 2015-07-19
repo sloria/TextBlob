@@ -1,12 +1,16 @@
 Changelog
 =========
 
-0.9.2 (unreleased)
-------------------
+0.10.0 (unreleased)
+-------------------
+
+Changes:
+
+- When translation fails, raise a ``TranslationError`` (:issue:`76`). Thanks :user:`jschnurr`.
 
 Bug fixes:
 
-- ``Translator.translate`` will detect language of input text by default (:issue:`85`). Thanks :user:`jschnurr`.
+- ``Translator.translate`` will detect language of input text by default (:issue:`85`). Thanks again :user:`jschnurr`.
 
 0.9.1 (2015-06-10)
 ------------------
