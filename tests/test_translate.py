@@ -43,6 +43,18 @@ class TestTranslator(unittest.TestCase):
         lang2 = self.translator.detect("Hola")
         assert_equal(lang2, "es")
 
+    @mock.patch('textblob.translate.Translator._get_json5')
+    def test_failed_translation_raises(self, mock_get_json5):
+        mock_get_json5.return_value = unicode('{"sentences":[{"trans":'
+                                        '"n0tv\\u0026l1d","orig":'
+                                        '"n0tv\\u0026l1d","translit":"",'
+                                        '"src_translit":""}],'
+                                        '"src":"en","server_time":2}')
+        text = unicode(' n0tv&l1d ')
+        assert_raises(TranslatorError,
+                      self.translator.translate, text, to_lang="es")
+        assert_true(mock_get_json5.called_once)
+
     @attr("requires_internet")
     def test_detect(self):
         assert_equal(self.translator.detect('Hola'), "es")
@@ -89,7 +101,9 @@ class TestTranslator(unittest.TestCase):
         assert_equal(translated, "Beautiful is better than ugly")
 
     @attr("requires_internet")
-    def test_translate_unicode_escape(self):
+    @mock.patch('textblob.translate.Translator._translation_successful')
+    def test_translate_unicode_escape(self, trans_success_mock):
+        trans_success_mock.return_value = True
         text = "Jenner & Block LLP"
         translated = self.translator.translate(text, from_lang="en", to_lang="en")
         assert_equal(translated, "Jenner & Block LLP")

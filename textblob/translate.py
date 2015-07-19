@@ -39,7 +39,10 @@ class Translator(object):
         data = {"client": "p", "ie": "UTF-8", "oe": "UTF-8",
                 "sl": from_lang, "tl": to_lang, "text": source}
         json5 = self._get_json5(self.url, host=host, type_=type_, data=data)
-        return self._get_translation_from_json5(json5)
+        if self._translation_successful(json5):
+            return self._get_translation_from_json5(json5)
+        else:
+            raise TranslatorError('Translation API returned an invalid result.')
 
     def detect(self, source, host=None, type_=None):
         """Detect the source text's language."""
@@ -64,6 +67,18 @@ class Translator(object):
         if 'sentences' in json_data:
             result = ''.join([s['trans'] for s in json_data['sentences']])
         return _unescape(result)
+
+    def _translation_successful(self, content):
+        """Validate API returned expected schema, and that the translated text
+        is different than the original string.
+        """
+        json_data = json.loads(content)
+        result = False
+        if 'sentences' in json_data:
+            response = json_data['sentences'][0]
+            if 'orig' in response and 'trans' in response:
+                result = response['orig'] != response['trans']
+        return result
 
     def _get_json5(self, url, host=None, type_=None, data=None):
         encoded_data = urlencode(data).encode('utf-8')
