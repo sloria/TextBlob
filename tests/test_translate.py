@@ -69,13 +69,13 @@ class TestTranslator(unittest.TestCase):
         lang3 = self.translator.detect(unicode("Избранная статья"))
         assert_equal(lang3, "ru")
 
-    @attr("requires internet")
+    @attr("requires_internet")
     def test_translate_spaces(self):
         es_text = u"Hola, me llamo Adrián! Cómo estás? Yo bien"
         to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
-        assert_equal(to_en, "Hello, my name is Adrian! How are you? I'm fine")
+        assert_equal(to_en, "Hello, my name is Adrian! How are you? I am good")
 
-    @attr("requires internet")
+    @attr("requires_internet")
     def test_translate_missing_from_language_auto_detects(self):
         text = u"Ich besorge das Bier"
         translated = self.translator.translate(text, to_lang="en")
