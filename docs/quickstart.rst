@@ -141,7 +141,7 @@ You can also create synsets directly.
     >>> octopus.path_similarity(shrimp)
     0.1111111111111111
 
-For more information on the WordNet API, see the NLTK documentation on the `Wordnet Interface <http://nltk.googlecode.com/svn/trunk/doc/howto/wordnet.html>`_.
+For more information on the WordNet API, see the NLTK documentation on the `Wordnet Interface <http://www.nltk.org/howto/wordnet.html>`_.
 
 WordLists
 ---------
