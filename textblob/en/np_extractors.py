@@ -196,7 +196,7 @@ def _is_match(tagged_phrase, cfg):
                 merge = True
                 copy.pop(i)
                 copy.pop(i)
-                match = '{0} {0}'.format(first[0], second[0])
+                match = '{0} {1}'.format(first[0], second[0])
                 pos = value
                 copy.insert(i, (match, pos))
                 break
