@@ -22,10 +22,13 @@ This will install TextBlob and download the necessary NLTK corpora. If you need 
 With conda
 ----------
 
+.. note::
+    Conda builds are currently available for Mac OSX only.
+
 TextBlob is also available as a `conda <http://conda.pydata.org/>`_ package. To install with ``conda``, run ::
 
-    $ conda config --add channels https://conda.binstar.org/sloria
-    $ conda install textblob
+
+    $ conda install -c https://conda.anaconda.org/sloria textblob
     $ python -m textblob.download_corpora
 
 From Source
