@@ -88,13 +88,13 @@ class WordListTest(TestCase):
         assert_equal(str(wl), str(self.words))
 
     def test_singularize(self):
-        wl = tb.WordList(['dogs', 'cats', 'buffaloes', 'men', 'mice'])
-        assert_equal(wl.singularize(), tb.WordList(['dog', 'cat', 'buffalo', 'man', 'mouse'
-                     ]))
+        wl = tb.WordList(['dogs', 'cats', 'buffaloes', 'men', 'mice', 'offspring'])
+        assert_equal(wl.singularize(),
+                     tb.WordList(['dog', 'cat', 'buffalo', 'man', 'mouse', 'offspring']))
 
     def test_pluralize(self):
-        wl = tb.WordList(['dog', 'cat', 'buffalo'])
-        assert_equal(wl.pluralize(), tb.WordList(['dogs', 'cats', 'buffaloes']))
+        wl = tb.WordList(['dog', 'cat', 'buffalo', 'antelope'])
+        assert_equal(wl.pluralize(), tb.WordList(['dogs', 'cats', 'buffaloes', 'antelope']))
 
     @attr('slow')
     def test_lemmatize(self):
