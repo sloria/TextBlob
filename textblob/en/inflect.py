@@ -176,11 +176,12 @@ for ruleset in plural_rules:
 # Suffix categories.
 plural_categories = {
     "uninflected": [
-        "bison", "bream", "breeches", "britches", "carp", "chassis", "clippers", "cod", "contretemps",
-        "corps", "debris", "diabetes", "djinn", "eland", "elk", "flounder", "gallows", "graffiti",
-        "headquarters", "herpes", "high-jinks", "homework", "innings", "jackanapes", "mackerel",
-        "measles", "mews", "mumps", "news", "pincers", "pliers", "proceedings", "rabies", "salmon",
-        "scissors", "series", "shears", "species", "swine", "trout", "tuna", "whiting", "wildebeest"],
+        "aircraft", "antelope", "bison", "bream", "breeches", "britches", "carp", "cattle", "chassis",
+        "clippers", "cod", "contretemps", "corps", "debris", "diabetes", "djinn", "eland", "elk",
+        "flounder", "gallows", "graffiti", "headquarters", "herpes", "high-jinks", "homework", "innings",
+        "jackanapes", "mackerel", "measles", "mews", "moose", "mumps", "offspring", "news", "pincers",
+        "pliers", "proceedings", "rabies", "salmon", "scissors", "series", "shears", "species", "swine",
+        "trout", "tuna", "whiting", "wildebeest"],
     "uncountable": [
         "advice", "bread", "butter", "cheese", "electricity", "equipment", "fruit", "furniture",
         "garbage", "gravel", "happiness", "information", "ketchup", "knowledge", "love", "luggage",
@@ -359,12 +360,12 @@ for rule in singular_rules:
     rule[0] = re.compile(rule[0])
 
 singular_uninflected = [
-    "bison", "bream", "breeches", "britches", "carp", "chassis", "christmas", "clippers", "cod",
-    "contretemps", "corps", "debris", "diabetes", "djinn", "eland", "elk", "flounder", "gallows",
-    "georgia", "graffiti", "headquarters", "herpes", "high-jinks", "homework", "innings",
-    "jackanapes", "mackerel", "measles", "mews", "mumps", "news", "pincers", "pliers", "proceedings",
-    "rabies", "salmon", "scissors", "series", "shears", "species", "swine", "swiss", "trout", "tuna",
-    "whiting", "wildebeest"
+    "aircraft", "antelope", "bison", "bream", "breeches", "britches", "carp", "cattle", "chassis",
+    "christmas", "clippers", "cod", "contretemps", "corps", "debris", "diabetes", "djinn", "eland",
+    "elk", "flounder", "gallows", "georgia", "graffiti", "headquarters", "herpes", "high-jinks",
+    "homework", "innings", "jackanapes", "mackerel", "measles", "mews", "moose", "mumps", "news",
+    "offspring", "pincers", "pliers", "proceedings", "rabies", "salmon", "scissors", "series",
+    "shears", "species", "swine", "swiss", "trout", "tuna", "whiting", "wildebeest"
 ]
 singular_uncountable = [
     "advice", "bread", "butter", "cheese", "electricity", "equipment", "fruit", "furniture",
