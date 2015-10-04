@@ -35,7 +35,7 @@ setup(
     name='textblob',
     version=__version__,
     description='Simple, Pythonic text processing. Sentiment analysis, '
-                'POS tagging, noun phrase parsing, and more.',
+                'part-of-speech tagging, noun phrase parsing, and more.',
     long_description=read("README.rst"),
     license=read("LICENSE"),
     author='Steven Loria',
@@ -49,7 +49,6 @@ setup(
         "textblob.en": ["*.txt", "*.xml"]
     },
     classifiers=(
-        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: MIT License',
@@ -58,6 +57,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         "Topic :: Text Processing :: Linguistic",

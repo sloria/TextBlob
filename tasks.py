@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import sys
 import webbrowser
 
 from invoke import task, run
@@ -54,12 +53,10 @@ def doctest():
 @task
 def publish(test=False):
     """Publish to the cheeseshop."""
-    try:
-        __import__('wheel')
-    except ImportError:
-        print("wheel required. Run `pip install wheel`.")
-        sys.exit(1)
+    clean()
     if test:
-        run('python setup.py register -r test sdist bdist_wheel upload -r test')
+        run('python setup.py register -r test sdist bdist_wheel', echo=True)
+        run('twine upload dist/* -r test', echo=True)
     else:
-        run("python setup.py register sdist bdist_wheel upload")
+        run('python setup.py register sdist bdist_wheel', echo=True)
+        run('twine upload dist/*', echo=True)

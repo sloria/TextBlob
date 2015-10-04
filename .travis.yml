@@ -5,6 +5,7 @@ python:
     - "2.7"
     - "3.3"
     - "3.4"
+    - "3.5"
 before_install:
     - "wget https://s3.amazonaws.com/textblob/nltk_data.tar.gz"
     - "tar -xzvf nltk_data.tar.gz -C ~"
