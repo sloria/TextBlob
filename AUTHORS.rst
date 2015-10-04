@@ -19,3 +19,4 @@ Contributors (chronological)
 - Jeff Schnurr `@jschnurr <https://github.com/jschnurr>`_
 - Adel Qalieh `@adelq <https://github.com/adelq>`_
 - Lage Ragnarsson `@lragnarsson <https://github.com/lragnarsson>`_
+- Jonathon Coe `@jonmcoe <https://github.com/jonmcoe>`_

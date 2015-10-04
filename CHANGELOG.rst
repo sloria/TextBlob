@@ -12,6 +12,7 @@ Bug fixes:
 
 - ``Translator.translate`` will detect language of input text by default (:issue:`85`). Thanks again :user:`jschnurr`.
 - Fix matching of tagged phrases with CFG in ``ConllExtractor``. Thanks :user:`lragnarsson`.
+- Fix inflection of a few irregular English nouns. Thanks :user:`jonmcoe`.
 
 0.9.1 (2015-06-10)
 ------------------
