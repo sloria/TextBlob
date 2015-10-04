@@ -35,6 +35,12 @@ class TranslatorError(TextBlobError):
     """Raised when an error occurs during language translation or detection."""
     pass
 
+class NotTranslated(TranslatorError):
+    """Raised when text is unchanged after translation. This may be due to the language
+    being unsupported by the translator.
+    """
+    pass
+
 class FormatError(TextBlobError):
     """Raised if a data file with an unsupported format is passed to a classifier."""
     pass

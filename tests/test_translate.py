@@ -8,7 +8,7 @@ import mock
 
 from textblob.translate import Translator, _unescape
 from textblob.compat import unicode
-from textblob.exceptions import TranslatorError
+from textblob.exceptions import TranslatorError, NotTranslated
 
 class TestTranslator(unittest.TestCase):
 
@@ -44,14 +44,14 @@ class TestTranslator(unittest.TestCase):
         assert_equal(lang2, "es")
 
     @mock.patch('textblob.translate.Translator._get_json5')
-    def test_failed_translation_raises(self, mock_get_json5):
+    def test_failed_translation_raises_not_translated(self, mock_get_json5):
         mock_get_json5.return_value = unicode('{"sentences":[{"trans":'
                                         '"n0tv\\u0026l1d","orig":'
                                         '"n0tv\\u0026l1d","translit":"",'
                                         '"src_translit":""}],'
                                         '"src":"en","server_time":2}')
         text = unicode(' n0tv&l1d ')
-        assert_raises(TranslatorError,
+        assert_raises(NotTranslated,
                       self.translator.translate, text, to_lang="es")
         assert_true(mock_get_json5.called_once)
 

@@ -10,7 +10,7 @@ import json
 import re
 import codecs
 from textblob.compat import PY2, request, urlencode
-from textblob.exceptions import TranslatorError
+from textblob.exceptions import TranslatorError, NotTranslated
 
 
 class Translator(object):
@@ -42,7 +42,7 @@ class Translator(object):
         if self._translation_successful(json5):
             return self._get_translation_from_json5(json5)
         else:
-            raise TranslatorError('Translation API returned an invalid result.')
+            raise NotTranslated('Translation API returned the input string unchanged.')
 
     def detect(self, source, host=None, type_=None):
         """Detect the source text's language."""

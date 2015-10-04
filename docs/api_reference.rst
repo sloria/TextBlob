@@ -93,4 +93,5 @@ Exceptions
 .. autoexception:: textblob.exceptions.MissingCorpusError
 .. autoexception:: textblob.exceptions.DeprecationError
 .. autoexception:: textblob.exceptions.TranslatorError
+.. autoexception:: textblob.exceptions.NotTranslated
 .. autoexception:: textblob.exceptions.FormatError
