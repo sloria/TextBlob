@@ -380,6 +380,8 @@ singular_ie = [
     "pixie", "quickie", "reverie", "rookie", "softie", "sortie", "stoolie", "sweetie", "techie",
     "^tie", "toughie", "valkyrie", "veggie", "weenie", "yuppie", "zombie"
 ]
+singular_s = plural_categories['s-singular']
+
 singular_irregular = {
             "men": "man",
          "people": "person",
@@ -448,6 +450,9 @@ def singularize(word, pos=NOUN, custom={}):
             return word
     for w in singular_ie:
         if lower.endswith(w+"s"):
+            return w
+    for w in singular_s:
+        if lower.endswith(w + 'es'):
             return w
     for w in list(singular_irregular.keys()):
         if lower.endswith(w):

@@ -12,3 +12,7 @@ class PluralizationTestCase(TestCase):
     def s_singular_singularize_test(self):
         lenses = Word('lenses')
         self.assertEquals(lenses.singularize(), 'lens')
+
+    def diagnoses_singularize_test(self):
+        diagnoses = Word('diagnoses')
+        self.assertEquals(diagnoses.singularize(), 'diagnosis')
