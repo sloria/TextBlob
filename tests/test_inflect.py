@@ -16,3 +16,7 @@ class PluralizationTestCase(TestCase):
     def diagnoses_singularize_test(self):
         diagnoses = Word('diagnoses')
         self.assertEquals(diagnoses.singularize(), 'diagnosis')
+
+    def bus_pluralize_test(self):
+        bus = Word('bus')
+        self.assertEquals(bus.pluralize(), 'buses')

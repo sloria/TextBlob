@@ -188,7 +188,7 @@ plural_categories = {
         "mathematics", "mayonnaise", "meat", "mustard", "news", "progress", "research", "rice",
         "sand", "software", "understanding", "water"],
     "s-singular": [
-        "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "caddis", "canvas",
+        "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "bus", "caddis", "canvas",
         "chaos", "Christmas", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis",
         "ibis", "lens", "mantis", "marquis", "metropolis", "pathos", "pelvis", "polis", "rhinoceros",
         "sassafras", "trellis"],
