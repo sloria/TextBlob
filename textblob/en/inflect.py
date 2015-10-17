@@ -62,7 +62,6 @@ plural_rules = [
     # 4) Words that do not inflect.
     [["$", "", "uninflected", False],
      ["$", "", "uncountable", False],
-     ["s$", "s", "s-singular", False],
      ["fish$", "fish", None, False],
      ["([- ])bass$", "\\1bass", None, False],
      ["ois$", "ois", None, False],
@@ -137,10 +136,11 @@ plural_rules = [
      ["$", "i", "-i-classical", True],
      ["$", "im", "-im-classical", True]
     ],
-    # 9) -ch, -sh and -ss take -es in the plural (churches, classes).
+    # 9) -ch, -sh and -ss and the s-singular group take -es in the plural (churches, classes, lenses).
     [["([cs])h$", "\\1hes", None, False],
      ["ss$", "sses", None, False],
-     ["x$", "xes", None, False]
+     ["x$", "xes", None, False],
+     ["s$", "ses", "s-singular", False]
     ],
     # 10) Certain words ending in -f or -fe take -ves in the plural (lives, wolves).
     [["([aeo]l)f$", "\\1ves", None, False],
