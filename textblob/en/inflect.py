@@ -189,7 +189,7 @@ plural_categories = {
         "sand", "software", "understanding", "water"],
     "s-singular": [
         "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "caddis", "cannabis", "canvas",
-        "chaos", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis", "glottis",
+        "chaos", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis",
         "ibis", "lens", "mantis", "marquis", "metropolis", "pathos", "pelvis", "polis", "rhinoceros",
         "sassafras", "trellis"],
     "ex-ices": ["codex", "murex", "silex"],
