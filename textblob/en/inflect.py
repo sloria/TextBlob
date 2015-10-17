@@ -382,6 +382,7 @@ singular_ie = [
 ]
 singular_s = plural_categories['s-singular']
 
+# key plural, value singular
 singular_irregular = {
             "men": "man",
          "people": "person",
