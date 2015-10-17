@@ -183,12 +183,12 @@ plural_categories = {
         "pliers", "proceedings", "rabies", "salmon", "scissors", "series", "shears", "species", "swine",
         "trout", "tuna", "whiting", "wildebeest"],
     "uncountable": [
-        "advice", "bread", "butter", "cheese", "electricity", "equipment", "fruit", "furniture",
+        "advice", "bread", "butter", "cannabis", "cheese", "electricity", "equipment", "fruit", "furniture",
         "garbage", "gravel", "happiness", "information", "ketchup", "knowledge", "love", "luggage",
         "mathematics", "mayonnaise", "meat", "mustard", "news", "progress", "research", "rice",
         "sand", "software", "understanding", "water"],
     "s-singular": [
-        "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "caddis", "cannabis", "canvas",
+        "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "caddis", "canvas",
         "chaos", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis",
         "ibis", "lens", "mantis", "marquis", "metropolis", "pathos", "pelvis", "polis", "rhinoceros",
         "sassafras", "trellis"],
