@@ -368,7 +368,7 @@ singular_uninflected = [
     "shears", "species", "swine", "swiss", "trout", "tuna", "whiting", "wildebeest"
 ]
 singular_uncountable = [
-    "advice", "bread", "butter", "cheese", "electricity", "equipment", "fruit", "furniture",
+    "advice", "bread", "butter", "cannabis", "cheese", "electricity", "equipment", "fruit", "furniture",
     "garbage", "gravel", "happiness", "information", "ketchup", "knowledge", "love", "luggage",
     "mathematics", "mayonnaise", "meat", "mustard", "news", "progress", "research", "rice", "sand",
     "software", "understanding", "water"
