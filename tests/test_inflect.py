@@ -3,7 +3,7 @@ from unittest import TestCase
 from textblob import Word
 
 
-class PluralizationTestCase(TestCase):
+class InflectTestCase(TestCase):
 
     def s_singular__pluralize_test(self):
         lens = Word('lens')
