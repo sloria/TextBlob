@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from textblob import Word
-
+from textblob.en.inflect import plural_categories
 
 class InflectTestCase(TestCase):
 
@@ -20,3 +20,7 @@ class InflectTestCase(TestCase):
     def bus_pluralize_test(self):
         bus = Word('bus')
         self.assertEquals(bus.pluralize(), 'buses')
+
+    def test_all_singular_s(self):
+        for w in plural_categories['s-singular']:
+            self.assertEquals(Word(w).pluralize().singularize(), w)
