@@ -189,7 +189,7 @@ plural_categories = {
         "sand", "software", "understanding", "water"],
     "s-singular": [
         "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "bus", "caddis", "canvas",
-        "chaos", "Christmas", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis",
+        "chaos", "christmas", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis",
         "ibis", "lens", "mantis", "marquis", "metropolis", "pathos", "pelvis", "polis", "rhinoceros",
         "sassafras", "trellis"],
     "ex-ices": ["codex", "murex", "silex"],
@@ -361,7 +361,7 @@ for rule in singular_rules:
 
 singular_uninflected = [
     "aircraft", "antelope", "bison", "bream", "breeches", "britches", "carp", "cattle", "chassis",
-    "christmas", "clippers", "cod", "contretemps", "corps", "debris", "diabetes", "djinn", "eland",
+    "clippers", "cod", "contretemps", "corps", "debris", "diabetes", "djinn", "eland",
     "elk", "flounder", "gallows", "georgia", "graffiti", "headquarters", "herpes", "high-jinks",
     "homework", "innings", "jackanapes", "mackerel", "measles", "mews", "moose", "mumps", "news",
     "offspring", "pincers", "pliers", "proceedings", "rabies", "salmon", "scissors", "series",
