@@ -57,6 +57,3 @@ README.html
 
 .ipynb_checkpoints/
 *.ipynb
-
-#pycharm
-.idea
