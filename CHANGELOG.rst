@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.11.0 (unreleased)
+-------------------
+
+Changes:
+
+- Compatible with nltk>=3.1. NLTK versions < 3.1 are no longer supported.
+- Change default tagger to NLTKTagger (uses NLTK's averaged perceptron tagger).
+- Tested on Python 3.5.
+
+Bug fixes:
+
+- Fix spelling correction when nltk>=3.1 is installed (:issue:`99`). Thanks :user:`shubham12101` for reporting.
+
 0.10.0 (2015-10-04)
 -------------------
 

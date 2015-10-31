@@ -45,11 +45,11 @@ class TestNLTKTagger(unittest.TestCase):
     def test_tag(self):
         tags = self.tagger.tag(self.text)
         assert_equal(tags,
-            [('Simple', 'NNP'), ('is', 'VBZ'),
+            [('Simple', 'NN'), ('is', 'VBZ'),
             ('better', 'JJR'), ('than', 'IN'),
             ('complex', 'JJ'), ('.', '.'), ('Complex', 'NNP'),
             ('is', 'VBZ'), ('better', 'JJR'),
-            ('than', 'IN'), ('complicated', 'JJ'), ('.', '.')])
+            ('than', 'IN'), ('complicated', 'VBN'), ('.', '.')])
 
 
 def test_cannot_instantiate_incomplete_tagger():

@@ -404,11 +404,11 @@ is managed by the non-profit Python Software Foundation.'''
             'better',
             'than',
             'implicit',
-            ]))
+        ]))
         short = tb.TextBlob("Just a bundle of words")
         assert_equal(short.words, tb.WordList([
             'Just', 'a', 'bundle', 'of', 'words'
-            ]))
+        ]))
 
     def test_words_includes_apostrophes_in_contractions(self):
         blob = tb.TextBlob("Let's test this.")
@@ -421,7 +421,7 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob('Simple is better than complex. '
                             'Complex is better than complicated.')
         assert_equal(blob.pos_tags, [
-            ('Simple', 'JJ'),
+            ('Simple', 'NN'),
             ('is', 'VBZ'),
             ('better', 'JJR'),
             ('than', 'IN'),
@@ -431,7 +431,7 @@ is managed by the non-profit Python Software Foundation.'''
             ('better', 'JJR'),
             ('than', 'IN'),
             ('complicated', 'VBN'),
-            ])
+        ])
 
     def test_tags(self):
         assert_equal(self.blob.tags, self.blob.pos_tags)
@@ -441,7 +441,6 @@ is managed by the non-profit Python Software Foundation.'''
                         'Béchamel, Tomato Sauce, Espagnole, Velouté and Hollandaise.')
         tags = b.tags
         assert_true(isinstance(tags[0][0], unicode))
-
 
     def test_pos_tags_includes_one_letter_articles(self):
         blob = tb.TextBlob("This is a sentence.")
@@ -483,13 +482,12 @@ is managed by the non-profit Python Software Foundation.'''
 
     def test_pos_tagger_defaults_to_pattern(self):
         blob = tb.TextBlob("some text")
-        assert_true(isinstance(blob.pos_tagger, PatternTagger))
+        assert_true(isinstance(blob.pos_tagger, NLTKTagger))
 
     def test_pos_tagger_is_shared_among_instances(self):
         blob1 = tb.TextBlob("This is one sentence")
         blob2 = tb.TextBlob("This is another sentence.")
         assert_true(blob1.pos_tagger is blob2.pos_tagger)
-
 
     def test_can_use_different_pos_tagger(self):
         tagger = NLTKTagger()
@@ -782,6 +780,13 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob3.correct(), "The meaning of life is 42.0.")
         blob4 = tb.TextBlob("?")
         assert_equal(blob4.correct(), "?")
+
+        blob5 = tb.TextBlob("I can't spel")
+        assert_equal(blob5.correct(), "I can't spell")
+
+        blob6 = tb.TextBlob("I cann't \nspel")
+        assert_equal(blob6.correct(), "I can't \nspell")
+
         # From a user-submitted bug
         text = "Before you embark on any of this journey, write a quick " + \
                 "high-level test that demonstrates the slowness. " + \
@@ -965,7 +970,7 @@ class BlobberTest(TestCase):
 
     def test_default_tagger(self):
         blob = self.blobber("Some text")
-        assert_true(isinstance(blob.pos_tagger, PatternTagger))
+        assert_true(isinstance(blob.pos_tagger, NLTKTagger))
 
     def test_default_np_extractor(self):
         blob = self.blobber("Some text")
@@ -976,7 +981,7 @@ class BlobberTest(TestCase):
         assert_true(isinstance(blob.tokenizer, WordTokenizer))
 
     def test_str_and_repr(self):
-        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=PatternTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser(), classifier=None)"
+        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=NLTKTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser(), classifier=None)"
         assert_equal(repr(self.blobber), expected)
         assert_equal(str(self.blobber), repr(self.blobber))
 
