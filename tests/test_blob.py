@@ -782,6 +782,13 @@ is managed by the non-profit Python Software Foundation.'''
         assert_equal(blob3.correct(), "The meaning of life is 42.0.")
         blob4 = tb.TextBlob("?")
         assert_equal(blob4.correct(), "?")
+
+        blob5 = tb.TextBlob("I can't spel")
+        assert_equal(blob5.correct(), "I can't spell")
+
+        blob6 = tb.TextBlob("I cann't \nspel")
+        assert_equal(blob6.correct(), "I can't \nspell")
+
         # From a user-submitted bug
         text = "Before you embark on any of this journey, write a quick " + \
                 "high-level test that demonstrates the slowness. " + \

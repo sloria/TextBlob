@@ -3,7 +3,7 @@
 import re
 from setuptools import setup, find_packages
 
-REQUIREMENTS = ['nltk>=3.0']
+REQUIREMENTS = ['nltk>=3.1']
 TEST_REQUIREMENTS = ['nose', 'mock']
 
 

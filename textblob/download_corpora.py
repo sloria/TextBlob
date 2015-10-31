@@ -18,12 +18,12 @@ import nltk
 MIN_CORPORA = [
     'brown',  # Required for FastNPExtractor
     'punkt',  # Required for WordTokenizer
-    'wordnet' # Required for lemmatization
+    'wordnet',  # Required for lemmatization
+    'averaged_perceptron_tagger',  # Required for NLTKTagger
 ]
 
 ADDITIONAL_CORPORA = [
     'conll2000',  # Required for ConllExtractor
-    'maxent_treebank_pos_tagger',  # Required for NLTKTagger
     'movie_reviews',  # Required for NaiveBayesAnalyzer
 ]
 
