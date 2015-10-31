@@ -6,7 +6,8 @@ Changelog
 
 Changes:
 
-- Depend on nltk>=3.1.
+- Compatible with nltk>=3.1. NLTK versions < 3.1 are no longer supported.
+- Tested on Python 3.5.
 
 Bug fixes:
 
