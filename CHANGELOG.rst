@@ -12,6 +12,7 @@ Changes:
 
 Bug fixes:
 
+- Fix singularization of a number of words. Thanks :user:`jonmcoe`.
 - Fix spelling correction when nltk>=3.1 is installed (:issue:`99`). Thanks :user:`shubham12101` for reporting.
 
 0.10.0 (2015-10-04)
