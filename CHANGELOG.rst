@@ -7,6 +7,7 @@ Changelog
 Changes:
 
 - Compatible with nltk>=3.1. NLTK versions < 3.1 are no longer supported.
+- Change default tagger to NLTKTagger (uses NLTK's averaged perceptron tagger).
 - Tested on Python 3.5.
 
 Bug fixes:

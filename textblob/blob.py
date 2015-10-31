@@ -35,7 +35,7 @@ from textblob.compat import unicode, basestring
 from textblob.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
                        BaseSentimentAnalyzer, BaseParser)
 from textblob.np_extractors import FastNPExtractor
-from textblob.taggers import PatternTagger
+from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
 from textblob.sentiments import PatternAnalyzer
 from textblob.parsers import PatternParser
@@ -321,7 +321,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
         defaults to :class:`FastNPExtractor() <textblob.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``,
-        defaults to :class:`PatternTagger <textblob.en.taggers.PatternTagger>`.
+        defaults to :class:`NLTKTagger <textblob.en.taggers.NLTKTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``,
         defaults to :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
@@ -332,7 +332,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         ``clean_html`` parameter deprecated, as it was in NLTK.
     """
     np_extractor = FastNPExtractor()
-    pos_tagger = PatternTagger()
+    pos_tagger = NLTKTagger()
     tokenizer = WordTokenizer()
     translator = Translator()
     analyzer = PatternAnalyzer()
@@ -589,7 +589,7 @@ class TextBlob(BaseBlob):
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
         defaults to :class:`FastNPExtractor() <textblob.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``, defaults to
-        :class:`PatternTagger <textblob.en.taggers.PatternTagger>`.
+        :class:`NLTKTagger <textblob.en.taggers.NLTKTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to
         :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param classifier: (optional) A classifier.
@@ -711,7 +711,7 @@ class Blobber(object):
     :param np_extractor: (optional) An NPExtractor instance. If ``None``,
         defaults to :class:`FastNPExtractor() <textblob.en.np_extractors.FastNPExtractor>`.
     :param pos_tagger: (optional) A Tagger instance. If ``None``,
-        defaults to :class:`PatternTagger <textblob.en.taggers.PatternTagger>`.
+        defaults to :class:`NLTKTagger <textblob.en.taggers.NLTKTagger>`.
     :param analyzer: (optional) A sentiment analyzer. If ``None``,
         defaults to :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param parser: A parser. If ``None``, defaults to
@@ -722,7 +722,7 @@ class Blobber(object):
     """
 
     np_extractor = FastNPExtractor()
-    pos_tagger = PatternTagger()
+    pos_tagger = NLTKTagger()
     tokenizer = WordTokenizer()
     analyzer = PatternAnalyzer()
     parser = PatternParser()
