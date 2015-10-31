@@ -62,7 +62,6 @@ plural_rules = [
     # 4) Words that do not inflect.
     [["$", "", "uninflected", False],
      ["$", "", "uncountable", False],
-     ["s$", "s", "s-singular", False],
      ["fish$", "fish", None, False],
      ["([- ])bass$", "\\1bass", None, False],
      ["ois$", "ois", None, False],
@@ -137,10 +136,11 @@ plural_rules = [
      ["$", "i", "-i-classical", True],
      ["$", "im", "-im-classical", True]
     ],
-    # 9) -ch, -sh and -ss take -es in the plural (churches, classes).
+    # 9) -ch, -sh and -ss and the s-singular group take -es in the plural (churches, classes, lenses).
     [["([cs])h$", "\\1hes", None, False],
      ["ss$", "sses", None, False],
-     ["x$", "xes", None, False]
+     ["x$", "xes", None, False],
+     ["s$", "ses", "s-singular", False]
     ],
     # 10) Certain words ending in -f or -fe take -ves in the plural (lives, wolves).
     [["([aeo]l)f$", "\\1ves", None, False],
@@ -183,13 +183,13 @@ plural_categories = {
         "pliers", "proceedings", "rabies", "salmon", "scissors", "series", "shears", "species", "swine",
         "trout", "tuna", "whiting", "wildebeest"],
     "uncountable": [
-        "advice", "bread", "butter", "cheese", "electricity", "equipment", "fruit", "furniture",
+        "advice", "bread", "butter", "cannabis", "cheese", "electricity", "equipment", "fruit", "furniture",
         "garbage", "gravel", "happiness", "information", "ketchup", "knowledge", "love", "luggage",
         "mathematics", "mayonnaise", "meat", "mustard", "news", "progress", "research", "rice",
         "sand", "software", "understanding", "water"],
     "s-singular": [
-        "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "caddis", "cannabis", "canvas",
-        "chaos", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis", "glottis",
+        "acropolis", "aegis", "alias", "asbestos", "bathos", "bias", "bus", "caddis", "canvas",
+        "chaos", "christmas", "cosmos", "dais", "digitalis", "epidermis", "ethos", "gas", "glottis",
         "ibis", "lens", "mantis", "marquis", "metropolis", "pathos", "pelvis", "polis", "rhinoceros",
         "sassafras", "trellis"],
     "ex-ices": ["codex", "murex", "silex"],
@@ -361,14 +361,14 @@ for rule in singular_rules:
 
 singular_uninflected = [
     "aircraft", "antelope", "bison", "bream", "breeches", "britches", "carp", "cattle", "chassis",
-    "christmas", "clippers", "cod", "contretemps", "corps", "debris", "diabetes", "djinn", "eland",
+    "clippers", "cod", "contretemps", "corps", "debris", "diabetes", "djinn", "eland",
     "elk", "flounder", "gallows", "georgia", "graffiti", "headquarters", "herpes", "high-jinks",
     "homework", "innings", "jackanapes", "mackerel", "measles", "mews", "moose", "mumps", "news",
     "offspring", "pincers", "pliers", "proceedings", "rabies", "salmon", "scissors", "series",
     "shears", "species", "swine", "swiss", "trout", "tuna", "whiting", "wildebeest"
 ]
 singular_uncountable = [
-    "advice", "bread", "butter", "cheese", "electricity", "equipment", "fruit", "furniture",
+    "advice", "bread", "butter", "cannabis", "cheese", "electricity", "equipment", "fruit", "furniture",
     "garbage", "gravel", "happiness", "information", "ketchup", "knowledge", "love", "luggage",
     "mathematics", "mayonnaise", "meat", "mustard", "news", "progress", "research", "rice", "sand",
     "software", "understanding", "water"
@@ -380,6 +380,9 @@ singular_ie = [
     "pixie", "quickie", "reverie", "rookie", "softie", "sortie", "stoolie", "sweetie", "techie",
     "^tie", "toughie", "valkyrie", "veggie", "weenie", "yuppie", "zombie"
 ]
+singular_s = plural_categories['s-singular']
+
+# key plural, value singular
 singular_irregular = {
             "men": "man",
          "people": "person",
@@ -448,6 +451,9 @@ def singularize(word, pos=NOUN, custom={}):
             return word
     for w in singular_ie:
         if lower.endswith(w+"s"):
+            return w
+    for w in singular_s:
+        if lower.endswith(w + 'es'):
             return w
     for w in list(singular_irregular.keys()):
         if lower.endswith(w):
