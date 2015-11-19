@@ -20,7 +20,7 @@ Bug fixes:
 
 Changes:
 
-- When translation fails, raise a ``TranslationError`` (:issue:`76`). Thanks :user:`jschnurr`.
+- Unchanged text is now considered a translation error. Raises ``NotTranslated`` (:issue:`76`). Thanks :user:`jschnurr`.
 
 Bug fixes:
 
