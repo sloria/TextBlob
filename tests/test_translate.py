@@ -85,7 +85,7 @@ class TestTranslator(unittest.TestCase):
     def test_translate_text(self):
         text = "This is a sentence."
         translated = self.translator.translate(text, to_lang="es")
-        assert_equal(translated, "Esta es una frase.")
+        assert_equal(translated, "Esta es una oración.")
         es_text = "Esta es una frase."
         to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
         assert_equal(to_en, "This is a sentence.")
