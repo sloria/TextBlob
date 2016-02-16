@@ -219,14 +219,8 @@ class SentenceTest(TestCase):
         assert_true(isinstance(blob.correct(), tb.Sentence))
         assert_equal(blob.correct(), tb.Sentence("I have \ngood spelling."))
 
-    @mock.patch('textblob.translate.Translator._get_translation_from_json5')
-    @mock.patch('textblob.translate.Translator._get_language_from_json5')
-    @mock.patch('textblob.translate.Translator._get_json5')
     @mock.patch('textblob.translate.Translator.detect')
-    def test_translate_detects_language_by_default(self, mock_detect,
-            mock_get_json5, mock_get_language, mock_get_translation):
-        mock_get_language.return_value = 'ar'
-        mock_get_translation.return_value = 'Fully sovereign'
+    def test_translate_detects_language_by_default(self, mock_detect):
         text = unicode("ذات سيادة كاملة")
         blob = tb.TextBlob(text)
         assert_true(mock_detect.called_once_with(text))

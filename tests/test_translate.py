@@ -16,44 +16,30 @@ class TestTranslator(unittest.TestCase):
         self.translator = Translator()
         self.sentence = "This is a sentence."
 
-    @mock.patch('textblob.translate.Translator._get_json5')
-    def test_translate(self, mock_get_json5):
-        mock_get_json5.return_value = unicode('{"sentences":[{"trans":'
-                                        '"Esta es una frase.","orig":'
-                                        '"This is a sentence.","translit":"",'
-                                        '"src_translit":""}],"src":"en",'
-                                        '"server_time":2}')
+    @mock.patch('textblob.translate.Translator._api_request')
+    def test_translate(self, mock_api):
+        mock_api.return_value = unicode('["Esta es una oración.","en"]')
         t = self.translator.translate(self.sentence, to_lang="es")
-        assert_equal(t, "Esta es una frase.")
-        assert_true(mock_get_json5.called_once)
+        assert_equal(t, "Esta es una oración.")
+        assert_true(mock_api.called_once)
 
-    @mock.patch('textblob.translate.Translator._get_json5')
-    def test_detect_parses_json5(self, mock_get_json5):
-        mock_get_json5.return_value = unicode('{"sentences":[{"trans":'
-                                        '"This is a sentence.","orig":'
-                                        '"This is a sentence.","translit":"",'
-                                        '"src_translit":""}],"src":"en",'
-                                        '"server_time":1}')
+    @mock.patch('textblob.translate.Translator._api_request')
+    def test_detect_parses_api_request(self, mock_api):
+        mock_api.return_value = unicode('["This is a sentence.","en"]')
         lang = self.translator.detect(self.sentence)
         assert_equal(lang, "en")
-        mock_get_json5.return_value = unicode('{"sentences":[{"trans":'
-                                        '"Hello","orig":"Hola",'
-                                        '"translit":"","src_translit":""}],'
-                                        '"src":"es","server_time":2}')
+
+        mock_api.return_value = unicode('["Hi there","es"]')
         lang2 = self.translator.detect("Hola")
         assert_equal(lang2, "es")
 
-    @mock.patch('textblob.translate.Translator._get_json5')
-    def test_failed_translation_raises_not_translated(self, mock_get_json5):
-        mock_get_json5.return_value = unicode('{"sentences":[{"trans":'
-                                        '"n0tv\\u0026l1d","orig":'
-                                        '"n0tv\\u0026l1d","translit":"",'
-                                        '"src_translit":""}],'
-                                        '"src":"en","server_time":2}')
-        text = unicode(' n0tv&l1d ')
+    @mock.patch('textblob.translate.Translator._api_request')
+    def test_failed_translation_raises_not_translated(self, mock_api):
+        mock_api.return_value = unicode('"..."')
+        text = unicode(' ... ')
         assert_raises(NotTranslated,
                       self.translator.translate, text, to_lang="es")
-        assert_true(mock_get_json5.called_once)
+        assert_true(mock_api.called_once)
 
     @attr("requires_internet")
     def test_detect(self):
@@ -101,23 +87,14 @@ class TestTranslator(unittest.TestCase):
         assert_equal(translated, "Beautiful is better than ugly")
 
     @attr("requires_internet")
-    @mock.patch('textblob.translate.Translator._translation_successful')
-    def test_translate_unicode_escape(self, trans_success_mock):
-        trans_success_mock.return_value = True
+    def test_no_translation_required_raises(self):
         text = "Jenner & Block LLP"
-        translated = self.translator.translate(text, from_lang="en", to_lang="en")
-        assert_equal(translated, "Jenner & Block LLP")
+        assert_raises(NotTranslated, lambda:
+                      self.translator.translate(text, from_lang="en", to_lang="en"))
 
     def test_detect_requires_more_than_two_characters(self):
         assert_raises(TranslatorError, lambda: self.translator.detect('f'))
         assert_raises(TranslatorError, lambda: self.translator.detect('fo'))
-
-    def test_get_language_from_json5(self):
-        json5 = ('{"sentences":[{"trans":"This is a sentence.",'
-                 '"orig":"This is a sentence.","translit":"",'
-                 '"src_translit":""}],"src":"en","server_time":1}')
-        lang = self.translator._get_language_from_json5(json5)
-        assert_equal(lang, "en")
 
 
 def test_unescape():
