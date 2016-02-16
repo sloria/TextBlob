@@ -46,10 +46,11 @@ class Translator(object):
                 "sl": from_lang, "tl": to_lang, "text": source}
         response = self._request(self.url, host=host, type_=type_, data=data)
         result = json.loads(response)
-        try:
-            result, _ = json.loads(response)
-        except ValueError:
-            pass
+        if isinstance(result, list):
+            try:
+                result = result[0]  # ignore detected language
+            except IndexError:
+                pass
         self._validate_translation(source, result)
         return result
 
@@ -96,15 +97,15 @@ def _unescape(text):
     return re.sub(pattern, decode, text)
 
 
-def _calculate_tk(a):
+def _calculate_tk(source):
     """Reverse engineered cross-site request protection."""
     # Source: https://github.com/soimort/translate-shell/issues/94#issuecomment-165433715
     b = int(time.time() / 3600)
 
     if PY2:
-        d = map(ord, a)
+        d = map(ord, source)
     else:
-        d = a.encode('utf-8')
+        d = source.encode('utf-8')
 
     def RL(a, b):
         for c in range(0, len(b) - 2, 3):
@@ -122,5 +123,5 @@ def _calculate_tk(a):
     a = a if a >= 0 else ((a & 2147483647) + 2147483648)
     a %= pow(10, 6)
 
-    tk = '{:d}.{:d}'.format(a, a ^ b)
+    tk = '{0:d}.{1:d}'.format(a, a ^ b)
     return tk
