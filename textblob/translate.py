@@ -9,9 +9,8 @@ from __future__ import absolute_import
 import json
 import re
 import codecs
-from textblob.compat import PY2, request, urlencode
+from textblob.compat import PY2, request, urlencode, basestring
 from textblob.exceptions import TranslatorError, NotTranslated
-
 
 class Translator(object):
 
