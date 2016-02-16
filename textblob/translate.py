@@ -8,8 +8,10 @@ Language detection added by Steven Loria.
 from __future__ import absolute_import
 
 import codecs
+import ctypes
 import json
 import re
+import time
 
 from textblob.compat import PY2, request, urlencode
 from textblob.exceptions import TranslatorError, NotTranslated
@@ -40,6 +42,7 @@ class Translator(object):
             source = source.encode('utf-8')
         data = {"client": "p",
                 "ie": "UTF-8", "oe": "UTF-8",
+                "dt": "at", "tk": _calculate_tk(source),
                 "sl": from_lang, "tl": to_lang, "text": source}
         response = self._request(self.url, host=host, type_=type_, data=data)
         result = json.loads(response)
@@ -58,6 +61,7 @@ class Translator(object):
             raise TranslatorError('Must provide a string with at least 3 characters.')
         data = {"client": "p",
                 "ie": "UTF-8", "oe": "UTF-8",
+                "dt": "at", "tk": _calculate_tk(source),
                 "sl": "auto", "text": source}
         response = self._request(self.url, host=host, type_=type_, data=data)
         result, language = json.loads(response)
@@ -90,3 +94,33 @@ def _unescape(text):
     pattern = r'\\{1,2}u[0-9a-fA-F]{4}'
     decode = lambda x: codecs.getdecoder('unicode_escape')(x.group())[0]
     return re.sub(pattern, decode, text)
+
+
+def _calculate_tk(a):
+    """Reverse engineered cross-site request protection."""
+    # Source: https://github.com/soimort/translate-shell/issues/94#issuecomment-165433715
+    b = int(time.time() / 3600)
+
+    if PY2:
+        d = map(ord, a)
+    else:
+        d = a.encode('utf-8')
+
+    def RL(a, b):
+        for c in range(0, len(b) - 2, 3):
+            d = b[c+2]
+            d = ord(d) - 87 if d >= 'a' else int(d)
+            xa = ctypes.c_uint32(a).value
+            d = xa >> d if b[c+1] == '+' else xa << d
+            a = a + d & 4294967295 if b[c] == '+' else a ^ d
+        return ctypes.c_int32(a).value
+
+    a = b
+    for di in d:
+        a = RL(a + di, "+-a^+6")
+    a = RL(a, "+-3^+b+-f")
+    a = a if a >= 0 else ((a & 2147483647) + 2147483648)
+    a %= pow(10, 6)
+
+    tk = '{:d}.{:d}'.format(a, a ^ b)
+    return tk
