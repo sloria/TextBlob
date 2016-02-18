@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.11.1 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Fix translation and language detection (:issue:`115`, :issue:`117`, :issue:`119`). Thanks :user:`AdrianLC` and :user:`jschnurr` for the fix. Thanks :user:`AdrianLC`, :user:`edgaralts`, and :user:`pouya-cognitiv` for reporting.
+
 0.11.0 (2015-11-01)
 -------------------
 

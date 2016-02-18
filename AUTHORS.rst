@@ -20,3 +20,4 @@ Contributors (chronological)
 - Adel Qalieh `@adelq <https://github.com/adelq>`_
 - Lage Ragnarsson `@lragnarsson <https://github.com/lragnarsson>`_
 - Jonathon Coe `@jonmcoe <https://github.com/jonmcoe>`_
+- Adrián López Calvo `@AdrianLC <https://github.com/AdrianLC>`_
