@@ -34,9 +34,6 @@ def get_argv():
         return args
     if "cover" in sys.argv:
         args += ["--with-coverage", "--cover-html"]
-    if PY26:
-        # Exclude tests that don't work on python2.6
-        attr_conditions.append("not py27_only")
     try:
         __import__('numpy')
     except ImportError:

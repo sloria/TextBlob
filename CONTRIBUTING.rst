@@ -102,7 +102,7 @@ Pull Requests
 
 - If the pull request adds functionality, it is tested and the docs are updated.
 - If you've developed an extension, it is on the :ref:`Extensions List <extensions>`.
-- The pull request works on Python 2.6, 2.7, 3.3, 3.4, and PyPy. Use ``tox`` to verify that it does.
+- The pull request works on Python 2.7, 3.3, 3.4, 3.5, and PyPy. Use ``tox`` to verify that it does.
 - You've added yourself to ``AUTHORS.rst``.
 
 4. Submit a pull request to the ``sloria:dev`` branch.
@@ -126,7 +126,7 @@ To get test coverage reports (must have coverage installed): ::
 
     $ python run_tests.py cover
 
-To run tests on Python 2.6, 2.7, 3.3, and 3.4 virtual environments (must have each interpreter installed): ::
+To run tests on Python 2.7, 3.3, 3.4, and 3.5 virtual environments (must have each interpreter installed): ::
 
     $ tox
 

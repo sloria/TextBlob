@@ -2,7 +2,6 @@
 import sys
 
 PY2 = int(sys.version[0]) == 2
-PY26 = PY2 and int(sys.version_info[1]) < 7
 
 if PY2:
     from itertools import imap, izip
@@ -17,10 +16,6 @@ if PY2:
     imap = imap
     izip = izip
     import unicodecsv as csv
-    if PY26:
-        from .ordereddict import OrderedDict
-    else:
-        from collections import OrderedDict
 
     def implements_to_string(cls):
         """Class decorator that renames __str__ to __unicode__ and
@@ -29,7 +24,7 @@ if PY2:
         cls.__unicode__ = cls.__str__
         cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
         return cls
-else: # PY3
+else:  # PY3
     from urllib import request
     from urllib.parse import quote as urlquote
     from urllib.parse import urlencode
@@ -41,7 +36,6 @@ else: # PY3
     imap = map
     izip = zip
     import csv
-    from collections import OrderedDict
 
     implements_to_string = lambda x: x
 
