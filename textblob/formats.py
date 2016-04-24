@@ -19,11 +19,12 @@ that format. ::
     with open('training_data.psv', 'r') as fp:
         cl = NaiveBayesAnalyzer(fp, format='psv')
 """
-
 from __future__ import absolute_import
-from textblob.compat import PY2, csv, OrderedDict
-from textblob.utils import is_filelike
 import json
+from collections import OrderedDict
+
+from textblob.compat import PY2, csv
+from textblob.utils import is_filelike
 
 DEFAULT_ENCODING = 'utf-8'
 

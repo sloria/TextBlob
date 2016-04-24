@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.12.0 (unreleased)
+-------------------
+
+Changes:
+
+- *Backwards-incompatible*: Remove Python 2.6 support.
+
 0.11.1 (2016-02-17)
 -------------------
 
