@@ -10,7 +10,7 @@ TextBlob: Simplified Text Processing
     :target: https://travis-ci.org/sloria/TextBlob
     :alt: Travis-CI
 
-Homepage: `https://textblob.readthedocs.org/ <https://textblob.readthedocs.org/>`_
+Homepage: `https://textblob.readthedocs.io/ <https://textblob.readthedocs.io/>`_
 
 `TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more.
 
@@ -76,13 +76,13 @@ Examples
 
 See more examples at the `Quickstart guide`_.
 
-.. _`Quickstart guide`: https://textblob.readthedocs.org/en/latest/quickstart.html#quickstart
+.. _`Quickstart guide`: https://textblob.readthedocs.io/en/latest/quickstart.html#quickstart
 
 
 Documentation
 -------------
 
-Full documentation is available at https://textblob.readthedocs.org/.
+Full documentation is available at https://textblob.readthedocs.io/.
 
 Requirements
 ------------
@@ -92,8 +92,8 @@ Requirements
 Project Links
 -------------
 
-- Docs: https://textblob.readthedocs.org/
-- Changelog: https://textblob.readthedocs.org/en/latest/changelog.html
+- Docs: https://textblob.readthedocs.io/
+- Changelog: https://textblob.readthedocs.io/en/latest/changelog.html
 - PyPI: https://pypi.python.org/pypi/TextBlob
 - Issues: https://github.com/sloria/TextBlob/issues
 
