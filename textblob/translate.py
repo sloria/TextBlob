@@ -31,14 +31,18 @@ class Translator(object):
         u'es'
     """
 
-    url = "http://translate.google.com/translate_a/t"
+    detection_pattern = re.compile(
+        r".*?\,\"([a-z]{2}(\-\w{2})?)\"\,.*?", flags=re.S)
+
+    parse_pattern = re.compile(r"\[\"(.*?)\",\".*?\",,,[0-9]{1}\]")
+
+    url = "https://translate.googleapis.com/translate_a/single"
 
     headers = {
         'Accept': '*/*',
         'Connection': 'keep-alive',
         'User-Agent': (
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) '
-            'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19')
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36')
     }
 
     def translate(self, source, from_lang='auto', to_lang='en', host=None, type_=None):
@@ -47,17 +51,20 @@ class Translator(object):
             source = source.encode('utf-8')
         data = {"client": "p",
                 "ie": "UTF-8", "oe": "UTF-8",
-                "dt": "at", "tk": _calculate_tk(source),
+                "dt": "t", "tk": _calculate_tk(source),
                 "sl": from_lang, "tl": to_lang, "text": source}
         response = self._request(self.url, host=host, type_=type_, data=data)
-        result = json.loads(response)
-        if isinstance(result, list):
-            try:
-                result = result[0]  # ignore detected language
-            except IndexError:
-                pass
+        result = self._parse_translated_text(response)
         self._validate_translation(source, result)
         return result
+
+    def _parse_translated_text(self, response):
+        """Parse API response and return translated text."""
+        match = ''.join(re.findall(self.parse_pattern, response))
+        if match.strip():
+            return _unescape(match)
+        else:
+            return None
 
     def detect(self, source, host=None, type_=None):
         """Detect the source text's language."""
@@ -67,14 +74,21 @@ class Translator(object):
             raise TranslatorError('Must provide a string with at least 3 characters.')
         data = {"client": "p",
                 "ie": "UTF-8", "oe": "UTF-8",
-                "dt": "at", "tk": _calculate_tk(source),
+                "dt": "t", "tk": _calculate_tk(source),
                 "sl": "auto", "text": source}
         response = self._request(self.url, host=host, type_=type_, data=data)
-        result, language = json.loads(response)
+        language = self._parse_detected_language(response)
         return language
 
+    def _parse_detected_language(self, content):
+        """Parse API response and return detected language."""
+        match = self.detection_pattern.match(content)
+        if not match:
+            return None
+        return match.group(1)
+
     def _validate_translation(self, source, result):
-        """Validate API returned expected schema, and that the translated text
+        """Validate API returned data, and that the translated text
         is different than the original string.
         """
         if not result:
@@ -93,14 +107,12 @@ class Translator(object):
         content = resp.read()
         return content.decode('utf-8')
 
-
 def _unescape(text):
     """Unescape unicode character codes within a string.
     """
     pattern = r'\\{1,2}u[0-9a-fA-F]{4}'
     decode = lambda x: codecs.getdecoder('unicode_escape')(x.group())[0]
     return re.sub(pattern, decode, text)
-
 
 def _calculate_tk(source):
     """Reverse engineered cross-site request protection."""
