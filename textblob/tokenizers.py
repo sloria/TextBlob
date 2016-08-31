@@ -25,13 +25,17 @@ class WordTokenizer(BaseTokenizer):
     * separate periods that appear at the end of line
     """
 
+    def __init__(self, language='english'):
+        super(WordTokenizer, self).__init__()
+        self.language = language
+
     def tokenize(self, text, include_punc=True):
         '''Return a list of word tokens.
 
         :param text: string of text.
         :param include_punc: (optional) whether to include punctuation as separate tokens. Default to True.
         '''
-        tokens = nltk.tokenize.word_tokenize(text)
+        tokens = nltk.tokenize.word_tokenize(text, language=self.language)
         if include_punc:
             return tokens
         else:
@@ -51,10 +55,14 @@ class SentenceTokenizer(BaseTokenizer):
     then uses that to find sentence boundaries.
     """
 
+    def __init__(self, language='english'):
+        super(SentenceTokenizer, self).__init__()
+        self.language = language
+
     @requires_nltk_corpus
     def tokenize(self, text):
         '''Return a list of sentences.'''
-        return nltk.tokenize.sent_tokenize(text)
+        return nltk.tokenize.sent_tokenize(text, language=self.language)
 
 #: Convenience function for tokenizing sentences
 sent_tokenize = SentenceTokenizer().itokenize
