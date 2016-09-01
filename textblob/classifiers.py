@@ -78,13 +78,20 @@ def basic_extractor(document, train_set):
     :param list train_set: Training data set, a list of tuples of the form
         ``(words, label)`` OR an iterable of strings.
     """
-    el_zero = iter(train_set).next() #Infer input from first element.
-    if isinstance(el_zero, tuple):
-        word_features = _get_words_from_dataset(train_set)
-    elif isinstance(el_zero, str):
-        word_features = train_set
+
+    try:
+        el_zero = iter(train_set).next() #Infer input from first element.
+    except StopIteration:
+        return {}
+    if isinstance(el_zero, str):
+        word_features = [w for w in chain([el_zero],train_set)]
     else:
-        raise ValueError('train_set is proabably malformed.')
+        try:
+            assert(isinstance(el_zero[0], str))
+            word_features = _get_words_from_dataset(chain([el_zero],train_set))
+        except:
+            raise ValueError('train_set is proabably malformed.')
+
     tokens = _get_document_tokens(document)
     features = dict(((u'contains({0})'.format(word), (word in tokens))
                                             for word in word_features))
