@@ -31,7 +31,7 @@ class Translator(object):
         u'es'
     """
 
-    url = "http://translate.google.com/translate_a/t"
+    url = "http://translate.google.com/translate_a/t?client=webapp"
 
     headers = {
         'Accept': '*/*',
