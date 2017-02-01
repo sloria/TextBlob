@@ -148,6 +148,16 @@ class Word(unicode):
         lemmatizer = nltk.stem.WordNetLemmatizer()
         return lemmatizer.lemmatize(self.string, pos)
 
+    #added 'stemmer' on lines of lemmatizer
+    #based on nltk
+    def stem(self, isporter=True):
+        #param isporter: True when using Porter stemmer, else Snowball
+        if isporter:
+            stemmer = nltk.stem.porter.PorterStemmer()
+        else:
+            stemmer = nltk.stem.snowball.SnowballStemmer("english") #only English for now
+        return stemmer.stem(self.string)
+
     @cached_property
     def synsets(self):
         """The list of Synset objects for this Word.
