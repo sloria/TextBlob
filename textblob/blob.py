@@ -148,14 +148,17 @@ class Word(unicode):
         lemmatizer = nltk.stem.WordNetLemmatizer()
         return lemmatizer.lemmatize(self.string, pos)
 
+    PorterStemmer = nltk.stem.porter.PorterStemmer()
+    LancasterStemmer = nltk.stem.lancaster.LancasterStemmer()
+    SnowballStemmer = nltk.stem.snowball.SnowballStemmer("english")
+
     #added 'stemmer' on lines of lemmatizer
     #based on nltk
-    def stem(self, isporter=True):
-        #param isporter: True when using Porter stemmer, else Snowball
-        if isporter:
-            stemmer = nltk.stem.porter.PorterStemmer()
-        else:
-            stemmer = nltk.stem.snowball.SnowballStemmer("english") #only English for now
+    def stem(self, stemmer=PorterStemmer()):
+        """Stem a word using various NLTK stemmers. (Default: Porter Stemmer)
+
+        .. versionadded:: 0.12.0
+        """
         return stemmer.stem(self.string)
 
     @cached_property

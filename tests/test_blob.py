@@ -924,7 +924,7 @@ class WordTest(TestCase):
         w = tb.Word("wolves")
         assert_equal(w.stem(), "wolv")
         w = tb.Word("went")
-        assert_equal(w.stem("v"), "went")
+        assert_equal(w.stem(), "went")
 
     def test_synsets(self):
         w = tb.Word("car")
