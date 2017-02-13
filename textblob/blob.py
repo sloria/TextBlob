@@ -154,7 +154,7 @@ class Word(unicode):
 
     #added 'stemmer' on lines of lemmatizer
     #based on nltk
-    def stem(self, stemmer=PorterStemmer()):
+    def stem(self, stemmer=PorterStemmer):
         """Stem a word using various NLTK stemmers. (Default: Porter Stemmer)
 
         .. versionadded:: 0.12.0
