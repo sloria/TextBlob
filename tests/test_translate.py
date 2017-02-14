@@ -22,7 +22,7 @@ class TestTranslator(unittest.TestCase):
 
     @mock.patch('textblob.translate.Translator._request')
     def test_translate(self, mock_request):
-        mock_request.return_value = '["Esta es una frase.","en"]'
+        mock_request.return_value = '[[["Esta es una frase.","This is a sentence.",,,1]],,"en",,,,0.26682821,,[["en"],,[0.26682821],["en"]]]'
         t = self.translator.translate(self.sentence, to_lang="es")
         assert_equal(t, "Esta es una frase.")
         assert_true(mock_request.called_once)
@@ -39,7 +39,7 @@ class TestTranslator(unittest.TestCase):
 
     @mock.patch("textblob.translate.Translator._request")
     def test_tk_parameter_included_in_requests(self, mock_request):
-        mock_request.return_value = '["Esta es una frase.","en"]'
+        mock_request.return_value = '[[["Esta es una frase.","This is a sentence.",,,1]],,"en",,,,0.26682821,,[["en"],,[0.26682821],["en"]]]'
         self.translator.translate(self.sentence, to_lang="es")
         assert_true(mock_request.called_once)
         args, kwargs = mock_request.call_args
@@ -48,7 +48,7 @@ class TestTranslator(unittest.TestCase):
 
     @mock.patch('textblob.translate.Translator._request')
     def test_detect(self, mock_request):
-        mock_request.return_value = '["Esta es una frase.","en"]'
+        mock_request.return_value = '[[["Esta es una frase.","This is a sentence.",,,1]],,"en",,,,0.26682821,,[["en"],,[0.26682821],["en"]]]'
         language = self.translator.detect(self.sentence)
         assert_equal(language, "en")
         assert_true(mock_request.called_once)
