@@ -101,6 +101,10 @@ class WordListTest(TestCase):
         wl = tb.WordList(["cat", "dogs", "oxen"])
         assert_equal(wl.lemmatize(), tb.WordList(['cat', 'dog', 'ox']))
 
+    def test_stem(self): #only PorterStemmer tested
+        wl = tb.WordList(["cat", "dogs", "oxen"])
+        assert_equal(wl.stem(), tb.WordList(['cat', 'dog', 'oxen']))
+
     def test_upper(self):
         wl = tb.WordList(self.words)
         assert_equal(wl.upper(), tb.WordList([w.upper() for w in self.words]))
@@ -913,6 +917,14 @@ class WordTest(TestCase):
         assert_equal(w.lemma, "wolf")
         w = tb.Word("went", "VBD");
         assert_equal(w.lemma, "go")
+
+    def test_stem(self): #only PorterStemmer tested
+        w = tb.Word("cars")
+        assert_equal(w.stem(), "car")
+        w = tb.Word("wolves")
+        assert_equal(w.stem(), "wolv")
+        w = tb.Word("went")
+        assert_equal(w.stem(), "went")
 
     def test_synsets(self):
         w = tb.Word("car")
