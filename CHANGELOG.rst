@@ -4,6 +4,10 @@ Changelog
 0.12.0 (unreleased)
 -------------------
 
+Features:
+
+- Add `Word.stem` method (:issue:`145`). Thanks :user:`nitkul`.
+
 Changes:
 
 - *Backwards-incompatible*: Remove Python 2.6 support.
