@@ -3,60 +3,60 @@
 import os
 import webbrowser
 
-from invoke import task, run
+from invoke import task
 
 docs_dir = 'docs'
 build_dir = os.path.join(docs_dir, '_build')
 
 @task
-def test():
-    run("python run_tests.py", pty=True)
+def test(ctx):
+    ctx.run("python run_tests.py", pty=True)
 
 
 @task
-def clean():
-    run("rm -rf build")
-    run("rm -rf dist")
-    run("rm -rf textblob.egg-info")
-    clean_docs()
+def clean(ctx):
+    ctx.run("rm -rf build")
+    ctx.run("rm -rf dist")
+    ctx.run("rm -rf textblob.egg-info")
+    clean_docs(ctx)
     print("Cleaned up.")
 
 @task
-def clean_docs():
-    run("rm -rf %s" % build_dir)
+def clean_docs(ctx):
+    ctx.run("rm -rf %s" % build_dir)
 
 
 @task
-def browse_docs():
+def browse_docs(ctx):
     path = os.path.join(build_dir, 'index.html')
     webbrowser.open_new_tab(path)
 
 @task
-def docs(clean=False, browse=False):
+def docs(ctx, clean=False, browse=False):
     if clean:
-        clean_docs()
-    run("sphinx-build %s %s" % (docs_dir, build_dir), pty=True)
+        clean_docs(ctx)
+    ctx.run("sphinx-build %s %s" % (docs_dir, build_dir), pty=True)
     if browse:
-        browse_docs()
+        browse_docs(ctx)
 
 @task
-def readme(browse=False):
-    run("rst2html.py README.rst > README.html", pty=True)
+def readme(ctx, browse=False):
+    ctx.run("rst2html.py README.rst > README.html", pty=True)
     if browse:
         webbrowser.open_new_tab('README.html')
 
 @task
-def doctest():
+def doctest(ctx):
     os.chdir(docs_dir)
-    run("make doctest")
+    ctx.run("make doctest")
 
 @task
-def publish(test=False):
+def publish(ctx, test=False):
     """Publish to the cheeseshop."""
-    clean()
+    clean(ctx)
     if test:
-        run('python setup.py register -r test sdist bdist_wheel', echo=True)
-        run('twine upload dist/* -r test', echo=True)
+        ctx.run('python setup.py register -r test sdist bdist_wheel', echo=True)
+        ctx.run('twine upload dist/* -r test', echo=True)
     else:
-        run('python setup.py register sdist bdist_wheel', echo=True)
-        run('twine upload dist/*', echo=True)
+        ctx.run('python setup.py register sdist bdist_wheel', echo=True)
+        ctx.run('twine upload dist/*', echo=True)
