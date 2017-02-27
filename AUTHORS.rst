@@ -22,3 +22,4 @@ Contributors (chronological)
 - Jonathon Coe `@jonmcoe <https://github.com/jonmcoe>`_
 - Adrián López Calvo `@AdrianLC <https://github.com/AdrianLC>`_
 - Nitish Kulshrestha `@nitkul <https://github.com/nitkul>`_
+- Jhon Eslava `@EpicJhon <https://github.com/EpicJhon>`_
