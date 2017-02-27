@@ -86,7 +86,7 @@ Old:
 Python
 ++++++
 
-TextBlob supports Python >=2.7 or >=3.3.
+TextBlob supports Python >=2.7 or >=3.4.
 
 
 Dependencies
