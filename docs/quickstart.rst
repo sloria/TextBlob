@@ -227,7 +227,7 @@ Raises `TranslatorError <textblob.exceptions.TranslatorError>` if the TextBlob c
 
     >>> chinese_blob = TextBlob(u"美丽优于丑陋")
     >>> chinese_blob.translate(from_lang="zh-CN", to='en')
-    TextBlob("Beautiful is better than ugly")
+    TextBlob("Beauty is better than ugly")
 
 You can also attempt to detect a TextBlob's language using :meth:`TextBlob.detect_language() <TextBlob.detect_language>`.
 
