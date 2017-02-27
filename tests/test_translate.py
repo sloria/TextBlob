@@ -38,13 +38,13 @@ class TestTranslator(unittest.TestCase):
         assert_equal(mock_request.call_count, len(failed_responses))
 
     @mock.patch("textblob.translate.Translator._request")
-    def test_tk_parameter_included_in_requests(self, mock_request):
+    def test_tk_parameter_included_in_request_url(self, mock_request):
         mock_request.return_value = '["Esta es una frase.","en"]'
         self.translator.translate(self.sentence, to_lang="es")
         assert_true(mock_request.called_once)
         args, kwargs = mock_request.call_args
-        tk = kwargs['data']['tk']
-        assert_true(re.match(r'^\d+\.\d+$', tk))
+        url = args[0]
+        assert_true(re.match('.+&tk=\d+\.\d+$', url))
 
     @mock.patch('textblob.translate.Translator._request')
     def test_detect(self, mock_request):
@@ -84,7 +84,7 @@ class TestTranslatorIntegration(unittest.TestCase):
         assert_equal(to_en, "Hello, my name is Adrian! How are you? I am good")
 
     def test_translate_missing_from_language_auto_detects(self):
-        text = "Ich besorge das Bier"
+        text = "Ich hole das Bier"
         translated = self.translator.translate(text, to_lang="en")
         assert_equal(translated, "I'll get the beer")
 
@@ -94,16 +94,16 @@ class TestTranslatorIntegration(unittest.TestCase):
         assert_equal(translated, "Esta es una frase.")
         es_text = "Esta es una frase."
         to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
-        assert_equal(to_en, "This is a sentence.")
+        assert_equal(to_en, "This is a phrase.")
 
     def test_translate_non_ascii(self):
         text = "ذات سيادة كاملة"
         translated = self.translator.translate(text, from_lang='ar', to_lang='en')
         assert_equal(translated, "With full sovereignty")
 
-        text2 = "美丽优于丑陋"
+        text2 = "美丽比丑陋更好"
         translated = self.translator.translate(text2, from_lang="zh-CN", to_lang='en')
-        assert_equal(translated, "Beautiful is better than ugly")
+        assert_equal(translated, "Beauty is better than ugly")
 
     @mock.patch('textblob.translate.Translator._validate_translation', mock.MagicMock())
     def test_translate_unicode_escape(self):

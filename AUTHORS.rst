@@ -21,3 +21,4 @@ Contributors (chronological)
 - Lage Ragnarsson `@lragnarsson <https://github.com/lragnarsson>`_
 - Jonathon Coe `@jonmcoe <https://github.com/jonmcoe>`_
 - Adrián López Calvo `@AdrianLC <https://github.com/AdrianLC>`_
+- Jhon Eslava `@EpicJhon <https://github.com/EpicJhon>`_
