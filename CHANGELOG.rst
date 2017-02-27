@@ -1,16 +1,20 @@
 Changelog
 =========
 
-0.12.0 (unreleased)
+0.12.0 (2017-02-26)
 -------------------
 
 Features:
 
-- Add `Word.stem` method (:issue:`145`). Thanks :user:`nitkul`.
+- Add `Word.stem` and `WordList.stem` methods (:issue:`145`). Thanks :user:`nitkul`.
+
+Bug fixes:
+
+- Fix translation and language detection (:issue:`137`). Thanks :user:`EpicJhon` for the fix.
 
 Changes:
 
-- *Backwards-incompatible*: Remove Python 2.6 support.
+- *Backwards-incompatible*: Remove Python 2.6 and 3.3 support.
 
 0.11.1 (2016-02-17)
 -------------------
