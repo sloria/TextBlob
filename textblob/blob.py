@@ -285,6 +285,10 @@ class WordList(list):
         """Return the lemma of each word in this WordList."""
         return self.__class__([word.lemmatize() for word in self])
 
+    def stem(self, *args, **kwargs):
+        """Return the stem for each word in this WordList."""
+        return self.__class__([word.stem(*args, **kwargs) for word in self])
+
 
 def _validated_param(obj, name, base_class, default, base_class_name=None):
     """Validates a parameter passed to __init__. Makes sure that obj is
@@ -487,7 +491,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         """
         if n <= 0:
             return []
-        grams = [WordList(self.words[i:i+n])
+        grams = [WordList(self.words[i:i + n])
                             for i in range(len(self.words) - n + 1)]
         return grams
 
