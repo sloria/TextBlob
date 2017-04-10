@@ -63,7 +63,7 @@ class BaseTokenizer(with_metaclass(ABCMeta), nltk.tokenize.api.TokenizerI):
         """
         return (t for t in self.tokenize(text, *args, **kwargs))
 
-##### SENTIMENT ANALYZERS ####
+##### SENTIMENT ANALYZERS #####
 
 DISCRETE = 'ds'
 CONTINUOUS = 'co'
