@@ -80,7 +80,7 @@ def basic_extractor(document, train_set):
     """
 
     try:
-        el_zero = iter(train_set).next() #Infer input from first element.
+        el_zero = next(iter(train_set)) #Infer input from first element.
     except StopIteration:
         return {}
     if isinstance(el_zero, basestring):
