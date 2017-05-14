@@ -23,6 +23,7 @@ Example usage: ::
 from __future__ import unicode_literals, absolute_import
 import sys
 import json
+import re
 from collections import defaultdict
 
 import nltk
@@ -367,6 +368,16 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         self.stripped = lowerstrip(self.raw, all=True)
         _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer,
                            parser, classifier)
+
+    @cached_property
+    def remove_stopwords(self,fname="stopwords.txt"):
+        """Take raw string and remove stop words.
+        :rtype: str
+        """
+        with open(fname) as f:
+            stopwords = [word for line in f for word in re.findall(r'\w+', line)]
+        clean_string = ' '.join([word for word in self.raw.split() if word not in stopwords])
+        return clean_string
 
     @cached_property
     def words(self):
