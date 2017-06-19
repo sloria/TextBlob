@@ -18,18 +18,28 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
     """Sentiment analyzer that uses the same implementation as the
     pattern library. Returns results as a named tuple of the form:
 
-    ``Sentiment(polarity, subjectivity)``
+    ``Sentiment(polarity, subjectivity, [assessments])``
+
+    where [assessments] is a list of the assessed tokens and their
+    polarity and subjectivity scores
     """
 
     kind = CONTINUOUS
-    #: Return type declaration
-    RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
 
-    def analyze(self, text):
+    def analyze(self, text, keep_assessments=False):
         """Return the sentiment as a named tuple of the form:
-        ``Sentiment(polarity, subjectivity)``.
+        ``Sentiment(polarity, subjectivity, [assessments])``.
         """
-        return self.RETURN_TYPE(*pattern_sentiment(text))
+        #: Return type declaration
+        if keep_assessments:
+            RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity', 'assessments'])
+            assessments = pattern_sentiment(text).assessments
+            polarity,subjectivity = pattern_sentiment(text)
+            return RETURN_TYPE( polarity,subjectivity,assessments )
+
+        else:
+            RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
+        return RETURN_TYPE(*pattern_sentiment(text))
 
 
 def _default_feature_extractor(words):
