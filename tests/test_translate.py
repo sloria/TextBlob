@@ -99,7 +99,7 @@ class TestTranslatorIntegration(unittest.TestCase):
     def test_translate_non_ascii(self):
         text = "ذات سيادة كاملة"
         translated = self.translator.translate(text, from_lang='ar', to_lang='en')
-        assert_equal(translated, "With full sovereignty")
+        assert_equal(translated, "Fully sovereign")
 
         text2 = "美丽比丑陋更好"
         translated = self.translator.translate(text2, from_lang="zh-CN", to_lang='en')
