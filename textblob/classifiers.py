@@ -80,15 +80,15 @@ def basic_extractor(document, train_set):
     """
 
     try:
-        el_zero = next(iter(train_set)) #Infer input from first element.
+        el_zero = next(iter(train_set))  # Infer input from first element.
     except StopIteration:
         return {}
     if isinstance(el_zero, basestring):
-        word_features = [w for w in chain([el_zero],train_set)]
+        word_features = [w for w in chain([el_zero], train_set)]
     else:
         try:
             assert(isinstance(el_zero[0], basestring))
-            word_features = _get_words_from_dataset(chain([el_zero],train_set))
+            word_features = _get_words_from_dataset(chain([el_zero], train_set))
         except:
             raise ValueError('train_set is proabably malformed.')
 
