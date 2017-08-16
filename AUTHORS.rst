@@ -23,3 +23,4 @@ Contributors (chronological)
 - Adrián López Calvo `@AdrianLC <https://github.com/AdrianLC>`_
 - Nitish Kulshrestha `@nitkul <https://github.com/nitkul>`_
 - Jhon Eslava `@EpicJhon <https://github.com/EpicJhon>`_
+- `@jcalbert <https://github.com/jcalbert>`_

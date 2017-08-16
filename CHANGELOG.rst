@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.13.0 (2017-08-15)
+-------------------
+
+Features:
+
+- Performance improvements to `NaiveBayesClassifier` (:issue:`63`, :issue:`77`,
+  :issue:`123`). Thanks :user:`jcalbert` for the PR.
+
 0.12.0 (2017-02-27)
 -------------------
 
