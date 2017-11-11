@@ -10,6 +10,7 @@ before_install:
   - tar -xzvf nltk_data-0.11.0.tar.gz -C ~
 install:
   - pip install numpy
+  - pip install -U six
   - pip install -U .
   - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then pip install -r docs/requirements.txt;
     fi
