@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.13.1 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Avoid AttributeError when using pattern's sentiment analyzer
+  (:issue:`178`). Thanks :user:`tylerjharden` for the catch and patch.
+- Correctly pass ``format`` argument to ``NLTKClassifier.accuracy``
+  (:issue:`177`). Thanks :user:`pavelmalai` for the catch and patch.
+
 0.13.0 (2017-08-15)
 -------------------
 

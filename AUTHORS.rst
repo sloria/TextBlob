@@ -24,3 +24,5 @@ Contributors (chronological)
 - Nitish Kulshrestha `@nitkul <https://github.com/nitkul>`_
 - Jhon Eslava `@EpicJhon <https://github.com/EpicJhon>`_
 - `@jcalbert <https://github.com/jcalbert>`_
+- Tyler James Harden `@tylerjharden <https://github.com/tylerjharden>`_
+- `@pavelmalai <https://github.com/pavelmalai>`_
