@@ -81,7 +81,7 @@ class TestTranslatorIntegration(unittest.TestCase):
     def test_translate_spaces(self):
         es_text = "Hola, me llamo Adrián! Cómo estás? Yo bien"
         to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
-        assert_equal(to_en, "Hello, my name is Adrian! How are you? I am good")
+        assert_equal(to_en, "Hi, my name is Adrián! How are you? I am good")
 
     def test_translate_missing_from_language_auto_detects(self):
         text = "Ich hole das Bier"
