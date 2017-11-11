@@ -260,7 +260,7 @@ class NLTKClassifier(BaseClassifier):
             file format.
         """
         if is_filelike(test_set):
-            test_data = self._read_data(test_set)
+            test_data = self._read_data(test_set, format)
         else:  # test_set is a list of tuples
             test_data = test_set
         test_features = [(self.extract_features(d), c) for d, c in test_data]
