@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 import nltk
-import six
+import textblob.compat
 
 import textblob as tb
 from textblob.en import tag as pattern_tag
@@ -19,7 +19,7 @@ class PatternTagger(BaseTagger):
 
     def tag(self, text, tokenize=True):
         """Tag a string or BaseBlob."""
-        if not isinstance(text, six.text_type):
+        if not isinstance(text, textblob.compat.text_type):
             text = text.raw
         return pattern_tag(text, tokenize)
 
@@ -32,7 +32,7 @@ class NLTKTagger(BaseTagger):
     @requires_nltk_corpus
     def tag(self, text):
         """Tag a string or BaseBlob."""
-        if isinstance(text, six.text_type):
+        if isinstance(text, textblob.compat.text_type):
             text = tb.TextBlob(text)
 
         return nltk.tag.pos_tag(text.tokens)
