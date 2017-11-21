@@ -1,7 +1,7 @@
 import os
 from .blob import TextBlob, Word, Sentence, Blobber, WordList
 
-__version__ = '0.13.1'
+__version__ = '0.14.0'
 __license__ = 'MIT'
 __author__ = 'Steven Loria'
 
