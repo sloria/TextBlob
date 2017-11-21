@@ -2,11 +2,11 @@
 TextBlob: Simplified Text Processing
 ====================================
 
-.. image:: https://badge.fury.io/py/textblob.png
+.. image:: https://badge.fury.io/py/textblob.svg
     :target: http://badge.fury.io/py/textblob
     :alt: Latest version
 
-.. image:: https://travis-ci.org/sloria/TextBlob.png?branch=master
+.. image:: https://travis-ci.org/sloria/TextBlob.svg?branch=master
     :target: https://travis-ci.org/sloria/TextBlob
     :alt: Travis-CI
 

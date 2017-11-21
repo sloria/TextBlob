@@ -1,20 +1,27 @@
 language: python
 sudo: false
 python:
-    - "2.7"
-    - "3.4"
-    - "3.5"
-    - "3.6"
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
 before_install:
-    - "wget https://s3.amazonaws.com/textblob/nltk_data-0.11.0.tar.gz"
-    - "tar -xzvf nltk_data-0.11.0.tar.gz -C ~"
-# Install dependencies
+  - wget https://s3.amazonaws.com/textblob/nltk_data-0.11.0.tar.gz
+  - tar -xzvf nltk_data-0.11.0.tar.gz -C ~
 install:
-    - "pip install numpy"
-    - "pip install -U ."
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then pip install -r docs/requirements.txt; fi
-# Run tests
+  - pip install numpy
+  - pip install -U six
+  - pip install -U .
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then pip install -r docs/requirements.txt;
+    fi
 script:
-    - "python run_tests.py"
-    # Run doctests against py34
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then cd docs && make doctest; fi
+  - python run_tests.py
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then cd docs && make doctest; fi
+deploy:
+  provider: pypi
+  user: sloria
+  password:
+    secure: aPoSh6zkeB6PnS77fmoeT/PzB/oeE7aM0g9ZrPd19ZwC5aORtF7/ifDfzYwYWhdyua4fLAzaEu3Z+pk5z644r1Zq8Jxryv18LeFzkzO/Sk/O9LxpJQ+ypbTIIK9Oc5LdQ0qCd5L3RtMV3zIvocvnpryVmkAm/vYBm77rCBFcMxg=
+  on:
+    tags: true
+  distributions: sdist bdist_wheel

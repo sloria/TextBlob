@@ -1,6 +1,24 @@
 Changelog
 =========
 
+0.13.1 (2017-11-11)
+-------------------
+
+Bug fixes:
+
+- Avoid AttributeError when using pattern's sentiment analyzer
+  (:issue:`178`). Thanks :user:`tylerjharden` for the catch and patch.
+- Correctly pass ``format`` argument to ``NLTKClassifier.accuracy``
+  (:issue:`177`). Thanks :user:`pavelmalai` for the catch and patch.
+
+0.13.0 (2017-08-15)
+-------------------
+
+Features:
+
+- Performance improvements to `NaiveBayesClassifier` (:issue:`63`, :issue:`77`,
+  :issue:`123`). Thanks :user:`jcalbert` for the PR.
+
 0.12.0 (2017-02-27)
 -------------------
 
