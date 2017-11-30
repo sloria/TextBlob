@@ -24,6 +24,17 @@ class TestPatternSentiment(unittest.TestCase):
         assert_equal(p1_result.polarity, p1_result[0])
         assert_equal(p1_result.subjectivity, p1_result[1])
 
+    def test_analyze_assessments(self):
+        p1 = "I feel great this morning."
+        n1 = "This is a terrible car."
+        p1_result = self.analyzer.analyze(p1,keep_assessments=True)
+        n1_result = self.analyzer.analyze(n1,keep_assessments=True)
+        p1_assessment = p1_result.assessments[0]
+        n1_assessment = n1_result.assessments[0]
+        assert_true(p1_assessment[1] > 0)
+        assert_true(n1_assessment[1] < 0)
+        assert_equal(p1_result.polarity, p1_assessment[1])
+        assert_equal(p1_result.subjectivity, p1_assessment[2])
 
 class TestNaiveBayesAnalyzer(unittest.TestCase):
 
