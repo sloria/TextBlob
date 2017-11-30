@@ -752,6 +752,20 @@ is managed by the non-profit Python Software Foundation.'''
         # Pass in the TabTokenizer
         assert_equal(blob.tokenize(tokenizer), tb.WordList(["This is", "text."]))
 
+    def test_tags_uses_custom_tokenizer(self):
+        tokenizer = nltk.tokenize.regexp.WordPunctTokenizer()
+        blob = tb.TextBlob("Good muffins cost $3.88\nin New York.", tokenizer=tokenizer)
+        assert_equal(blob.tags, [(u'Good', u'JJ'), (u'muffins', u'NNS'), (u'cost', u'VBP'), (
+            u'3', u'CD'), (u'88', u'CD'), (u'in', u'IN'), (u'New', u'NNP'), (u'York', u'NNP')])
+
+    def test_tags_with_custom_tokenizer_and_tagger(self):
+        tokenizer = nltk.tokenize.regexp.WordPunctTokenizer()
+        tagger = tb.taggers.PatternTagger()
+        blob = tb.TextBlob("Good muffins cost $3.88\nin New York.", tokenizer=tokenizer, pos_tagger=tagger)
+        # PatterTagger takes raw text (not tokens), and handles tokenization itself.
+        assert_equal(blob.tags, [(u'Good', u'JJ'), (u'muffins', u'NNS'), (u'cost', u'NN'),
+                                 (u'3.88', u'CD'), (u'in', u'IN'), (u'New', u'NNP'), (u'York', u'NNP')])
+
     @mock.patch('textblob.translate.Translator.translate')
     def test_translate(self, mock_translate):
         mock_translate.return_value = 'Esta es una frase.'

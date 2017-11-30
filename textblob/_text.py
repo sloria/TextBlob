@@ -815,7 +815,7 @@ class Sentiment(lazydict):
         # A synset id.
         # Sentiment("a-00193480") => horrible => (-0.6, 1.0)   (English WordNet)
         # Sentiment("c_267") => verschrikkelijk => (-0.9, 1.0) (Dutch Cornetto)
-        elif isinstance(s, basestring) and RE_SYNSET.match(s):
+        elif isinstance(s, basestring) and RE_SYNSET.match(s) and hasattr(s, "synonyms"):
             a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
         # A string of words.
         # Sentiment("a horrible movie") => (-0.6, 1.0)

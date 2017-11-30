@@ -1,12 +1,11 @@
 import os
+from .blob import TextBlob, Word, Sentence, Blobber, WordList
 
-__version__ = '0.12.0'
+__version__ = '0.14.0'
 __license__ = 'MIT'
 __author__ = 'Steven Loria'
 
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-from .blob import TextBlob, Word, Sentence, Blobber, WordList
 
 __all__ = [
     'TextBlob',

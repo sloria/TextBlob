@@ -22,7 +22,7 @@ class BaseTagger(with_metaclass(ABCMeta)):
     @abstractmethod
     def tag(self, text, tokenize=True):
         """Return a list of tuples of the form (word, tag)
-        for a given set of text.
+        for a given set of text or BaseBlob instance.
         """
         return
 
