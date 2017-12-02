@@ -24,7 +24,8 @@ jobs:
   - stage: PyPI Release
     python: "3.6"
     env: []
-    # Override install and script to no-ops
+    # Override before_install, install, and script to no-ops
+    before_install: true
     install: true
     script: echo "Releasing to PyPI..."
     after_success: true
