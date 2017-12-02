@@ -26,3 +26,4 @@ Contributors (chronological)
 - `@jcalbert <https://github.com/jcalbert>`_
 - Tyler James Harden `@tylerjharden <https://github.com/tylerjharden>`_
 - `@pavelmalai <https://github.com/pavelmalai>`_
+- Jeff Kolb `@jeffakolb <https://github.com/jeffakolb>`_
