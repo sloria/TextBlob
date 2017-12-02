@@ -18,11 +18,21 @@ install:
 script:
   - python run_tests.py
   - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then cd docs && make doctest; fi
-deploy:
-  provider: pypi
-  user: sloria
-  password:
-    secure: aPoSh6zkeB6PnS77fmoeT/PzB/oeE7aM0g9ZrPd19ZwC5aORtF7/ifDfzYwYWhdyua4fLAzaEu3Z+pk5z644r1Zq8Jxryv18LeFzkzO/Sk/O9LxpJQ+ypbTIIK9Oc5LdQ0qCd5L3RtMV3zIvocvnpryVmkAm/vYBm77rCBFcMxg=
-  on:
-    tags: true
-  distributions: sdist bdist_wheel
+
+jobs:
+  include:
+  - stage: PyPI Release
+    python: "3.6"
+    env: []
+    # Override install and script to no-ops
+    install: true
+    script: echo "Releasing to PyPI..."
+    after_success: true
+    deploy:
+      provider: pypi
+      user: sloria
+      password:
+        secure: aPoSh6zkeB6PnS77fmoeT/PzB/oeE7aM0g9ZrPd19ZwC5aORtF7/ifDfzYwYWhdyua4fLAzaEu3Z+pk5z644r1Zq8Jxryv18LeFzkzO/Sk/O9LxpJQ+ypbTIIK9Oc5LdQ0qCd5L3RtMV3zIvocvnpryVmkAm/vYBm77rCBFcMxg=
+      on:
+        tags: true
+      distributions: sdist bdist_wheel
