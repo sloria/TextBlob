@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.15.0 (2017-12-02)
+-------------------
+
+Features:
+
+- Add `TextBlob.sentiment_assessments` property which exposes pattern's
+  sentiment assessments (:issue:`170`). Thanks :user:`jeffakolb`.
+
 0.14.0 (2017-11-20)
 -------------------
 
