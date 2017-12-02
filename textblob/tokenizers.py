@@ -56,6 +56,7 @@ class SentenceTokenizer(BaseTokenizer):
         '''Return a list of sentences.'''
         return nltk.tokenize.sent_tokenize(text)
 
+
 #: Convenience function for tokenizing sentences
 sent_tokenize = SentenceTokenizer().itokenize
 

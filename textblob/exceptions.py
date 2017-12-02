@@ -15,6 +15,7 @@ class TextBlobError(Exception):
     """A TextBlob-related error."""
     pass
 
+
 TextBlobException = TextBlobError  # Backwards compat
 
 class MissingCorpusError(TextBlobError):
@@ -24,6 +25,7 @@ class MissingCorpusError(TextBlobError):
 
     def __init__(self, message=MISSING_CORPUS_MESSAGE, *args, **kwargs):
         super(MissingCorpusError, self).__init__(message, *args, **kwargs)
+
 
 MissingCorpusException = MissingCorpusError  # Backwards compat
 

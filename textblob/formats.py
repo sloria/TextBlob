@@ -127,6 +127,7 @@ class JSON(BaseFormat):
         except ValueError:
             return False
 
+
 _registry = OrderedDict([
     ('csv', CSV),
     ('json', JSON),

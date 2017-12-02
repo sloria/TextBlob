@@ -89,8 +89,8 @@ def basic_extractor(document, train_set):
         try:
             assert(isinstance(el_zero[0], basestring))
             word_features = _get_words_from_dataset(chain([el_zero], train_set))
-        except:
-            raise ValueError('train_set is proabably malformed.')
+        except Exception:
+            raise ValueError('train_set is probably malformed.')
 
     tokens = _get_document_tokens(document)
     features = dict(((u'contains({0})'.format(word), (word in tokens))
@@ -136,7 +136,7 @@ class BaseClassifier(object):
             self.train_set = self._read_data(train_set, format)
         else:  # train_set is a list of tuples
             self.train_set = train_set
-        self._word_set = _get_words_from_dataset(self.train_set) #Keep a hidden set of unique words.
+        self._word_set = _get_words_from_dataset(self.train_set)  # Keep a hidden set of unique words.
         self.train_features = None
 
     def _read_data(self, dataset, format=None):

@@ -65,6 +65,7 @@ class BaseTokenizer(with_metaclass(ABCMeta), nltk.tokenize.api.TokenizerI):
 
 ##### SENTIMENT ANALYZERS ####
 
+
 DISCRETE = 'ds'
 CONTINUOUS = 'co'
 

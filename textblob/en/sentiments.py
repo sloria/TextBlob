@@ -23,8 +23,10 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
     where [assessments] is a list of the assessed tokens and their
     polarity and subjectivity scores
     """
-
     kind = CONTINUOUS
+    # This is only here for backwards-compatibility.
+    # The return type is actually determined upon calling analyze()
+    RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
 
     def analyze(self, text, keep_assessments=False):
         """Return the sentiment as a named tuple of the form:
@@ -32,14 +34,14 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
         """
         #: Return type declaration
         if keep_assessments:
-            RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity', 'assessments'])
+            Sentiment = namedtuple('Sentiment', ['polarity', 'subjectivity', 'assessments'])
             assessments = pattern_sentiment(text).assessments
-            polarity,subjectivity = pattern_sentiment(text)
-            return RETURN_TYPE( polarity,subjectivity,assessments )
+            polarity, subjectivity = pattern_sentiment(text)
+            return Sentiment(polarity, subjectivity, assessments)
 
         else:
-            RETURN_TYPE = namedtuple('Sentiment', ['polarity', 'subjectivity'])
-        return RETURN_TYPE(*pattern_sentiment(text))
+            Sentiment = namedtuple('Sentiment', ['polarity', 'subjectivity'])
+            return Sentiment(*pattern_sentiment(text))
 
 
 def _default_feature_extractor(words):

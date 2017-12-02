@@ -98,8 +98,7 @@ def _unescape(text):
     """Unescape unicode character codes within a string.
     """
     pattern = r'\\{1,2}u[0-9a-fA-F]{4}'
-    decode = lambda x: codecs.getdecoder('unicode_escape')(x.group())[0]
-    return re.sub(pattern, decode, text)
+    return re.sub(pattern, lambda x: codecs.getdecoder('unicode_escape')(x.group())[0], text)
 
 
 def _calculate_tk(source):

@@ -12,8 +12,11 @@ When there's no Internet
     python run_tests.py no-internet
 '''
 from __future__ import unicode_literals
-import nose
+import subprocess
 import sys
+
+import nose
+
 from textblob.compat import PY2
 
 PY26 = PY2 and int(sys.version_info[1]) < 7
@@ -22,6 +25,9 @@ PYPY = "PyPy" in sys.version
 
 def main():
     args = get_argv()
+    retcode = subprocess.call(['flake8', 'textblob'])
+    if retcode:
+        sys.exit(1)
     success = nose.run(argv=args)
     sys.exit(0) if success else sys.exit(1)
 
@@ -58,6 +64,7 @@ def get_argv():
     if attr_expression:
         args.extend(["-A", attr_expression])
     return args
+
 
 if __name__ == '__main__':
     main()

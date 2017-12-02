@@ -433,7 +433,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :rtype: namedtuple of the form ``Sentiment(polarity, subjectivity,
         assessments)``
         """
-        return self.analyzer.analyze(self.raw,keep_assessments=True)
+        return self.analyzer.analyze(self.raw, keep_assessments=True)
 
     @cached_property
     def polarity(self):
