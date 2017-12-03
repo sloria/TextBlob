@@ -4,8 +4,6 @@ import re
 from setuptools import setup, find_packages
 
 REQUIREMENTS = ['nltk>=3.1']
-TEST_REQUIREMENTS = ['nose', 'mock']
-
 
 def find_version(fname):
     """Attempts to find the version number in the file names fname.
@@ -23,13 +21,15 @@ def find_version(fname):
         raise RuntimeError('Cannot find version information')
     return version
 
-__version__ = find_version("textblob/__init__.py")
+
+__version__ = find_version('textblob/__init__.py')
 
 
 def read(fname):
     with open(fname) as fp:
         content = fp.read()
     return content
+
 
 setup(
     name='textblob',
@@ -61,6 +61,5 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
         "Topic :: Text Processing :: Linguistic",
     ),
-    tests_require=TEST_REQUIREMENTS,
     keywords=["textblob", "nlp", 'linguistics', 'nltk', 'pattern']
 )
