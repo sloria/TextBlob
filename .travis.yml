@@ -22,6 +22,7 @@ script:
 jobs:
   include:
   - stage: PyPI Release
+    if: tag IS present
     python: "3.6"
     env: []
     # Override before_install, install, and script to no-ops
