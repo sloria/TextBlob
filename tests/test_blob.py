@@ -924,7 +924,8 @@ class WordTest(TestCase):
         w = tb.Word("wolves")
         assert_equal(w.lemmatize(), "wolf")
         w = tb.Word("went")
-        assert_equal(w.lemmatize("v"), "go")
+        assert_equal(w.lemmatize("v"), "go") # wordnet tagset
+        assert_equal(w.lemmatize("VBD"), "go") # penn treebank tagset
 
     def test_lemma(self):
         w = tb.Word("wolves")

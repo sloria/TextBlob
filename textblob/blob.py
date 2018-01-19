@@ -131,8 +131,7 @@ class Word(unicode):
     def lemma(self):
         """Return the lemma of this word using Wordnet's morphy function.
         """
-        tag = _penn_to_wordnet(self.pos_tag) if (self.pos_tag is not None) else None
-        return self.lemmatize(pos=tag)
+        return self.lemmatize(pos=self.pos_tag)
 
     @requires_nltk_corpus
     def lemmatize(self, pos=None):
@@ -144,9 +143,13 @@ class Word(unicode):
         .. versionadded:: 0.8.1
         """
         if pos is None:
-            pos = _wordnet.NOUN
+            tag = _wordnet.NOUN
+        elif pos in _wordnet._FILEMAP.keys():
+            tag = pos
+        else:
+            tag = _penn_to_wordnet(pos)
         lemmatizer = nltk.stem.WordNetLemmatizer()
-        return lemmatizer.lemmatize(self.string, pos)
+        return lemmatizer.lemmatize(self.string, tag)
 
     PorterStemmer = nltk.stem.porter.PorterStemmer()
     LancasterStemmer = nltk.stem.lancaster.LancasterStemmer()
