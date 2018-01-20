@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.15.1 (2018-01-20)
+-------------------
+
+Bug fixes:
+
+- Convert POS tags from treebank to wordnet when calling ``lemmatize``
+  to prevent ``MissingCorpusError`` (:issue:`160`). Thanks
+  :user:`jschnurr`.
+
 0.15.0 (2017-12-02)
 -------------------
 
