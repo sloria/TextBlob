@@ -103,7 +103,7 @@ class TestTranslatorIntegration(unittest.TestCase):
 
         text2 = "美丽比丑陋更好"
         translated = self.translator.translate(text2, from_lang="zh-CN", to_lang='en')
-        assert_equal(translated, "Beauty is better than ugly")
+        assert_equal(translated, "Beautiful is better than ugly")
 
     @mock.patch('textblob.translate.Translator._validate_translation', mock.MagicMock())
     def test_translate_unicode_escape(self):
