@@ -1,4 +1,4 @@
 
-sphinx==1.7.6
+sphinx==1.7.7
 PyYAML==3.13
 sphinx-issues==1.0.0
