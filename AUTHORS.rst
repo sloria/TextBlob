@@ -27,3 +27,4 @@ Contributors (chronological)
 - Tyler James Harden `@tylerjharden <https://github.com/tylerjharden>`_
 - `@pavelmalai <https://github.com/pavelmalai>`_
 - Jeff Kolb `@jeffakolb <https://github.com/jeffakolb>`_
+- Daniel Ong `@danong <https://github.com/danong>`_
