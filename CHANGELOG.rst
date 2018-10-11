@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.16.0 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Fix bug that raised a ``RuntimeError`` when executing methods that
+  delegate to ``pattern.en`` (:issue:`230`). Thanks :user:`vvaezian`
+  for the report and thanks :user:`danong` for the fix.
+
 0.15.1 (2018-01-20)
 -------------------
 
