@@ -215,30 +215,33 @@ class WordList(list):
         """Initialize a WordList. Takes a collection of strings as
         its only argument.
         """
-        self._collection = [Word(w) for w in collection]
-        super(WordList, self).__init__(self._collection)
-
-    def __str__(self):
-        return str(self._collection)
+        super(WordList, self).__init__([Word(w) for w in collection])
 
     def __repr__(self):
         """Returns a string representation for debugging."""
         class_name = self.__class__.__name__
-        return '{cls}({lst})'.format(cls=class_name, lst=repr(self._collection))
+        return '{cls}({lst})'.format(cls=class_name, lst=super(WordList, self).__repr__())
 
     def __getitem__(self, key):
         """Returns a string at the given index."""
+        item = super(WordList, self).__getitem__(key)
         if isinstance(key, slice):
-            return self.__class__(self._collection[key])
+            return self.__class__(item)
         else:
-            return self._collection[key]
+            return item
 
     def __getslice__(self, i, j):
         # This is included for Python 2.* compatibility
-        return self.__class__(self._collection[i:j])
+        return self.__class__(super(WordList, self).__getslice__(i, j))
 
-    def __iter__(self):
-        return iter(self._collection)
+    def __setitem__(self, index, obj):
+        """Places object at given index, replacing existing item. If the object
+        is a string, inserts a :class:`Word <Word>` object.
+        """
+        if isinstance(obj, basestring):
+            super(WordList, self).__setitem__(index, Word(obj))
+        else:
+            super(WordList, self).__setitem__(index, obj)
 
     def count(self, strg, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
@@ -249,24 +252,23 @@ class WordList(list):
         if not case_sensitive:
             return [word.lower() for word in self].count(strg.lower(), *args,
                     **kwargs)
-        return self._collection.count(strg, *args, **kwargs)
+        return super(WordList, self).count(strg, *args, **kwargs)
 
     def append(self, obj):
         """Append an object to end. If the object is a string, appends a
         :class:`Word <Word>` object.
         """
         if isinstance(obj, basestring):
-            return self._collection.append(Word(obj))
+            super(WordList, self).append(Word(obj))
         else:
-            return self._collection.append(obj)
+            super(WordList, self).append(obj)
 
     def extend(self, iterable):
         """Extend WordList by appending elements from ``iterable``. If an element
         is a string, appends a :class:`Word <Word>` object.
         """
-        [self._collection.append(Word(e) if isinstance(e, basestring) else e)
-            for e in iterable]
-        return self
+        for e in iterable:
+            self.append(e)
 
     def upper(self):
         """Return a new WordList with each word upper-cased."""
