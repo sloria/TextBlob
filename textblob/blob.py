@@ -216,6 +216,10 @@ class WordList(list):
         its only argument.
         """
         super(WordList, self).__init__([Word(w) for w in collection])
+        
+    def __str__(self):
+        """Returns a string representation for printing."""
+        return super(WordList, self).__repr__()
 
     def __repr__(self):
         """Returns a string representation for debugging."""
