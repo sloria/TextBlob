@@ -136,6 +136,25 @@ class WordListTest(TestCase):
         assert_true(isinstance(wl[2], tb.Word))
         assert_true(isinstance(wl[3], int))
 
+    def test_pop(self):
+        wl = tb.WordList(['cats', 'dogs'])
+        assert_equal(wl.pop(), tb.Word('dogs'))
+        assert_raises(IndexError, wl.__getitem__, 1)
+        assert_equal(wl.pop(), tb.Word('cats'))
+        assert_equal(len(wl), 0)
+        assert_raises(IndexError, wl.pop)
+
+    def test_setitem(self):
+        wl = tb.WordList(['I', 'love', 'JavaScript'])
+        wl[2] = tb.Word('Python')
+        assert_equal(wl[2], tb.Word('Python'))
+
+    def test_reverse(self):
+        wl = tb.WordList(['head', 'shoulders', 'knees', 'toes'])
+        wl.reverse()
+        assert_equal(list(wl), ['toes', 'knees', 'shoulders', 'head'])
+
+
 
 class SentenceTest(TestCase):
 
