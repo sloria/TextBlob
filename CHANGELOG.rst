@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.16.0 (unreleased)
+0.15.2 (2018-11-21)
 -------------------
 
 Bug fixes:
@@ -9,6 +9,9 @@ Bug fixes:
 - Fix bug that raised a ``RuntimeError`` when executing methods that
   delegate to ``pattern.en`` (:issue:`230`). Thanks :user:`vvaezian`
   for the report and thanks :user:`danong` for the fix.
+- Fix methods of ``WordList`` that modified the list in-place by
+  removing the internal `_collection` variable (:pr:`235`). Thanks
+  :user:`jammmo` for the PR.
 
 0.15.1 (2018-01-20)
 -------------------
