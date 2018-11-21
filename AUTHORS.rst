@@ -28,3 +28,4 @@ Contributors (chronological)
 - `@pavelmalai <https://github.com/pavelmalai>`_
 - Jeff Kolb `@jeffakolb <https://github.com/jeffakolb>`_
 - Daniel Ong `@danong <https://github.com/danong>`_
+- Jamie Moschella `@jammmo <https://github.com/jammmo>`_
