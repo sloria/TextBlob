@@ -575,7 +575,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :rtype: :class:`BaseBlob <BaseBlob>`
         """
         # regex matches: word or punctuation or whitespace
-        tokens = nltk.tokenize.regexp_tokenize(self.raw, "\w+|[^\w\s]|\s")
+        tokens = nltk.tokenize.regexp_tokenize(self.raw, r"\w+|[^\w\s]|\s")
         corrected = (Word(w).correct() for w in tokens)
         ret = ''.join(corrected)
         return self.__class__(ret)
