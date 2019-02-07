@@ -864,6 +864,12 @@ is managed by the non-profit Python Software Foundation.'''
         assert_raises(NameError,
             lambda: blob.classify())
 
+    def test_word_string_type_after_pos_tags_is_str(self):
+        text = 'John is a cat'
+        blob = tb.TextBlob(text)
+        for word, part_of_speech in blob.pos_tags:
+            assert type(word.string) is str
+
 
 class WordTest(TestCase):
 
