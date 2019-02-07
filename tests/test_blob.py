@@ -868,7 +868,7 @@ is managed by the non-profit Python Software Foundation.'''
         text = 'John is a cat'
         blob = tb.TextBlob(text)
         for word, part_of_speech in blob.pos_tags:
-            assert type(word.string) is str
+            assert type(word.string) is unicode
 
 
 class WordTest(TestCase):
