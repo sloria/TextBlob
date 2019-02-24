@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.15.3 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Fix bug when ``Word`` string type after pos_tags is not a ``str``
+  (:pr:`255`). Thanks :user:`roman-y-korolev` for the patch.
+
 0.15.2 (2018-11-21)
 -------------------
 
