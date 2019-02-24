@@ -483,7 +483,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         if isinstance(self, TextBlob):
             return [val for sublist in [s.pos_tags for s in self.sentences] for val in sublist]
         else:
-            return [(Word(word, pos_tag=t), unicode(t))
+            return [(Word(unicode(word), pos_tag=t), unicode(t))
                     for word, t in self.pos_tagger.tag(self)
                     if not PUNCTUATION_REGEX.match(unicode(t))]
 
