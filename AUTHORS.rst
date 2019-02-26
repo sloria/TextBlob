@@ -29,4 +29,4 @@ Contributors (chronological)
 - Jeff Kolb `@jeffakolb <https://github.com/jeffakolb>`_
 - Daniel Ong `@danong <https://github.com/danong>`_
 - Jamie Moschella `@jammmo <https://github.com/jammmo>`_
-- Roman Korolev `@jammmo <https://github.com/roman-y-korolev>`_
+- Roman Korolev `@roman-y-korolev <https://github.com/roman-y-korolev>`_
