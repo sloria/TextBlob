@@ -81,12 +81,12 @@ class TestTranslatorIntegration(unittest.TestCase):
     def test_translate_spaces(self):
         es_text = "Hola, me llamo Adrián! Cómo estás? Yo bien"
         to_en = self.translator.translate(es_text, from_lang="es", to_lang="en")
-        assert_equal(to_en, "Hi, my name is Adrián! How are you? I am good")
+        assert_equal(to_en, "Hello, my name is Adrian! How are you? I am good")
 
     def test_translate_missing_from_language_auto_detects(self):
         text = "Ich hole das Bier"
         translated = self.translator.translate(text, to_lang="en")
-        assert_equal(translated, "I'll get the beer")
+        assert_equal(translated, "I get the beer")
 
     def test_translate_text(self):
         text = "This is a sentence."
@@ -99,11 +99,11 @@ class TestTranslatorIntegration(unittest.TestCase):
     def test_translate_non_ascii(self):
         text = "ذات سيادة كاملة"
         translated = self.translator.translate(text, from_lang='ar', to_lang='en')
-        assert_equal(translated, "Fully sovereign")
+        assert_equal(translated, "Full sovereign")
 
-        text2 = "美丽比丑陋更好"
+        text2 = "美丽胜于丑陋"
         translated = self.translator.translate(text2, from_lang="zh-CN", to_lang='en')
-        assert_equal(translated, "Beautiful is better than ugly")
+        assert_equal(translated, "Beauty is better than ugly")
 
     @mock.patch('textblob.translate.Translator._validate_translation', mock.MagicMock())
     def test_translate_unicode_escape(self):

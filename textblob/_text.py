@@ -1377,7 +1377,7 @@ class Spelling(lazydict):
     def _known(self, words=[]):
         """ Returns the given list of words filtered by known words.
         """
-        return set(w for w in words if w in self)
+        return set(w for w in words if w.lower() in self)
 
     def suggest(self, w):
         """ Return a list of (word, confidence) spelling corrections for the given word,
