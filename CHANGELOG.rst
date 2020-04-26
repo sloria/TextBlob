@@ -6,7 +6,11 @@ Changelog
 
 Deprecations:
 
-- ``TextBlob.translate()`` and ``TextBlob.detect_language`` are deprecated. Use the official Google Translate API instead.
+- ``TextBlob.translate()`` and ``TextBlob.detect_language`` are deprecated. Use the official Google Translate API instead (:issue:`215`).
+
+Other changes:
+
+- Pin NLTK to ``nltk<3.5`` on Python 2 (:issue:`315`).
 
 0.15.3 (2019-02-24)
 -------------------
