@@ -10,6 +10,8 @@ Deprecations:
 
 Other changes:
 
+- *Backwards-incompatible*: Drop support for Python 3.4.
+- Test against Python 3.7 and Python 3.8.
 - Pin NLTK to ``nltk<3.5`` on Python 2 (:issue:`315`).
 
 0.15.3 (2019-02-24)

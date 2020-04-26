@@ -1,9 +1,10 @@
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 before_install:
   - wget https://s3.amazonaws.com/textblob/nltk_data-0.11.0.tar.gz
   - tar -xzvf nltk_data-0.11.0.tar.gz -C ~
@@ -12,11 +13,11 @@ install:
   - pip install -r dev-requirements.txt
   - pip install -U six
   - pip install -U .
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then pip install -r docs/requirements.txt;
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then pip install -r docs/requirements.txt;
     fi
 script:
   - python run_tests.py
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then cd docs && make doctest; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then cd docs && make doctest; fi
 
 jobs:
   include:
@@ -25,10 +26,10 @@ jobs:
     python: "3.6"
     env: []
     # Override before_install, install, and script to no-ops
-    before_install: true
-    install: true
+    before_install: skip
+    install: skip
     script: echo "Releasing to PyPI..."
-    after_success: true
+    after_success: skip
     deploy:
       provider: pypi
       user: sloria
