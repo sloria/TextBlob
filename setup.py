@@ -3,8 +3,10 @@
 import re
 from setuptools import setup, find_packages
 
-REQUIREMENTS = ['nltk>=3.1']
-
+REQUIREMENTS = [
+    'nltk>=3.1; python_version >= "3"',
+    'nltk>=3.1,<3.5; python_version < "3"',
+]
 def find_version(fname):
     """Attempts to find the version number in the file names fname.
     Raises RuntimeError if not found.
