@@ -208,41 +208,6 @@ Each of these methods can also be used with noun phrases. ::
     >>> wiki.noun_phrases.count('python')
     1
 
-Translation and Language Detection
-----------------------------------
-New in version `0.5.0`.
-
-TextBlobs can be translated between languages.
-
-.. doctest::
-
-    >>> en_blob = TextBlob(u'Simple is better than complex.')
-    >>> en_blob.translate(to='es')
-    TextBlob("Lo simple es mejor que lo complejo.")
-
-If no source language is specified, TextBlob will attempt to detect the language. You can specify the source language explicitly, like so.
-Raises `TranslatorError <textblob.exceptions.TranslatorError>` if the TextBlob cannot be translated into the requested language or `NotTranslated <textblob.exceptions.NotTranslated>` if the translated result is the same as the input string.
-
-.. doctest::
-
-    >>> chinese_blob = TextBlob(u"美丽优于丑陋")
-    >>> chinese_blob.translate(from_lang="zh-CN", to='en')
-    TextBlob("Beauty is better than ugly")
-
-You can also attempt to detect a TextBlob's language using :meth:`TextBlob.detect_language() <TextBlob.detect_language>`.
-
-.. doctest::
-
-    >>> b = TextBlob(u"بسيط هو أفضل من مجمع")
-    >>> b.detect_language()
-    'ar'
-
-As a reference, language codes can be found `here <https://developers.google.com/translate/v2/using_rest#language-params>`_.
-
-Language translation and detection is powered by the `Google Translate API`_.
-
-.. _`Google Translate API`: https://developers.google.com/translate/
-
 Parsing
 -------
 

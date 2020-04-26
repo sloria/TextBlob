@@ -43,7 +43,6 @@ Homepage: `https://textblob.readthedocs.io/ <https://textblob.readthedocs.io/>`_
     # 0.060
     # -0.341
 
-    blob.translate(to="es")  # 'La amenaza titular de The Blob...'
 
 TextBlob stands on the giant shoulders of `NLTK`_ and `pattern`_, and plays nicely with both.
 
@@ -54,7 +53,6 @@ Features
 - Part-of-speech tagging
 - Sentiment analysis
 - Classification (Naive Bayes, Decision Tree)
-- Language translation and detection powered by Google Translate
 - Tokenization (splitting text into words and sentences)
 - Word and phrase frequencies
 - Parsing
