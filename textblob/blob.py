@@ -23,6 +23,7 @@ Example usage: ::
 from __future__ import unicode_literals, absolute_import
 import sys
 import json
+import warnings
 from collections import defaultdict
 
 import nltk
@@ -95,16 +96,30 @@ class Word(unicode):
         '''Translate the word to another language using Google's
         Translate API.
 
+        .. deprecated:: 0.16.0
+            Use the official Google Translate API instead.
         .. versionadded:: 0.5.0
         '''
+        warnings.warn(
+            'Word.translate is deprecated and will be removed in a future release. '
+            'Use the official Google Translate API instead.',
+            DeprecationWarning
+        )
         return self.translator.translate(self.string,
                                          from_lang=from_lang, to_lang=to)
 
     def detect_language(self):
         '''Detect the word's language using Google's Translate API.
 
+        .. deprecated:: 0.16.0
+            Use the official Google Translate API istead.
         .. versionadded:: 0.5.0
         '''
+        warnings.warn(
+            'Word.detect_language is deprecated and will be removed in a future release. '
+            'Use the official Google Translate API instead.',
+            DeprecationWarning
+        )
         return self.translator.detect(self.string)
 
     def spellcheck(self):
@@ -536,6 +551,8 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         Language code reference:
             https://developers.google.com/translate/v2/using_rest#language-params
 
+        .. deprecated:: 0.16.0
+            Use the official Google Translate API instead.
         .. versionadded:: 0.5.0.
 
         :param str from_lang: Language to translate from. If ``None``, will attempt
@@ -543,6 +560,11 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :param str to: Language to translate to.
         :rtype: :class:`BaseBlob <BaseBlob>`
         """
+        warnings.warn(
+            'TextBlob.translate is deprecated and will be removed in a future release. '
+            'Use the official Google Translate API instead.',
+            DeprecationWarning
+        )
         return self.__class__(self.translator.translate(self.raw,
                               from_lang=from_lang, to_lang=to))
 
@@ -561,10 +583,17 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         Language code reference:
             https://developers.google.com/translate/v2/using_rest#language-params
 
+        .. deprecated:: 0.16.0
+            Use the official Google Translate API instead.
         .. versionadded:: 0.5.0
 
         :rtype: str
         """
+        warnings.warn(
+            'TextBlob.detext_translate is deprecated and will be removed in a future release. '
+            'Use the official Google Translate API instead.',
+            DeprecationWarning
+        )
         return self.translator.detect(self.raw)
 
     def correct(self):

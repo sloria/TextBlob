@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.16.0 (unreleased)
+-------------------
+
+Deprecations:
+
+- ``TextBlob.translate()`` and ``TextBlob.detect_language`` are deprecated. Use the official Google Translate API instead.
+
 0.15.3 (2019-02-24)
 -------------------
 
