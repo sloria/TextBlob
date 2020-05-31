@@ -335,7 +335,8 @@ def _initialize_models(obj, tokenizer, pos_tagger,
     """Common initialization between BaseBlob and Blobber classes."""
     # tokenizer may be a textblob or an NLTK tokenizer
     obj.tokenizer = _validated_param(tokenizer, "tokenizer",
-                                    base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
+                                    base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI,
+                                        nltk.tokenize.casual.TweetTokenizer),
                                     default=BaseBlob.tokenizer,
                                     base_class_name="BaseTokenizer")
     obj.np_extractor = _validated_param(np_extractor, "np_extractor",

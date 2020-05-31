@@ -763,6 +763,17 @@ is managed by the non-profit Python Software Foundation.'''
         blob = tb.TextBlob("This is\ttext.", tokenizer=tokenizer)
         assert_equal(blob.tokens, tb.WordList(["This is", "text."]))
 
+    def test_can_use_a_tweet_tokenizer(self):
+        tokenizer = nltk.tokenize.TweetTokenizer()
+        blob = tb.TextBlob("This is\ttext.", tokenizer=tokenizer)
+        assert_equal(blob.tokens, tb.WordList(["This", "is", "text", "."]))
+
+    def test_can_use_a_tweet_tokenizer_with_constructor_options(self):
+        tokenizer = nltk.tokenize.TweetTokenizer(strip_handles=True, reduce_len=True)
+        blob = tb.TextBlob("@remy: This is waaaaayyyy too much for you!!!!!!", tokenizer=tokenizer)
+        assert_equal(blob.tokens, tb.WordList([':', 'This', 'is', 'waaayyy', 'too',
+            'much', 'for', 'you', '!', '!', '!']))
+
     def test_tokenize_method(self):
         tokenizer = nltk.tokenize.TabTokenizer()
         blob = tb.TextBlob("This is\ttext.")
