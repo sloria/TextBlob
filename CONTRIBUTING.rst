@@ -133,7 +133,7 @@ To run tests on Python 2.7, 3.4, 3.5, and 3.6 virtual environments (must have ea
 Documentation
 +++++++++++++
 
-Contributions to the documentation are welcome. Documentation is written in `reStructured Text`_ (rST). A quick rST reference can be found `here <http://docutils.sourceforge.net/docs/user/rst/quickref.html>`_. Builds are powered by Sphinx_.
+Contributions to the documentation are welcome. Documentation is written in `reStructured Text`_ (rST). A quick rST reference can be found `here <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_. Builds are powered by Sphinx_.
 
 To build docs: ::
 
@@ -143,6 +143,6 @@ The ``-b`` (for "browse") automatically opens up the docs in your browser after 
 
 .. _Sphinx: http://sphinx.pocoo.org/
 
-.. _`reStructured Text`: http://docutils.sourceforge.net/rst.html
+.. _`reStructured Text`: https://docutils.sourceforge.io/rst.html
 
 .. _TextBlob: https://github.com/sloria/TextBlob
