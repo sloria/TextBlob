@@ -823,7 +823,8 @@ class Sentiment(lazydict):
             a = self.assessments(((w.lower(), None) for w in " ".join(self.tokenizer(s)).split()), negation)
         # A pattern.en.Text.
         elif hasattr(s, "sentences"):
-            a = self.assessments(((w.lemma or w.string.lower(), w.pos[:2]) for w in chain(*s)), negation)
+            a = self.assessments(((w.lemma or w.string.lower(), w.pos[:2])
+                                  for w in chain.from_iterable(s)), negation)
         # A pattern.en.Sentence or pattern.en.Chunk.
         elif hasattr(s, "lemmata"):
             a = self.assessments(((w.lemma or w.string.lower(), w.pos[:2]) for w in s.words), negation)
@@ -835,11 +836,11 @@ class Sentiment(lazydict):
         # Bag-of words is unordered: inject None between each two words
         # to stop assessments() from scanning for preceding negation & modifiers.
         elif hasattr(s, "terms"):
-            a = self.assessments(chain(*(((w, None), (None, None)) for w in s)), negation)
+            a = self.assessments(chain.from_iterable(((w, None), (None, None)) for w in s), negation)
             kwargs.setdefault("weight", lambda w: s.terms[w[0]])
         # A dict of (word, weight)-items.
         elif isinstance(s, dict):
-            a = self.assessments(chain(*(((w, None), (None, None)) for w in s)), negation)
+            a = self.assessments(chain.from_iterable(((w, None), (None, None)) for w in s), negation)
             kwargs.setdefault("weight", lambda w: s[w[0]])
         # A list of words.
         elif isinstance(s, list):
