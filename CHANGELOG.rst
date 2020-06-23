@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.17.0 (unreleased)
+-------------------
+
+Features:
+
+- Performance improvement: Use ``chain.from_iterable`` in ``_text.py``
+  to improve runtime and memory usage (:pr:`333`). Thanks :user:`cool-RR` for the PR.
+
 0.16.0 (2020-04-26)
 -------------------
 
