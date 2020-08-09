@@ -11,9 +11,8 @@ from itertools import chain
 import types
 import os
 import re
-from xml.etree import cElementTree
 
-from .compat import text_type, basestring, imap, unicode, binary_type, PY2
+from .compat import text_type, basestring, imap, unicode, binary_type, PY2, ET
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -740,7 +739,7 @@ class Sentiment(lazydict):
         if not os.path.exists(path):
             return
         words, synsets, labels = {}, {}, {}
-        xml = cElementTree.parse(path)
+        xml = ET.parse(path)
         xml = xml.getroot()
         for w in xml.findall("word"):
             if self._confidence is None \

@@ -16,6 +16,7 @@ if PY2:
     imap = imap
     izip = izip
     import unicodecsv as csv
+    import xml.etree.cElementTree as ET
 
     def implements_to_string(cls):
         """Class decorator that renames __str__ to __unicode__ and
@@ -36,6 +37,7 @@ else:  # PY3
     imap = map
     izip = zip
     import csv
+    import xml.etree.ElementTree as ET
 
     implements_to_string = lambda x: x
 
