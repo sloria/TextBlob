@@ -100,5 +100,5 @@ License
 
 MIT licensed. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/master/LICENSE>`_ file for more details.
 
-.. _pattern: http://www.clips.ua.ac.be/pattern
+.. _pattern: https://github.com/clips/pattern/
 .. _NLTK: http://nltk.org/
