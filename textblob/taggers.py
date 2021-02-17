@@ -1,4 +1,4 @@
-'''Default taggers to the English taggers for backwards incompatiblity, so you
+'''Default taggers to the English taggers for backwards incompatibility, so you
 can still do
 
 >>> from textblob.taggers import NLTKTagger
