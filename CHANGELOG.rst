@@ -9,6 +9,10 @@ Features:
 - Performance improvement: Use ``chain.from_iterable`` in ``_text.py``
   to improve runtime and memory usage (:pr:`333`). Thanks :user:`cool-RR` for the PR.
 
+Other changes:
+
+- Remove usage of `ctypes` (:pr:`354`). Thanks :user:`casatir`.
+
 0.16.0 (2020-04-26)
 -------------------
 

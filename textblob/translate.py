@@ -8,7 +8,6 @@ Language detection added by Steven Loria.
 from __future__ import absolute_import
 
 import codecs
-import ctypes
 import json
 import re
 
@@ -106,6 +105,14 @@ def _calculate_tk(source):
     # Source: https://github.com/soimort/translate-shell/issues/94#issuecomment-165433715
     # Source: http://www.liuxiatool.com/t.php
 
+    def c_int(x, nbits=32):
+        """ C cast to int32, int16, int8... """
+        return (x & ((1 << (nbits - 1)) - 1)) - (x & (1 << (nbits - 1)))
+
+    def c_uint(x, nbits=32):
+        """ C cast to uint32, uint16, uint8... """
+        return x & ((1 << nbits) - 1)
+
     tkk = [406398, 561666268 + 1526272306]
     b = tkk[0]
 
@@ -118,10 +125,10 @@ def _calculate_tk(source):
         for c in range(0, len(b) - 2, 3):
             d = b[c + 2]
             d = ord(d) - 87 if d >= 'a' else int(d)
-            xa = ctypes.c_uint32(a).value
+            xa = c_uint(a)
             d = xa >> d if b[c + 1] == '+' else xa << d
             a = a + d & 4294967295 if b[c] == '+' else a ^ d
-        return ctypes.c_int32(a).value
+        return c_int(a)
 
     a = b
 
