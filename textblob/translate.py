@@ -51,7 +51,7 @@ class Translator(object):
             tk=_calculate_tk(source),
         )
         response = self._request(url, host=host, type_=type_, data=data)
-        result = json.loads(response)
+        result = json.loads(response)[0][0][0][0]
         if isinstance(result, list):
             try:
                 result = result[0]  # ignore detected language
@@ -69,7 +69,7 @@ class Translator(object):
         data = {"q": source}
         url = u'{url}&sl=auto&tk={tk}'.format(url=self.url, tk=_calculate_tk(source))
         response = self._request(url, host=host, type_=type_, data=data)
-        result, language = json.loads(response)
+        language = json.loads(response)[0][0][2]
         return language
 
     def _validate_translation(self, source, result):
