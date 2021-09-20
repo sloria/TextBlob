@@ -44,11 +44,13 @@ class Translator(object):
         if PY2:
             source = source.encode('utf-8')
         data = {"q": source}
-        url = u'{url}&sl={from_lang}&tl={to_lang}&hl={to_lang}&tk={tk}'.format(
+        url = u'{url}&sl={from_lang}&tl={to_lang}&hl={to_lang}&tk={tk}&client={client}&format={format}'.format(
             url=self.url,
             from_lang=from_lang,
             to_lang=to_lang,
             tk=_calculate_tk(source),
+            client="te",
+            format="html",
         )
         response = self._request(url, host=host, type_=type_, data=data)
         result = json.loads(response)
