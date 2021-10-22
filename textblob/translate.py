@@ -44,11 +44,12 @@ class Translator(object):
         if PY2:
             source = source.encode('utf-8')
         data = {"q": source}
-        url = u'{url}&sl={from_lang}&tl={to_lang}&hl={to_lang}&tk={tk}'.format(
+        url = u'{url}&sl={from_lang}&tl={to_lang}&hl={to_lang}&tk={tk}&client={client}'.format(
             url=self.url,
             from_lang=from_lang,
             to_lang=to_lang,
             tk=_calculate_tk(source),
+            client="te",
         )
         response = self._request(url, host=host, type_=type_, data=data)
         result = json.loads(response)
@@ -67,7 +68,11 @@ class Translator(object):
         if len(source) < 3:
             raise TranslatorError('Must provide a string with at least 3 characters.')
         data = {"q": source}
-        url = u'{url}&sl=auto&tk={tk}'.format(url=self.url, tk=_calculate_tk(source))
+        url = u'{url}&sl=auto&tk={tk}&client={client}'.format(
+            url=self.url,
+            tk=_calculate_tk(source),
+            client="te",
+        )
         response = self._request(url, host=host, type_=type_, data=data)
         result, language = json.loads(response)
         return language

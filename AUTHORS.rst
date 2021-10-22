@@ -32,3 +32,4 @@ Contributors (chronological)
 - Roman Korolev `@roman-y-korolev <https://github.com/roman-y-korolev>`_
 - Ram Rachum `@cool-RR <https://github.com/cool-RR>`_
 - Romain Casati `@casatir <https://github.com/casatir>`_
+- Evgeny Kemerov `@sudoguy <https://github.com/sudoguy>`_
