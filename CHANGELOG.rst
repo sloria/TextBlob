@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.17.1 (unreleased)
+-------------------
+
+Bug fixes:
+
+- Fix translation and language detection (:issue:`395`).
+  Thanks :user:`sudoguy` for the patch.
+
 0.17.0 (2021-02-17)
 -------------------
 
