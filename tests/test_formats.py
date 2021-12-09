@@ -119,7 +119,10 @@ class TestRegistry(unittest.TestCase):
 
         assert_true(CustomFormat in registry.values())
         assert_true('trt' in registry.keys())
+        del formats.get_registry()['trt']
 
 
 if __name__ == '__main__':
     unittest.main()
+
+
