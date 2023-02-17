@@ -215,8 +215,8 @@ ABBREVIATIONS = abbreviations = set((
     "pred.", "pres.", "p.m.", "ref.", "v.", "vs.", "w/"
 ))
 
-RE_ABBR1 = re.compile("^[A-Za-z]\.$")       # single letter, "T. De Smedt"
-RE_ABBR2 = re.compile("^([A-Za-z]\.)+$")    # alternating letters, "U.S."
+RE_ABBR1 = re.compile("^[A-Za-z][.]$")      # single letter, "T. De Smedt"
+RE_ABBR2 = re.compile("^([A-Za-z][.])+$")   # alternating letters, "U.S."
 RE_ABBR3 = re.compile("^[A-Z][" + "|".join( # capital followed by consonants, "Mr."
         "bcdfghjklmnpqrstvwxz") + "]+.$")
 
