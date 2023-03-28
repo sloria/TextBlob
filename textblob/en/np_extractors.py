@@ -142,7 +142,9 @@ class FastNPExtractor(BaseNPExtractor):
         merge = True
         while merge:
             merge = False
-            for x in range(0, len(tags) - 1):
+            
+            x = 0 
+            while x < len(tags) - 1:
                 t1 = tags[x]
                 t2 = tags[x + 1]
                 key = t1[1], t2[1]
@@ -154,7 +156,7 @@ class FastNPExtractor(BaseNPExtractor):
                     match = '%s %s' % (t1[0], t2[0])
                     pos = value
                     tags.insert(x, (match, pos))
-                    break
+                x = x + 1
 
         matches = [t[0] for t in tags if t[1] in ['NNP', 'NNI']]
         return matches
@@ -188,7 +190,8 @@ def _is_match(tagged_phrase, cfg):
     merge = True
     while merge:
         merge = False
-        for i in range(len(copy) - 1):
+        i = 0 
+        while i < len(copy) - 1:
             first, second = copy[i], copy[i + 1]
             key = first[1], second[1]  # Tuple of tags e.g. ('NN', 'JJ')
             value = cfg.get(key, None)
@@ -199,6 +202,7 @@ def _is_match(tagged_phrase, cfg):
                 match = '{0} {1}'.format(first[0], second[0])
                 pos = value
                 copy.insert(i, (match, pos))
-                break
+            i = i + 1
+
     match = any([t[1] in ('NNP', 'NNI') for t in copy])
     return match
