@@ -12,6 +12,7 @@ option: ::
     $ python -m textblob.download_corpora lite
 
 """
+import os
 import sys
 import nltk
 
@@ -29,21 +30,23 @@ ADDITIONAL_CORPORA = [
 
 ALL_CORPORA = MIN_CORPORA + ADDITIONAL_CORPORA
 
-def download_lite():
+
+def download_lite(download_dir=None):
     for each in MIN_CORPORA:
-        nltk.download(each)
+        nltk.download(each, download_dir=download_dir)
 
 
-def download_all():
+def download_all(download_dir=None):
     for each in ALL_CORPORA:
-        nltk.download(each)
+        nltk.download(each, download_dir=download_dir)
 
 
 def main():
+    download_dir = os.getenv('NLTK_DATA')
     if 'lite' in sys.argv:
-        download_lite()
+        download_lite(download_dir)
     else:
-        download_all()
+        download_all(download_dir)
     print("Finished.")
 
 
