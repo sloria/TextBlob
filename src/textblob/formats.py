@@ -18,8 +18,8 @@ that format. ::
     with open('training_data.psv', 'r') as fp:
         cl = NaiveBayesAnalyzer(fp, format='psv')
 """
-import json
 import csv
+import json
 from collections import OrderedDict
 
 from textblob.utils import is_filelike

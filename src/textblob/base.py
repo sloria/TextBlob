@@ -8,7 +8,6 @@ from abc import ABCMeta, abstractmethod
 
 import nltk
 
-
 ##### POS TAGGERS #####
 
 
