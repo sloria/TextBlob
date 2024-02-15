@@ -44,7 +44,6 @@ from textblob.parsers import PatternParser
 from textblob.sentiments import PatternAnalyzer
 from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
-from textblob.translate import Translator
 from textblob.utils import PUNCTUATION_REGEX, lowerstrip
 
 # Wordnet interface
@@ -71,8 +70,6 @@ class Word(unicode):
     translation, and WordNet integration.
     """
 
-    translator = Translator()
-
     def __new__(cls, string, pos_tag=None):
         """Return a new instance of the class. It is necessary to override
         this method in order to handle the extra pos_tag argument in the
@@ -97,37 +94,6 @@ class Word(unicode):
     def pluralize(self):
         """Return the plural version of the word as a string."""
         return Word(_pluralize(self.string))
-
-    def translate(self, from_lang="auto", to="en"):
-        """Translate the word to another language using Google's
-        Translate API.
-
-        .. deprecated:: 0.16.0
-            Use the official Google Translate API instead.
-        .. versionadded:: 0.5.0
-        """
-        warnings.warn(
-            "Word.translate is deprecated and will be removed in a future release. "
-            "Use the official Google Translate API instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.translator.translate(self.string, from_lang=from_lang, to_lang=to)
-
-    def detect_language(self):
-        """Detect the word's language using Google's Translate API.
-
-        .. deprecated:: 0.16.0
-            Use the official Google Translate API istead.
-        .. versionadded:: 0.5.0
-        """
-        warnings.warn(
-            "Word.detect_language is deprecated and will be removed in"
-            " a future release. Use the official Google Translate API instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.translator.detect(self.string)
 
     def spellcheck(self):
         """Return a list of (word, confidence) tuples of spelling corrections.
@@ -387,7 +353,6 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
     np_extractor = FastNPExtractor()
     pos_tagger = NLTKTagger()
     tokenizer = WordTokenizer()
-    translator = Translator()
     analyzer = PatternAnalyzer()
     parser = PatternParser()
 
@@ -570,70 +535,6 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
             WordList(self.words[i : i + n]) for i in range(len(self.words) - n + 1)
         ]
         return grams
-
-    def translate(self, from_lang="auto", to="en"):
-        """Translate the blob to another language.
-        Uses the Google Translate API. Returns a new TextBlob.
-
-        Requires an internet connection.
-
-        Usage:
-        ::
-
-            >>> b = TextBlob("Simple is better than complex")
-            >>> b.translate(to="es")
-            TextBlob('Lo simple es mejor que complejo')
-
-        Language code reference:
-            https://developers.google.com/translate/v2/using_rest#language-params
-
-        .. deprecated:: 0.16.0
-            Use the official Google Translate API instead.
-        .. versionadded:: 0.5.0.
-
-        :param str from_lang: Language to translate from. If ``None``, will attempt
-            to detect the language.
-        :param str to: Language to translate to.
-        :rtype: :class:`BaseBlob <BaseBlob>`
-        """
-        warnings.warn(
-            "TextBlob.translate is deprecated and will be removed in a future release. "
-            "Use the official Google Translate API instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.__class__(
-            self.translator.translate(self.raw, from_lang=from_lang, to_lang=to)
-        )
-
-    def detect_language(self):
-        """Detect the blob's language using the Google Translate API.
-
-        Requires an internet connection.
-
-        Usage:
-        ::
-
-            >>> b = TextBlob("bonjour")
-            >>> b.detect_language()
-            u'fr'
-
-        Language code reference:
-            https://developers.google.com/translate/v2/using_rest#language-params
-
-        .. deprecated:: 0.16.0
-            Use the official Google Translate API instead.
-        .. versionadded:: 0.5.0
-
-        :rtype: str
-        """
-        warnings.warn(
-            "TextBlob.detext_translate is deprecated and will be removed in "
-            "a future release. Use the official Google Translate API instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.translator.detect(self.raw)
 
     def correct(self):
         """Attempt to correct the spelling of a blob.

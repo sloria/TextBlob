@@ -11,7 +11,7 @@ import pytest
 import textblob as tb
 import textblob.wordnet as wn
 from textblob.classifiers import NaiveBayesClassifier
-from textblob.compat import PY2, basestring, binary_type, unicode
+from textblob.compat import basestring, binary_type, unicode
 from textblob.np_extractors import ConllExtractor, FastNPExtractor
 from textblob.parsers import PatternParser
 from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
@@ -67,17 +67,11 @@ class WordListTest(TestCase):
 
     def test_repr(self):
         wl = tb.WordList(["Beautiful", "is", "better"])
-        if PY2:
-            assert repr(wl) == "WordList([u'Beautiful', u'is', u'better'])"
-        else:
-            assert repr(wl) == "WordList(['Beautiful', 'is', 'better'])"
+        assert repr(wl) == "WordList(['Beautiful', 'is', 'better'])"
 
     def test_slice_repr(self):
         wl = tb.WordList(["Beautiful", "is", "better"])
-        if PY2:
-            assert repr(wl[:2]) == "WordList([u'Beautiful', u'is'])"
-        else:
-            assert repr(wl[:2]) == "WordList(['Beautiful', 'is'])"
+        assert repr(wl[:2]) == "WordList(['Beautiful', 'is'])"
 
     def test_str(self):
         wl = tb.WordList(self.words)
@@ -160,14 +154,7 @@ class SentenceTest(TestCase):
         self.sentence = tb.Sentence(self.raw_sentence)
 
     def test_repr(self):
-        # In Py2, repr returns bytestring
-        if PY2:
-            assert repr(self.sentence) == b'Sentence("{0}")'.format(
-                binary_type(self.raw_sentence)
-            )
-        # In Py3, returns text type string
-        else:
-            assert repr(self.sentence) == f'Sentence("{self.raw_sentence}")'
+        assert repr(self.sentence) == f'Sentence("{self.raw_sentence}")'
 
     def test_stripped_sentence(self):
         assert (
@@ -231,14 +218,6 @@ class SentenceTest(TestCase):
     def test_string_equality(self):
         assert self.sentence == "Any place with frites and Belgian beer has my vote."
 
-    @mock.patch("textblob.translate.Translator.translate")
-    def test_translate(self, mock_translate):
-        mock_translate.return_value = "Esta es una frase."
-        blob = tb.Sentence("This is a sentence.")
-        translated = blob.translate(to="es")
-        assert isinstance(translated, tb.Sentence)
-        assert translated == "Esta es una frase."
-
     def test_correct(self):
         blob = tb.Sentence("I havv bad speling.")
         assert isinstance(blob.correct(), tb.Sentence)
@@ -246,14 +225,6 @@ class SentenceTest(TestCase):
         blob = tb.Sentence("I havv \ngood speling.")
         assert isinstance(blob.correct(), tb.Sentence)
         assert blob.correct() == tb.Sentence("I have \ngood spelling.")
-
-    @mock.patch("textblob.translate.Translator.translate")
-    def test_translate_detects_language_by_default(self, mock_translate):
-        text = unicode("ذات سيادة كاملة")
-        mock_translate.return_value = "With full sovereignty"
-        blob = tb.TextBlob(text)
-        blob.translate()
-        mock_translate.assert_called_once_with(text, from_lang="auto", to_lang="en")
 
 
 class TextBlobTest(TestCase):
@@ -396,10 +367,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
 
     def test_repr(self):
         blob1 = tb.TextBlob("lorem ipsum")
-        if PY2:
-            assert repr(blob1) == b'TextBlob("{0}")'.format(binary_type("lorem ipsum"))
-        else:
-            assert repr(blob1) == 'TextBlob("{}")'.format("lorem ipsum")
+        assert repr(blob1) == 'TextBlob("{}")'.format("lorem ipsum")
 
     def test_cmp(self):
         blob1 = tb.TextBlob("lorem ipsum")
@@ -812,25 +780,6 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
             ("York", "NNP"),
         ]
 
-    @mock.patch("textblob.translate.Translator.translate")
-    def test_translate(self, mock_translate):
-        mock_translate.return_value = "Esta es una frase."
-        blob = tb.TextBlob("This is a sentence.")
-        translated = blob.translate(to="es")
-        assert isinstance(translated, tb.TextBlob)
-        assert translated == "Esta es una frase."
-        mock_translate.return_value = "This is a sentence."
-        es_blob = tb.TextBlob("Esta es una frase.")
-        to_en = es_blob.translate(from_lang="es", to="en")
-        assert to_en == "This is a sentence."
-
-    @mock.patch("textblob.translate.Translator.detect")
-    def test_detect(self, mock_detect):
-        mock_detect.return_value = "es"
-        es_blob = tb.TextBlob("Hola")
-        assert es_blob.detect_language() == "es"
-        mock_detect.assert_called_once_with("Hola")
-
     def test_correct(self):
         blob = tb.TextBlob("I havv bad speling.")
         assert isinstance(blob.correct(), tb.TextBlob)
@@ -931,21 +880,6 @@ class WordTest(TestCase):
         assert self.cat.upper() == "CAT"
         assert self.cat.lower() == "cat"
         assert self.cat[0:2] == "ca"
-
-    @mock.patch("textblob.translate.Translator.translate")
-    def test_translate(self, mock_translate):
-        mock_translate.return_value = "gato"
-        assert tb.Word("cat").translate(to="es") == "gato"
-
-    @mock.patch("textblob.translate.Translator.translate")
-    def test_translate_without_from_lang(self, mock_translate):
-        mock_translate.return_value = "hi"
-        assert tb.Word("hola").translate() == "hi"
-
-    @mock.patch("textblob.translate.Translator.detect")
-    def test_detect_language(self, mock_detect):
-        mock_detect.return_value = "fr"
-        assert tb.Word("bonjour").detect_language() == "fr"
 
     def test_spellcheck(self):
         blob = tb.Word("speling")

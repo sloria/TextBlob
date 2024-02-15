@@ -19,9 +19,9 @@ that format. ::
         cl = NaiveBayesAnalyzer(fp, format='psv')
 """
 import json
+import csv
 from collections import OrderedDict
 
-from textblob.compat import PY2, csv
 from textblob.utils import is_filelike
 
 DEFAULT_ENCODING = "utf-8"
@@ -62,10 +62,7 @@ class DelimitedFormat(BaseFormat):
 
     def __init__(self, fp, **kwargs):
         BaseFormat.__init__(self, fp, **kwargs)
-        if PY2:
-            reader = csv.reader(fp, delimiter=self.delimiter, encoding=DEFAULT_ENCODING)
-        else:
-            reader = csv.reader(fp, delimiter=self.delimiter)
+        reader = csv.reader(fp, delimiter=self.delimiter)
         self.data = [row for row in reader]
 
     def to_iterable(self):

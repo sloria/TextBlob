@@ -6,7 +6,8 @@ Changelog
 
 Removals:
 
-- Remove deprecated ``textblob.translate`` module.
+- ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate`` 
+  are removed. Use the official Google Translate API instead (:issue:`215`).
 
 Support:
 
