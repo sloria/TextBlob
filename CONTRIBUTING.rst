@@ -104,7 +104,6 @@ Pull Requests
 
 - If the pull request adds functionality, it is tested and the docs are updated.
 - If you've developed an extension, it is on the :ref:`Extensions List <extensions>`.
-- The pull request works on Python 2.7, 3.4, 3.5, 3.6, and PyPy. Use ``tox`` to verify that it does.
 - You've added yourself to ``AUTHORS.rst``.
 
 4. Submit a pull request to the ``sloria:dev`` branch.
