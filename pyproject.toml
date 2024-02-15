@@ -78,7 +78,6 @@ exclude = [
   "src/textblob/en",
   "src/textblob/unicodecsv",
   "src/textblob/_text.py",
-  "src/textblob/compat.py",
 ]
 
 [tool.ruff.lint]
@@ -93,9 +92,6 @@ select = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E721"]
-
-[tool.ruff.lint.pycodestyle]
-ignore-overlong-task-comments = true
 
 [tool.pytest.ini_options]
 markers = [
