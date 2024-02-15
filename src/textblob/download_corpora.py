@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """Downloads the necessary NLTK corpora for TextBlob.
 
 Usage: ::
@@ -13,21 +12,23 @@ option: ::
 
 """
 import sys
+
 import nltk
 
 MIN_CORPORA = [
-    'brown',  # Required for FastNPExtractor
-    'punkt',  # Required for WordTokenizer
-    'wordnet',  # Required for lemmatization
-    'averaged_perceptron_tagger',  # Required for NLTKTagger
+    "brown",  # Required for FastNPExtractor
+    "punkt",  # Required for WordTokenizer
+    "wordnet",  # Required for lemmatization
+    "averaged_perceptron_tagger",  # Required for NLTKTagger
 ]
 
 ADDITIONAL_CORPORA = [
-    'conll2000',  # Required for ConllExtractor
-    'movie_reviews',  # Required for NaiveBayesAnalyzer
+    "conll2000",  # Required for ConllExtractor
+    "movie_reviews",  # Required for NaiveBayesAnalyzer
 ]
 
 ALL_CORPORA = MIN_CORPORA + ADDITIONAL_CORPORA
+
 
 def download_lite():
     for each in MIN_CORPORA:
@@ -40,12 +41,12 @@ def download_all():
 
 
 def main():
-    if 'lite' in sys.argv:
+    if "lite" in sys.argv:
         download_lite()
     else:
         download_all()
     print("Finished.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

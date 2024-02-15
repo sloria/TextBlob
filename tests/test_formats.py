@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import unittest
 
@@ -37,10 +36,10 @@ class TestDelimitedFormat(unittest.TestCase):
         assert formats.DelimitedFormat.delimiter == ","
 
     def test_detect(self):
-        with open(CSV_FILE, "r") as fp:
+        with open(CSV_FILE) as fp:
             stream = fp.read()
             assert formats.DelimitedFormat.detect(stream)
-        with open(JSON_FILE, "r") as fp:
+        with open(JSON_FILE) as fp:
             stream = fp.read()
             assert not formats.DelimitedFormat.detect(stream)
 
@@ -48,13 +47,13 @@ class TestDelimitedFormat(unittest.TestCase):
 class TestCSV(unittest.TestCase):
     def test_read_from_filename(self):
         with open(CSV_FILE) as fp:
-            data = formats.CSV(fp)
+            formats.CSV(fp)
 
     def test_detect(self):
-        with open(CSV_FILE, "r") as fp:
+        with open(CSV_FILE) as fp:
             stream = fp.read()
             assert formats.CSV.detect(stream)
-        with open(JSON_FILE, "r") as fp:
+        with open(JSON_FILE) as fp:
             stream = fp.read()
             assert not formats.CSV.detect(stream)
 
@@ -62,14 +61,14 @@ class TestCSV(unittest.TestCase):
 class TestTSV(unittest.TestCase):
     def test_read_from_file_object(self):
         with open(TSV_FILE) as fp:
-            data = formats.TSV(fp)
+            formats.TSV(fp)
 
     def test_detect(self):
-        with open(TSV_FILE, "r") as fp:
+        with open(TSV_FILE) as fp:
             stream = fp.read()
             assert formats.TSV.detect(stream)
 
-        with open(CSV_FILE, "r") as fp:
+        with open(CSV_FILE) as fp:
             stream = fp.read()
             assert not formats.TSV.detect(stream)
 
@@ -80,10 +79,10 @@ class TestJSON(unittest.TestCase):
             formats.JSON(fp)
 
     def test_detect(self):
-        with open(JSON_FILE, "r") as fp:
+        with open(JSON_FILE) as fp:
             stream = fp.read()
             assert formats.JSON.detect(stream)
-        with open(CSV_FILE, "r") as fp:
+        with open(CSV_FILE) as fp:
             stream = fp.read()
             assert not formats.JSON.detect(stream)
 
@@ -92,7 +91,7 @@ class TestJSON(unittest.TestCase):
             d = formats.JSON(fp)
         data = d.to_iterable()
         first = data[0]
-        text, label = first[0], first[1]
+        text, _label = first[0], first[1]
         assert isinstance(text, unicode)
 
 
@@ -111,7 +110,7 @@ class TestRegistry(unittest.TestCase):
 
     def test_register(self):
         registry = formats.get_registry()
-        assert not CustomFormat in registry.values()
+        assert CustomFormat not in registry.values()
 
         formats.register("trt", CustomFormat)
 

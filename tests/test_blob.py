@@ -1,25 +1,22 @@
-# -*- coding: utf-8 -*-
 """
 Tests for the text processor.
 """
-from __future__ import unicode_literals
 import json
-from unittest import TestCase, main
 from datetime import datetime
-import mock
+from unittest import TestCase, main, mock
 
-import pytest
 import nltk
+import pytest
 
-from textblob.compat import PY2, unicode, basestring, binary_type
 import textblob as tb
-from textblob.np_extractors import ConllExtractor, FastNPExtractor
-from textblob.taggers import NLTKTagger, PatternTagger
-from textblob.tokenizers import WordTokenizer, SentenceTokenizer
-from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
-from textblob.parsers import PatternParser
-from textblob.classifiers import NaiveBayesClassifier
 import textblob.wordnet as wn
+from textblob.classifiers import NaiveBayesClassifier
+from textblob.compat import PY2, basestring, binary_type, unicode
+from textblob.np_extractors import ConllExtractor, FastNPExtractor
+from textblob.parsers import PatternParser
+from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
+from textblob.taggers import NLTKTagger, PatternTagger
+from textblob.tokenizers import SentenceTokenizer, WordTokenizer
 
 Synset = nltk.corpus.reader.Synset
 
@@ -170,7 +167,7 @@ class SentenceTest(TestCase):
             )
         # In Py3, returns text type string
         else:
-            assert repr(self.sentence) == 'Sentence("{0}")'.format(self.raw_sentence)
+            assert repr(self.sentence) == f'Sentence("{self.raw_sentence}")'
 
     def test_stripped_sentence(self):
         assert (
@@ -296,7 +293,7 @@ but is also used in a wide range of non-scripting contexts.
 Using third-party tools, Python code can be packaged into standalone executable
 programs. Python interpreters are available for many operating systems. CPython, the reference implementation of Python, is free and open source software and h
 as a community-based development model, as do nearly all of its alternative implementations. CPython
-is managed by the non-profit Python Software Foundation."""
+is managed by the non-profit Python Software Foundation."""  # noqa: E501
         self.np_test_blob = tb.TextBlob(self.np_test_text)
 
         self.short = "Beautiful is better than ugly. "
@@ -345,7 +342,14 @@ is managed by the non-profit Python Software Foundation."""
         ]
 
     def test_clean_html(self):
-        html = '<b>Python</b> is a widely used <a href="/wiki/General-purpose_programming_language" title="General-purpose programming language">general-purpose</a>, <a href="/wiki/High-level_programming_language" title="High-level programming language">high-level programming language</a>.'
+        html = (
+            "<b>Python</b> is a widely used "
+            '<a href="/wiki/General-purpose_programming_language" '
+            'title="General-purpose programming language">general-purpose</a>, '
+            '<a href="/wiki/High-level_programming_language" '
+            'title="High-level programming language">'
+            "high-level programming language</a>."
+        )
         with pytest.raises(NotImplementedError):
             tb.TextBlob(html, clean_html=True)
 
@@ -395,7 +399,7 @@ is managed by the non-profit Python Software Foundation."""
         if PY2:
             assert repr(blob1) == b'TextBlob("{0}")'.format(binary_type("lorem ipsum"))
         else:
-            assert repr(blob1) == 'TextBlob("{0}")'.format("lorem ipsum")
+            assert repr(blob1) == 'TextBlob("{}")'.format("lorem ipsum")
 
     def test_cmp(self):
         blob1 = tb.TextBlob("lorem ipsum")
@@ -580,7 +584,7 @@ is managed by the non-profit Python Software Foundation."""
     def test_format(self):
         blob = tb.TextBlob("1 + 1 = {0}")
         assert blob.format(1 + 1) == tb.TextBlob("1 + 1 = 2")
-        assert "1 + 1 = {0}".format(tb.TextBlob("2")) == "1 + 1 = 2"
+        assert "1 + 1 = {}".format(tb.TextBlob("2")) == "1 + 1 = 2"
 
     def test_using_indices_for_slicing(self):
         blob = tb.TextBlob("Hello world. How do you do?")
@@ -611,9 +615,9 @@ is managed by the non-profit Python Software Foundation."""
         assert blob.replace("blob", "bro", 1) == tb.TextBlob("textbro is a blobby blob")
 
     def test_join(self):
-        l = ["explicit", "is", "better"]
-        wl = tb.WordList(l)
-        assert tb.TextBlob(" ").join(l) == tb.TextBlob("explicit is better")
+        lst = ["explicit", "is", "better"]
+        wl = tb.WordList(lst)
+        assert tb.TextBlob(" ").join(lst) == tb.TextBlob("explicit is better")
         assert tb.TextBlob(" ").join(wl) == tb.TextBlob("explicit is better")
 
     @pytest.mark.slow
@@ -1051,7 +1055,7 @@ class BlobberTest(TestCase):
         assert isinstance(blob.tokenizer, WordTokenizer)
 
     def test_str_and_repr(self):
-        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=NLTKTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser(), classifier=None)"
+        expected = "Blobber(tokenizer=WordTokenizer(), pos_tagger=NLTKTagger(), np_extractor=FastNPExtractor(), analyzer=PatternAnalyzer(), parser=PatternParser(), classifier=None)"  # noqa: E501
         assert repr(self.blobber) == expected
         assert str(self.blobber) == repr(self.blobber)
 

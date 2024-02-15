@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """Various parser implementations.
 
 .. versionadded:: 0.6.0
 """
-from __future__ import absolute_import
-from textblob.en import parse as pattern_parse
 from textblob.base import BaseParser
+from textblob.en import parse as pattern_parse
 
 
 class PatternParser(BaseParser):

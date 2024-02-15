@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """File formats for training and testing data.
 
 Includes a registry of valid file formats. New file formats can be added to the
@@ -19,16 +18,16 @@ that format. ::
     with open('training_data.psv', 'r') as fp:
         cl = NaiveBayesAnalyzer(fp, format='psv')
 """
-from __future__ import absolute_import
 import json
 from collections import OrderedDict
 
 from textblob.compat import PY2, csv
 from textblob.utils import is_filelike
 
-DEFAULT_ENCODING = 'utf-8'
+DEFAULT_ENCODING = "utf-8"
 
-class BaseFormat(object):
+
+class BaseFormat:
     """Interface for format classes. Individual formats can decide on the
     composition and meaning of ``**kwargs``.
 
@@ -37,6 +36,7 @@ class BaseFormat(object):
     .. versionchanged:: 0.9.0
         Constructor receives a file pointer rather than a file path.
     """
+
     def __init__(self, fp, **kwargs):
         pass
 
@@ -54,6 +54,7 @@ class BaseFormat(object):
         """
         raise NotImplementedError('Must implement a "detect" class method.')
 
+
 class DelimitedFormat(BaseFormat):
     """A general character-delimited format."""
 
@@ -62,8 +63,7 @@ class DelimitedFormat(BaseFormat):
     def __init__(self, fp, **kwargs):
         BaseFormat.__init__(self, fp, **kwargs)
         if PY2:
-            reader = csv.reader(fp, delimiter=self.delimiter,
-                                encoding=DEFAULT_ENCODING)
+            reader = csv.reader(fp, delimiter=self.delimiter, encoding=DEFAULT_ENCODING)
         else:
             reader = csv.reader(fp, delimiter=self.delimiter)
         self.data = [row for row in reader]
@@ -89,12 +89,13 @@ class CSV(DelimitedFormat):
         Today is a good day,pos
         I hate this car.,pos
     """
+
     delimiter = ","
 
 
 class TSV(DelimitedFormat):
-    """TSV format. Assumes each row is of the form ``text\tlabel``.
-    """
+    """TSV format. Assumes each row is of the form ``text\tlabel``."""
+
     delimiter = "\t"
 
 
@@ -110,13 +111,14 @@ class JSON(BaseFormat):
             {"text": "I hate this car.", "label": "neg"}
         ]
     """
+
     def __init__(self, fp, **kwargs):
         BaseFormat.__init__(self, fp, **kwargs)
         self.dict = json.load(fp)
 
     def to_iterable(self):
         """Return an iterable object from the JSON data."""
-        return [(d['text'], d['label']) for d in self.dict]
+        return [(d["text"], d["label"]) for d in self.dict]
 
     @classmethod
     def detect(cls, stream):
@@ -128,11 +130,14 @@ class JSON(BaseFormat):
             return False
 
 
-_registry = OrderedDict([
-    ('csv', CSV),
-    ('json', JSON),
-    ('tsv', TSV),
-])
+_registry = OrderedDict(
+    [
+        ("csv", CSV),
+        ("json", JSON),
+        ("tsv", TSV),
+    ]
+)
+
 
 def detect(fp, max_read=1024):
     """Attempt to detect a file's format, trying each of the supported
@@ -148,9 +153,11 @@ def detect(fp, max_read=1024):
         fp.seek(0)
     return None
 
+
 def get_registry():
     """Return a dictionary of registered formats."""
     return _registry
+
 
 def register(name, format_class):
     """Register a new format.

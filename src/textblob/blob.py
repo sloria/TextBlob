@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Wrappers for various units of text, including the main
 :class:`TextBlob <textblob.blob.TextBlob>`, :class:`Word <textblob.blob.Word>`,
 and :class:`WordList <textblob.blob.WordList>` classes.
@@ -19,33 +18,39 @@ Example usage: ::
 
 .. versionchanged:: 0.8.0
     These classes are now imported from ``textblob`` rather than ``text.blob``.
-"""
-from __future__ import unicode_literals, absolute_import
-import sys
+"""  # noqa: E501
 import json
+import sys
 import warnings
 from collections import defaultdict
 
 import nltk
 
+from textblob.base import (
+    BaseNPExtractor,
+    BaseParser,
+    BaseSentimentAnalyzer,
+    BaseTagger,
+    BaseTokenizer,
+)
+from textblob.compat import basestring, unicode
 from textblob.decorators import cached_property, requires_nltk_corpus
-from textblob.utils import lowerstrip, PUNCTUATION_REGEX
-from textblob.inflect import singularize as _singularize, pluralize as _pluralize
+from textblob.en import suggest
+from textblob.inflect import pluralize as _pluralize
+from textblob.inflect import singularize as _singularize
 from textblob.mixins import BlobComparableMixin, StringlikeMixin
-from textblob.compat import unicode, basestring
-from textblob.base import (BaseNPExtractor, BaseTagger, BaseTokenizer,
-                       BaseSentimentAnalyzer, BaseParser)
 from textblob.np_extractors import FastNPExtractor
+from textblob.parsers import PatternParser
+from textblob.sentiments import PatternAnalyzer
 from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
-from textblob.sentiments import PatternAnalyzer
-from textblob.parsers import PatternParser
 from textblob.translate import Translator
-from textblob.en import suggest
+from textblob.utils import PUNCTUATION_REGEX, lowerstrip
 
 # Wordnet interface
 # NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
 _wordnet = nltk.corpus.wordnet
+
 
 def _penn_to_wordnet(tag):
     """Converts a Penn corpus tag into a Wordnet tag."""
@@ -58,6 +63,7 @@ def _penn_to_wordnet(tag):
     if tag in ("RB", "RBR", "RBS"):
         return _wordnet.ADV
     return None
+
 
 class Word(unicode):
 
@@ -72,7 +78,7 @@ class Word(unicode):
         this method in order to handle the extra pos_tag argument in the
         constructor.
         """
-        return super(Word, cls).__new__(cls, string)
+        return super().__new__(cls, string)
 
     def __init__(self, string, pos_tag=None):
         self.string = string
@@ -89,63 +95,63 @@ class Word(unicode):
         return Word(_singularize(self.string))
 
     def pluralize(self):
-        '''Return the plural version of the word as a string.'''
+        """Return the plural version of the word as a string."""
         return Word(_pluralize(self.string))
 
-    def translate(self, from_lang='auto', to="en"):
-        '''Translate the word to another language using Google's
+    def translate(self, from_lang="auto", to="en"):
+        """Translate the word to another language using Google's
         Translate API.
 
         .. deprecated:: 0.16.0
             Use the official Google Translate API instead.
         .. versionadded:: 0.5.0
-        '''
+        """
         warnings.warn(
-            'Word.translate is deprecated and will be removed in a future release. '
-            'Use the official Google Translate API instead.',
-            DeprecationWarning
+            "Word.translate is deprecated and will be removed in a future release. "
+            "Use the official Google Translate API instead.",
+            DeprecationWarning,
+            stacklevel=2,
         )
-        return self.translator.translate(self.string,
-                                         from_lang=from_lang, to_lang=to)
+        return self.translator.translate(self.string, from_lang=from_lang, to_lang=to)
 
     def detect_language(self):
-        '''Detect the word's language using Google's Translate API.
+        """Detect the word's language using Google's Translate API.
 
         .. deprecated:: 0.16.0
             Use the official Google Translate API istead.
         .. versionadded:: 0.5.0
-        '''
+        """
         warnings.warn(
-            'Word.detect_language is deprecated and will be removed in a future release. '
-            'Use the official Google Translate API instead.',
-            DeprecationWarning
+            "Word.detect_language is deprecated and will be removed in"
+            " a future release. Use the official Google Translate API instead.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         return self.translator.detect(self.string)
 
     def spellcheck(self):
-        '''Return a list of (word, confidence) tuples of spelling corrections.
+        """Return a list of (word, confidence) tuples of spelling corrections.
 
         Based on: Peter Norvig, "How to Write a Spelling Corrector"
         (http://norvig.com/spell-correct.html) as implemented in the pattern
         library.
 
         .. versionadded:: 0.6.0
-        '''
+        """
         return suggest(self.string)
 
     def correct(self):
-        '''Correct the spelling of the word. Returns the word with the highest
+        """Correct the spelling of the word. Returns the word with the highest
         confidence using the spelling corrector.
 
         .. versionadded:: 0.6.0
-        '''
+        """
         return Word(self.spellcheck()[0][0])
 
     @cached_property
     @requires_nltk_corpus
     def lemma(self):
-        """Return the lemma of this word using Wordnet's morphy function.
-        """
+        """Return the lemma of this word using Wordnet's morphy function."""
         return self.lemmatize(pos=self.pos_tag)
 
     @requires_nltk_corpus
@@ -170,8 +176,8 @@ class Word(unicode):
     LancasterStemmer = nltk.stem.lancaster.LancasterStemmer()
     SnowballStemmer = nltk.stem.snowball.SnowballStemmer("english")
 
-    #added 'stemmer' on lines of lemmatizer
-    #based on nltk
+    # added 'stemmer' on lines of lemmatizer
+    # based on nltk
     def stem(self, stemmer=PorterStemmer):
         """Stem a word using various NLTK stemmers. (Default: Porter Stemmer)
 
@@ -230,20 +236,20 @@ class WordList(list):
         """Initialize a WordList. Takes a collection of strings as
         its only argument.
         """
-        super(WordList, self).__init__([Word(w) for w in collection])
+        super().__init__([Word(w) for w in collection])
 
     def __str__(self):
         """Returns a string representation for printing."""
-        return super(WordList, self).__repr__()
+        return super().__repr__()
 
     def __repr__(self):
         """Returns a string representation for debugging."""
         class_name = self.__class__.__name__
-        return '{cls}({lst})'.format(cls=class_name, lst=super(WordList, self).__repr__())
+        return f"{class_name}({super().__repr__()})"
 
     def __getitem__(self, key):
         """Returns a string at the given index."""
-        item = super(WordList, self).__getitem__(key)
+        item = super().__getitem__(key)
         if isinstance(key, slice):
             return self.__class__(item)
         else:
@@ -251,16 +257,16 @@ class WordList(list):
 
     def __getslice__(self, i, j):
         # This is included for Python 2.* compatibility
-        return self.__class__(super(WordList, self).__getslice__(i, j))
+        return self.__class__(super().__getslice__(i, j))
 
     def __setitem__(self, index, obj):
         """Places object at given index, replacing existing item. If the object
         is a string, inserts a :class:`Word <Word>` object.
         """
         if isinstance(obj, basestring):
-            super(WordList, self).__setitem__(index, Word(obj))
+            super().__setitem__(index, Word(obj))
         else:
-            super(WordList, self).__setitem__(index, obj)
+            super().__setitem__(index, obj)
 
     def count(self, strg, case_sensitive=False, *args, **kwargs):
         """Get the count of a word or phrase `s` within this WordList.
@@ -269,18 +275,17 @@ class WordList(list):
         :param case_sensitive: A boolean, whether or not the search is case-sensitive.
         """
         if not case_sensitive:
-            return [word.lower() for word in self].count(strg.lower(), *args,
-                    **kwargs)
-        return super(WordList, self).count(strg, *args, **kwargs)
+            return [word.lower() for word in self].count(strg.lower(), *args, **kwargs)
+        return super().count(strg, *args, **kwargs)
 
     def append(self, obj):
         """Append an object to end. If the object is a string, appends a
         :class:`Word <Word>` object.
         """
         if isinstance(obj, basestring):
-            super(WordList, self).append(Word(obj))
+            super().append(Word(obj))
         else:
-            super(WordList, self).append(obj)
+            super().append(obj)
 
     def extend(self, iterable):
         """Extend WordList by appending elements from ``iterable``. If an element
@@ -325,26 +330,34 @@ def _validated_param(obj, name, base_class, default, base_class_name=None):
     """
     base_class_name = base_class_name if base_class_name else base_class.__name__
     if obj is not None and not isinstance(obj, base_class):
-        raise ValueError('{name} must be an instance of {cls}'
-                         .format(name=name, cls=base_class_name))
+        raise ValueError(f"{name} must be an instance of {base_class_name}")
     return obj or default
 
 
-def _initialize_models(obj, tokenizer, pos_tagger,
-                       np_extractor, analyzer, parser, classifier):
+def _initialize_models(
+    obj, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier
+):
     """Common initialization between BaseBlob and Blobber classes."""
     # tokenizer may be a textblob or an NLTK tokenizer
-    obj.tokenizer = _validated_param(tokenizer, "tokenizer",
-                                    base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
-                                    default=BaseBlob.tokenizer,
-                                    base_class_name="BaseTokenizer")
-    obj.np_extractor = _validated_param(np_extractor, "np_extractor",
-                                        base_class=BaseNPExtractor,
-                                        default=BaseBlob.np_extractor)
-    obj.pos_tagger = _validated_param(pos_tagger, "pos_tagger",
-                                        BaseTagger, BaseBlob.pos_tagger)
-    obj.analyzer = _validated_param(analyzer, "analyzer",
-                                     BaseSentimentAnalyzer, BaseBlob.analyzer)
+    obj.tokenizer = _validated_param(
+        tokenizer,
+        "tokenizer",
+        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
+        default=BaseBlob.tokenizer,
+        base_class_name="BaseTokenizer",
+    )
+    obj.np_extractor = _validated_param(
+        np_extractor,
+        "np_extractor",
+        base_class=BaseNPExtractor,
+        default=BaseBlob.np_extractor,
+    )
+    obj.pos_tagger = _validated_param(
+        pos_tagger, "pos_tagger", BaseTagger, BaseBlob.pos_tagger
+    )
+    obj.analyzer = _validated_param(
+        analyzer, "analyzer", BaseSentimentAnalyzer, BaseBlob.analyzer
+    )
     obj.parser = _validated_param(parser, "parser", BaseParser, BaseBlob.parser)
     obj.classifier = classifier
 
@@ -369,7 +382,8 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     .. versionchanged:: 0.6.0
         ``clean_html`` parameter deprecated, as it was in NLTK.
-    """
+    """  # noqa: E501
+
     np_extractor = FastNPExtractor()
     pos_tagger = NLTKTagger()
     tokenizer = WordTokenizer()
@@ -377,20 +391,33 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
     analyzer = PatternAnalyzer()
     parser = PatternParser()
 
-    def __init__(self, text, tokenizer=None,
-                pos_tagger=None, np_extractor=None, analyzer=None,
-                parser=None, classifier=None, clean_html=False):
+    def __init__(
+        self,
+        text,
+        tokenizer=None,
+        pos_tagger=None,
+        np_extractor=None,
+        analyzer=None,
+        parser=None,
+        classifier=None,
+        clean_html=False,
+    ):
         if not isinstance(text, basestring):
-            raise TypeError('The `text` argument passed to `__init__(text)` '
-                            'must be a string, not {0}'.format(type(text)))
+            raise TypeError(
+                "The `text` argument passed to `__init__(text)` "
+                f"must be a string, not {type(text)}"
+            )
         if clean_html:
-            raise NotImplementedError("clean_html has been deprecated. "
-                                    "To remove HTML markup, use BeautifulSoup's "
-                                    "get_text() function")
+            raise NotImplementedError(
+                "clean_html has been deprecated. "
+                "To remove HTML markup, use BeautifulSoup's "
+                "get_text() function"
+            )
         self.raw = self.string = text
         self.stripped = lowerstrip(self.raw, all=True)
-        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer,
-                           parser, classifier)
+        _initialize_models(
+            self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier
+        )
 
     @cached_property
     def words(self):
@@ -479,9 +506,13 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
     @cached_property
     def noun_phrases(self):
         """Returns a list of noun phrases for this blob."""
-        return WordList([phrase.strip().lower()
-                        for phrase in self.np_extractor.extract(self.raw)
-                        if len(phrase) > 1])
+        return WordList(
+            [
+                phrase.strip().lower()
+                for phrase in self.np_extractor.extract(self.raw)
+                if len(phrase) > 1
+            ]
+        )
 
     @cached_property
     def pos_tags(self):
@@ -496,18 +527,23 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :rtype: list of tuples
         """
         if isinstance(self, TextBlob):
-            return [val for sublist in [s.pos_tags for s in self.sentences] for val in sublist]
+            return [
+                val
+                for sublist in [s.pos_tags for s in self.sentences]
+                for val in sublist
+            ]
         else:
-            return [(Word(unicode(word), pos_tag=t), unicode(t))
-                    for word, t in self.pos_tagger.tag(self)
-                    if not PUNCTUATION_REGEX.match(unicode(t))]
+            return [
+                (Word(unicode(word), pos_tag=t), unicode(t))
+                for word, t in self.pos_tagger.tag(self)
+                if not PUNCTUATION_REGEX.match(unicode(t))
+            ]
 
     tags = pos_tags
 
     @cached_property
     def word_counts(self):
-        """Dictionary of word frequencies in this text.
-        """
+        """Dictionary of word frequencies in this text."""
         counts = defaultdict(int)
         stripped_words = [lowerstrip(word) for word in self.words]
         for word in stripped_words:
@@ -516,8 +552,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
     @cached_property
     def np_counts(self):
-        """Dictionary of noun phrase frequencies in this text.
-        """
+        """Dictionary of noun phrase frequencies in this text."""
         counts = defaultdict(int)
         for phrase in self.noun_phrases:
             counts[phrase] += 1
@@ -531,8 +566,9 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         """
         if n <= 0:
             return []
-        grams = [WordList(self.words[i:i + n])
-                            for i in range(len(self.words) - n + 1)]
+        grams = [
+            WordList(self.words[i : i + n]) for i in range(len(self.words) - n + 1)
+        ]
         return grams
 
     def translate(self, from_lang="auto", to="en"):
@@ -561,12 +597,14 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :rtype: :class:`BaseBlob <BaseBlob>`
         """
         warnings.warn(
-            'TextBlob.translate is deprecated and will be removed in a future release. '
-            'Use the official Google Translate API instead.',
-            DeprecationWarning
+            "TextBlob.translate is deprecated and will be removed in a future release. "
+            "Use the official Google Translate API instead.",
+            DeprecationWarning,
+            stacklevel=2,
         )
-        return self.__class__(self.translator.translate(self.raw,
-                              from_lang=from_lang, to_lang=to))
+        return self.__class__(
+            self.translator.translate(self.raw, from_lang=from_lang, to_lang=to)
+        )
 
     def detect_language(self):
         """Detect the blob's language using the Google Translate API.
@@ -590,9 +628,10 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :rtype: str
         """
         warnings.warn(
-            'TextBlob.detext_translate is deprecated and will be removed in a future release. '
-            'Use the official Google Translate API instead.',
-            DeprecationWarning
+            "TextBlob.detext_translate is deprecated and will be removed in "
+            "a future release. Use the official Google Translate API instead.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         return self.translator.detect(self.raw)
 
@@ -606,7 +645,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         # regex matches: word or punctuation or whitespace
         tokens = nltk.tokenize.regexp_tokenize(self.raw, r"\w+|[^\w\s]|\s")
         corrected = (Word(w).correct() for w in tokens)
-        ret = ''.join(corrected)
+        ret = "".join(corrected)
         return self.__class__(ret)
 
     def _cmpkey(self):
@@ -623,19 +662,20 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         return hash(self._cmpkey())
 
     def __add__(self, other):
-        '''Concatenates two text objects the same way Python strings are
+        """Concatenates two text objects the same way Python strings are
         concatenated.
 
         Arguments:
         - `other`: a string or a text object
-        '''
+        """
         if isinstance(other, basestring):
             return self.__class__(self.raw + other)
         elif isinstance(other, BaseBlob):
             return self.__class__(self.raw + other.raw)
         else:
-            raise TypeError('Operands must be either strings or {0} objects'
-                .format(self.__class__.__name__))
+            raise TypeError(
+                f"Operands must be either strings or {self.__class__.__name__} objects"
+            )
 
     def split(self, sep=None, maxsplit=sys.maxsize):
         """Behaves like the built-in str.split() except returns a
@@ -660,7 +700,7 @@ class TextBlob(BaseBlob):
     :param analyzer: (optional) A sentiment analyzer. If ``None``, defaults to
         :class:`PatternAnalyzer <textblob.en.sentiments.PatternAnalyzer>`.
     :param classifier: (optional) A classifier.
-    """
+    """  # noqa: E501
 
     @cached_property
     def sentences(self):
@@ -688,26 +728,25 @@ class TextBlob(BaseBlob):
         return [sentence.dict for sentence in self.sentences]
 
     def to_json(self, *args, **kwargs):
-        '''Return a json representation (str) of this blob.
+        """Return a json representation (str) of this blob.
         Takes the same arguments as json.dumps.
 
         .. versionadded:: 0.5.1
-        '''
+        """
         return json.dumps(self.serialized, *args, **kwargs)
 
     @property
     def json(self):
-        '''The json representation of this blob.
+        """The json representation of this blob.
 
         .. versionchanged:: 0.5.1
             Made ``json`` a property instead of a method to restore backwards
             compatibility that was broken after version 0.4.0.
-        '''
+        """
         return self.to_json()
 
     def _create_sentence_objects(self):
-        '''Returns a list of Sentence objects from the raw text.
-        '''
+        """Returns a list of Sentence objects from the raw text."""
         sentence_objects = []
         sentences = sent_tokenize(self.raw)
         char_index = 0  # Keeps track of character index within the blob
@@ -718,10 +757,17 @@ class TextBlob(BaseBlob):
             char_index += len(sent)
             end_index = start_index + len(sent)
             # Sentences share the same models as their parent blob
-            s = Sentence(sent, start_index=start_index, end_index=end_index,
-                tokenizer=self.tokenizer, np_extractor=self.np_extractor,
-                pos_tagger=self.pos_tagger, analyzer=self.analyzer,
-                parser=self.parser, classifier=self.classifier)
+            s = Sentence(
+                sent,
+                start_index=start_index,
+                end_index=end_index,
+                tokenizer=self.tokenizer,
+                np_extractor=self.np_extractor,
+                pos_tagger=self.pos_tagger,
+                analyzer=self.analyzer,
+                parser=self.parser,
+                classifier=self.classifier,
+            )
             sentence_objects.append(s)
         return sentence_objects
 
@@ -738,7 +784,7 @@ class Sentence(BaseBlob):
     """
 
     def __init__(self, sentence, start_index=0, end_index=None, *args, **kwargs):
-        super(Sentence, self).__init__(sentence, *args, **kwargs)
+        super().__init__(sentence, *args, **kwargs)
         #: The start index within a TextBlob
         self.start = self.start_index = start_index
         #: The end index within a textBlob
@@ -746,19 +792,19 @@ class Sentence(BaseBlob):
 
     @property
     def dict(self):
-        '''The dict representation of this sentence.'''
+        """The dict representation of this sentence."""
         return {
-            'raw': self.raw,
-            'start_index': self.start_index,
-            'end_index': self.end_index,
-            'stripped': self.stripped,
-            'noun_phrases': self.noun_phrases,
-            'polarity': self.polarity,
-            'subjectivity': self.subjectivity,
+            "raw": self.raw,
+            "start_index": self.start_index,
+            "end_index": self.end_index,
+            "stripped": self.stripped,
+            "noun_phrases": self.noun_phrases,
+            "polarity": self.polarity,
+            "subjectivity": self.subjectivity,
         }
 
 
-class Blobber(object):
+class Blobber:
     """A factory for TextBlobs that all share the same tagger,
     tokenizer, parser, classifier, and np_extractor.
 
@@ -786,7 +832,7 @@ class Blobber(object):
     :param classifier: A classifier.
 
     .. versionadded:: 0.4.0
-    """
+    """  # noqa: E501
 
     np_extractor = FastNPExtractor()
     pos_tagger = NLTKTagger()
@@ -794,10 +840,18 @@ class Blobber(object):
     analyzer = PatternAnalyzer()
     parser = PatternParser()
 
-    def __init__(self, tokenizer=None, pos_tagger=None, np_extractor=None,
-                analyzer=None, parser=None, classifier=None):
-        _initialize_models(self, tokenizer, pos_tagger, np_extractor, analyzer,
-                            parser, classifier)
+    def __init__(
+        self,
+        tokenizer=None,
+        pos_tagger=None,
+        np_extractor=None,
+        analyzer=None,
+        parser=None,
+        classifier=None,
+    ):
+        _initialize_models(
+            self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier
+        )
 
     def __call__(self, text):
         """Return a new TextBlob object with this Blobber's ``np_extractor``,
@@ -805,20 +859,30 @@ class Blobber(object):
 
         :returns: A new :class:`TextBlob <TextBlob>`.
         """
-        return TextBlob(text, tokenizer=self.tokenizer, pos_tagger=self.pos_tagger,
-                        np_extractor=self.np_extractor, analyzer=self.analyzer,
-                        parser=self.parser,
-                        classifier=self.classifier)
+        return TextBlob(
+            text,
+            tokenizer=self.tokenizer,
+            pos_tagger=self.pos_tagger,
+            np_extractor=self.np_extractor,
+            analyzer=self.analyzer,
+            parser=self.parser,
+            classifier=self.classifier,
+        )
 
     def __repr__(self):
-        classifier_name = self.classifier.__class__.__name__ + "()" if self.classifier else "None"
-        return ("Blobber(tokenizer={0}(), pos_tagger={1}(), "
-                    "np_extractor={2}(), analyzer={3}(), parser={4}(), classifier={5})")\
-                    .format(self.tokenizer.__class__.__name__,
-                            self.pos_tagger.__class__.__name__,
-                            self.np_extractor.__class__.__name__,
-                            self.analyzer.__class__.__name__,
-                            self.parser.__class__.__name__,
-                            classifier_name)
+        classifier_name = (
+            self.classifier.__class__.__name__ + "()" if self.classifier else "None"
+        )
+        return (
+            "Blobber(tokenizer={}(), pos_tagger={}(), "
+            "np_extractor={}(), analyzer={}(), parser={}(), classifier={})"
+        ).format(
+            self.tokenizer.__class__.__name__,
+            self.pos_tagger.__class__.__name__,
+            self.np_extractor.__class__.__name__,
+            self.analyzer.__class__.__name__,
+            self.parser.__class__.__name__,
+            classifier_name,
+        )
 
     __str__ = __repr__

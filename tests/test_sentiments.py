@@ -1,12 +1,12 @@
-from __future__ import unicode_literals
 import unittest
+
 import pytest
 
 from textblob.sentiments import (
-    PatternAnalyzer,
-    NaiveBayesAnalyzer,
-    DISCRETE,
     CONTINUOUS,
+    DISCRETE,
+    NaiveBayesAnalyzer,
+    PatternAnalyzer,
 )
 
 

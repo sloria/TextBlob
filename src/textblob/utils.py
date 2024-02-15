@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import re
 import string
 
-PUNCTUATION_REGEX = re.compile('[{0}]'.format(re.escape(string.punctuation)))
+PUNCTUATION_REGEX = re.compile(f"[{re.escape(string.punctuation)}]")
 
 
 def strip_punc(s, all=False):
@@ -13,7 +12,7 @@ def strip_punc(s, all=False):
         the ends of the string.
     """
     if all:
-        return PUNCTUATION_REGEX.sub('', s.strip())
+        return PUNCTUATION_REGEX.sub("", s.strip())
     else:
         return s.strip().strip(string.punctuation)
 
@@ -28,7 +27,7 @@ def lowerstrip(s, all=False):
     return strip_punc(s.lower().strip(), all=all)
 
 
-def tree2str(tree, concat=' '):
+def tree2str(tree, concat=" "):
     """Convert a nltk.tree.Tree to a string.
 
     For example:
@@ -37,7 +36,7 @@ def tree2str(tree, concat=' '):
     return concat.join([word for (word, tag) in tree])
 
 
-def filter_insignificant(chunk, tag_suffixes=('DT', 'CC', 'PRP$', 'PRP')):
+def filter_insignificant(chunk, tag_suffixes=("DT", "CC", "PRP$", "PRP")):
     """Filter out insignificant (word, tag) tuples from a chunk of text."""
     good = []
     for word, tag in chunk:
@@ -53,4 +52,4 @@ def filter_insignificant(chunk, tag_suffixes=('DT', 'CC', 'PRP$', 'PRP')):
 
 def is_filelike(obj):
     """Return whether ``obj`` is a file-like object."""
-    return hasattr(obj, 'read')
+    return hasattr(obj, "read")

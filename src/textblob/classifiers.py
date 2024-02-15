@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Various classifier implementations. Also includes basic feature extractor
 methods.
 
@@ -30,18 +29,17 @@ Example Usage:
     neg
 
 .. versionadded:: 0.6.0
-"""
-from __future__ import absolute_import
+"""  # noqa: E501
 from itertools import chain
 
 import nltk
 
+import textblob.formats as formats
 from textblob.compat import basestring
 from textblob.decorators import cached_property
 from textblob.exceptions import FormatError
 from textblob.tokenizers import word_tokenize
-from textblob.utils import strip_punc, is_filelike
-import textblob.formats as formats
+from textblob.utils import is_filelike, strip_punc
 
 ### Basic feature extractors ###
 
@@ -52,6 +50,7 @@ def _get_words_from_dataset(dataset):
     :param dataset: A list of tuples of the form ``(words, label)`` where
         ``words`` is either a string of a list of tokens.
     """
+
     # Words may be either a string or a list of tokens. Return an iterator
     # of tokens accordingly
     def tokenize(words):
@@ -59,16 +58,21 @@ def _get_words_from_dataset(dataset):
             return word_tokenize(words, include_punc=False)
         else:
             return words
+
     all_words = chain.from_iterable(tokenize(words) for words, _ in dataset)
     return set(all_words)
 
+
 def _get_document_tokens(document):
     if isinstance(document, basestring):
-        tokens = set((strip_punc(w, all=False)
-                    for w in word_tokenize(document, include_punc=False)))
+        tokens = set(
+            strip_punc(w, all=False)
+            for w in word_tokenize(document, include_punc=False)
+        )
     else:
         tokens = set(strip_punc(w, all=False) for w in document)
     return tokens
+
 
 def basic_extractor(document, train_set):
     """A basic document feature extractor that returns a dict indicating
@@ -87,14 +91,13 @@ def basic_extractor(document, train_set):
         word_features = [w for w in chain([el_zero], train_set)]
     else:
         try:
-            assert(isinstance(el_zero[0], basestring))
+            assert isinstance(el_zero[0], basestring)
             word_features = _get_words_from_dataset(chain([el_zero], train_set))
-        except Exception:
-            raise ValueError('train_set is probably malformed.')
+        except Exception as error:
+            raise ValueError("train_set is probably malformed.") from error
 
     tokens = _get_document_tokens(document)
-    features = dict(((u'contains({0})'.format(word), (word in tokens))
-                                            for word in word_features))
+    features = dict((f"contains({word})", (word in tokens)) for word in word_features)
     return features
 
 
@@ -103,12 +106,14 @@ def contains_extractor(document):
     the document contains.
     """
     tokens = _get_document_tokens(document)
-    features = dict((u'contains({0})'.format(w), True) for w in tokens)
+    features = dict((f"contains({w})", True) for w in tokens)
     return features
+
 
 ##### CLASSIFIERS #####
 
-class BaseClassifier(object):
+
+class BaseClassifier:
     """Abstract classifier class from which all classifers inherit. At a
     minimum, descendant classes must implement a ``classify`` method and have
     a ``classifier`` property.
@@ -129,14 +134,18 @@ class BaseClassifier(object):
     .. versionadded:: 0.6.0
     """
 
-    def __init__(self, train_set, feature_extractor=basic_extractor, format=None, **kwargs):
+    def __init__(
+        self, train_set, feature_extractor=basic_extractor, format=None, **kwargs
+    ):
         self.format_kwargs = kwargs
         self.feature_extractor = feature_extractor
         if is_filelike(train_set):
             self.train_set = self._read_data(train_set, format)
         else:  # train_set is a list of tuples
             self.train_set = train_set
-        self._word_set = _get_words_from_dataset(self.train_set)  # Keep a hidden set of unique words.
+        self._word_set = _get_words_from_dataset(
+            self.train_set
+        )  # Keep a hidden set of unique words.
         self.train_features = None
 
     def _read_data(self, dataset, format=None):
@@ -147,12 +156,14 @@ class BaseClassifier(object):
         if not format:
             format_class = formats.detect(dataset)
             if not format_class:
-                raise FormatError('Could not automatically detect format for the given '
-                                  'data source.')
+                raise FormatError(
+                    "Could not automatically detect format for the given "
+                    "data source."
+                )
         else:
             registry = formats.get_registry()
             if format not in registry.keys():
-                raise ValueError("'{0}' format not supported.".format(format))
+                raise ValueError(f"'{format}' format not supported.")
             format_class = registry[format]
         return format_class(dataset, **self.format_kwargs).to_iterable()
 
@@ -174,10 +185,10 @@ class BaseClassifier(object):
         raise NotImplementedError('Must implement a "labels" method.')
 
     def extract_features(self, text):
-        '''Extracts features from a body of text.
+        """Extracts features from a body of text.
 
         :rtype: dictionary of features
-        '''
+        """
         # Feature extractor may take one or two arguments
         try:
             return self.feature_extractor(text, self._word_set)
@@ -200,24 +211,25 @@ class NLTKClassifier(BaseClassifier):
     #: The NLTK class to be wrapped. Must be a class within nltk.classify
     nltk_class = None
 
-    def __init__(self, train_set,
-                 feature_extractor=basic_extractor, format=None, **kwargs):
-        super(NLTKClassifier, self).__init__(train_set, feature_extractor, format, **kwargs)
+    def __init__(
+        self, train_set, feature_extractor=basic_extractor, format=None, **kwargs
+    ):
+        super().__init__(train_set, feature_extractor, format, **kwargs)
         self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
 
     def __repr__(self):
         class_name = self.__class__.__name__
-        return "<{cls} trained on {n} instances>".format(cls=class_name,
-                                                        n=len(self.train_set))
+        return f"<{class_name} trained on {len(self.train_set)} instances>"
 
     @cached_property
     def classifier(self):
         """The classifier."""
         try:
             return self.train()
-        except AttributeError:  # nltk_class has not been defined
-            raise ValueError("NLTKClassifier must have a nltk_class"
-                            " variable that is not None.")
+        except AttributeError as error:  # nltk_class has not been defined
+            raise ValueError(
+                "NLTKClassifier must have a nltk_class" " variable that is not None."
+            ) from error
 
     def train(self, *args, **kwargs):
         """Train the classifier with a labeled feature set and return
@@ -231,12 +243,14 @@ class NLTKClassifier(BaseClassifier):
         :rtype: A classifier
         """
         try:
-            self.classifier = self.nltk_class.train(self.train_features,
-                                                    *args, **kwargs)
+            self.classifier = self.nltk_class.train(
+                self.train_features, *args, **kwargs
+            )
             return self.classifier
-        except AttributeError:
-            raise ValueError("NLTKClassifier must have a nltk_class"
-                            " variable that is not None.")
+        except AttributeError as error:
+            raise ValueError(
+                "NLTKClassifier must have a nltk_class" " variable that is not None."
+            ) from error
 
     def labels(self):
         """Return an iterable of possible labels."""
@@ -275,14 +289,15 @@ class NLTKClassifier(BaseClassifier):
         """
         self.train_set += new_data
         self._word_set.update(_get_words_from_dataset(new_data))
-        self.train_features = [(self.extract_features(d), c)
-                                for d, c in self.train_set]
+        self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
         try:
-            self.classifier = self.nltk_class.train(self.train_features,
-                                                    *args, **kwargs)
-        except AttributeError:  # Descendant has not defined nltk_class
-            raise ValueError("NLTKClassifier must have a nltk_class"
-                            " variable that is not None.")
+            self.classifier = self.nltk_class.train(
+                self.train_features, *args, **kwargs
+            )
+        except AttributeError as error:  # Descendant has not defined nltk_class
+            raise ValueError(
+                "NLTKClassifier must have a nltk_class" " variable that is not None."
+            ) from error
         return True
 
 
@@ -421,23 +436,27 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
 
     nltk_class = nltk.classify.PositiveNaiveBayesClassifier
 
-    def __init__(self, positive_set, unlabeled_set,
-                feature_extractor=contains_extractor,
-                positive_prob_prior=0.5, **kwargs):
+    def __init__(
+        self,
+        positive_set,
+        unlabeled_set,
+        feature_extractor=contains_extractor,
+        positive_prob_prior=0.5,
+        **kwargs,
+    ):
         self.feature_extractor = feature_extractor
         self.positive_set = positive_set
         self.unlabeled_set = unlabeled_set
-        self.positive_features = [self.extract_features(d)
-                                    for d in self.positive_set]
-        self.unlabeled_features = [self.extract_features(d)
-                                    for d in self.unlabeled_set]
+        self.positive_features = [self.extract_features(d) for d in self.positive_set]
+        self.unlabeled_features = [self.extract_features(d) for d in self.unlabeled_set]
         self.positive_prob_prior = positive_prob_prior
 
     def __repr__(self):
         class_name = self.__class__.__name__
-        return "<{cls} trained on {n_pos} labeled and {n_unlabeled} unlabeled instances>"\
-                        .format(cls=class_name, n_pos=len(self.positive_set),
-                                n_unlabeled=len(self.unlabeled_set))
+        return (
+            f"<{class_name} trained on {len(self.positive_set)} labeled "
+            f"and {len(self.unlabeled_set)} unlabeled instances>"
+        )
 
     # Override
     def train(self, *args, **kwargs):
@@ -449,14 +468,19 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
 
         :rtype: A classifier
         """
-        self.classifier = self.nltk_class.train(self.positive_features,
-                                                self.unlabeled_features,
-                                                self.positive_prob_prior)
+        self.classifier = self.nltk_class.train(
+            self.positive_features, self.unlabeled_features, self.positive_prob_prior
+        )
         return self.classifier
 
-    def update(self, new_positive_data=None,
-               new_unlabeled_data=None, positive_prob_prior=0.5,
-               *args, **kwargs):
+    def update(
+        self,
+        new_positive_data=None,
+        new_unlabeled_data=None,
+        positive_prob_prior=0.5,
+        *args,
+        **kwargs,
+    ):
         """Update the classifier with new data and re-trains the
         classifier.
 
@@ -466,16 +490,21 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
         self.positive_prob_prior = positive_prob_prior
         if new_positive_data:
             self.positive_set += new_positive_data
-            self.positive_features += [self.extract_features(d)
-                                            for d in new_positive_data]
+            self.positive_features += [
+                self.extract_features(d) for d in new_positive_data
+            ]
         if new_unlabeled_data:
             self.unlabeled_set += new_unlabeled_data
-            self.unlabeled_features += [self.extract_features(d)
-                                            for d in new_unlabeled_data]
-        self.classifier = self.nltk_class.train(self.positive_features,
-                                                self.unlabeled_features,
-                                                self.positive_prob_prior,
-                                                *args, **kwargs)
+            self.unlabeled_features += [
+                self.extract_features(d) for d in new_unlabeled_data
+            ]
+        self.classifier = self.nltk_class.train(
+            self.positive_features,
+            self.unlabeled_features,
+            self.positive_prob_prior,
+            *args,
+            **kwargs,
+        )
         return True
 
 

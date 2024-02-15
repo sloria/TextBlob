@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-'''Default sentiment analyzers are English for backwards compatibility, so
+"""Default sentiment analyzers are English for backwards compatibility, so
 you can still do
 
 >>> from textblob.sentiments import PatternAnalyzer
@@ -7,16 +6,19 @@ you can still do
 which is equivalent to
 
 >>> from textblob.en.sentiments import PatternAnalyzer
-'''
-from __future__ import absolute_import
+"""
 from textblob.base import BaseSentimentAnalyzer
-from textblob.en.sentiments import (DISCRETE, CONTINUOUS,
-                                PatternAnalyzer, NaiveBayesAnalyzer)
+from textblob.en.sentiments import (
+    CONTINUOUS,
+    DISCRETE,
+    NaiveBayesAnalyzer,
+    PatternAnalyzer,
+)
 
 __all__ = [
-    'BaseSentimentAnalyzer',
-    'DISCRETE',
-    'CONTINUOUS',
-    'PatternAnalyzer',
-    'NaiveBayesAnalyzer',
+    "BaseSentimentAnalyzer",
+    "DISCRETE",
+    "CONTINUOUS",
+    "PatternAnalyzer",
+    "NaiveBayesAnalyzer",
 ]

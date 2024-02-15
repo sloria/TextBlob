@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import unittest
 
-from textblob.parsers import PatternParser
 from textblob.en import parse as pattern_parse
+from textblob.parsers import PatternParser
 
 
 class TestPatternParser(unittest.TestCase):

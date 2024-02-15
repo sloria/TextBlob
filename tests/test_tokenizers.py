@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
 import unittest
+
 import pytest
 
-from textblob.tokenizers import (
-    WordTokenizer,
-    SentenceTokenizer,
-    word_tokenize,
-    sent_tokenize,
-)
 from textblob.compat import PY2
+from textblob.tokenizers import (
+    SentenceTokenizer,
+    WordTokenizer,
+    sent_tokenize,
+    word_tokenize,
+)
 
 
 def is_generator(obj):

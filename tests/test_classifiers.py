@@ -1,25 +1,24 @@
-# -*- coding: utf-8 -*-
 import os
 import unittest
+from unittest import mock
 
-import mock
-import pytest
 import nltk
+import pytest
 
-from textblob.tokenizers import WordTokenizer
+from textblob import formats
 from textblob.classifiers import (
-    NaiveBayesClassifier,
     DecisionTreeClassifier,
-    basic_extractor,
-    contains_extractor,
+    MaxEntClassifier,
+    NaiveBayesClassifier,
     NLTKClassifier,
     PositiveNaiveBayesClassifier,
     _get_words_from_dataset,
-    MaxEntClassifier,
+    basic_extractor,
+    contains_extractor,
 )
-from textblob import formats
 from textblob.compat import unicode
 from textblob.exceptions import FormatError
+from textblob.tokenizers import WordTokenizer
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, "data.csv")
@@ -119,7 +118,7 @@ class TestNaiveBayesClassifier(unittest.TestCase):
         assert "negative" in labels
 
     def test_show_informative_features(self):
-        feats = self.classifier.show_informative_features()
+        self.classifier.show_informative_features()
 
     def test_informative_features(self):
         feats = self.classifier.informative_features(3)
@@ -208,9 +207,10 @@ class TestNaiveBayesClassifier(unittest.TestCase):
             NaiveBayesClassifier(CSV_FILE, format="unknown")
 
     def test_repr(self):
-        assert repr(
-            self.classifier
-        ) == "<NaiveBayesClassifier trained on {0} instances>".format(len(train_set))
+        assert (
+            repr(self.classifier)
+            == f"<NaiveBayesClassifier trained on {len(train_set)} instances>"
+        )
 
 
 class TestDecisionTreeClassifier(unittest.TestCase):
@@ -248,9 +248,10 @@ class TestDecisionTreeClassifier(unittest.TestCase):
         assert pp == pf
 
     def test_repr(self):
-        assert repr(
-            self.classifier
-        ) == "<DecisionTreeClassifier trained on {0} instances>".format(len(train_set))
+        assert (
+            repr(self.classifier)
+            == f"<DecisionTreeClassifier trained on {len(train_set)} instances>"
+        )
 
 
 @pytest.mark.numpy
@@ -329,7 +330,7 @@ class TestPositiveNaiveBayesClassifier(unittest.TestCase):
     def test_repr(self):
         assert (
             repr(self.classifier)
-            == "<PositiveNaiveBayesClassifier trained on {0} labeled and {1} unlabeled instances>".format(
+            == "<PositiveNaiveBayesClassifier trained on {} labeled and {} unlabeled instances>".format(  # noqa: E501
                 len(self.classifier.positive_set), len(self.classifier.unlabeled_set)
             )
         )
@@ -373,7 +374,7 @@ def custom_extractor(document):
     feats = {}
     tokens = document.split()
     for tok in tokens:
-        feat_name = "last_letter({0})".format(tok[-1])
+        feat_name = f"last_letter({tok[-1]})"
         feats[feat_name] = True
     return feats
 

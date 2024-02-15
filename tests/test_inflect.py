@@ -1,12 +1,11 @@
 from unittest import TestCase
 
-
 from textblob.en.inflect import (
     plural_categories,
+    pluralize,
     singular_ie,
     singular_irregular,
     singularize,
-    pluralize,
 )
 
 

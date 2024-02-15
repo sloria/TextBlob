@@ -57,8 +57,10 @@ To create a new extension for a part-of-speech tagger, sentiment analyzer, noun 
 
     from textblob.base import BaseTagger
 
+
     class MyTagger(BaseTagger):
         def tag(self, text):
+            pass
             # Your implementation goes here
 
 Language Extensions

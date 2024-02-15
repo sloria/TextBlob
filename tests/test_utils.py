@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
-from unittest import TestCase
 import os
+from unittest import TestCase
 
-
-from textblob.utils import lowerstrip, strip_punc, is_filelike
+from textblob.utils import is_filelike, lowerstrip, strip_punc
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, "data.csv")

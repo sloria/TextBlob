@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
 """Parts-of-speech tagger implementations."""
-from __future__ import absolute_import
 
 import nltk
-import textblob.compat
 
 import textblob as tb
-from textblob.en import tag as pattern_tag
-from textblob.decorators import requires_nltk_corpus
+import textblob.compat
 from textblob.base import BaseTagger
+from textblob.decorators import requires_nltk_corpus
+from textblob.en import tag as pattern_tag
 
 
 class PatternTagger(BaseTagger):

@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 import os
 import unittest
+
 import pytest
 
-from textblob.base import BaseTagger
 import textblob.taggers
+from textblob.base import BaseTagger
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 AP_MODEL_LOC = os.path.join(HERE, "trontagger.pickle")

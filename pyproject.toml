@@ -45,7 +45,7 @@ include = ["tests/", "CHANGELOG.rst", "CONTRIBUTING.rst", "tox.ini"]
 src = ["src"]
 fix = true
 show-fixes = true
-show-source = true
+unsafe-fixes = true
 exclude = [
   # Default excludes from ruff
   ".bzr",
@@ -75,10 +75,10 @@ exclude = [
   "site-packages",
   "venv",
   # Vendorized code
-  "textblob/en",
-  "textblob/unicodecsv",
-  "textblob/_text.py",
-  "textblob/compat.py",
+  "src/textblob/en",
+  "src/textblob/unicodecsv",
+  "src/textblob/_text.py",
+  "src/textblob/compat.py",
 ]
 
 [tool.ruff.lint]
@@ -91,7 +91,7 @@ select = [
   "W",  # pycodestyle warning
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E721"]
 
 [tool.ruff.lint.pycodestyle]

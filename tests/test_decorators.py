@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
 import unittest
+
 import pytest
 
 from textblob.decorators import requires_nltk_corpus
 from textblob.exceptions import MissingCorpusError
 
 
-class Tokenizer(object):
+class Tokenizer:
     @requires_nltk_corpus
     def tag(self, text):
         raise LookupError

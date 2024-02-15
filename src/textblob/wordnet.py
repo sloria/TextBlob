@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Wordnet interface. Contains classes for creating Synsets and Lemmas
 directly.
 

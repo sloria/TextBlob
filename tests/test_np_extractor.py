@@ -1,8 +1,7 @@
-from __future__ import unicode_literals
 import unittest
-import pytest
 
 import nltk
+import pytest
 
 from textblob.base import BaseNPExtractor
 from textblob.np_extractors import ConllExtractor
