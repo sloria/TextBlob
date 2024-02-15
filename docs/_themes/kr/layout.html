@@ -1,18 +1,23 @@
-{%- extends "basic/layout.html" %}
-{%- block extrahead %}
-  {{ super() }}
-  {% if theme_touch_icon %}
-    <link rel="apple-touch-icon" href="{{ pathto('_static/' ~ theme_touch_icon, 1) }}" />
-  {% endif %}
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
-{% endblock %}
-{%- block relbar2 %}{% endblock %}
-{%- block footer %}
-    <div class="footer">
-      &copy; Copyright {{ copyright }}.
-    </div>
-    <a href="https://github.com/sloria/textblob" class="github">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
-    </a>
+{%- extends "basic/layout.html" %} {%- block extrahead %} {{ super() }} {% if
+theme_touch_icon %}
+<link
+  rel="apple-touch-icon"
+  href="{{ pathto('_static/' ~ theme_touch_icon, 1) }}"
+/>
+{% endif %}
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=0.9, maximum-scale=0.9"
+/>
+{% endblock %} {%- block relbar2 %}{% endblock %} {%- block footer %}
+<div class="footer">&copy; Copyright {{ copyright }}.</div>
+<a href="https://github.com/sloria/textblob" class="github">
+  <img
+    style="position: absolute; top: 0; right: 0; border: 0"
+    src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png"
+    alt="Fork me on GitHub"
+    class="github"
+  />
+</a>
 
 {%- endblock %}
