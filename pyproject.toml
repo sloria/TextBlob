@@ -72,7 +72,6 @@ exclude = [
   "venv",
   # Vendorized code
   "src/textblob/en",
-  "src/textblob/unicodecsv",
   "src/textblob/_text.py",
 ]
 

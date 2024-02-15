@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.19.0 (unreleased)
+___________________
+
+Other changes:
+
+- Remove vendorized ``unicodecsv`` module, as it's no longer used.
+
 0.18.0 (2024-02-15)
 -------------------
 

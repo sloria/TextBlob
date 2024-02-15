@@ -67,7 +67,7 @@ def _penn_to_wordnet(tag):
 class Word(str):
 
     """A simple word representation. Includes methods for inflection,
-    translation, and WordNet integration.
+    and WordNet integration.
     """
 
     def __new__(cls, string, pos_tag=None):
