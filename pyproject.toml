@@ -27,7 +27,7 @@ Source = "https://github.com/sloria/TextBlob"
 
 [project.optional-dependencies]
 docs = ["sphinx==7.2.6", "sphinx-issues==4.0.0", "PyYAML==6.0.1"]
-tests = ["pytest", "mock", "numpy"]
+tests = ["pytest", "numpy"]
 dev = ["textblob[tests]", "tox", "pre-commit~=3.5"]
 
 [build-system]
