@@ -4,6 +4,13 @@ Changelog
 0.18.0 (unreleased)
 -------------------
 
+Bug fixes:
+
+- Remove usage of deprecated cElementTree (:issue:`339`).
+  Thanks :user:`tirkarthi` for reporting and for the PR.
+- Address ``SyntaxWarning`` on Python 3.12 (:pr:`418`).
+  Thanks :user:`smontanaro` for the PR.
+
 Removals:
 
 - ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate`` 
