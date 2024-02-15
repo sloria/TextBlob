@@ -6,9 +6,10 @@ TextBlob: Simplified Text Processing
     :target: https://pypi.org/project/textblob/
     :alt: Latest version
 
-.. image:: https://badgen.net/travis/sloria/TextBlob/dev
-    :target: https://travis-ci.org/sloria/TextBlob
-    :alt: Travis-CI
+.. image:: https://github.com/sloria/TextBlob/actions/workflows/build-release.yml/badge.svg
+    :target: https://github.com/sloria/TextBlob/actions/workflows/build-release.yml
+    :alt: Build status
+
 
 Homepage: `https://textblob.readthedocs.io/ <https://textblob.readthedocs.io/>`_
 

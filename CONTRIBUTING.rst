@@ -112,34 +112,20 @@ Running tests
 
 To run all the tests: ::
 
-    $ python run_tests.py
+    $ pytest
 
 To skip slow tests: ::
 
-    $ python run_tests.py fast
-
-To skip tests that require internet: ::
-
-    $ python run_tests.py no-internet
-
-To get test coverage reports (must have coverage installed): ::
-
-    $ python run_tests.py cover
-
-To run tests on Python 2.7, 3.4, 3.5, and 3.6 virtual environments (must have each interpreter installed): ::
-
-    $ tox
+    $ pytest -m 'not slow'
 
 Documentation
 +++++++++++++
 
 Contributions to the documentation are welcome. Documentation is written in `reStructuredText`_ (rST). A quick rST reference can be found `here <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_. Builds are powered by Sphinx_.
 
-To build docs: ::
+To build docs and run in watch mode: ::
 
-    $ invoke docs -b
-
-The ``-b`` (for "browse") automatically opens up the docs in your browser after building.
+    $ tox -e watch-docs
 
 .. _Sphinx: http://sphinx.pocoo.org/
 
