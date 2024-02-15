@@ -1,5 +1,5 @@
 [project]
-name = "TextBlob"
+name = "textblob"
 version = "0.18.0"
 description = "Simple, Pythonic text processing. Sentiment analysis, part-of-speech tagging, noun phrase parsing, and more."
 readme = "README.rst"
@@ -33,10 +33,6 @@ dev = ["textblob[tests]", "tox", "pre-commit~=3.5"]
 [build-system]
 requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
-
-[tool.flit.module]
-# Needed because import name is `textblob` and package name is `TextBlob`
-name = "textblob"
 
 [tool.flit.sdist]
 include = ["tests/", "CHANGELOG.rst", "CONTRIBUTING.rst", "tox.ini"]
