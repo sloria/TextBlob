@@ -9,7 +9,7 @@ import re
 import string
 import types
 from itertools import chain
-from xml.etree import cElementTree
+from xml.etree import ElementTree
 
 basestring = (str, bytes)
 
@@ -909,7 +909,7 @@ class Sentiment(lazydict):
         if not os.path.exists(path):
             return
         words, synsets, labels = {}, {}, {}
-        xml = cElementTree.parse(path)
+        xml = ElementTree.parse(path)
         xml = xml.getroot()
         for w in xml.findall("word"):
             if self._confidence is None or self._confidence <= float(

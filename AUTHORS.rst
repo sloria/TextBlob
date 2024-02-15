@@ -33,3 +33,4 @@ Contributors (chronological)
 - Ram Rachum `@cool-RR <https://github.com/cool-RR>`_
 - Romain Casati `@casatir <https://github.com/casatir>`_
 - Evgeny Kemerov `@sudoguy <https://github.com/sudoguy>`_
+- Karthikeyan Singaravelan `@tirkarthi <https://github.com/tirkarthi>`_
