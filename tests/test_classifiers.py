@@ -16,7 +16,6 @@ from textblob.classifiers import (
     basic_extractor,
     contains_extractor,
 )
-from textblob.compat import unicode
 from textblob.exceptions import FormatError
 from textblob.tokenizers import WordTokenizer
 
@@ -135,28 +134,28 @@ class TestNaiveBayesClassifier(unittest.TestCase):
             cl = NaiveBayesClassifier(fp, format="csv")
         assert cl.classify("I feel happy this morning") == "pos"
         training_sentence = cl.train_set[0][0]
-        assert isinstance(training_sentence, unicode)
+        assert isinstance(training_sentence, str)
 
     def test_init_with_csv_file_without_format_specifier(self):
         with open(CSV_FILE) as fp:
             cl = NaiveBayesClassifier(fp)
         assert cl.classify("I feel happy this morning") == "pos"
         training_sentence = cl.train_set[0][0]
-        assert isinstance(training_sentence, unicode)
+        assert isinstance(training_sentence, str)
 
     def test_init_with_json_file(self):
         with open(JSON_FILE) as fp:
             cl = NaiveBayesClassifier(fp, format="json")
         assert cl.classify("I feel happy this morning") == "pos"
         training_sentence = cl.train_set[0][0]
-        assert isinstance(training_sentence, unicode)
+        assert isinstance(training_sentence, str)
 
     def test_init_with_json_file_without_format_specifier(self):
         with open(JSON_FILE) as fp:
             cl = NaiveBayesClassifier(fp)
         assert cl.classify("I feel happy this morning") == "pos"
         training_sentence = cl.train_set[0][0]
-        assert isinstance(training_sentence, unicode)
+        assert isinstance(training_sentence, str)
 
     def test_init_with_custom_format(self):
         redis_train = [("I like turtles", "pos"), ("I hate turtles", "neg")]
@@ -200,7 +199,7 @@ class TestNaiveBayesClassifier(unittest.TestCase):
             cl = NaiveBayesClassifier(fp)
         assert cl.classify("I feel happy this morning") == "pos"
         training_sentence = cl.train_set[0][0]
-        assert isinstance(training_sentence, unicode)
+        assert isinstance(training_sentence, str)
 
     def test_init_with_bad_format_specifier(self):
         with pytest.raises(ValueError):
@@ -244,7 +243,7 @@ class TestDecisionTreeClassifier(unittest.TestCase):
     def test_pretty_format(self):
         pp = self.classifier.pprint(width=60)
         pf = self.classifier.pretty_format(width=60)
-        assert isinstance(pp, unicode)
+        assert isinstance(pp, str)
         assert pp == pf
 
     def test_repr(self):

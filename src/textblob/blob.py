@@ -21,7 +21,6 @@ Example usage: ::
 """  # noqa: E501
 import json
 import sys
-import warnings
 from collections import defaultdict
 
 import nltk
@@ -33,7 +32,6 @@ from textblob.base import (
     BaseTagger,
     BaseTokenizer,
 )
-from textblob.compat import basestring, unicode
 from textblob.decorators import cached_property, requires_nltk_corpus
 from textblob.en import suggest
 from textblob.inflect import pluralize as _pluralize
@@ -50,6 +48,8 @@ from textblob.utils import PUNCTUATION_REGEX, lowerstrip
 # NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
 _wordnet = nltk.corpus.wordnet
 
+basestring = (str, bytes)
+
 
 def _penn_to_wordnet(tag):
     """Converts a Penn corpus tag into a Wordnet tag."""
@@ -64,7 +64,7 @@ def _penn_to_wordnet(tag):
     return None
 
 
-class Word(unicode):
+class Word(str):
 
     """A simple word representation. Includes methods for inflection,
     translation, and WordNet integration.
@@ -499,9 +499,9 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
             ]
         else:
             return [
-                (Word(unicode(word), pos_tag=t), unicode(t))
+                (Word(str(word), pos_tag=t), str(t))
                 for word, t in self.pos_tagger.tag(self)
-                if not PUNCTUATION_REGEX.match(unicode(t))
+                if not PUNCTUATION_REGEX.match(str(t))
             ]
 
     tags = pos_tags

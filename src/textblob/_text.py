@@ -11,7 +11,7 @@ import types
 from itertools import chain
 from xml.etree import cElementTree
 
-from .compat import PY2, basestring, binary_type, imap, text_type, unicode
+basestring = (str, bytes)
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -35,21 +35,21 @@ def decode_string(v, encoding="utf-8"):
     """Returns the given value as a Unicode string (if possible)."""
     if isinstance(encoding, basestring):
         encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
-    if isinstance(v, binary_type):
+    if isinstance(v, bytes):
         for e in encoding:
             try:
                 return v.decode(*e)
             except:
                 pass
         return v
-    return unicode(v)
+    return str(v)
 
 
 def encode_string(v, encoding="utf-8"):
     """Returns the given value as a Python byte string (if possible)."""
     if isinstance(encoding, basestring):
         encoding = ((encoding,),) + (("windows-1252",), ("utf-8", "ignore"))
-    if isinstance(v, unicode):
+    if isinstance(v, str):
         for e in encoding:
             try:
                 return v.encode(*e)
@@ -365,9 +365,9 @@ def find_tokens(
     for a, b in list(replace.items()):
         string = re.sub(a, b, string)
     # Handle Unicode quotes.
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         string = (
-            unicode(string)
+            str(string)
             .replace("“", " “ ")
             .replace("”", " ” ")
             .replace("‘", " ‘ ")
@@ -463,10 +463,7 @@ def _read(path, encoding="utf-8", comment=";;;"):
     if path:
         if isinstance(path, basestring) and os.path.exists(path):
             # From file path.
-            if PY2:
-                f = codecs.open(path, "r", encoding="utf-8")
-            else:
-                f = open(path, encoding="utf-8")
+            f = open(path, encoding="utf-8")
         elif isinstance(path, basestring):
             # From string.
             f = path.splitlines()
@@ -478,7 +475,7 @@ def _read(path, encoding="utf-8", comment=";;;"):
         for i, line in enumerate(f):
             line = (
                 line.strip(codecs.BOM_UTF8)
-                if i == 0 and isinstance(line, binary_type)
+                if i == 0 and isinstance(line, bytes)
                 else line
             )
             line = line.strip()
@@ -1123,7 +1120,7 @@ class Sentiment(lazydict):
                     w.isalpha() is False and len(w) <= 5 and w not in PUNCTUATION
                 ):  # speedup
                     for (_type, p), e in EMOTICONS.items():
-                        if w in imap(lambda e: e.lower(), e):
+                        if w in map(lambda e: e.lower(), e):
                             a.append(dict(w=[w], p=p, s=1.0, i=1.0, n=1, x=MOOD))
                             break
         for i in range(len(a)):
@@ -1446,7 +1443,7 @@ class Parser:
         """
         # "The cat purs." => ["The cat purs ."]
         return find_tokens(
-            text_type(string),
+            str(string),
             punctuation=kwargs.get("punctuation", PUNCTUATION),
             abbreviations=kwargs.get("abbreviations", ABBREVIATIONS),
             replace=kwargs.get("replace", replacements),
@@ -1519,7 +1516,7 @@ class Parser:
         # Unicode.
         for i in range(len(s)):
             for j in range(len(s[i])):
-                if isinstance(s[i][j], binary_type):
+                if isinstance(s[i][j], bytes):
                     s[i][j] = decode_string(s[i][j], encoding)
             # Tagger (required by chunker, labeler & lemmatizer).
             if tags or chunks or relations or lemmata:
@@ -1561,7 +1558,7 @@ class Parser:
             s[i] = " ".join(s[i])
         s = "\n".join(s)
         s = TaggedString(
-            unicode(s), format, language=kwargs.get("language", self.language)
+            str(s), format, language=kwargs.get("language", self.language)
         )
         return s
 
@@ -1574,7 +1571,7 @@ class Parser:
 TOKENS = "tokens"
 
 
-class TaggedString(unicode):
+class TaggedString(str):
     def __new__(self, string, tags=None, language=None):
         """Unicode string with tags and language attributes.
         For example: TaggedString("cat/NN/NP", tags=["word", "pos", "chunk"]).
@@ -1582,7 +1579,7 @@ class TaggedString(unicode):
         # From a TaggedString:
         if tags is None:
             tags = ["word"]
-        if isinstance(string, unicode) and hasattr(string, "tags"):
+        if isinstance(string, str) and hasattr(string, "tags"):
             tags, language = string.tags, string.language
         # From a TaggedString.split(TOKENS) list:
         if isinstance(string, list):
@@ -1591,7 +1588,7 @@ class TaggedString(unicode):
                 for s in string
             ]
             string = "\n".join(" ".join("/".join(token) for token in s) for s in string)
-        s = unicode.__new__(self, string)
+        s = str.__new__(self, string)
         s.tags = list(tags)
         s.language = language
         return s
@@ -1601,7 +1598,7 @@ class TaggedString(unicode):
         where each token is a list of word + tags.
         """
         if sep != TOKENS:
-            return unicode.split(self, sep)
+            return str.split(self, sep)
         if len(self) == 0:
             return []
         return [
@@ -1609,7 +1606,7 @@ class TaggedString(unicode):
                 [x.replace("&slash;", "/") for x in token.split("/")]
                 for token in sentence.split(" ")
             ]
-            for sentence in unicode.split(self, "\n")
+            for sentence in str.split(self, "\n")
         ]
 
 

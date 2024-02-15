@@ -8,12 +8,11 @@ from abc import ABCMeta, abstractmethod
 
 import nltk
 
-from textblob.compat import with_metaclass
 
 ##### POS TAGGERS #####
 
 
-class BaseTagger(with_metaclass(ABCMeta)):
+class BaseTagger(metaclass=ABCMeta):
     """Abstract tagger class from which all taggers
     inherit from. All descendants must implement a
     ``tag()`` method.
@@ -30,7 +29,7 @@ class BaseTagger(with_metaclass(ABCMeta)):
 ##### NOUN PHRASE EXTRACTORS #####
 
 
-class BaseNPExtractor(with_metaclass(ABCMeta)):
+class BaseNPExtractor(metaclass=ABCMeta):
     """Abstract base class from which all NPExtractor classes inherit.
     Descendant classes must implement an ``extract(text)`` method
     that returns a list of noun phrases as strings.
@@ -45,7 +44,7 @@ class BaseNPExtractor(with_metaclass(ABCMeta)):
 ##### TOKENIZERS #####
 
 
-class BaseTokenizer(with_metaclass(ABCMeta), nltk.tokenize.api.TokenizerI):
+class BaseTokenizer(nltk.tokenize.api.TokenizerI, metaclass=ABCMeta):
     """Abstract base class from which all Tokenizer classes inherit.
     Descendant classes must implement a ``tokenize(text)`` method
     that returns a list of noun phrases as strings.
@@ -76,7 +75,7 @@ DISCRETE = "ds"
 CONTINUOUS = "co"
 
 
-class BaseSentimentAnalyzer(with_metaclass(ABCMeta)):
+class BaseSentimentAnalyzer(metaclass=ABCMeta):
     """Abstract base class from which all sentiment analyzers inherit.
     Should implement an ``analyze(text)`` method which returns either the
     results of analysis.
@@ -106,7 +105,7 @@ class BaseSentimentAnalyzer(with_metaclass(ABCMeta)):
 ##### PARSERS #####
 
 
-class BaseParser(with_metaclass(ABCMeta)):
+class BaseParser(metaclass=ABCMeta):
     """Abstract parser class from which all parsers inherit from. All
     descendants must implement a ``parse()`` method.
     """

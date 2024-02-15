@@ -1,6 +1,5 @@
 import csv
 
-from textblob.compat import izip
 
 # http://semver.org/
 VERSION = (0, 9, 4)
@@ -242,7 +241,7 @@ class DictReader(csv.DictReader):
         row = csv.DictReader.next(self)
         result = dict(
             (uni_key, row[str_key])
-            for (str_key, uni_key) in izip(self.fieldnames, self.unicode_fieldnames)
+            for (str_key, uni_key) in zip(self.fieldnames, self.unicode_fieldnames)
         )
         rest = row.get(self.restkey)
         if rest:

@@ -1,7 +1,5 @@
 import sys
 
-from textblob.compat import PY2, basestring, binary_type, implements_to_string
-
 
 class ComparableMixin:
 
@@ -39,13 +37,12 @@ class BlobComparableMixin(ComparableMixin):
     """Allow blob objects to be comparable with both strings and blobs."""
 
     def _compare(self, other, method):
-        if isinstance(other, basestring):
+        if isinstance(other, (str, bytes)):
             # Just compare with the other string
             return method(self._cmpkey(), other)
         return super()._compare(other, method)
 
 
-@implements_to_string
 class StringlikeMixin:
 
     """Make blob objects behave like Python strings.
@@ -58,9 +55,8 @@ class StringlikeMixin:
     def __repr__(self):
         """Returns a string representation for debugging."""
         class_name = self.__class__.__name__
-        text = self.__unicode__().encode("utf-8") if PY2 else str(self)
-        ret = f'{class_name}("{text}")'
-        return binary_type(ret) if PY2 else ret
+        text = str(self)
+        return f'{class_name}("{text}")'
 
     def __str__(self):
         """Returns a string representation used in print statements

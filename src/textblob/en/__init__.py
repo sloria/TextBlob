@@ -6,7 +6,6 @@ import os
 from textblob._text import CHUNK, PENN, PNP, POS, UNIVERSAL, WORD, Lexicon, Spelling
 from textblob._text import Parser as _Parser
 from textblob._text import Sentiment as _Sentiment
-from textblob.compat import text_type, unicode
 
 try:
     MODULE = os.path.dirname(os.path.abspath(__file__))
@@ -85,24 +84,24 @@ sentiment = Sentiment(
 
 def tokenize(s, *args, **kwargs):
     """Returns a list of sentences, where punctuation marks have been split from words."""
-    return parser.find_tokens(text_type(s), *args, **kwargs)
+    return parser.find_tokens(str(s), *args, **kwargs)
 
 
 def parse(s, *args, **kwargs):
-    """Returns a tagged Unicode string."""
-    return parser.parse(unicode(s), *args, **kwargs)
+    """Returns a tagged str string."""
+    return parser.parse(str(s), *args, **kwargs)
 
 
 def parsetree(s, *args, **kwargs):
     """Returns a parsed Text from the given string."""
-    return Text(parse(unicode(s), *args, **kwargs))
+    return Text(parse(str(s), *args, **kwargs))
 
 
 def split(s, token=None):
     """Returns a parsed Text from the given parsed string."""
     if token is None:
         token = [WORD, POS, CHUNK, PNP]
-    return Text(text_type(s), token)
+    return Text(str(s), token)
 
 
 def tag(s, tokenize=True, encoding="utf-8"):
@@ -121,14 +120,14 @@ def suggest(w):
 
 def polarity(s, **kwargs):
     """Returns the sentence polarity (positive/negative) between -1.0 and 1.0."""
-    return sentiment(unicode(s), **kwargs)[0]
+    return sentiment(str(s), **kwargs)[0]
 
 
 def subjectivity(s, **kwargs):
     """Returns the sentence subjectivity (objective/subjective) between 0.0 and 1.0."""
-    return sentiment(unicode(s), **kwargs)[1]
+    return sentiment(str(s), **kwargs)[1]
 
 
 def positive(s, threshold=0.1, **kwargs):
     """Returns True if the given sentence has a positive sentiment (polarity >= threshold)."""
-    return polarity(unicode(s), **kwargs) >= threshold
+    return polarity(str(s), **kwargs) >= threshold

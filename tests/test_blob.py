@@ -3,7 +3,7 @@ Tests for the text processor.
 """
 import json
 from datetime import datetime
-from unittest import TestCase, main, mock
+from unittest import TestCase
 
 import nltk
 import pytest
@@ -11,7 +11,6 @@ import pytest
 import textblob as tb
 import textblob.wordnet as wn
 from textblob.classifiers import NaiveBayesClassifier
-from textblob.compat import basestring, binary_type, unicode
 from textblob.np_extractors import ConllExtractor, FastNPExtractor
 from textblob.parsers import PatternParser
 from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
@@ -442,7 +441,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
             "Béchamel, Tomato Sauce, Espagnole, Velouté and Hollandaise."
         )
         tags = b.tags
-        assert isinstance(tags[0][0], unicode)
+        assert isinstance(tags[0][0], str)
 
     def test_pos_tags_includes_one_letter_articles(self):
         blob = tb.TextBlob("This is a sentence.")
@@ -845,7 +844,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         text = "John is a cat"
         blob = tb.TextBlob(text)
         for word, _ in blob.pos_tags:
-            assert type(word.string) is unicode
+            assert type(word.string) is str
 
 
 class WordTest(TestCase):
@@ -941,8 +940,7 @@ class WordTest(TestCase):
     def test_definitions(self):
         w = tb.Word("octopus")
         for definition in w.definitions:
-            print(type(definition))
-            assert isinstance(definition, basestring)
+            assert isinstance(definition, str)
 
     def test_define(self):
         w = tb.Word("hack")
@@ -1019,7 +1017,3 @@ class BlobberTest(TestCase):
 
 def is_blob(obj):
     return isinstance(obj, tb.TextBlob)
-
-
-if __name__ == "__main__":
-    main()

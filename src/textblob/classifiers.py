@@ -35,11 +35,12 @@ from itertools import chain
 import nltk
 
 import textblob.formats as formats
-from textblob.compat import basestring
 from textblob.decorators import cached_property
 from textblob.exceptions import FormatError
 from textblob.tokenizers import word_tokenize
 from textblob.utils import is_filelike, strip_punc
+
+basestring = (str, bytes)
 
 ### Basic feature extractors ###
 

@@ -2,7 +2,6 @@ import os
 import unittest
 
 from textblob import formats
-from textblob.compat import unicode
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSV_FILE = os.path.join(HERE, "data.csv")
@@ -92,7 +91,7 @@ class TestJSON(unittest.TestCase):
         data = d.to_iterable()
         first = data[0]
         text, _label = first[0], first[1]
-        assert isinstance(text, unicode)
+        assert isinstance(text, str)
 
 
 class CustomFormat(formats.BaseFormat):

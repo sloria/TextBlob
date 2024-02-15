@@ -2,7 +2,6 @@ import unittest
 
 import pytest
 
-from textblob.compat import PY2
 from textblob.tokenizers import (
     SentenceTokenizer,
     WordTokenizer,
@@ -12,10 +11,7 @@ from textblob.tokenizers import (
 
 
 def is_generator(obj):
-    if PY2:
-        return hasattr(obj, "next")
-    else:
-        return hasattr(obj, "__next__")
+    return hasattr(obj, "__next__")
 
 
 class TestWordTokenizer(unittest.TestCase):
