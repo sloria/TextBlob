@@ -6,20 +6,21 @@ TextBlob: Simplified Text Processing
     :target: https://pypi.org/project/textblob/
     :alt: Latest version
 
-.. image:: https://badgen.net/travis/sloria/TextBlob/dev
-    :target: https://travis-ci.org/sloria/TextBlob
-    :alt: Travis-CI
+.. image:: https://github.com/sloria/TextBlob/actions/workflows/build-release.yml/badge.svg
+    :target: https://github.com/sloria/TextBlob/actions/workflows/build-release.yml
+    :alt: Build status
+
 
 Homepage: `https://textblob.readthedocs.io/ <https://textblob.readthedocs.io/>`_
 
-`TextBlob` is a Python (2 and 3) library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more.
+`TextBlob` is a Python library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more.
 
 
 .. code-block:: python
 
     from textblob import TextBlob
 
-    text = '''
+    text = """
     The titular threat of The Blob has always struck me as the ultimate movie
     monster: an insatiably hungry, amoeba-like mass able to penetrate
     virtually any safeguard, capable of--as a doomed doctor chillingly
@@ -28,15 +29,15 @@ Homepage: `https://textblob.readthedocs.io/ <https://textblob.readthedocs.io/>`_
     devastating of potential consequences, not unlike the grey goo scenario
     proposed by technological theorists fearful of
     artificial intelligence run rampant.
-    '''
+    """
 
     blob = TextBlob(text)
-    blob.tags           # [('The', 'DT'), ('titular', 'JJ'),
-                        #  ('threat', 'NN'), ('of', 'IN'), ...]
+    blob.tags  # [('The', 'DT'), ('titular', 'JJ'),
+    #  ('threat', 'NN'), ('of', 'IN'), ...]
 
-    blob.noun_phrases   # WordList(['titular threat', 'blob',
-                        #            'ultimate movie monster',
-                        #            'amoeba-like mass', ...])
+    blob.noun_phrases  # WordList(['titular threat', 'blob',
+    #            'ultimate movie monster',
+    #            'amoeba-like mass', ...])
 
     for sentence in blob.sentences:
         print(sentence.sentiment.polarity)
@@ -81,11 +82,6 @@ Documentation
 -------------
 
 Full documentation is available at https://textblob.readthedocs.io/.
-
-Requirements
-------------
-
-- Python >= 2.7 or >= 3.5
 
 Project Links
 -------------

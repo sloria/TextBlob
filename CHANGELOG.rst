@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.18.0 (unreleased)
+-------------------
+
+Removals:
+
+- ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate`` 
+  are removed. Use the official Google Translate API instead (:issue:`215`).
+- Remove ``textblob.compat``.
+
+Support:
+
+- Support Python 3.8-3.12. Older versions are no longer supported.
+- Support nltk>=3.8.
+
 0.17.1 (2021-10-21)
 -------------------
 
