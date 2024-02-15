@@ -1,13 +1,39 @@
 Changelog
 =========
 
-0.17.0 (unreleased)
+0.18.0 (unreleased)
+-------------------
+
+Removals:
+
+- ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate`` 
+  are removed. Use the official Google Translate API instead (:issue:`215`).
+- Remove ``textblob.compat``.
+
+Support:
+
+- Support Python 3.8-3.12. Older versions are no longer supported.
+- Support nltk>=3.8.
+
+0.17.1 (2021-10-21)
+-------------------
+
+Bug fixes:
+
+- Fix translation and language detection (:issue:`395`).
+  Thanks :user:`sudoguy` for the patch.
+
+0.17.0 (2021-02-17)
 -------------------
 
 Features:
 
 - Performance improvement: Use ``chain.from_iterable`` in ``_text.py``
   to improve runtime and memory usage (:pr:`333`). Thanks :user:`cool-RR` for the PR.
+
+Other changes:
+
+- Remove usage of `ctypes` (:pr:`354`). Thanks :user:`casatir`.
 
 0.16.0 (2020-04-26)
 -------------------

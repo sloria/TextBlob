@@ -1,0 +1,80 @@
+name: build
+on:
+  push:
+    branches: ["dev"]
+    tags: ["*"]
+  pull_request:
+
+jobs:
+  tests:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "3.8", python: "3.8", tox: py38 }
+          - { name: "3.12", python: "3.12", tox: py312 }
+          - { name: "lowest", python: "3.8", tox: py38-lowest }
+    steps:
+      - uses: actions/checkout@v4.0.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Download nltk data
+        run: wget https://s3.amazonaws.com/textblob/nltk_data-0.11.0.tar.gz
+      - name: Extract nltk data
+        run: tar -xzvf nltk_data-0.11.0.tar.gz -C ~
+      - run: python -m pip install tox
+      - run: python -m tox -e${{ matrix.tox }}
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pypa/build
+        run: python -m pip install build
+      - name: Build a binary wheel and a source tarball
+        run: python -m build
+      - name: Install twine
+        run: python -m pip install twine
+      - name: Check build
+        run: python -m twine check --strict dist/*
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+  # this duplicates pre-commit.ci, so only run it on tags
+  # it guarantees that linting is passing prior to a release
+  lint-pre-release:
+    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.0.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install tox
+      - run: python -m tox -e lint
+  publish-to-pypi:
+    name: PyPI release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build, tests, lint-pre-release]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/textblob
+    permissions:
+      id-token: write
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
