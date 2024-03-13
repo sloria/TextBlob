@@ -7,6 +7,7 @@ which is equivalent to
 
 >>> from textblob.en.sentiments import PatternAnalyzer
 """
+
 from textblob.base import BaseSentimentAnalyzer
 from textblob.en.sentiments import (
     CONTINUOUS,

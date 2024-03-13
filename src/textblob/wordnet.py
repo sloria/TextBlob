@@ -4,6 +4,7 @@ directly.
 .. versionadded:: 0.7.0
 
 """
+
 import nltk
 
 #: wordnet module from nltk

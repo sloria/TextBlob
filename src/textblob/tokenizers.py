@@ -2,6 +2,7 @@
 
 .. versionadded:: 0.4.0
 """
+
 from itertools import chain
 
 import nltk

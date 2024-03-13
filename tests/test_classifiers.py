@@ -47,7 +47,6 @@ test_set = [
 
 
 class BadNLTKClassifier(NLTKClassifier):
-
     """An NLTK classifier without ``nltk_class`` defined. Oops!"""
 
     pass
