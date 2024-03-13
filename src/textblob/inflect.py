@@ -7,6 +7,7 @@ is equivalent to
 
     >>> from textblob.en.inflect import singularize
 """
+
 from textblob.en.inflect import pluralize, singularize
 
 __all__ = [

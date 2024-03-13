@@ -7,6 +7,7 @@ which is equivalent to
 
 >>> from textblob.en.taggers import NLTKTagger
 """
+
 from textblob.base import BaseTagger
 from textblob.en.taggers import NLTKTagger, PatternTagger
 

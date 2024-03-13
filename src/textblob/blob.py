@@ -19,6 +19,7 @@ Example usage: ::
 .. versionchanged:: 0.8.0
     These classes are now imported from ``textblob`` rather than ``text.blob``.
 """  # noqa: E501
+
 import json
 import sys
 from collections import defaultdict
@@ -65,7 +66,6 @@ def _penn_to_wordnet(tag):
 
 
 class Word(str):
-
     """A simple word representation. Includes methods for inflection,
     and WordNet integration.
     """
@@ -486,8 +486,14 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         Example:
         ::
 
-            [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
-                    ('Thursday', 'NNP'), ('morning', 'NN')]
+            [
+                ("At", "IN"),
+                ("eight", "CD"),
+                ("o'clock", "JJ"),
+                ("on", "IN"),
+                ("Thursday", "NNP"),
+                ("morning", "NN"),
+            ]
 
         :rtype: list of tuples
         """
@@ -775,15 +781,12 @@ class Blobber:
             self.classifier.__class__.__name__ + "()" if self.classifier else "None"
         )
         return (
-            "Blobber(tokenizer={}(), pos_tagger={}(), "
-            "np_extractor={}(), analyzer={}(), parser={}(), classifier={})"
-        ).format(
-            self.tokenizer.__class__.__name__,
-            self.pos_tagger.__class__.__name__,
-            self.np_extractor.__class__.__name__,
-            self.analyzer.__class__.__name__,
-            self.parser.__class__.__name__,
-            classifier_name,
+            f"Blobber(tokenizer={self.tokenizer.__class__.__name__}(), "
+            f"pos_tagger={self.pos_tagger.__class__.__name__}(), "
+            f"np_extractor={self.np_extractor.__class__.__name__}(), "
+            f"analyzer={self.analyzer.__class__.__name__}(), "
+            f"parser={self.parser.__class__.__name__}(), "
+            f"classifier={classifier_name})"
         )
 
     __str__ = __repr__

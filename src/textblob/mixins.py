@@ -2,7 +2,6 @@ import sys
 
 
 class ComparableMixin:
-
     """Implements rich operators for an object."""
 
     def _compare(self, other, method):
@@ -33,7 +32,6 @@ class ComparableMixin:
 
 
 class BlobComparableMixin(ComparableMixin):
-
     """Allow blob objects to be comparable with both strings and blobs."""
 
     def _compare(self, other, method):
@@ -44,7 +42,6 @@ class BlobComparableMixin(ComparableMixin):
 
 
 class StringlikeMixin:
-
     """Make blob objects behave like Python strings.
 
     Expects that classes that use this mixin to have a _strkey() method that

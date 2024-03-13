@@ -5,19 +5,22 @@ registry like so: ::
 
     from textblob import formats
 
-    class PipeDelimitedFormat(formats.DelimitedFormat):
-        delimiter = '|'
 
-    formats.register('psv', PipeDelimitedFormat)
+    class PipeDelimitedFormat(formats.DelimitedFormat):
+        delimiter = "|"
+
+
+    formats.register("psv", PipeDelimitedFormat)
 
 Once a format has been registered, classifiers will be able to read data files with
 that format. ::
 
     from textblob.classifiers import NaiveBayesAnalyzer
 
-    with open('training_data.psv', 'r') as fp:
-        cl = NaiveBayesAnalyzer(fp, format='psv')
+    with open("training_data.psv", "r") as fp:
+        cl = NaiveBayesAnalyzer(fp, format="psv")
 """
+
 import csv
 import json
 from collections import OrderedDict
@@ -105,7 +108,7 @@ class JSON(BaseFormat):
 
         [
             {"text": "Today is a good day.", "label": "pos"},
-            {"text": "I hate this car.", "label": "neg"}
+            {"text": "I hate this car.", "label": "neg"},
         ]
     """
 

@@ -7,6 +7,7 @@ which is equivalent to
 
 >>> from textblob.en.np_extractors import ConllExtractor
 """
+
 from textblob.base import BaseNPExtractor
 from textblob.en.np_extractors import ConllExtractor, FastNPExtractor
 

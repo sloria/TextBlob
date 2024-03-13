@@ -30,6 +30,7 @@ Example Usage:
 
 .. versionadded:: 0.6.0
 """  # noqa: E501
+
 from itertools import chain
 
 import nltk

@@ -47,7 +47,6 @@ test_set = [
 
 
 class BadNLTKClassifier(NLTKClassifier):
-
     """An NLTK classifier without ``nltk_class`` defined. Oops!"""
 
     pass
@@ -329,9 +328,7 @@ class TestPositiveNaiveBayesClassifier(unittest.TestCase):
     def test_repr(self):
         assert (
             repr(self.classifier)
-            == "<PositiveNaiveBayesClassifier trained on {} labeled and {} unlabeled instances>".format(  # noqa: E501
-                len(self.classifier.positive_set), len(self.classifier.unlabeled_set)
-            )
+            == f"<PositiveNaiveBayesClassifier trained on {len(self.classifier.positive_set)} labeled and {len(self.classifier.unlabeled_set)} unlabeled instances>"  # noqa: E501
         )
 
 

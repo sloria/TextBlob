@@ -4,6 +4,7 @@ which define the interface for descendant classes.
 .. versionchanged:: 0.7.0
     All base classes are defined in the same module, ``textblob.base``.
 """
+
 from abc import ABCMeta, abstractmethod
 
 import nltk

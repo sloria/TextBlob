@@ -1,6 +1,7 @@
 """
 Tests for the text processor.
 """
+
 import json
 from datetime import datetime
 from unittest import TestCase

@@ -6,6 +6,7 @@ which is equivalent to
 
 >>> from textblob.en.parsers import PatternParser
 """
+
 from textblob.base import BaseParser
 from textblob.en.parsers import PatternParser
 
