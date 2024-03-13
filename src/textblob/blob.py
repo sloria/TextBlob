@@ -486,8 +486,14 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         Example:
         ::
 
-            [('At', 'IN'), ('eight', 'CD'), ("o'clock", 'JJ'), ('on', 'IN'),
-                    ('Thursday', 'NNP'), ('morning', 'NN')]
+            [
+                ("At", "IN"),
+                ("eight", "CD"),
+                ("o'clock", "JJ"),
+                ("on", "IN"),
+                ("Thursday", "NNP"),
+                ("morning", "NN"),
+            ]
 
         :rtype: list of tuples
         """
@@ -775,8 +781,12 @@ class Blobber:
             self.classifier.__class__.__name__ + "()" if self.classifier else "None"
         )
         return (
-            f"Blobber(tokenizer={self.tokenizer.__class__.__name__}(), pos_tagger={self.pos_tagger.__class__.__name__}(), "
-            f"np_extractor={self.np_extractor.__class__.__name__}(), analyzer={self.analyzer.__class__.__name__}(), parser={self.parser.__class__.__name__}(), classifier={classifier_name})"
+            f"Blobber(tokenizer={self.tokenizer.__class__.__name__}(), "
+            f"pos_tagger={self.pos_tagger.__class__.__name__}(), "
+            f"np_extractor={self.np_extractor.__class__.__name__}(), "
+            f"analyzer={self.analyzer.__class__.__name__}(), "
+            f"parser={self.parser.__class__.__name__}(), "
+            f"classifier={classifier_name})"
         )
 
     __str__ = __repr__

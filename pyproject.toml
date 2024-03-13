@@ -75,6 +75,9 @@ exclude = [
   "src/textblob/_text.py",
 ]
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.ruff.lint]
 select = [
   "B",  # flake8-bugbear
