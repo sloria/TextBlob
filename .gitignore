@@ -25,6 +25,7 @@ lib64
 # pip
 pip-log.txt
 pip-wheel-metadata
+Pipfile
 
 # Unit test / coverage reports
 .coverage
@@ -57,3 +58,16 @@ README.html
 
 # ruff
 .ruff_cache
+
+# Ipython
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# text
+*.txt
+
+# parquet
+*.parquet
+
+# DS store
+**/.DS_Store
