@@ -34,3 +34,4 @@ Contributors (chronological)
 - Romain Casati `@casatir <https://github.com/casatir>`_
 - Evgeny Kemerov `@sudoguy <https://github.com/sudoguy>`_
 - Karthikeyan Singaravelan `@tirkarthi <https://github.com/tirkarthi>`_
+- Krinal Joshi `@kjdeveloper8 <https://github.com/kjdeveloper8>`_
