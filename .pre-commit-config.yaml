@@ -1,11 +1,11 @@
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.5.0
+  rev: v0.5.2
   hooks:
     - id: ruff
     - id: ruff-format
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.28.6
+  rev: 0.29.0
   hooks:
     - id: check-github-workflows
 - repo: https://github.com/asottile/blacken-docs
