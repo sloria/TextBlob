@@ -18,7 +18,7 @@ import nltk
 
 MIN_CORPORA = [
     "brown",  # Required for FastNPExtractor
-    "punkt",  # Required for WordTokenizer
+    "punkt_tab",  # Required for WordTokenizer
     "wordnet",  # Required for lemmatization
     "averaged_perceptron_tagger",  # Required for NLTKTagger
 ]
