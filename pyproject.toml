@@ -28,7 +28,7 @@ Source = "https://github.com/sloria/TextBlob"
 [project.optional-dependencies]
 docs = ["sphinx==8.0.2", "sphinx-issues==4.1.0", "PyYAML==6.0.2"]
 tests = ["pytest", "numpy"]
-dev = ["textblob[tests]", "tox", "pre-commit~=3.5"]
+dev = ["textblob[tests]", "tox", "pre-commit>=3.5,<5.0"]
 
 [build-system]
 requires = ["flit_core<4"]
