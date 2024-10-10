@@ -98,3 +98,25 @@ MIT licensed. See the bundled `LICENSE <https://github.com/sloria/TextBlob/blob/
 
 .. _pattern: https://github.com/clips/pattern/
 .. _NLTK: http://nltk.org/
+
+
+----------------------------------------------------------------------
+# TextBlob - Text Complexity Scoring Feature
+----------------------------------------------------------------------
+### Overview
+
+This project includes a **Text Complexity Scoring** feature, which computes various readability scores, including:
+- **Automated Readability Index (ARI)**
+- **Flesch-Kincaid Grade Level**
+- **Gunning Fog Index**
+- **SMOG Index**
+
+Scores help determine the readability of the given text, which can be useful for educators, content creators, or anyone interested in text complexity analysis.
+
+### How to Use
+
+#### 1. Install the Required Dependencies
+
+Make sure you have the necessary dependencies installed and we can directly import the class and use it.
+
+Also I have provided the 
