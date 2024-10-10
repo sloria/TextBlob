@@ -57,3 +57,9 @@ README.html
 
 # ruff
 .ruff_cache
+
+# for text complexity feature:
+env/
+.DS_Store
+src/.DS_Store
+src/.ipynb_checkpoints/
