@@ -3,9 +3,11 @@ import nltk
 
 # Set the NLTK data path explicitly
 # nltk.data.path.append('/Users/rahulkailasa/Documents/GitHub/TextBlob/env/nltk_data/')
-nltk.data.path.append('/Users/rahulkailasa/nltk_data')
-from textblob import TextBlob
+nltk.data.path.append("/Users/rahulkailasa/nltk_data")
 import math
+
+from textblob import TextBlob
+
 
 class TextComplexityScorer:
     """
@@ -15,16 +17,16 @@ class TextComplexityScorer:
     --------
     ari():
         Computes the Automated Readability Index (ARI) for the text.
-    
+
     flesch_kincaid_grade():
         Computes the Flesch-Kincaid Grade Level for the text.
-    
+
     gunning_fog():
         Computes the Gunning Fog Index for the text.
-    
+
     smog_index():
         Computes the SMOG Index for the text.
-    
+
     compute_scores():
         Returns a dictionary containing all complexity scores.
     """
@@ -55,19 +57,33 @@ class TextComplexityScorer:
 
     def flesch_kincaid_grade(self):
         total_syllables = sum(self.count_syllables(word) for word in self.words)
-        return 0.39 * (self.total_words / self.total_sentences) + 11.8 * (total_syllables / self.total_words) - 15.59
+        return (
+            0.39 * (self.total_words / self.total_sentences)
+            + 11.8 * (total_syllables / self.total_words)
+            - 15.59
+        )
 
     def gunning_fog(self):
         complex_words = [word for word in self.words if self.count_syllables(word) > 2]
-        return 0.4 * ((self.total_words / self.total_sentences) + 100 * (len(complex_words) / self.total_words))
+        return 0.4 * (
+            (self.total_words / self.total_sentences)
+            + 100 * (len(complex_words) / self.total_words)
+        )
 
     def smog_index(self):
         complex_words = [word for word in self.words if self.count_syllables(word) > 2]
-        return 1.0430 * math.sqrt(len(complex_words) * (30 / self.total_sentences)) + 3.1291
+        return (
+            1.0430 * math.sqrt(len(complex_words) * (30 / self.total_sentences))
+            + 3.1291
+        )
 
     def ari(self):
         total_characters = sum(len(word) for word in self.words)
-        return 4.71 * (total_characters / self.total_words) + 0.5 * (self.total_words / self.total_sentences) - 21.43
+        return (
+            4.71 * (total_characters / self.total_words)
+            + 0.5 * (self.total_words / self.total_sentences)
+            - 21.43
+        )
 
     def compute_scores(self):
         """
@@ -82,5 +98,5 @@ class TextComplexityScorer:
             "Flesch-Kincaid Grade Level": self.flesch_kincaid_grade(),
             "Gunning Fog Index": self.gunning_fog(),
             "SMOG Index": self.smog_index(),
-            "Automated Readability Index": self.ari()
+            "Automated Readability Index": self.ari(),
         }

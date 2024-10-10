@@ -1,10 +1,13 @@
 import unittest
+
 import nltk
+
 # from textblob_complexity import TextComplexityScorer
 from textblob_complexity.complexity import TextComplexityScorer
 
 # nltk.data.path.append('/Users/rahulkailasa/Documents/GitHub/TextBlob/env/nltk_data/')
-nltk.data.path.append('/Users/rahulkailasa/nltk_data')
+nltk.data.path.append("/Users/rahulkailasa/nltk_data")
+
 
 class TestTextComplexityScorer(unittest.TestCase):
     def setUp(self):
@@ -30,6 +33,7 @@ class TestTextComplexityScorer(unittest.TestCase):
     def test_compute_scores(self):
         scores = self.scorer.compute_scores()
         self.assertTrue("Flesch-Kincaid Grade Level" in scores)
+
 
 if __name__ == "__main__":
     unittest.main()
