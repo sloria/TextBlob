@@ -1,13 +1,22 @@
 import unittest
 
 import nltk
+<<<<<<< HEAD
 
 # from textblob_complexity import TextComplexityScorer
+=======
+>>>>>>> a0d2300 (Fix PEP8 issues (E402: imports at top, E501: line too long))
 from textblob_complexity.complexity import TextComplexityScorer
+# from textblob_complexity import TextComplexityScorer
+
 
 # nltk.data.path.append('/Users/rahulkailasa/Documents/GitHub/TextBlob/env/nltk_data/')
+<<<<<<< HEAD
 nltk.data.path.append("/Users/rahulkailasa/nltk_data")
 
+=======
+# nltk.data.path.append('/Users/rahulkailasa/nltk_data')
+>>>>>>> a0d2300 (Fix PEP8 issues (E402: imports at top, E501: line too long))
 
 class TestTextComplexityScorer(unittest.TestCase):
     def setUp(self):

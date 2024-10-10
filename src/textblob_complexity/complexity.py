@@ -3,8 +3,12 @@ import nltk
 
 # Set the NLTK data path explicitly
 # nltk.data.path.append('/Users/rahulkailasa/Documents/GitHub/TextBlob/env/nltk_data/')
-nltk.data.path.append("/Users/rahulkailasa/nltk_data")
+# nltk.data.path.append("/Users/rahulkailasa/nltk_data")
 import math
+# Set the NLTK data path explicitly
+# nltk.data.path.append('/Users/rahulkailasa/Documents/GitHub/TextBlob/env/nltk_data/')
+# nltk.data.path.append('/Users/rahulkailasa/nltk_data')
+
 
 from textblob import TextBlob
 
