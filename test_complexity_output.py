@@ -1,8 +1,10 @@
 from textblob_complexity import TextComplexityScorer
 
 # Example text
-text = ("The quick brown fox jumps over the lazy dog. Hoever,"
-        " the dog was not amused and decided to take a nap instead.")
+text = (
+    "The quick brown fox jumps over the lazy dog. Hoever,"
+    " the dog was not amused and decided to take a nap instead."
+)
 
 
 # Initialize the TextComplexityScorer with your text
