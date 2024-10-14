@@ -26,7 +26,7 @@ Issues = "https://github.com/sloria/TextBlob/issues"
 Source = "https://github.com/sloria/TextBlob"
 
 [project.optional-dependencies]
-docs = ["sphinx==8.0.2", "sphinx-issues==4.1.0", "PyYAML==6.0.2"]
+docs = ["sphinx==8.0.2", "sphinx-issues==5.0.0", "PyYAML==6.0.2"]
 tests = ["pytest", "numpy"]
 dev = ["textblob[tests]", "tox", "pre-commit~=3.5"]
 
