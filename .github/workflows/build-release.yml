@@ -15,6 +15,7 @@ jobs:
         include:
           - { name: "3.9", python: "3.9", tox: py39 }
           - { name: "3.13", python: "3.13", tox: py313 }
+          - { name: "lowest", python: "3.9", tox: py39-lowest }
     steps:
       - uses: actions/checkout@v4.0.0
       - uses: actions/setup-python@v5
