@@ -93,4 +93,4 @@ Project info
 
 
 .. _NLTK: http://www.nltk.org
-.. _pattern: http://www.clips.ua.ac.be/pages/pattern-en
+.. _pattern: https://github.com/clips/pattern
