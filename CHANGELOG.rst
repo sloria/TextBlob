@@ -4,6 +4,11 @@ Changelog
 0.19.0 (unreleased)
 ___________________
 
+Bug fixes:
+
+- Fix ``textblob.download_corpora`` script (:issue:`474`).
+  Thanks :user:`cagan-elden` for reporting.
+
 Changes:
 
 - Remove vendorized ``unicodecsv`` module, as it's no longer used.
