@@ -21,7 +21,9 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Download nltk data
-        run: python -m textblob.download_corpora
+        run: |
+          pip install .
+          python -m textblob.download_corpora
       - run: python -m pip install tox
       - run: python -m tox -e${{ matrix.tox }}
   build:
