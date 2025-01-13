@@ -276,7 +276,7 @@ class TestPositiveNaiveBayesClassifier(unittest.TestCase):
             "They lost the ball",
             "The game was intense",
             "The goalkeeper catched the ball",
-            "The other team controlled the ball" "The ball went off the court",
+            "The other team controlled the ballThe ball went off the court",
             "They had the ball for the whole game",
         ]
 
