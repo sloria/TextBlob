@@ -29,7 +29,7 @@ class BaseTagger(metaclass=ABCMeta):
         """Return a list of tuples of the form (word, tag)
         for a given set of text or BaseBlob instance.
         """
-        raise NotImplementedError("Subclass must implement a tag method")
+        ...
 
 
 ##### NOUN PHRASE EXTRACTORS #####
@@ -44,7 +44,7 @@ class BaseNPExtractor(metaclass=ABCMeta):
     @abstractmethod
     def extract(self, text: str) -> list[str]:
         """Return a list of noun phrases (strings) for a body of text."""
-        raise NotImplementedError("Subclass must implement an extract method")
+        ...
 
 
 ##### TOKENIZERS #####
@@ -62,7 +62,7 @@ class BaseTokenizer(nltk.tokenize.api.TokenizerI, metaclass=ABCMeta):  # pyright
 
         :rtype: list
         """
-        raise NotImplementedError("Subclasss must implement tokenize method")
+        ...
 
     def itokenize(self, text: str, *args, **kwargs):
         """Return a generator that generates tokens "on-demand".
@@ -121,4 +121,4 @@ class BaseParser(metaclass=ABCMeta):
     @abstractmethod
     def parse(self, text: AnyStr):
         """Parses the text."""
-        raise NotImplementedError("Subclass must implement a parse method")
+        ...
