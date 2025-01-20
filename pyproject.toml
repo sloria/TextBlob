@@ -35,7 +35,7 @@ requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.sdist]
-include = ["tests/", "CHANGELOG.rst", "CONTRIBUTING.rst", "tox.ini"]
+include = ["tests/", "CHANGELOG.rst", "CONTRIBUTING.rst", "tox.ini", "NOTICE"]
 
 [tool.ruff]
 src = ["src"]
