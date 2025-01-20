@@ -388,7 +388,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
 
     def test_words(self):
         blob = tb.TextBlob(
-            "Beautiful is better than ugly. " "Explicit is better than implicit."
+            "Beautiful is better than ugly. Explicit is better than implicit."
         )
         assert isinstance(blob.words, tb.WordList)
         assert blob.words == tb.WordList(
@@ -418,7 +418,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
 
     def test_pos_tags(self):
         blob = tb.TextBlob(
-            "Simple is better than complex. " "Complex is better than complicated."
+            "Simple is better than complex. Complex is better than complicated."
         )
         assert blob.pos_tags == [
             ("Simple", "NN"),
@@ -664,7 +664,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
 
     def test_sentiment(self):
         positive = tb.TextBlob(
-            "This is the best, most amazing " "text-processing library ever!"
+            "This is the best, most amazing text-processing library ever!"
         )
         assert positive.sentiment[0] > 0.0
         negative = tb.TextBlob("bad bad bitches that's my muthufuckin problem.")
@@ -722,7 +722,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
 
     def test_words_have_pos_tags(self):
         blob = tb.TextBlob(
-            "Simple is better than complex. " "Complex is better than complicated."
+            "Simple is better than complex. Complex is better than complicated."
         )
         first_word, first_tag = blob.pos_tags[0]
         assert isinstance(first_word, tb.Word)

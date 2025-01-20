@@ -12,9 +12,7 @@ AP_MODEL_LOC = os.path.join(HERE, "trontagger.pickle")
 
 class TestPatternTagger(unittest.TestCase):
     def setUp(self):
-        self.text = (
-            "Simple is better than complex. " "Complex is better than complicated."
-        )
+        self.text = "Simple is better than complex. Complex is better than complicated."
         self.tagger = textblob.taggers.PatternTagger()
 
     def test_init(self):
@@ -43,9 +41,7 @@ class TestPatternTagger(unittest.TestCase):
 @pytest.mark.numpy
 class TestNLTKTagger(unittest.TestCase):
     def setUp(self):
-        self.text = (
-            "Simple is better than complex. " "Complex is better than complicated."
-        )
+        self.text = "Simple is better than complex. Complex is better than complicated."
         self.tagger = textblob.taggers.NLTKTagger()
 
     def test_tag(self):

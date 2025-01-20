@@ -35,11 +35,7 @@ Setting Up for Local Development
 2. Install development requirements. It is highly recommended that you use a virtualenv. ::
 
     # After activating your virtualenv
-    $ pip install -r dev-requirements.txt
-
-3. Install TextBlob in develop mode. ::
-
-   $ python setup.py develop
+    $ pip install -e '.[tests]'
 
 .. _extension-development:
 
