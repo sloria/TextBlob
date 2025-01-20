@@ -4,7 +4,15 @@ Licenced under the BSD.
 See here https://github.com/clips/pattern/blob/master/LICENSE.txt for
 complete license information.
 """
+
+from __future__ import annotations
+from collections.abc import MutableMapping
 import re
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import AnyStr
+
 
 VERB, NOUN, ADJECTIVE, ADVERB = "VB", "NN", "JJ", "RB"
 
@@ -523,7 +531,7 @@ plural_categories = {
 }
 
 
-def pluralize(word, pos=NOUN, custom=None, classical=True):
+def pluralize(word: str, pos=NOUN, custom=None, classical=True) -> str:
     """Returns the plural of a given word.
     For example: child -> children.
     Handles nouns and adjectives, using classical inflection by default
@@ -584,6 +592,7 @@ def pluralize(word, pos=NOUN, custom=None, classical=True):
                 ):
                     if suffix.search(word) is not None:
                         return suffix.sub(inflection, word)
+    return word
 
 
 #### SINGULARIZE ###################################################################################
@@ -607,54 +616,56 @@ def pluralize(word, pos=NOUN, custom=None, classical=True):
 # THIS SOFTWARE.
 
 singular_rules = [
-    ["(?i)(.)ae$", "\\1a"],
-    ["(?i)(.)itis$", "\\1itis"],
-    ["(?i)(.)eaux$", "\\1eau"],
-    ["(?i)(quiz)zes$", "\\1"],
-    ["(?i)(matr)ices$", "\\1ix"],
-    ["(?i)(ap|vert|ind)ices$", "\\1ex"],
-    ["(?i)^(ox)en", "\\1"],
-    ["(?i)(alias|status)es$", "\\1"],
-    ["(?i)([octop|vir])i$", "\\1us"],
-    ["(?i)(cris|ax|test)es$", "\\1is"],
-    ["(?i)(shoe)s$", "\\1"],
-    ["(?i)(o)es$", "\\1"],
-    ["(?i)(bus)es$", "\\1"],
-    ["(?i)([m|l])ice$", "\\1ouse"],
-    ["(?i)(x|ch|ss|sh)es$", "\\1"],
-    ["(?i)(m)ovies$", "\\1ovie"],
-    ["(?i)(.)ombies$", "\\1ombie"],
-    ["(?i)(s)eries$", "\\1eries"],
-    ["(?i)([^aeiouy]|qu)ies$", "\\1y"],
+    (re.compile("(?i)(.)ae$"), "\\1a"),
+    (re.compile("(?i)(.)itis$"), "\\1itis"),
+    (re.compile("(?i)(.)eaux$"), "\\1eau"),
+    (re.compile("(?i)(quiz)zes$"), "\\1"),
+    (re.compile("(?i)(matr)ices$"), "\\1ix"),
+    (re.compile("(?i)(ap|vert|ind)ices$"), "\\1ex"),
+    (re.compile("(?i)^(ox)en"), "\\1"),
+    (re.compile("(?i)(alias|status)es$"), "\\1"),
+    (re.compile("(?i)([octop|vir])i$"), "\\1us"),
+    (re.compile("(?i)(cris|ax|test)es$"), "\\1is"),
+    (re.compile("(?i)(shoe)s$"), "\\1"),
+    (re.compile("(?i)(o)es$"), "\\1"),
+    (re.compile("(?i)(bus)es$"), "\\1"),
+    (re.compile("(?i)([m|l])ice$"), "\\1ouse"),
+    (re.compile("(?i)(x|ch|ss|sh)es$"), "\\1"),
+    (re.compile("(?i)(m)ovies$"), "\\1ovie"),
+    (re.compile("(?i)(.)ombies$"), "\\1ombie"),
+    (re.compile("(?i)(s)eries$"), "\\1eries"),
+    (re.compile("(?i)([^aeiouy]|qu)ies$"), "\\1y"),
     # Certain words ending in -f or -fe take -ves in the plural (lives, wolves).
-    ["([aeo]l)ves$", "\\1f"],
-    ["([^d]ea)ves$", "\\1f"],
-    ["arves$", "arf"],
-    ["erves$", "erve"],
-    ["([nlw]i)ves$", "\\1fe"],
-    ["(?i)([lr])ves$", "\\1f"],
-    ["([aeo])ves$", "\\1ve"],
-    ["(?i)(sive)s$", "\\1"],
-    ["(?i)(tive)s$", "\\1"],
-    ["(?i)(hive)s$", "\\1"],
-    ["(?i)([^f])ves$", "\\1fe"],
+    (re.compile("([aeo]l)ves$"), "\\1f"),
+    (re.compile("([^d]ea)ves$"), "\\1f"),
+    (re.compile("arves$"), "arf"),
+    (re.compile("erves$"), "erve"),
+    (re.compile("([nlw]i)ves$"), "\\1fe"),
+    (re.compile("(?i)([lr])ves$"), "\\1f"),
+    (re.compile("([aeo])ves$"), "\\1ve"),
+    (re.compile("(?i)(sive)s$"), "\\1"),
+    (re.compile("(?i)(tive)s$"), "\\1"),
+    (re.compile("(?i)(hive)s$"), "\\1"),
+    (re.compile("(?i)([^f])ves$"), "\\1fe"),
     # -es suffix.
-    ["(?i)(^analy)ses$", "\\1sis"],
-    ["(?i)((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", "\\1\\2sis"],
-    ["(?i)(.)opses$", "\\1opsis"],
-    ["(?i)(.)yses$", "\\1ysis"],
-    ["(?i)(h|d|r|o|n|b|cl|p)oses$", "\\1ose"],
-    ["(?i)(fruct|gluc|galact|lact|ket|malt|rib|sacchar|cellul)ose$", "\\1ose"],
-    ["(?i)(.)oses$", "\\1osis"],
+    (re.compile("(?i)(^analy)ses$"), "\\1sis"),
+    (
+        re.compile("(?i)((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$"),
+        "\\1\\2sis",
+    ),
+    (re.compile("(?i)(.)opses$"), "\\1opsis"),
+    (re.compile("(?i)(.)yses$"), "\\1ysis"),
+    (re.compile("(?i)(h|d|r|o|n|b|cl|p)oses$"), "\\1ose"),
+    (
+        re.compile("(?i)(fruct|gluc|galact|lact|ket|malt|rib|sacchar|cellul)ose$"),
+        "\\1ose",
+    ),
+    (re.compile("(?i)(.)oses$"), "\\1osis"),
     # -a
-    ["(?i)([ti])a$", "\\1um"],
-    ["(?i)(n)ews$", "\\1ews"],
-    ["(?i)s$", ""],
+    (re.compile("(?i)([ti])a$"), "\\1um"),
+    (re.compile("(?i)(n)ews$"), "\\1ews"),
+    (re.compile("(?i)s$"), ""),
 ]
-
-# For performance, compile the regular expressions only once:
-for rule in singular_rules:
-    rule[0] = re.compile(rule[0])
 
 singular_uninflected = [
     "aircraft",
@@ -833,7 +844,7 @@ singular_irregular = {
 }
 
 
-def singularize(word, pos=NOUN, custom=None):
+def singularize(word: str, pos=NOUN, custom: MutableMapping[str, str] | None = None):
     if custom is None:
         custom = {}
     if word in list(custom.keys()):

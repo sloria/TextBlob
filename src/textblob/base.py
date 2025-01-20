@@ -5,9 +5,15 @@ which define the interface for descendant classes.
     All base classes are defined in the same module, ``textblob.base``.
 """
 
+from __future__ import annotations
+
 from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING
 
 import nltk
+
+if TYPE_CHECKING:
+    from typing import Any, AnyStr
 
 ##### POS TAGGERS #####
 
@@ -19,11 +25,11 @@ class BaseTagger(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def tag(self, text, tokenize=True):
+    def tag(self, text: str, tokenize=True) -> list[tuple[str, str]]:
         """Return a list of tuples of the form (word, tag)
         for a given set of text or BaseBlob instance.
         """
-        return
+        raise NotImplementedError("Subclass must implement a tag method")
 
 
 ##### NOUN PHRASE EXTRACTORS #####
@@ -36,29 +42,29 @@ class BaseNPExtractor(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def extract(self, text):
+    def extract(self, text: str) -> list[str]:
         """Return a list of noun phrases (strings) for a body of text."""
-        return
+        raise NotImplementedError("Subclass must implement an extract method")
 
 
 ##### TOKENIZERS #####
 
 
-class BaseTokenizer(nltk.tokenize.api.TokenizerI, metaclass=ABCMeta):
+class BaseTokenizer(nltk.tokenize.api.TokenizerI, metaclass=ABCMeta):  # pyright: ignore
     """Abstract base class from which all Tokenizer classes inherit.
     Descendant classes must implement a ``tokenize(text)`` method
     that returns a list of noun phrases as strings.
     """
 
     @abstractmethod
-    def tokenize(self, text):
+    def tokenize(self, text: str) -> list[str]:
         """Return a list of tokens (strings) for a body of text.
 
         :rtype: list
         """
-        return
+        raise NotImplementedError("Subclasss must implement tokenize method")
 
-    def itokenize(self, text, *args, **kwargs):
+    def itokenize(self, text: str, *args, **kwargs):
         """Return a generator that generates tokens "on-demand".
 
         .. versionadded:: 0.6.0
@@ -81,6 +87,8 @@ class BaseSentimentAnalyzer(metaclass=ABCMeta):
     results of analysis.
     """
 
+    _trained: bool
+
     kind = DISCRETE
 
     def __init__(self):
@@ -91,7 +99,7 @@ class BaseSentimentAnalyzer(metaclass=ABCMeta):
         self._trained = True
 
     @abstractmethod
-    def analyze(self, text):
+    def analyze(self, text) -> Any:
         """Return the result of of analysis. Typically returns either a
         tuple, float, or dictionary.
         """
@@ -111,6 +119,6 @@ class BaseParser(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def parse(self, text):
+    def parse(self, text: AnyStr):
         """Parses the text."""
-        return
+        raise NotImplementedError("Subclass must implement a parse method")

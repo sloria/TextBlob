@@ -510,8 +510,8 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
 
 
 class MaxEntClassifier(NLTKClassifier):
-    __doc__ = nltk.classify.maxent.MaxentClassifier.__doc__
-    nltk_class = nltk.classify.maxent.MaxentClassifier
+    __doc__ = nltk.classify.MaxentClassifier.__doc__
+    nltk_class = nltk.classify.MaxentClassifier
 
     def prob_classify(self, text):
         """Return the label probability distribution for classifying a string

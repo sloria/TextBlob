@@ -1,8 +1,17 @@
 """Custom decorators."""
 
+from __future__ import annotations
+
 from functools import wraps
+from typing import TYPE_CHECKING
 
 from textblob.exceptions import MissingCorpusError
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import TypeVar
+
+    ReturnType = TypeVar("ReturnType")
 
 
 class cached_property:
@@ -24,7 +33,9 @@ class cached_property:
         return value
 
 
-def requires_nltk_corpus(func):
+def requires_nltk_corpus(
+    func: Callable[..., ReturnType],
+) -> Callable[..., ReturnType]:
     """Wraps a function that requires an NLTK corpus. If the corpus isn't found,
     raise a :exc:`MissingCorpusError`.
     """

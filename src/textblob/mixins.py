@@ -4,6 +4,9 @@ import sys
 class ComparableMixin:
     """Implements rich operators for an object."""
 
+    def _cmpkey(self):
+        raise NotImplementedError("Class must implement _cmpkey method")
+
     def _compare(self, other, method):
         try:
             return method(self._cmpkey(), other._cmpkey())
@@ -48,6 +51,9 @@ class StringlikeMixin:
     returns the string to apply string methods to. Using _strkey() instead
     of __str__ ensures consistent behavior between Python 2 and 3.
     """
+
+    def _strkey(self) -> str:
+        raise NotImplementedError("Class must implement _strkey method")
 
     def __repr__(self):
         """Returns a string representation for debugging."""
@@ -94,7 +100,7 @@ class StringlikeMixin:
 
     def rfind(self, sub, start=0, end=sys.maxsize):
         """Behaves like the built-in str.rfind() method. Returns an integer,
-        the index of he last (right-most) occurence of the substring argument
+        the index of the last (right-most) occurrence of the substring argument
         sub in the sub-sequence given by [start:end].
         """
         return self._strkey().rfind(sub, start, end)
@@ -161,7 +167,7 @@ class StringlikeMixin:
         return self.__class__(self._strkey().join(iterable))
 
     def replace(self, old, new, count=sys.maxsize):
-        """Return a new blob object with all the occurence of `old` replaced
+        """Return a new blob object with all occurrences of `old` replaced
         by `new`.
         """
         return self.__class__(self._strkey().replace(old, new, count))

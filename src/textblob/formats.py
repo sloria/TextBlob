@@ -21,6 +21,8 @@ that format. ::
         cl = NaiveBayesAnalyzer(fp, format="psv")
 """
 
+from __future__ import annotations
+
 import csv
 import json
 from collections import OrderedDict
@@ -48,7 +50,7 @@ class BaseFormat:
         raise NotImplementedError('Must implement a "to_iterable" method.')
 
     @classmethod
-    def detect(cls, stream):
+    def detect(cls, stream: str):
         """Detect the file format given a filename.
         Return True if a stream is this file format.
 
@@ -61,6 +63,7 @@ class BaseFormat:
 class DelimitedFormat(BaseFormat):
     """A general character-delimited format."""
 
+    data: list[list[str]]
     delimiter = ","
 
     def __init__(self, fp, **kwargs):
@@ -121,7 +124,7 @@ class JSON(BaseFormat):
         return [(d["text"], d["label"]) for d in self.dict]
 
     @classmethod
-    def detect(cls, stream):
+    def detect(cls, stream: str | bytes | bytearray):
         """Return True if stream is valid JSON."""
         try:
             json.loads(stream)

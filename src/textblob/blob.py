@@ -138,9 +138,9 @@ class Word(str):
         lemmatizer = nltk.stem.WordNetLemmatizer()
         return lemmatizer.lemmatize(self.string, tag)
 
-    PorterStemmer = nltk.stem.porter.PorterStemmer()
-    LancasterStemmer = nltk.stem.lancaster.LancasterStemmer()
-    SnowballStemmer = nltk.stem.snowball.SnowballStemmer("english")
+    PorterStemmer = nltk.stem.PorterStemmer()
+    LancasterStemmer = nltk.stem.LancasterStemmer()
+    SnowballStemmer = nltk.stem.SnowballStemmer("english")
 
     # added 'stemmer' on lines of lemmatizer
     # based on nltk
@@ -308,7 +308,7 @@ def _initialize_models(
     obj.tokenizer = _validated_param(
         tokenizer,
         "tokenizer",
-        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),
+        base_class=(BaseTokenizer, nltk.tokenize.api.TokenizerI),  # pyright: ignore
         default=BaseBlob.tokenizer,
         base_class_name="BaseTokenizer",
     )

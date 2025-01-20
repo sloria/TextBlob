@@ -124,7 +124,7 @@ class lazydict(dict):
     def values(self):
         return self._lazy("values")
 
-    def update(self, *args):
+    def update(self, *args, **kwargs):
         return self._lazy("update", *args)
 
     def pop(self, *args):
@@ -324,10 +324,10 @@ EMOTICONS = {  # (facial expression, sentiment)-keys
     ("cry", -1.00): set((":'(", ":'''(", ";'(")),
 }
 
-RE_EMOTICONS = [
+TEMP_RE_EMOTICONS = [
     r" ?".join([re.escape(each) for each in e]) for v in EMOTICONS.values() for e in v
 ]
-RE_EMOTICONS = re.compile(r"(%s)($|\s)" % "|".join(RE_EMOTICONS))
+RE_EMOTICONS = re.compile(r"(%s)($|\s)" % "|".join(TEMP_RE_EMOTICONS))
 
 # Handle sarcasm punctuation (!).
 RE_SARCASM = re.compile(r"\( ?\! ?\)")
@@ -490,9 +490,9 @@ class Lexicon(lazydict):
     def __init__(
         self,
         path="",
-        morphology=None,
-        context=None,
-        entities=None,
+        morphology="",
+        context="",
+        entities="",
         NNP="NNP",
         language=None,
     ):
@@ -724,7 +724,7 @@ class Context(lazylist, Rules):
                     t[i] = [t[i][0], r[1]]
         return t[len(o) : -len(o)]
 
-    def insert(self, i, tag1, tag2, cmd="prevtag", x=None, y=None):
+    def insert(self, i, tag1, tag2, cmd="prevtag", x=None, y=None, *args):
         """Inserts a new rule that updates words with tag1 to tag2,
         given constraints x and y, e.g., Context.append("TO < NN", "VB")
         """
@@ -739,7 +739,7 @@ class Context(lazylist, Rules):
     def append(self, *args, **kwargs):
         self.insert(len(self) - 1, *args, **kwargs)
 
-    def extend(self, rules=None):
+    def extend(self, rules=None, *args):
         if rules is None:
             rules = []
         for r in rules:
@@ -1570,9 +1570,8 @@ class Parser:
 
 TOKENS = "tokens"
 
-
 class TaggedString(str):
-    def __new__(self, string, tags=None, language=None):
+    def __new__(cls, string, tags=None, language=None):
         """Unicode string with tags and language attributes.
         For example: TaggedString("cat/NN/NP", tags=["word", "pos", "chunk"]).
         """
@@ -1588,7 +1587,7 @@ class TaggedString(str):
                 for s in string
             ]
             string = "\n".join(" ".join("/".join(token) for token in s) for s in string)
-        s = str.__new__(self, string)
+        s = str.__new__(cls, string)
         s.tags = list(tags)
         s.language = language
         return s
@@ -1634,7 +1633,7 @@ class Spelling(lazydict):
         return self._language
 
     @classmethod
-    def train(self, s, path="spelling.txt"):
+    def train(cls, s, path="spelling.txt"):
         """Counts the words in the given string and saves the probabilities at the given path.
         This can be used to generate a new model for the Spelling() constructor.
         """

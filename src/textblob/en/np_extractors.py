@@ -9,6 +9,8 @@ from textblob.utils import filter_insignificant, tree2str
 
 
 class ChunkParser(nltk.ChunkParserI):
+    _trained: bool
+
     def __init__(self):
         self._trained = False
 
@@ -25,22 +27,21 @@ class ChunkParser(nltk.ChunkParserI):
         self.tagger = nltk.BigramTagger(train_data, backoff=unigram_tagger)
         self._trained = True
 
-    def parse(self, sentence):
+    def parse(self, tokens):
         """Return the parse tree for the sentence."""
         if not self._trained:
             self.train()
-        pos_tags = [pos for (word, pos) in sentence]
+        pos_tags = [pos for (_, pos) in tokens]
         tagged_pos_tags = self.tagger.tag(pos_tags)
-        chunktags = [chunktag for (pos, chunktag) in tagged_pos_tags]
+        chunktags = [chunktag for (_, chunktag) in tagged_pos_tags]
         conlltags = [
             (word, pos, chunktag)
-            for ((word, pos), chunktag) in zip(sentence, chunktags)
+            for ((word, pos), chunktag) in zip(tokens, chunktags)
         ]
-        return nltk.chunk.util.conlltags2tree(conlltags)
+        return nltk.chunk.conlltags2tree(conlltags)
 
 
 class ConllExtractor(BaseNPExtractor):
-
     """A noun phrase extractor that uses chunk parsing trained with the
     ConLL-2000 training corpus.
     """
@@ -89,13 +90,14 @@ class ConllExtractor(BaseNPExtractor):
 
 
 class FastNPExtractor(BaseNPExtractor):
-
     """A fast and simple noun phrase extractor.
 
     Credit to Shlomi Babluk. Link to original blog post:
 
         http://thetokenizer.com/2013/05/09/efficient-way-to-extract-the-main-topics-of-a-sentence/
     """
+
+    _trained: bool
 
     CFG = {
         ("NNP", "NNP"): "NNP",
@@ -137,11 +139,11 @@ class FastNPExtractor(BaseNPExtractor):
         tokens = nltk.word_tokenize(sentence)
         return tokens
 
-    def extract(self, sentence):
+    def extract(self, text):
         """Return a list of noun phrases (strings) for body of text."""
         if not self._trained:
             self.train()
-        tokens = self._tokenize_sentence(sentence)
+        tokens = self._tokenize_sentence(text)
         tagged = self.tagger.tag(tokens)
         tags = _normalize_tags(tagged)
         merge = True
