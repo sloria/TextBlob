@@ -26,6 +26,7 @@ from collections import defaultdict
 
 import nltk
 
+from textblob.alphabets_detection import detect_alphabets
 from textblob.base import (
     BaseNPExtractor,
     BaseParser,
@@ -41,7 +42,6 @@ from textblob.mixins import BlobComparableMixin, StringlikeMixin
 from textblob.np_extractors import FastNPExtractor
 from textblob.parsers import PatternParser
 from textblob.sentiments import PatternAnalyzer
-from textblob.alphabets_detection import detect_alphabets
 from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
 from textblob.utils import PUNCTUATION_REGEX, lowerstrip

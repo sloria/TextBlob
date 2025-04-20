@@ -1,15 +1,25 @@
 from enum import Enum
-from typing import Tuple
 
 from textblob.utils import unicode_range
 
-latin = unicode_range(0x0041, 0x005A) + unicode_range(0x0061, 0x007A) + unicode_range(0x00C0, 0x00FF) + unicode_range(
-    0x0100, 0x017F)
-cyrillic = unicode_range(0x0400, 0x04FF) + unicode_range(0x0500, 0x052F) + unicode_range(0x2DE0,
-                                                                                         0x2DFF) + unicode_range(0xA640,
-                                                                                                                 0xA69F)
-arabic = unicode_range(0x0600, 0x06FF) + unicode_range(0x0750, 0x077F) + unicode_range(0xFB50, 0xFDFF) + unicode_range(
-    0xFE70, 0xFEFF)
+latin = (
+    unicode_range(0x0041, 0x005A)
+    + unicode_range(0x0061, 0x007A)
+    + unicode_range(0x00C0, 0x00FF)
+    + unicode_range(0x0100, 0x017F)
+)
+cyrillic = (
+    unicode_range(0x0400, 0x04FF)
+    + unicode_range(0x0500, 0x052F)
+    + unicode_range(0x2DE0, 0x2DFF)
+    + unicode_range(0xA640, 0xA69F)
+)
+arabic = (
+    unicode_range(0x0600, 0x06FF)
+    + unicode_range(0x0750, 0x077F)
+    + unicode_range(0xFB50, 0xFDFF)
+    + unicode_range(0xFE70, 0xFEFF)
+)
 hebrew = unicode_range(0x0590, 0x05FF)
 hangul = unicode_range(0xAC00, 0xD7AF) + unicode_range(0x1100, 0x11FF)
 georgian = unicode_range(0x10A0, 0x10FF)
@@ -113,7 +123,9 @@ def detect_alphabets(text: str):
         chars = sum(1 for x in only_chars if x in alphabet_value)
 
         percentage = chars / len(only_chars) * 100
-        is_completed, result, current_percentage = is_percentage_completed(percentage, current_percentage, alphabet_key, alphabets_result)
+        is_completed, result, current_percentage = is_percentage_completed(
+            percentage, current_percentage, alphabet_key, alphabets_result
+        )
 
         if percentage > 0:
             final_result.append((alphabet_key.name, result[alphabet_key.name]))
@@ -124,7 +136,12 @@ def detect_alphabets(text: str):
     return final_result
 
 
-def is_percentage_completed(percentage: int | float, current_percent: int, current_alphabet: Alphabet, alphabets_result: dict) -> Tuple[bool, dict, float]:
+def is_percentage_completed(
+    percentage: int | float,
+    current_percent: int,
+    current_alphabet: Alphabet,
+    alphabets_result: dict,
+) -> tuple[bool, dict, float]:
     """Function to check if the percentage is >= 99.99"""
     if percentage > 0:
         alphabets_result[current_alphabet.name] = round(percentage, 2)
