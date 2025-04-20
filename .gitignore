@@ -57,3 +57,6 @@ README.html
 
 # ruff
 .ruff_cache
+
+# idea
+.idea

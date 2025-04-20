@@ -65,3 +65,8 @@ def is_filelike(obj):
     if not callable(obj.read):
         return False
     return True
+
+
+def unicode_range(start, end):
+    """Creates char in any unicode range (used for alphabet detection."""
+    return ''.join(chr(c) for c in range(start, end + 1))
