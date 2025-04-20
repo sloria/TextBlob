@@ -99,10 +99,10 @@ alphabets = {
 
 
 def detect_alphabets(text: str):
-    """Detects the percentage of character containing in a string `text` and return list with tuples.
-    Tuple contains (Alphabet.name, % of the alphabet in the `text`)
-    Any additional languages should be added at top of the file as unicode ranges and
-    appended to  the `alphabets` map and `Alphabet` enum.
+    """Detects the percentage of character containing in a string `text` and
+    return list with tuples. Tuple contains (Alphabet.name, % of the alphabet
+    in the `text`). Any additional languages should be added at top of the file
+    as unicode ranges and appended to  the `alphabets` map and `Alphabet` enum.
     """
     only_chars = [x for x in text if x.isalpha()]
     alphabets_result = {}
