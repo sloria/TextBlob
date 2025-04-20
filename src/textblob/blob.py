@@ -41,6 +41,7 @@ from textblob.mixins import BlobComparableMixin, StringlikeMixin
 from textblob.np_extractors import FastNPExtractor
 from textblob.parsers import PatternParser
 from textblob.sentiments import PatternAnalyzer
+from textblob.alphabets_detection import detect_alphabets
 from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
 from textblob.utils import PUNCTUATION_REGEX, lowerstrip
@@ -677,6 +678,10 @@ class TextBlob(BaseBlob):
             )
             sentence_objects.append(s)
         return sentence_objects
+
+    @property
+    def alphabets(self):
+        return detect_alphabets(self.raw)
 
 
 class Sentence(BaseBlob):

@@ -17,6 +17,7 @@ from textblob.parsers import PatternParser
 from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
 from textblob.taggers import NLTKTagger, PatternTagger
 from textblob.tokenizers import SentenceTokenizer, WordTokenizer
+from textblob.alphabets_detection import Alphabet
 
 Synset = nltk.corpus.reader.Synset
 
@@ -269,6 +270,24 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
 
         self.short = "Beautiful is better than ugly. "
         self.short_blob = tb.TextBlob(self.short)
+
+        self.detect_alphabets_text = """   
+        ছথৢ৮ৡঐ৕ঀহঈঙশ৶ঁ৩ছঘঙৃষ৽ৈ৴ণয়রঽৄৈবো঒ধৈ্ঘ৺েঃৄળસ૎્૩ૂઋન૒ૺમય઄ન૧૮૳રહ૦૫ુનઋઉત૬ઇૡવ૯૫
+        ૉૂ૬ૄ૗ેઌๅ๘๒ฑท๯๣ธ๾ไ๜๭ู๽๨ีีฮไ๭คญฎ๾๼๑๟๔๸ึืฆฺ๤ัฤ๭ภ๫๻ⴴⴻⵣⵏⵠⵯⴺⴵ⵿ⵐⵋⴱ⵭ⴺⴽⵙⵚ⵲ⴰⴽⵎ⵬ⵏⵇⵎ
+        ⵥⵣⵎⴳⵥ⵲⵴⵵⵷ⵀⵑⵋ⵴ⵁⵊᱹᱞᱻᱭᱟᱮᱬᱳ᱐᱖ᱬᱢᱽᱬᱹᱟᱨᱠ᱕ᱩ᱗᱓ᱨᱬᱰ
+        ᱰᱛᱧᱭ᱐᱿ᱱᱱᱰᱯᱭᱛᱞᱣᱞೞ೵ೇ೻ೆತಔೡ಴೔಴ಣೝರಶೠ೔೚ಅ೰ೠದ೼ಃಒಿಥಳೄ೮ಃ೤ಌಔಐನಆಉzofiJ
+        UcXkBZDTGwJIRFXSEsrLMgnYVDVCrbYtCNPߥߴߡ߱ߝ߾߭ߔߌ߼߲ߪ߰߾ߍߗ߾ߧߠ߁ߍߓ߬߶߮ߡߊ߀߬ߍ߮߉ߙ߼߳߾߫߿߶߅ႯვყჺჇხზრႹლႹო჊჻ყ჌ႴზჍი჊წ჎
+        ႯჂႿჸႺზႶჼჩႥႺჾჂზႷჲӏҕѦЌҰФТїЭБЪѲҧҤЮЯӭҪӴћӃеѠЄҭнӋүҐѯҩҰӷҞӃђхгӸцඞ෮ී෴෮බ෩රූ෹බ෪තඤෑඑයඪ
+        ගඨඈඔඟඛ෿ඤඉ෵ඟඣ෧ථ෩ඐ෬ශඝ෥෨ඒຓຎ໐ຟວຳ໮໖ວ໕ຏໂຟ຤ຠງໝ໭໋໪ປິ໐ຶ໼ໃ໅໲ຜຈ໫໓໲ປ໮໋
+        ວ໐໪ऄവ൳ഥആൽൟഌനമഷ൹ഥ൙൤൦ഔർ൮൴൐ഈംിഐ൵ാ൳ഹർ൦ടഀ൞ഠൽ൤േഝ뒿텰뫨쿄뉦숴쒢넹믰푎갠큖츦좹엻혻무폛쯨껏쉑챜꿆퀨쾠렋
+        굱럹쪓껹괕숒럊궷샆쿗뼒됡쪸륍ᡒ᠜ᢕᡡᠸ᠋᠘ᢢᢿᡔᡟᢀᠻᡢᡊ᠀ᢺᢏᠡᢀᡑᡒ᠜ᢉ᠉ᢎ᠓ᡂᠹᡝᠩᢔᢦᡩᠡᡎᡕᠹᡲ᠘ⰭⱈⰍⱓⱙⰩⰯⱐⰨⰶⰛⱗⰂⰂⰄⰈⰷⰍⱔⰃⰢⰾⱂⰫⱜⱎⰰⱗⰄⰡⱝⰰⰫⰯⰑⱟⰂⰃⱚⱄ״ٰץֱַ֥ׅ֝֕֞֔֒֍֝֫רְ֢֩֞דך׳֋֮֬֜֍
+        ֧מֱ֦֬֩֩צֲַֽዤኝጧሩጧፂኪጫኜፋኹጩ፨ጪዬፆ፜ሚቝኍቿ።ኤሡኄቅሷውፋኳላሮቚሓጋፂፒሱቬሳ޷ޭޟ޵ީެޕޥ
+        ޚީވޘދޒާޖޡދފޜ޾ޒޭރޱޛރޛޱޣލ޵ޜޓޘކޡ޻ޛޤ౿ౝఱ౜ష౪ౙ౭మంూళఓౖహ౹ష౥౲ొౄఃడఙె౺౏మ౼౜ో౑ౘఢశద౹ఉఅ
+        ဳဪၷ႟ဆၼဌ၊ခဳၒၾ႒၌ၖၦၖဨဥၣၳၩညဉဌၬဒမဖ႙လၔႏၧၓ့ႛဴငၞ௄வ௳ථஆல்ൟഌനமஷ൹ഥ൙൤൦ഔർ൮൴൐ഈം
+        ഐ൵ാ൳ഹർ൦ടഀ൞ഠൽ൤േឨផុទឆឤ២ចែគ៕េៜ៿ម៭។ៃៜឱឝេឃទៗផំ៦ព៊៭ង៎ុ១៘ំ៙៿ើՇԻզփՂ֍ռԻզՖքՖ՞Իտծւ՚օրՑՊ֋՛֏֎քթծՄԴՁ֌՝ԱԵՖտճיڪ۷ڼؚ۟ڳ
+        ڶ؛؆ۻەڀۆڰڱٝڤہؚٛۯ۱ګ٭ٷ۾ةػ۳ؾ٫ـٌۢ۴ۄٜٱ۶ۮटज़ॏॻ६ऐॶ।ॕ॔॔शॄघवऄथ॔कप३ॱॢतऍस७ज़ए़॰षएःऽय़ख़ो्उਅੑਧ੐ਰੰ੓ਂਦ੕੆੝੒ਜ਼੻ਏਢ੻ੁੋਅ੏ਵ੗ੰਮ
+        ੿ੰਤਝ੸੦ੴਫੱਗ਼ਅਫ਼ਔ੔𐒈𐒈𐒮𐒚𐒍𐒪𐒃𐒅𐒓𐒯𐒁𐒩𐒓𐒠𐒛𐒇𐒪𐒝𐒟𐒧𐒩𐒆𐒌𐒠𐒥𐒢𐒆𐒘𐒎𐒓𐒪𐒆𐒪𐒒𐒀𐒫𐒗𐒊𐒣𐒒ᱧ೉"""
+        self.alphabets = tb.TextBlob(self.detect_alphabets_text)
 
     def test_init(self):
         blob = tb.TextBlob("Wow I love this place. It really rocks my socks!")
@@ -846,6 +865,18 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         blob = tb.TextBlob(text)
         for word, _ in blob.pos_tags:
             assert type(word.string) is str
+
+    def test_alphabets_in_text(self):
+        alphabets_results = self.alphabets.alphabets
+        enum_keys = [member.name for member in Alphabet]
+        for alphabet_name, percentage in alphabets_results:
+            assert alphabet_name in enum_keys
+            assert percentage > 0 if (alphabet_name is not
+                                      Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name) \
+                else percentage == 0
+            enum_keys.remove(alphabet_name)
+
+        assert len(enum_keys) == 0
 
 
 class WordTest(TestCase):

@@ -1,7 +1,6 @@
 from enum import Enum
 from string import punctuation, whitespace
 from typing import List, Tuple
-from unicodedata import category
 
 from textblob.utils import unicode_range
 
@@ -22,9 +21,24 @@ tifinagh = unicode_range(0x2D30, 0x2D7F)
 osmanya = unicode_range(0x10480, 0x104AF)
 mongolian = unicode_range(0x1800, 0x18AF)
 ol_chiki = unicode_range(0x1C50, 0x1C7F)
+armenian = unicode_range(0x0530, 0x058F)
+devanagari = unicode_range(0x0900, 0x097F)
+bengali = unicode_range(0x0980, 0x09FF)
+gurmukhi = unicode_range(0x0A00, 0x0A7F)
+tamil = unicode_range(0x0B80, 0x0BFF)
+telugu = unicode_range(0x0C00, 0x0C7F)
+gujarati = unicode_range(0x0A80, 0x0AFF)
+kannada = unicode_range(0x0C80, 0x0CFF)
+malayalam = unicode_range(0x0D00, 0x0D7F)
+sinhala = unicode_range(0x0D80, 0x0DFF)
+thai = unicode_range(0x0E00, 0x0E7F)
+lao = unicode_range(0x0E80, 0x0EFF)
+myanmar = unicode_range(0x1000, 0x109F)
+khmer = unicode_range(0x1780, 0x17FF)
 
 
 class Alphabet(Enum):
+    STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET = 0
     LATIN = 1
     CYRILLIC = 2
     ARABIC = 3
@@ -38,6 +52,20 @@ class Alphabet(Enum):
     OSMANYA = 11
     MONGOLIAN = 12
     OL_CHIKI = 13
+    ARMENIAN = 14
+    DEVANAGARI = 15
+    BENGALI = 16
+    GURMUKHI = 17
+    TAMIL = 18
+    TELUGU = 19
+    GUJARATI = 20
+    KANNADA = 21
+    MALAYALAM = 22
+    SINHALA = 23
+    THAI = 24
+    LAO = 25
+    MYANMAR = 26
+    KHMER = 27
 
 
 alphabets = {
@@ -53,29 +81,28 @@ alphabets = {
     Alphabet.TIFINAGH: tifinagh,
     Alphabet.OSMANYA: osmanya,
     Alphabet.MONGOLIAN: mongolian,
-    Alphabet.OL_CHIKI: ol_chiki
+    Alphabet.OL_CHIKI: ol_chiki,
+    Alphabet.ARMENIAN: armenian,
+    Alphabet.DEVANAGARI: devanagari,
+    Alphabet.BENGALI: bengali,
+    Alphabet.GURMUKHI: gurmukhi,
+    Alphabet.TAMIL: tamil,
+    Alphabet.TELUGU: telugu,
+    Alphabet.GUJARATI: gujarati,
+    Alphabet.KANNADA: kannada,
+    Alphabet.MALAYALAM: malayalam,
+    Alphabet.SINHALA: sinhala,
+    Alphabet.THAI: thai,
+    Alphabet.LAO: lao,
+    Alphabet.MYANMAR: myanmar,
+    Alphabet.KHMER: khmer,
 }
 
-test_string = (
-        "Latin: hello; " +
-        "Cyrillic: Привет; " +
-        "Arabic: مرحبا; " +
-        "Hebrew: שלום; " +
-        "Hangul: 안녕하세요; " +
-        "Georgian: გამარჯობა; " +
-        "Ethiopic: ሰላም; " +
-        "Thaana: ޝީހް; " +
-        "N’Ko: ߣߊ߫; " +
-        "Tifinagh: ⴰⵣⵓⵍ; " +
-        "Osmanya: 𐒝𐒛𐒒𐒚; " +
-        "Mongolian: ᠰᠠᠶᠠᠨ ᠤᠯᠤ; " +
-        "Ol Chiki: ᱦᱚᱞᱚ"
-)
 
-
-def alphabets_detection(text: str):
+def detect_alphabets(text: str):
     only_chars = [x for x in text if x.isalpha()]
     alphabets_result = {}
+    final_result = []
     current_percentage = 0
 
     for alphabet_key, alphabet_value in alphabets.items():
@@ -83,18 +110,24 @@ def alphabets_detection(text: str):
         is_completed, result, current_percentage = is_current_percentage_completed(chars, current_percentage,
                                                                                    only_chars, alphabet_key,
                                                                                    alphabets_result)
-        if is_completed:
-            return result
 
-    return None
+        final_result.append((alphabet_key.name, result[alphabet_key.name]))
+
+        if is_completed:
+            return final_result
+
+    final_result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, 0))
+
+    return final_result
 
 
 def is_current_percentage_completed(alphabet_chars_sum: int, current_percent: int, chars: List,
-                                    current_language: Alphabet, languages_result: dict) -> Tuple[bool, dict, float]:
+                                    current_alphabet: Alphabet, alphabets_result: dict) -> Tuple[bool, dict, float]:
     percentage = alphabet_chars_sum / len(chars) * 100
-    languages_result[current_language.name] = percentage
 
-    if current_percent + percentage >= 100:
-        return True, languages_result, current_percent + percentage
+    if percentage > 0:
+        alphabets_result[current_alphabet.name] = round(percentage, 2)
 
-    return False, languages_result, current_percent + percentage
+    if current_percent + percentage >= 99.99:
+        return True, alphabets_result, current_percent + percentage
+    return False, alphabets_result, current_percent + percentage
