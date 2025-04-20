@@ -300,7 +300,7 @@ Use ``blob.alphabets`` to get the precentage of the alphabets containing in `str
 
 .. doctest::
 
-    >>> blob = TextBlob("hello Привет  שלום 안녕하세요")
+    >>> blob = TextBlob("hello Привет  שלום 안녕하")
     >>> blob.alphabets
     [('LATIN', 27.78), ('CYRILLIC', 33.33), ('HEBREW', 22.22), ('HANGUL', 16.67)]
     >>> blob.alphabets[0]
