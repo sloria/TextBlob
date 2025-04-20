@@ -681,7 +681,7 @@ class TextBlob(BaseBlob):
 
     @property
     def alphabets(self):
-        """Return a list with tuples containing the language name and
+        """Return a list with tuples containing the alphabet name and
         percentage of presence in the text
         """
         return detect_alphabets(self.raw)
