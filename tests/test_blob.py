@@ -866,7 +866,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         for word, _ in blob.pos_tags:
             assert type(word.string) is str
 
-    def test_alphabets_in_text(self):
+    def test_all_alphabets_are_in_text(self):
         alphabets_results = self.alphabets.alphabets
         enum_keys = [member.name for member in Alphabet]
         for alphabet_name, percentage in alphabets_results:

@@ -115,7 +115,6 @@ def detect_alphabets(text: str):
     as unicode ranges and appended to  the `alphabets` map and `Alphabet` enum.
     """
     only_chars = [x for x in text if x.isalpha()]
-    alphabets_result = {}
     final_result = []
     current_percentage = 0
 
@@ -123,12 +122,14 @@ def detect_alphabets(text: str):
         chars = sum(1 for x in only_chars if x in alphabet_value)
 
         percentage = chars / len(only_chars) * 100
-        is_completed, result, current_percentage = is_percentage_completed(
-            percentage, current_percentage, alphabet_key, alphabets_result
+        is_completed, current_percentage = is_percentage_completed(
+            percentage,
+            current_percentage,
         )
 
         if percentage > 0:
-            final_result.append((alphabet_key.name, result[alphabet_key.name]))
+            final_result.append((alphabet_key.name, round(percentage, 2)))
+
         if is_completed:
             return final_result
 
@@ -139,13 +140,9 @@ def detect_alphabets(text: str):
 def is_percentage_completed(
     percentage: int | float,
     current_percent: int,
-    current_alphabet: Alphabet,
-    alphabets_result: dict,
-) -> tuple[bool, dict, float]:
+) -> tuple[bool, float]:
     """Function to check if the percentage is >= 99.99"""
-    if percentage > 0:
-        alphabets_result[current_alphabet.name] = round(percentage, 2)
-
-    if current_percent + percentage >= 99.99:
-        return True, alphabets_result, current_percent + percentage
-    return False, alphabets_result, current_percent + percentage
+    progress = current_percent + percentage
+    if progress >= 99.99:
+        return True, progress
+    return False, progress
