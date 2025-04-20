@@ -1,6 +1,5 @@
 from enum import Enum
-from string import punctuation, whitespace
-from typing import List, Tuple
+from typing import Tuple
 
 from textblob.utils import unicode_range
 
@@ -100,6 +99,11 @@ alphabets = {
 
 
 def detect_alphabets(text: str):
+    """Detects the percentage of character containing in a string `text` and return list with tuples.
+    Tuple contains (Alphabet.name, % of the alphabet in the `text`)
+    Any additional languages should be added at top of the file as unicode ranges and
+    appended to  the `alphabets` map and `Alphabet` enum.
+    """
     only_chars = [x for x in text if x.isalpha()]
     alphabets_result = {}
     final_result = []
@@ -107,24 +111,21 @@ def detect_alphabets(text: str):
 
     for alphabet_key, alphabet_value in alphabets.items():
         chars = sum(1 for x in only_chars if x in alphabet_value)
-        is_completed, result, current_percentage = is_current_percentage_completed(chars, current_percentage,
-                                                                                   only_chars, alphabet_key,
-                                                                                   alphabets_result)
 
-        final_result.append((alphabet_key.name, result[alphabet_key.name]))
+        percentage = chars / len(only_chars) * 100
+        is_completed, result, current_percentage = is_percentage_completed(percentage, current_percentage, alphabet_key, alphabets_result)
 
+        if percentage > 0:
+            final_result.append((alphabet_key.name, result[alphabet_key.name]))
         if is_completed:
             return final_result
 
     final_result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, 0))
-
     return final_result
 
 
-def is_current_percentage_completed(alphabet_chars_sum: int, current_percent: int, chars: List,
-                                    current_alphabet: Alphabet, alphabets_result: dict) -> Tuple[bool, dict, float]:
-    percentage = alphabet_chars_sum / len(chars) * 100
-
+def is_percentage_completed(percentage: int | float, current_percent: int, current_alphabet: Alphabet, alphabets_result: dict) -> Tuple[bool, dict, float]:
+    """Function to check if the percentage is >= 99.99"""
     if percentage > 0:
         alphabets_result[current_alphabet.name] = round(percentage, 2)
 

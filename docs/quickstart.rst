@@ -293,6 +293,22 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
     Simple is better than complex.
     ---- Starts at index 65, Ends at index 95
 
+Detect Alphabets Percantages
+--------------------------------------
+
+Use ``blob.alphabets`` to get the precentage of the alphabets containing in `string`.
+
+.. doctest::
+
+    >>> blob = TextBlob("hello Привет  שלום 안녕하세요")
+    >>> blob.alphabets
+    [('LATIN', 27.78), ('CYRILLIC', 33.33), ('HEBREW', 22.22), ('HANGUL', 16.67)]
+    >>> blob.alphabets[0]
+    ('LATIN', 27.78)
+    >>> blob.alphabets[0][1]
+    27.78
+
+
 Next Steps
 ++++++++++
 
