@@ -69,4 +69,4 @@ def is_filelike(obj):
 
 def unicode_range(start, end):
     """Creates char in any unicode range (used for alphabet detection."""
-    return ''.join(chr(c) for c in range(start, end + 1))
+    return "".join(chr(c) for c in range(start, end + 1))

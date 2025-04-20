@@ -11,13 +11,13 @@ import pytest
 
 import textblob as tb
 import textblob.wordnet as wn
+from textblob.alphabets_detection import Alphabet
 from textblob.classifiers import NaiveBayesClassifier
 from textblob.np_extractors import ConllExtractor, FastNPExtractor
 from textblob.parsers import PatternParser
 from textblob.sentiments import NaiveBayesAnalyzer, PatternAnalyzer
 from textblob.taggers import NLTKTagger, PatternTagger
 from textblob.tokenizers import SentenceTokenizer, WordTokenizer
-from textblob.alphabets_detection import Alphabet
 
 Synset = nltk.corpus.reader.Synset
 
@@ -271,7 +271,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         self.short = "Beautiful is better than ugly. "
         self.short_blob = tb.TextBlob(self.short)
 
-        self.detect_alphabets_text = """   
+        self.detect_alphabets_text = """
         ছথৢ৮ৡঐ৕ঀহঈঙশ৶ঁ৩ছঘঙৃষ৽ৈ৴ণয়রঽৄৈবো঒ধৈ্ঘ৺েঃৄળસ૎્૩ૂઋન૒ૺમય઄ન૧૮૳રહ૦૫ુનઋઉત૬ઇૡવ૯૫
         ૉૂ૬ૄ૗ેઌๅ๘๒ฑท๯๣ธ๾ไ๜๭ู๽๨ีีฮไ๭คญฎ๾๼๑๟๔๸ึืฆฺ๤ัฤ๭ภ๫๻ⴴⴻⵣⵏⵠⵯⴺⴵ⵿ⵐⵋⴱ⵭ⴺⴽⵙⵚ⵲ⴰⴽⵎ⵬ⵏⵇⵎ
         ⵥⵣⵎⴳⵥ⵲⵴⵵⵷ⵀⵑⵋ⵴ⵁⵊᱹᱞᱻᱭᱟᱮᱬᱳ᱐᱖ᱬᱢᱽᱬᱹᱟᱨᱠ᱕ᱩ᱗᱓ᱨᱬᱰ
@@ -871,9 +871,14 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         enum_keys = [member.name for member in Alphabet]
         for alphabet_name, percentage in alphabets_results:
             assert alphabet_name in enum_keys
-            assert percentage > 0 if (alphabet_name is not
-                                      Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name) \
+            assert (
+                percentage > 0
+                if (
+                    alphabet_name
+                    is not Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name
+                )
                 else percentage == 0
+            )
             enum_keys.remove(alphabet_name)
 
         assert len(enum_keys) == 0
