@@ -119,9 +119,9 @@ def detect_alphabets(text: str):
     progress = 0
 
     for alphabet_key, alphabet_value in alphabets.items():
-        found_chars_sum = sum(1 for x in only_chars if x in alphabet_value)
+        found_chars_count = sum(1 for x in only_chars if x in alphabet_value)
 
-        percentage = found_chars_sum / len(only_chars) * 100
+        percentage = found_chars_count / len(only_chars) * 100
         progress += percentage
 
         if percentage > 0:
