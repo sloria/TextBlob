@@ -115,7 +115,7 @@ def detect_alphabets(text: str):
     as unicode ranges and appended to  the `alphabets` map and `Alphabet` enum.
     """
     only_chars = [x for x in text if x.isalpha()]
-    final_result = []
+    result = []
     progress = 0
 
     for alphabet_key, alphabet_value in alphabets.items():
@@ -125,10 +125,10 @@ def detect_alphabets(text: str):
         progress += percentage
 
         if percentage > 0:
-            final_result.append((alphabet_key.name, round(percentage, 2)))
+            result.append((alphabet_key.name, round(percentage, 2)))
 
         if progress >= 99.99:
             return final_result
 
     final_result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, 0))
-    return final_result
+    return result
