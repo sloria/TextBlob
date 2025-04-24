@@ -130,5 +130,5 @@ def detect_alphabets(text: str):
         if progress >= 99.99:
             return result
 
-    result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, 0))
+    result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, round(100 - progress, 2))
     return result
