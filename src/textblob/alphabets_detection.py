@@ -119,16 +119,16 @@ def detect_alphabets(text: str):
     progress = 0
 
     for alphabet_key, alphabet_value in alphabets.items():
-        chars = sum(1 for x in only_chars if x in alphabet_value)
+        found_chars_sum = sum(1 for x in only_chars if x in alphabet_value)
 
-        percentage = chars / len(only_chars) * 100
+        percentage = found_chars_sum / len(only_chars) * 100
         progress += percentage
 
         if percentage > 0:
             result.append((alphabet_key.name, round(percentage, 2)))
 
         if progress >= 99.99:
-            return final_result
+            return result
 
     final_result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, 0))
     return result
