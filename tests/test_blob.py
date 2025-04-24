@@ -871,14 +871,7 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         enum_keys = [member.name for member in Alphabet]
         for alphabet_name, percentage in alphabets_results:
             assert alphabet_name in enum_keys
-            assert (
-                percentage > 0
-                if (
-                    alphabet_name
-                    is not Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name
-                )
-                else percentage == 0
-            )
+            assert percentage > 0
             enum_keys.remove(alphabet_name)
 
         assert len(enum_keys) == 0
