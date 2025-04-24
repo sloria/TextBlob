@@ -116,33 +116,19 @@ def detect_alphabets(text: str):
     """
     only_chars = [x for x in text if x.isalpha()]
     final_result = []
-    current_percentage = 0
+    progress = 0
 
     for alphabet_key, alphabet_value in alphabets.items():
         chars = sum(1 for x in only_chars if x in alphabet_value)
 
         percentage = chars / len(only_chars) * 100
-        is_completed, current_percentage = is_percentage_completed(
-            percentage,
-            current_percentage,
-        )
+        progress += percentage
 
         if percentage > 0:
             final_result.append((alphabet_key.name, round(percentage, 2)))
 
-        if is_completed:
+        if progress >= 99.99:
             return final_result
 
     final_result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, 0))
     return final_result
-
-
-def is_percentage_completed(
-    percentage: int | float,
-    current_percent: int,
-) -> tuple[bool, float]:
-    """Function to check if the percentage is >= 99.99"""
-    progress = current_percent + percentage
-    if progress >= 99.99:
-        return True, progress
-    return False, progress
