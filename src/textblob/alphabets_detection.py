@@ -47,7 +47,7 @@ khmer = unicode_range(0x1780, 0x17FF)
 
 
 class Alphabet(Enum):
-    STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET = 0
+    NOT_IMPLEMENTED_ALPHABET_OR_CHAR = 0
     LATIN = 1
     CYRILLIC = 2
     ARABIC = 3
@@ -130,5 +130,10 @@ def detect_alphabets(text: str):
         if progress >= 99.99:
             return result
 
-    result.append((Alphabet.STRING_CONTAINS_NOT_IMPLEMENTED_ALPHABET.name, round(100 - progress, 2))
+    result.append(
+        (
+            Alphabet.NOT_IMPLEMENTED_ALPHABET_OR_CHAR.name,
+            round(100 - progress, 2),
+        )
+    )
     return result
