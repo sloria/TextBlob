@@ -1,12 +1,13 @@
 """
 svm_sentiment.py
+SVM-based Sentiment Analysis Example for TextBlob contribution.
 
 -----------------
 Example sentiment classifier using Support Vector Machines (SVM)
 """
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
+from sklearn.svm import LinearSVC, SVC
 from sklearn.pipeline import make_pipeline
 
 class SVMSentimentClassifier:
@@ -34,3 +35,5 @@ if __name__ == '__main__':
     test = ["This was awesome!", "I didn't like it.", "It's average."]
     for t in test:
         print(t, "->", clf.predict(t))
+
+    
