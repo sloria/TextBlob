@@ -1,21 +1,13 @@
-"""
-svm_sentiment.py
-
------------------
-Example sentiment classifier using Support Vector Machines (SVM)
-"""
-
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.pipeline import make_pipeline
 from sklearn.svm import LinearSVC
-
+from sklearn.pipeline import make_pipeline
 
 class SVMSentimentClassifier:
     def __init__(self):
         self.model = make_pipeline(TfidfVectorizer(), LinearSVC())
 
     def train(self, texts, labels):
-        """Train the classifier with labeled tetx data"""
+        """Train the classifier with labeled text data"""
         self.model.fit(texts, labels)
 
     def predict(self, text):
@@ -39,3 +31,4 @@ if __name__ == "__main__":
     test = ["This was awesome!", "I didn't like it.", "It's average."]
     for t in test:
         print(t, "->", clf.predict(t))
+        

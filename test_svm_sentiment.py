@@ -33,4 +33,6 @@ def test_neutral_sentiment(trained_classifier):
 def test_model_training_required():
     clf = SVMSentimentClassifier()
     with pytest.raises(Exception):
-        clf.predict("I love it!") 
+        clf.predict("I love it!")
+        
+         
