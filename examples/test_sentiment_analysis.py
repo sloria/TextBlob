@@ -1,18 +1,28 @@
-import os
-import tempfile
-from typing import Iterable, List
+from collections.abc import Iterable
+
 import joblib
-from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
 
 
-def build_pipeline(max_features: int = 20000, ngram_range=(1, 2), stop_words='english') -> Pipeline:
+def build_pipeline(
+    max_features: int = 20000, ngram_range=(1, 2), stop_words="english"
+) -> Pipeline:
     """Create and return a TfIDF vectorization and LinearSVC pipeline."""
-    pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(max_features=max_features, ngram_range=ngram_range, stop_words=stop_words)),
-        ('clf', LinearSVC(class_weight='balanced', random_state=42))
-    ])
+    pipeline = Pipeline(
+        [
+            (
+                "tfidf",
+                TfidfVectorizer(
+                    max_features=max_features,
+                    ngram_range=ngram_range,
+                    stop_words=stop_words,
+                ),
+            ),
+            ("clf", LinearSVC(class_weight="balanced", random_state=42)),
+        ]
+    )
     return pipeline
 
 
@@ -23,7 +33,7 @@ def train_pipeline(X: Iterable[str], y: Iterable, **pipeline_kwargs) -> Pipeline
     return pipeline
 
 
-def predict(pipeline: Pipeline, texts: List[str]) -> List:
+def predict(pipeline: Pipeline, texts: list[str]) -> list:
     """Return predictions for a list of texts using the trained pipeline or the trained model."""
     return pipeline.predict(texts)
 
@@ -41,8 +51,8 @@ def load_model(path: str) -> Pipeline:
 def test_build_pipeline_returns_pipeline():
     """Testing the pipeline has the requiered fit and predict methods in it"""
     p = build_pipeline(max_features=1000)
-    assert hasattr(p, 'fit')
-    assert hasattr(p, 'predict')
+    assert hasattr(p, "fit")
+    assert hasattr(p, "predict")
 
 
 def test_train_pipeline_shapes_and_predict():
@@ -61,7 +71,7 @@ def test_predict_types_and_values():
     p = train_pipeline(X, y, max_features=500)
     preds = predict(p, ["I love it!"])
     # predictions should be iterable and contain strings
-    assert isinstance(preds, (list, tuple)) or hasattr(preds, '__iter__')
+    assert isinstance(preds, (list, tuple)) or hasattr(preds, "__iter__")
     assert all(isinstance(x, str) for x in preds)
 
 
