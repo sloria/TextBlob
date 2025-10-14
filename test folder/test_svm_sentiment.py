@@ -3,16 +3,16 @@ Unit test sample
 """
 
 import unittest
+
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC
-from sklearn.pipeline import make_pipeline
 from sklearn import metrics
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.svm import SVC
 
 
 class TestSentimentAnalysis(unittest.TestCase):
-
     def test_sentiment_pipeline(self):
         """Testing the SVM sentiment model trains and predicts correctly"""
 
@@ -38,7 +38,7 @@ class TestSentimentAnalysis(unittest.TestCase):
         # Model pipeline
         model = make_pipeline(
             TfidfVectorizer(stop_words="english", max_features=3000),
-            SVC(kernel="linear")
+            SVC(kernel="linear"),
         )
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
