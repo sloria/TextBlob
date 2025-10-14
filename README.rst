@@ -79,14 +79,15 @@ See more examples at the `Quickstart guide`_.
 
 For new Sentimental Analysis(examples folder) :
 Data : 
-    Train.csv
+    Path : examples/train.csv
 
 Install the required libraries :
     pip install pandas scikit-learn seaborn joblib
     Then run the code in examples/sentiment_analysis.ipynb
     (or)
     Use the pre-trained model in examples/sentiment_model.joblib
-    by loading it using joblib.load('sentiment_model.joblib')
+    by loading it using :
+        joblib.load('sentiment_model.joblib')
 
 Documentation
 -------------
