@@ -62,7 +62,7 @@ Features
 - Spelling correction
 - Add new models or languages through extensions
 - WordNet integration
-
+- Sentiment Analysis (Labeling the text) Trained on larger data 
 Get it now
 ----------
 ::
@@ -77,6 +77,16 @@ See more examples at the `Quickstart guide`_.
 
 .. _`Quickstart guide`: https://textblob.readthedocs.io/en/latest/quickstart.html#quickstart
 
+For new Sentimental Analysis(examples folder) :
+Data : 
+    Train.csv
+
+Install the required libraries :
+    pip install pandas scikit-learn seaborn joblib
+    Then run the code in examples/sentiment_analysis.ipynb
+    (or)
+    Use the pre-trained model in examples/sentiment_model.joblib
+    by loading it using joblib.load('sentiment_model.joblib')
 
 Documentation
 -------------
