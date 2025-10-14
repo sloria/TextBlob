@@ -6,7 +6,6 @@ Implements sentiment classification using SVM and TF-IDF features.
 Part of DATA 245 open-source contribution exercise.
 """
 
-
 """
 svm_sentiment.py
 ----------------
@@ -15,16 +14,16 @@ This script uses Support Vector Machine (SVM) to predict text sentiment
 and scikit-learn for open-source contribution practice.
 """
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
 import pandas as pd
+from sklearn import metrics
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.svm import SVC
 
 # Sample dataset
 data = {
-    'text': [
+    "text": [
         "I love this product, it’s amazing!",
         "This is the worst experience ever.",
         "It’s okay, not too bad but not great.",
@@ -44,24 +43,42 @@ data = {
         "Waste of money, horrible product.",
         "Satisfied overall with this purchase.",
         "Bad packaging but works okay.",
-        "Great results, super happy with it!"
+        "Great results, super happy with it!",
     ],
-    'sentiment': [
-        'positive', 'negative', 'neutral', 'positive', 'negative',
-        'neutral', 'positive', 'negative', 'neutral', 'positive',
-        'negative', 'neutral', 'positive', 'negative', 'neutral',
-        'positive', 'negative', 'positive', 'neutral', 'positive'
-    ]
+    "sentiment": [
+        "positive",
+        "negative",
+        "neutral",
+        "positive",
+        "negative",
+        "neutral",
+        "positive",
+        "negative",
+        "neutral",
+        "positive",
+        "negative",
+        "neutral",
+        "positive",
+        "negative",
+        "neutral",
+        "positive",
+        "negative",
+        "positive",
+        "neutral",
+        "positive",
+    ],
 }
 
 # Convert to DataFrame
 df = pd.DataFrame(data)
 
 # Split data
-X_train, X_test, y_train, y_test = train_test_split(df['text'], df['sentiment'], test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    df["text"], df["sentiment"], test_size=0.3, random_state=42
+)
 
 # Create an SVM pipeline
-model = make_pipeline(TfidfVectorizer(), SVC(kernel='linear', probability=True))
+model = make_pipeline(TfidfVectorizer(), SVC(kernel="linear", probability=True))
 
 # Train the model
 model.fit(X_train, y_train)
@@ -78,7 +95,7 @@ print(metrics.classification_report(y_test, y_pred, zero_division=1))
 examples = [
     "I really enjoyed using this!",
     "It was a horrible experience.",
-    "Nothing special, just average."
+    "Nothing special, just average.",
 ]
 predictions = model.predict(examples)
 
