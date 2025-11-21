@@ -1,5 +1,6 @@
 from googletrans import Translator as GT
 
+
 class Translator:
     def __init__(self):
         self.translator = GT()
