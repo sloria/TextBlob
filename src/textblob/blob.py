@@ -77,6 +77,13 @@ class Word(str):
         """
         return super().__new__(cls, string)
 
+    def translate(self, to="en", source="auto"):
+        """Translate text using googletrans backend."""
+        from .translation import Translator
+
+        translator = Translator()
+        return self.__class__(translator.translate(str(self), source, to))
+
     def __init__(self, string, pos_tag=None):
         self.string = string
         self.pos_tag = pos_tag
