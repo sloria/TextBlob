@@ -122,7 +122,7 @@ Contributions to the documentation are welcome. Documentation is written in `reS
 
 To build docs and run in watch mode: ::
 
-    $ tox -e watch-docs
+    $ tox -e docs-serve
 
 .. _Sphinx: http://sphinx.pocoo.org/
 

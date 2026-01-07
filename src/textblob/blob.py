@@ -447,7 +447,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         subjectivity scores for the assessed tokens.
 
         :rtype: namedtuple of the form ``Sentiment(polarity, subjectivity,
-        assessments)``
+            assessments)``
         """
         return self.analyzer.analyze(self.raw, keep_assessments=True)
 
