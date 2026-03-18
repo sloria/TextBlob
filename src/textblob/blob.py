@@ -43,7 +43,7 @@ from textblob.parsers import PatternParser
 from textblob.sentiments import PatternAnalyzer
 from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
-from textblob.utils import PUNCTUATION_REGEX, lowerstrip
+from textblob.utils import PUNCTUATION_REGEX, lowerstrip, strip_punc
 
 # Wordnet interface
 # NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
@@ -328,6 +328,26 @@ def _initialize_models(
     obj.classifier = classifier
 
 
+def _word_tokens_from_tokenizer(text, tokenizer):
+    """Tokenize text into words, excluding punctuation."""
+    if isinstance(tokenizer, WordTokenizer):
+        # Keep historical behavior for the default tokenizer: tokenize by
+        # sentence first, then split into word tokens.
+        return word_tokenize(text, include_punc=False)
+    try:
+        return tokenizer.tokenize(text, include_punc=False)
+    except TypeError:
+        tokens = tokenizer.tokenize(text)
+        tokens_without_punc = []
+        for token in tokens:
+            stripped = strip_punc(token, all=False)
+            if not stripped:
+                continue
+            # Preserve contractions like "'s" and "n't" when possible.
+            tokens_without_punc.append(token if token.startswith("'") else stripped)
+        return tokens_without_punc
+
+
 class BaseBlob(StringlikeMixin, BlobComparableMixin):
     """An abstract base class that all textblob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
@@ -392,7 +412,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
         :returns: A :class:`WordList <WordList>` of word tokens.
         """
-        return WordList(word_tokenize(self.raw, include_punc=False))
+        return WordList(_word_tokens_from_tokenizer(self.raw, self.tokenizer))
 
     @cached_property
     def tokens(self):
@@ -622,7 +642,7 @@ class TextBlob(BaseBlob):
 
         :returns: A :class:`WordList <WordList>` of word tokens.
         """
-        return WordList(word_tokenize(self.raw, include_punc=False))
+        return WordList(_word_tokens_from_tokenizer(self.raw, self.tokenizer))
 
     @property
     def raw_sentences(self):

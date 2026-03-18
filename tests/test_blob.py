@@ -739,6 +739,13 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         blob = tb.TextBlob("This is\ttext.", tokenizer=tokenizer)
         assert blob.tokens == tb.WordList(["This is", "text."])
 
+    def test_words_uses_custom_tokenizer(self):
+        tokenizer = nltk.tokenize.regexp.WordPunctTokenizer()
+        blob = tb.TextBlob("Good muffins cost $3.88\nin New York.", tokenizer=tokenizer)
+        assert blob.words == tb.WordList(
+            ["Good", "muffins", "cost", "3", "88", "in", "New", "York"]
+        )
+
     def test_tokenize_method(self):
         tokenizer = nltk.tokenize.TabTokenizer()
         blob = tb.TextBlob("This is\ttext.")
