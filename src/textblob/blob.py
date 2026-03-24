@@ -43,7 +43,7 @@ from textblob.parsers import PatternParser
 from textblob.sentiments import PatternAnalyzer
 from textblob.taggers import NLTKTagger
 from textblob.tokenizers import WordTokenizer, sent_tokenize, word_tokenize
-from textblob.utils import PUNCTUATION_REGEX, lowerstrip, strip_punc
+from textblob.utils import PUNCTUATION_REGEX, lowerstrip
 
 # Wordnet interface
 # NOTE: textblob.wordnet is not imported so that the wordnet corpus can be lazy-loaded
@@ -329,23 +329,17 @@ def _initialize_models(
 
 
 def _word_tokens_from_tokenizer(text, tokenizer):
-    """Tokenize text into words, excluding punctuation."""
+    """Tokenize text into words.
+
+    Preserve the historical no-punctuation behavior for the default
+    ``WordTokenizer`` path. For custom tokenizers, defer token filtering to
+    the tokenizer itself.
+    """
     if isinstance(tokenizer, WordTokenizer):
         # Keep historical behavior for the default tokenizer: tokenize by
         # sentence first, then split into word tokens.
         return word_tokenize(text, include_punc=False)
-    try:
-        return tokenizer.tokenize(text, include_punc=False)
-    except TypeError:
-        tokens = tokenizer.tokenize(text)
-        tokens_without_punc = []
-        for token in tokens:
-            stripped = strip_punc(token, all=False)
-            if not stripped:
-                continue
-            # Preserve contractions like "'s" and "n't" when possible.
-            tokens_without_punc.append(token if token.startswith("'") else stripped)
-        return tokens_without_punc
+    return tokenizer.tokenize(text)
 
 
 class BaseBlob(StringlikeMixin, BlobComparableMixin):
