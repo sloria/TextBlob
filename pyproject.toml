@@ -3,21 +3,20 @@ name = "textblob"
 version = "0.19.0"
 description = "Simple, Pythonic text processing. Sentiment analysis, part-of-speech tagging, noun phrase parsing, and more."
 readme = "README.rst"
-license = { file = "LICENSE" }
-authors = [{ name = "Steven Loria", email = "sloria1@gmail.com" }]
+license = "MIT"
+authors = [{ name = "Steven Loria", email = "oss@stevenloria.com" }]
 classifiers = [
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Text Processing :: Linguistic",
 ]
 keywords = ["textblob", "nlp", 'linguistics', 'nltk', 'pattern']
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["nltk>=3.9"]
 
 [project.urls]
@@ -25,10 +24,20 @@ Changelog = "https://textblob.readthedocs.io/en/latest/changelog.html"
 Issues = "https://github.com/sloria/TextBlob/issues"
 Source = "https://github.com/sloria/TextBlob"
 
-[project.optional-dependencies]
-docs = ["sphinx==9.1.0", "sphinx-issues==5.0.1", "PyYAML==6.0.3"]
+[dependency-groups]
+docs = ["sphinx", "sphinx-issues", "PyYAML"]
 tests = ["pytest", "numpy"]
-dev = ["textblob[tests]", "tox", "pre-commit>=3.5,<5.0", "pyright", "ruff"]
+dev = [
+  { include-group = "tests" },
+  "tox",
+  "tox-uv",
+  "pre-commit>=3.5,<5.0",
+  "pyright",
+  "ruff",
+]
+
+[tool.uv]
+default-groups = ["dev"]
 
 [build-system]
 requires = ["flit_core<4"]

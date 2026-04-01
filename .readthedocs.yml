@@ -4,12 +4,13 @@ sphinx:
 formats:
   - pdf
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    python: "3.11"
-python:
-  install:
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
+    python: "3.13"
+  jobs:
+    post_install:
+      - asdf plugin add uv
+      - asdf install uv latest
+      - asdf global uv latest
+      - uv venv $READTHEDOCS_VIRTUALENV_PATH
+      - uv sync --frozen --group docs

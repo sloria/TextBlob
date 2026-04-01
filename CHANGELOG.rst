@@ -9,6 +9,10 @@ Features:
 - Allow custom tokenizer to be used for tokenizing words with ``.words`` (:pr:`555`).
   Thanks :user:`ReinerBRO` for the PR.
 
+Support:
+
+- Support Python 3.10-3.14.
+
 0.19.0 (2025-01-13)
 ___________________
 

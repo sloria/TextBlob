@@ -32,10 +32,9 @@ Setting Up for Local Development
     $ git clone https://github.com/sloria/TextBlob.git
     $ cd TextBlob
 
-2. Install development requirements. It is highly recommended that you use a virtualenv. ::
+2. Install development requirements. ::
 
-    # After activating your virtualenv
-    $ pip install -e '.[tests]'
+    $ uv sync
 
 .. _extension-development:
 
@@ -109,11 +108,11 @@ Running tests
 
 To run all the tests: ::
 
-    $ pytest
+    $ uv run pytest
 
 To skip slow tests: ::
 
-    $ pytest -m 'not slow'
+    $ uv run pytest -m 'not slow'
 
 Documentation
 +++++++++++++
@@ -122,7 +121,7 @@ Contributions to the documentation are welcome. Documentation is written in `reS
 
 To build docs and run in watch mode: ::
 
-    $ tox -e docs-serve
+    $ uv run tox -e docs-serve
 
 .. _Sphinx: http://sphinx.pocoo.org/
 
