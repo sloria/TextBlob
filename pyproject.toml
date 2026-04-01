@@ -3,11 +3,10 @@ name = "textblob"
 version = "0.19.0"
 description = "Simple, Pythonic text processing. Sentiment analysis, part-of-speech tagging, noun phrase parsing, and more."
 readme = "README.rst"
-license = { file = "LICENSE" }
-authors = [{ name = "Steven Loria", email = "sloria1@gmail.com" }]
+license = "MIT"
+authors = [{ name = "Steven Loria", email = "oss@stevenloria.com" }]
 classifiers = [
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -28,7 +27,14 @@ Source = "https://github.com/sloria/TextBlob"
 [dependency-groups]
 docs = ["sphinx", "sphinx-issues", "PyYAML"]
 tests = ["pytest", "numpy"]
-dev = [{include-group = "tests"}, "tox", "tox-uv", "pre-commit>=3.5,<5.0", "pyright", "ruff"]
+dev = [
+  { include-group = "tests" },
+  "tox",
+  "tox-uv",
+  "pre-commit>=3.5,<5.0",
+  "pyright",
+  "ruff",
+]
 
 [tool.uv]
 default-groups = ["dev"]
