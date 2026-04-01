@@ -35,3 +35,4 @@ Contributors (chronological)
 - Evgeny Kemerov `@sudoguy <https://github.com/sudoguy>`_
 - Karthikeyan Singaravelan `@tirkarthi <https://github.com/tirkarthi>`_
 - John Franey `@johnfraney <https://github.com/johnfraney>`_
+- rikka0612 `@ReinerBRO <https://github.com/ReinerBRO>`_
