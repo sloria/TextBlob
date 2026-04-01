@@ -328,6 +328,20 @@ def _initialize_models(
     obj.classifier = classifier
 
 
+def _word_tokens_from_tokenizer(text, tokenizer):
+    """Tokenize text into words.
+
+    Preserve the historical no-punctuation behavior for the default
+    ``WordTokenizer`` path. For custom tokenizers, defer token filtering to
+    the tokenizer itself.
+    """
+    if isinstance(tokenizer, WordTokenizer):
+        # Keep historical behavior for the default tokenizer: tokenize by
+        # sentence first, then split into word tokens.
+        return word_tokenize(text, include_punc=False)
+    return tokenizer.tokenize(text)
+
+
 class BaseBlob(StringlikeMixin, BlobComparableMixin):
     """An abstract base class that all textblob classes will inherit from.
     Includes words, POS tag, NP, and word count properties. Also includes
@@ -392,7 +406,7 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
 
         :returns: A :class:`WordList <WordList>` of word tokens.
         """
-        return WordList(word_tokenize(self.raw, include_punc=False))
+        return WordList(_word_tokens_from_tokenizer(self.raw, self.tokenizer))
 
     @cached_property
     def tokens(self):
@@ -622,7 +636,7 @@ class TextBlob(BaseBlob):
 
         :returns: A :class:`WordList <WordList>` of word tokens.
         """
-        return WordList(word_tokenize(self.raw, include_punc=False))
+        return WordList(_word_tokens_from_tokenizer(self.raw, self.tokenizer))
 
     @property
     def raw_sentences(self):

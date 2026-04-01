@@ -1,6 +1,14 @@
 Changelog
 =========
 
+unreleased
+----------
+
+Features:
+
+- Allow custom tokenizer to be used for tokenizing words with ``.words`` (:pr:`555`).
+  Thanks :user:`ReinerBRO` for the PR.
+
 0.19.0 (2025-01-13)
 ___________________
 

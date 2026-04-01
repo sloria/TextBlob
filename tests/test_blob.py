@@ -46,6 +46,14 @@ test = [
 classifier = NaiveBayesClassifier(train)
 
 
+class NoPunctuationWordPunctTokenizer(nltk.tokenize.api.TokenizerI):
+    def __init__(self):
+        self._tokenizer = nltk.tokenize.regexp.WordPunctTokenizer()
+
+    def tokenize(self, text):
+        return [token for token in self._tokenizer.tokenize(text) if token.isalnum()]
+
+
 class WordListTest(TestCase):
     def setUp(self):
         self.words = "Beautiful is better than ugly".split()
@@ -738,6 +746,13 @@ is managed by the non-profit Python Software Foundation."""  # noqa: E501
         tokenizer = nltk.tokenize.TabTokenizer()
         blob = tb.TextBlob("This is\ttext.", tokenizer=tokenizer)
         assert blob.tokens == tb.WordList(["This is", "text."])
+
+    def test_words_uses_custom_tokenizer(self):
+        tokenizer = NoPunctuationWordPunctTokenizer()
+        blob = tb.TextBlob("Good muffins cost $3.88\nin New York.", tokenizer=tokenizer)
+        assert blob.words == tb.WordList(
+            ["Good", "muffins", "cost", "3", "88", "in", "New", "York"]
+        )
 
     def test_tokenize_method(self):
         tokenizer = nltk.tokenize.TabTokenizer()
