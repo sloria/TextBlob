@@ -13,36 +13,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: "3.9", python: "3.9", tox: py39 }
-          - { name: "3.13", python: "3.13", tox: py313 }
-          - { name: "lowest", python: "3.9", tox: py39-lowest }
+          - { name: "3.10", python: "3.10", tox: py310 }
+          - { name: "3.14", python: "3.14", tox: py314 }
+          - { name: "lowest", python: "3.10", tox: py310-lowest }
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v7
       - name: Download nltk data
         run: |
-          pip install .
-          python -m textblob.download_corpora
-      - run: python -m pip install tox
-      - run: python -m tox -e${{ matrix.tox }}
+          uv run python -m textblob.download_corpora
+      - run: uv run tox -e${{ matrix.tox }}
   build:
     name: Build package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-      - name: Install pypa/build
-        run: python -m pip install build
+      - uses: astral-sh/setup-uv@v7
       - name: Build a binary wheel and a source tarball
-        run: python -m build
-      - name: Install twine
-        run: python -m pip install twine
+        run: uv build
       - name: Check build
-        run: python -m twine check --strict dist/*
+        run: uvx twine check --strict dist/*
       - name: Store the distribution packages
         uses: actions/upload-artifact@v7
         with:
@@ -55,11 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-      - run: python -m pip install tox
-      - run: python -m tox -e lint
+      - uses: astral-sh/setup-uv@v7
+      - run: uv run tox -e lint
   publish-to-pypi:
     name: PyPI release
     if: startsWith(github.ref, 'refs/tags/')
