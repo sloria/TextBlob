@@ -1,6 +1,6 @@
 [project]
 name = "textblob"
-version = "0.19.0"
+version = "0.20.0"
 description = "Simple, Pythonic text processing. Sentiment analysis, part-of-speech tagging, noun phrase parsing, and more."
 readme = "README.rst"
 license = "MIT"
