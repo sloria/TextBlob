@@ -17,8 +17,15 @@ class UtilsTests(TestCase):
     def test_strip_punc_all(self):
         assert strip_punc(self.text, all=True) == "this Has Punctuation"
 
+    def test_strip_punc_all_punctuation(self):
+        assert strip_punc("!!!", all=True) == ""
+        assert strip_punc("!!!") == ""
+
     def test_lowerstrip(self):
         assert lowerstrip(self.text) == "this. has. punctuation"
+
+    def test_lowerstrip_unicode_whitespace(self):
+        assert lowerstrip("\u2003Hello\u2003") == "hello"
 
 
 def test_is_filelike():
@@ -26,3 +33,11 @@ def test_is_filelike():
         assert is_filelike(fp)
     assert not is_filelike("notafile")
     assert not is_filelike(12.3)
+
+
+class NotAFile:
+    pass
+
+
+def test_is_filelike_missing_read():
+    assert not is_filelike(NotAFile())
