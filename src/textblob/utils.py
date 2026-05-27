@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+
     from nltk.tree import Tree
 
 PUNCTUATION_REGEX = re.compile(f"[{re.escape(string.punctuation)}]")
@@ -44,7 +45,8 @@ def tree2str(tree: Tree, concat: str = " ") -> str:
 
 
 def filter_insignificant(
-    chunk: Iterable[tuple[str, str]], tag_suffixes: Iterable[str] = ("DT", "CC", "PRP$", "PRP")
+    chunk: Iterable[tuple[str, str]],
+    tag_suffixes: Iterable[str] = ("DT", "CC", "PRP$", "PRP"),
 ) -> list[tuple[str, str]]:
     """Filter out insignificant (word, tag) tuples from a chunk of text."""
     good: list[tuple[str, str]] = []
