@@ -405,7 +405,7 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
     Example usage:
     ::
 
-        >>> from text.classifiers import PositiveNaiveBayesClassifier
+        >>> from textblob.classifiers import PositiveNaiveBayesClassifier
         >>> sports_sentences = ['The team dominated the game',
         ...                   'They lost the ball',
         ...                   'The game was intense',
