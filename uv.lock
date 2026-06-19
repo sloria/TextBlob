@@ -1086,6 +1086,9 @@ docs = [
     { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "sphinx-issues" },
 ]
+lint = [
+    { name = "pre-commit" },
+]
 tests = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -1110,6 +1113,7 @@ docs = [
     { name = "sphinx" },
     { name = "sphinx-issues" },
 ]
+lint = [{ name = "pre-commit", specifier = ">=3.5,<5.0" }]
 tests = [
     { name = "numpy" },
     { name = "pytest" },
