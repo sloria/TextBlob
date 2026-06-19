@@ -26,12 +26,13 @@ Source = "https://github.com/sloria/TextBlob"
 
 [dependency-groups]
 docs = ["sphinx", "sphinx-issues", "PyYAML"]
+lint = ["pre-commit>=3.5,<5.0"]
 tests = ["pytest", "numpy"]
 dev = [
   { include-group = "tests" },
+  { include-group = "lint" },
   "tox",
   "tox-uv",
-  "pre-commit>=3.5,<5.0",
   "pyright",
   "ruff",
 ]
