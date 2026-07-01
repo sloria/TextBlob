@@ -22,6 +22,24 @@ class InflectTestCase(TestCase):
     def bus_pluralize_test(self):
         assert pluralize("bus") == "buses"
 
+    def test_pluralize_lynx(self):
+        assert pluralize("lynx") == "lynxes"
+
+    def test_singularize_lynxes(self):
+        assert singularize("lynxes") == "lynx"
+
+    def test_pluralize_quiz(self):
+        assert pluralize("quiz") == "quizzes"
+
+    def test_singularize_quizzes(self):
+        assert singularize("quizzes") == "quiz"
+
+    def test_pluralize_already_plural_jeans(self):
+        assert pluralize("jeans") == "jeans"
+
+    def test_singularize_jeans(self):
+        assert singularize("jeans") == "jeans"
+
     def test_all_singular_s(self):
         for w in plural_categories["s-singular"]:
             assert singularize(pluralize(w)) == w
