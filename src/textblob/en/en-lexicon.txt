@@ -1,22 +1,22 @@
-;;;   
+;;;
 ;;;   The lexicon was taken from Brill's rule based tagger v1.14,
 ;;;   trained on Brown corpus and Penn Treebank.
-;;;   
+;;;
 ;;;   Eric Brill (1992). A simple rule-based part of speech tagger.
 ;;;   In Proceedings of the workshop on Speech and Natural Language (pp. 112-116).
 ;;;   Association for Computational Linguistics.
-;;;   
+;;;
 ;;;   Copyright 1993 by the Massachusetts Institute of Technology and the
 ;;;   University of Pennsylvania. All rights reserved. MIT license.
-;;;   
+;;;
 ;;;   Additional words were added from the Twitter Part-of-Speech Annotated Data,
 ;;;   available under the Creative Commons Attribution 3.0 Unported license ("CC-BY").
 ;;;   Carnegie Mellon University. http://www.ark.cs.cmu.edu/TweetNLP
-;;;   
+;;;
 ;;;   Kevin Gimpel, Nathan Schneider, Brendan O'Connor, et al. (2011).
 ;;;   Part-of-Speech Tagging for Twitter: Annotation, Features, and Experiments.
 ;;;   In Proceedings of the Annual Meeting of the ACL, Portland, OR, June 2011.
-;;;   
+;;;
 ! .
 !! .
 !!! .

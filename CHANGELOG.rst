@@ -39,7 +39,7 @@ Bug fixes:
 
 Removals:
 
-- ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate`` 
+- ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate``
   are removed. Use the official Google Translate API instead (:issue:`215`).
 - Remove ``textblob.compat``.
 

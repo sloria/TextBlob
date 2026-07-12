@@ -263,7 +263,7 @@ Islam
 Israel LOC
 Italy LOC
 Ivy League ORG
-J. Robert Oppenheimer PERS 
+J. Robert Oppenheimer PERS
 J.K. Rowling PERS
 J.R.R. Tolkien PERS
 JFK PERS
