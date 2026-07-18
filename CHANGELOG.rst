@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.20.1 (2026-07-18)
+-------------------
+
+Bug fixes:
+
+- Fix pluralization of some words (:issue:`403`).
+  Thanks :user:`alcinos` for reporting and :user:`cool-RR` for the PR.
+
 0.20.0 (2026-04-01)
 -------------------
 
