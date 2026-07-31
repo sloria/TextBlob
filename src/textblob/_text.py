@@ -756,7 +756,7 @@ RE_ENTITY3 = re.compile(r"^[\w\-\.\+]+@(\w[\w\-]+\.)+[\w\-]+$")  # name@domain.c
 class Entities(lazydict, Rules):
     def __init__(self, lexicon=None, path="", tag="NNP"):
         """A dictionary of named entities and their labels.
-        For domain names and e-mail adresses, regular expressions are used.
+        For domain names and e-mail addresses, regular expressions are used.
         """
         if lexicon is None:
             lexicon = {}
