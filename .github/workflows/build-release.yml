@@ -20,10 +20,10 @@ jobs:
           - { name: "3.14", python: "3.14", tox: py314 }
           - { name: "lowest", python: "3.10", tox: py310-lowest }
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7  # zizmor: ignore[cache-poisoning]
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0  # zizmor: ignore[cache-poisoning]
       - name: Download nltk data
         run: |
           uv run python -m textblob.download_corpora
@@ -32,10 +32,10 @@ jobs:
     name: Build package
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7  # zizmor: ignore[cache-poisoning]
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0  # zizmor: ignore[cache-poisoning]
       - name: Build a binary wheel and a source tarball
         run: uv build
       - name: Check build
@@ -51,10 +51,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7  # zizmor: ignore[cache-poisoning]
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0  # zizmor: ignore[cache-poisoning]
       - run: uv run tox -e lint
   publish-to-pypi:
     name: PyPI release
@@ -73,4 +73,4 @@ jobs:
           name: python-package-distributions
           path: dist/
       - name: Publish distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
