@@ -405,8 +405,10 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         :rtype: str
         """
         with open(fname) as f:
-            stopwords = [word for line in f for word in re.findall(r'\w+', line)]
-        clean_string = ' '.join([word for word in self.raw.split() if word not in    stopwords])
+            stopwords = [word for line in f for word in re.findall(r"\w+", line)]
+        clean_string = " ".join(
+            [word for word in self.raw.split() if word not in stopwords]
+        )
         return clean_string
 
     @cached_property
