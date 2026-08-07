@@ -21,6 +21,7 @@ Example usage: ::
 """  # noqa: E501
 
 import json
+import re
 import sys
 from collections import defaultdict
 
@@ -397,6 +398,16 @@ class BaseBlob(StringlikeMixin, BlobComparableMixin):
         _initialize_models(
             self, tokenizer, pos_tagger, np_extractor, analyzer, parser, classifier
         )
+
+    @cached_property
+    def remove_stopwords(self, fname="stopwords.txt"):
+        """Take raw string and remove stop words.
+        :rtype: str
+        """
+        with open(fname) as f:
+            stopwords = [word for line in f for word in re.findall(r'\w+', line)]
+        clean_string = ' '.join([word for word in self.raw.split() if word not in    stopwords])
+        return clean_string
 
     @cached_property
     def words(self):
