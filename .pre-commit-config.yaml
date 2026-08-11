@@ -1,15 +1,15 @@
 repos:
 - repo: https://github.com/astral-sh/uv-pre-commit
-  rev: 0.12.1
+  rev: 0.12.3
   hooks:
     - id: uv-lock
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.16.1
+  rev: v0.16.2
   hooks:
     - id: ruff
     - id: ruff-format
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.37.4
+  rev: 0.38.0
   hooks:
     - id: check-github-workflows
 - repo: https://github.com/zizmorcore/zizmor-pre-commit
