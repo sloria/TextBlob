@@ -164,7 +164,11 @@ class StringlikeMixin:
         Returns a blob which is the concatenation of the strings or blobs
         in the iterable.
         """
-        return self.__class__(self._strkey().join(iterable))
+        strings = (
+            str(item) if isinstance(item, StringlikeMixin) else item
+            for item in iterable
+        )
+        return self.__class__(self._strkey().join(strings))
 
     def replace(self, old, new, count=sys.maxsize):
         """Return a new blob object with all occurrences of `old` replaced

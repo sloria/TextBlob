@@ -36,3 +36,4 @@ Contributors (chronological)
 - Karthikeyan Singaravelan `@tirkarthi <https://github.com/tirkarthi>`_
 - John Franey `@johnfraney <https://github.com/johnfraney>`_
 - rikka0612 `@ReinerBRO <https://github.com/ReinerBRO>`_
+- `@Eric3-jp <https://github.com/Eric3-jp>`_ (with OpenAI Codex assistance)
