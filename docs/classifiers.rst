@@ -16,24 +16,24 @@ First we'll create some training and test data.
 .. doctest::
 
     >>> train = [
-    ...     ('I love this sandwich.', 'pos'),
-    ...     ('this is an amazing place!', 'pos'),
-    ...     ('I feel very good about these beers.', 'pos'),
-    ...     ('this is my best work.', 'pos'),
-    ...     ("what an awesome view", 'pos'),
-    ...     ('I do not like this restaurant', 'neg'),
-    ...     ('I am tired of this stuff.', 'neg'),
-    ...     ("I can't deal with this", 'neg'),
-    ...     ('he is my sworn enemy!', 'neg'),
-    ...     ('my boss is horrible.', 'neg')
+    ...     ("I love this sandwich.", "pos"),
+    ...     ("this is an amazing place!", "pos"),
+    ...     ("I feel very good about these beers.", "pos"),
+    ...     ("this is my best work.", "pos"),
+    ...     ("what an awesome view", "pos"),
+    ...     ("I do not like this restaurant", "neg"),
+    ...     ("I am tired of this stuff.", "neg"),
+    ...     ("I can't deal with this", "neg"),
+    ...     ("he is my sworn enemy!", "neg"),
+    ...     ("my boss is horrible.", "neg"),
     ... ]
     >>> test = [
-    ...     ('the beer was good.', 'pos'),
-    ...     ('I do not enjoy my job', 'neg'),
-    ...     ("I ain't feeling dandy today.", 'neg'),
-    ...     ("I feel amazing!", 'pos'),
-    ...     ('Gary is a friend of mine.', 'pos'),
-    ...     ("I can't believe I'm doing this.", 'neg')
+    ...     ("the beer was good.", "pos"),
+    ...     ("I do not enjoy my job", "neg"),
+    ...     ("I ain't feeling dandy today.", "neg"),
+    ...     ("I feel amazing!", "pos"),
+    ...     ("Gary is a friend of mine.", "pos"),
+    ...     ("I can't believe I'm doing this.", "neg"),
     ... ]
 
 Now we'll create a Naive Bayes classifier, passing the training data into the constructor.
@@ -154,10 +154,12 @@ Use the ``update(new_data)`` method to update a classifier with new training dat
 
 .. doctest::
 
-    >>> new_data = [('She is my best friend.', 'pos'),
-    ...             ("I'm happy to have a new friend.", 'pos'),
-    ...             ("Stay thirsty, my friend.", 'pos'),
-    ...             ("He ain't from around here.", 'neg')]
+    >>> new_data = [
+    ...     ("She is my best friend.", "pos"),
+    ...     ("I'm happy to have a new friend.", "pos"),
+    ...     ("Stay thirsty, my friend.", "pos"),
+    ...     ("He ain't from around here.", "neg"),
+    ... ]
     >>> cl.update(new_data)
     True
     >>> cl.accuracy(test)
@@ -185,8 +187,9 @@ For example, let's create a feature extractor that just uses the first and last 
     ...     feats["first({0})".format(first_word)] = True
     ...     feats["last({0})".format(last_word)] = False
     ...     return feats
+    ...
     >>> features = end_word_extractor("I feel happy")
-    >>> assert features == {'last(happy)': False, 'first(I)': True}
+    >>> assert features == {"last(happy)": False, "first(I)": True}
 
 We can then use the feature extractor in a classifier by passing it as the second argument of the constructor.
 

@@ -30,3 +30,9 @@ Contributors (chronological)
 - Daniel Ong `@danong <https://github.com/danong>`_
 - Jamie Moschella `@jammmo <https://github.com/jammmo>`_
 - Roman Korolev `@roman-y-korolev <https://github.com/roman-y-korolev>`_
+- Ram Rachum `@cool-RR <https://github.com/cool-RR>`_
+- Romain Casati `@casatir <https://github.com/casatir>`_
+- Evgeny Kemerov `@sudoguy <https://github.com/sudoguy>`_
+- Karthikeyan Singaravelan `@tirkarthi <https://github.com/tirkarthi>`_
+- John Franey `@johnfraney <https://github.com/johnfraney>`_
+- rikka0612 `@ReinerBRO <https://github.com/ReinerBRO>`_

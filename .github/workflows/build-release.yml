@@ -1,0 +1,76 @@
+name: build
+on:
+  push:
+    branches: ["dev"]
+    tags: ["*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "3.10", python: "3.10", tox: py310 }
+          - { name: "3.14", python: "3.14", tox: py314 }
+          - { name: "lowest", python: "3.10", tox: py310-lowest }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1  # zizmor: ignore[cache-poisoning]
+      - name: Download nltk data
+        run: |
+          uv run python -m textblob.download_corpora
+      - run: uv run tox -e${{ matrix.tox }}
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1  # zizmor: ignore[cache-poisoning]
+      - name: Build a binary wheel and a source tarball
+        run: uv build
+      - name: Check build
+        run: uvx twine check --strict dist/*
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: python-package-distributions
+          path: dist/
+  # this duplicates pre-commit.ci, so only run it on tags
+  # it guarantees that linting is passing prior to a release
+  lint-pre-release:
+    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1  # zizmor: ignore[cache-poisoning]
+      - run: uv run tox -e lint
+  publish-to-pypi:
+    name: PyPI release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build, tests, lint-pre-release]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/textblob
+    permissions:
+      id-token: write
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1

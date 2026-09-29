@@ -1,6 +1,8 @@
-### Python ###
-
 *.py[cod]
+
+# virtualenv
+.venv/
+venv/
 
 # C extensions
 *.so
@@ -19,16 +21,17 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-__pycache__
-cover
 
-# Installer logs
+# pip
 pip-log.txt
+pip-wheel-metadata
 
 # Unit test / coverage reports
 .coverage
 .tox
 nosetests.xml
+test-output/
+.pytest_cache
 
 # Translations
 *.mo
@@ -38,22 +41,19 @@ nosetests.xml
 .project
 .pydevproject
 
-*.bak
-.bumpversion.cfg
+# Complexity
+output/*.html
+output/*/index.html
 
-# Docs
+# Sphinx
 docs/_build
-
-# Pylint
-pylintrc
-
-### Extra models and data ###
-
-text/*.pickle
-text/en/*.pickle
-
-# Readme build
 README.html
 
-.ipynb_checkpoints/
-*.ipynb
+# mypy
+
+.mypy_cache
+
+!tests/.env
+
+# ruff
+.ruff_cache

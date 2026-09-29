@@ -1,6 +1,81 @@
 Changelog
 =========
 
+0.20.1 (2026-07-18)
+-------------------
+
+Bug fixes:
+
+- Fix pluralization of some words (:issue:`403`).
+  Thanks :user:`alcinos` for reporting and :user:`cool-RR` for the PR.
+
+0.20.0 (2026-04-01)
+-------------------
+
+Features:
+
+- Allow custom tokenizer to be used for tokenizing words with ``.words`` (:pr:`555`).
+  Thanks :user:`ReinerBRO` for the PR.
+
+Support:
+
+- Support Python 3.10-3.14.
+
+0.19.0 (2025-01-13)
+___________________
+
+Bug fixes:
+
+- Fix ``textblob.download_corpora`` script (:issue:`474`).
+  Thanks :user:`cagan-elden` for reporting.
+
+Changes:
+
+- Remove vendorized ``unicodecsv`` module, as it's no longer used.
+- Support Python 3.9-3.13 and nltk>=3.9 (:pr:`486`)
+  Thanks :user:`johnfraney` for the PR.
+
+0.18.0 (2024-02-15)
+-------------------
+
+Bug fixes:
+
+- Remove usage of deprecated cElementTree (:issue:`339`).
+  Thanks :user:`tirkarthi` for reporting and for the PR.
+- Address ``SyntaxWarning`` on Python 3.12 (:pr:`418`).
+  Thanks :user:`smontanaro` for the PR.
+
+Removals:
+
+- ``TextBlob.translate()`` and ``TextBlob.detect_language``, and ``textblob.translate`` 
+  are removed. Use the official Google Translate API instead (:issue:`215`).
+- Remove ``textblob.compat``.
+
+Support:
+
+- Support Python 3.8-3.12. Older versions are no longer supported.
+- Support nltk>=3.8.
+
+0.17.1 (2021-10-21)
+-------------------
+
+Bug fixes:
+
+- Fix translation and language detection (:issue:`395`).
+  Thanks :user:`sudoguy` for the patch.
+
+0.17.0 (2021-02-17)
+-------------------
+
+Features:
+
+- Performance improvement: Use ``chain.from_iterable`` in ``_text.py``
+  to improve runtime and memory usage (:pr:`333`). Thanks :user:`cool-RR` for the PR.
+
+Other changes:
+
+- Remove usage of `ctypes` (:pr:`354`). Thanks :user:`casatir`.
+
 0.16.0 (2020-04-26)
 -------------------
 

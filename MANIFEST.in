@@ -1,3 +1,0 @@
-include *.rst LICENSE NOTICE
-recursive-include textblob *.txt
-recursive-include textblob *.xml

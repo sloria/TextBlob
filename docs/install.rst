@@ -79,16 +79,10 @@ Old:
     from text.taggers import NLTKTagger
 
 
-Python
-++++++
-
-TextBlob supports Python >=2.7 or >=3.5.
-
-
 Dependencies
 ++++++++++++
 
-TextBlob depends on NLTK 3. NLTK will be installed automatically when you run ``pip install textblob`` or ``python setup.py install``.
+TextBlob depends on NLTK 3. NLTK will be installed automatically when you run ``pip install textblob``.
 
 Some features, such as the maximum entropy classifier, require `numpy`_, but it is not required for basic usage.
 

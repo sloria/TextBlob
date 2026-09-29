@@ -63,9 +63,11 @@ You can break TextBlobs into words or sentences.
 
 .. doctest::
 
-    >>> zen = TextBlob("Beautiful is better than ugly. "
-    ...                "Explicit is better than implicit. "
-    ...                "Simple is better than complex.")
+    >>> zen = TextBlob(
+    ...     "Beautiful is better than ugly. "
+    ...     "Explicit is better than implicit. "
+    ...     "Simple is better than complex."
+    ... )
     >>> zen.words
     WordList(['Beautiful', 'is', 'better', 'than', 'ugly', 'Explicit', 'is', 'better', 'than', 'implicit', 'Simple', 'is', 'better', 'than', 'complex'])
     >>> zen.sentences
@@ -89,7 +91,7 @@ object (a subclass of ``unicode``) with useful methods, e.g. for word inflection
 
 .. doctest::
 
-    >>> sentence = TextBlob('Use 4 spaces per indentation level.')
+    >>> sentence = TextBlob("Use 4 spaces per indentation level.")
     >>> sentence.words
     WordList(['Use', '4', 'spaces', 'per', 'indentation', 'level'])
     >>> sentence.words[2].singularize()
@@ -136,8 +138,8 @@ You can also create synsets directly.
 .. doctest::
 
     >>> from textblob.wordnet import Synset
-    >>> octopus = Synset('octopus.n.02')
-    >>> shrimp = Synset('shrimp.n.03')
+    >>> octopus = Synset("octopus.n.02")
+    >>> shrimp = Synset("shrimp.n.03")
     >>> octopus.path_similarity(shrimp)
     0.1111111111111111
 
@@ -172,7 +174,7 @@ Use the :meth:`correct() <TextBlob.correct>` method to attempt spelling correcti
 .. doctest::
 
     >>> from textblob import Word
-    >>> w = Word('falibility')
+    >>> w = Word("falibility")
     >>> w.spellcheck()
     [('fallibility', 1.0)]
 
@@ -245,18 +247,18 @@ You can make comparisons between TextBlobs and strings.
 
 .. doctest::
 
-    >>> apple_blob = TextBlob('apples')
-    >>> banana_blob = TextBlob('bananas')
+    >>> apple_blob = TextBlob("apples")
+    >>> banana_blob = TextBlob("bananas")
     >>> apple_blob < banana_blob
     True
-    >>> apple_blob == 'apples'
+    >>> apple_blob == "apples"
     True
 
 You can concatenate and interpolate TextBlobs and strings.
 
 .. doctest::
 
-    >>> apple_blob + ' and ' + banana_blob
+    >>> apple_blob + " and " + banana_blob
     TextBlob("apples and bananas")
     >>> "{0} and {1}".format(apple_blob, banana_blob)
     'apples and bananas'
@@ -283,6 +285,7 @@ Use ``sentence.start`` and ``sentence.end`` to get the indices where a sentence 
     >>> for s in zen.sentences:
     ...     print(s)
     ...     print("---- Starts at index {}, Ends at index {}".format(s.start, s.end))
+    ...
     Beautiful is better than ugly.
     ---- Starts at index 0, Ends at index 30
     Explicit is better than implicit.

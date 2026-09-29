@@ -1,0 +1,23 @@
+repos:
+- repo: https://github.com/astral-sh/uv-pre-commit
+  rev: 0.12.19
+  hooks:
+    - id: uv-lock
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.16.9
+  hooks:
+    - id: ruff
+    - id: ruff-format
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.38.2
+  hooks:
+    - id: check-github-workflows
+- repo: https://github.com/zizmorcore/zizmor-pre-commit
+  rev: v1.30.1
+  hooks:
+    - id: zizmor
+- repo: https://github.com/asottile/blacken-docs
+  rev: 1.20.0
+  hooks:
+  - id: blacken-docs
+    additional_dependencies: [black==24.10.0]
