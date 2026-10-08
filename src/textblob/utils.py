@@ -46,6 +46,7 @@ def filter_insignificant(
     chunk, tag_suffixes: Iterable[str] = ("DT", "CC", "PRP$", "PRP")
 ):
     """Filter out insignificant (word, tag) tuples from a chunk of text."""
+    tag_suffixes = tuple(tag_suffixes)
     good: list[tuple[str, str]] = []
     for word, tag in chunk:
         ok = True
