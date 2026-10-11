@@ -257,6 +257,8 @@ class WordList(list):
         """Extend WordList by appending elements from ``iterable``. If an element
         is a string, appends a :class:`Word <Word>` object.
         """
+        if iterable is self:
+            iterable = list(self)
         for e in iterable:
             self.append(e)
 
