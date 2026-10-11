@@ -675,8 +675,8 @@ class TextBlob(BaseBlob):
             # Compute the start and end indices of the sentence
             # within the blob
             start_index = self.raw.index(sent, char_index)
-            char_index += len(sent)
             end_index = start_index + len(sent)
+            char_index = end_index
             # Sentences share the same models as their parent blob
             s = Sentence(
                 sent,
