@@ -229,7 +229,17 @@ class WordList(list):
         """Places object at given index, replacing existing item. If the object
         is a string, inserts a :class:`Word <Word>` object.
         """
-        if isinstance(obj, basestring):
+        if isinstance(index, slice):
+            super().__setitem__(
+                index,
+                [
+                    Word(item)
+                    if isinstance(item, basestring) and not isinstance(item, Word)
+                    else item
+                    for item in obj
+                ],
+            )
+        elif isinstance(obj, basestring):
             super().__setitem__(index, Word(obj))
         else:
             super().__setitem__(index, obj)
@@ -259,6 +269,12 @@ class WordList(list):
         """
         for e in iterable:
             self.append(e)
+
+    def insert(self, index, obj):
+        """Insert an object before index, converting strings to :class:`Word`."""
+        if isinstance(obj, basestring) and not isinstance(obj, Word):
+            obj = Word(obj)
+        super().insert(index, obj)
 
     def upper(self):
         """Return a new WordList with each word upper-cased."""
