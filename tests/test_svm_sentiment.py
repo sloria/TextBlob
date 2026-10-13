@@ -6,7 +6,7 @@ from sentiment_analysis import SVMSentimentAnalyzer
 
 class TestSVMSentimentAnalyzer(unittest.TestCase):
     def setUp(self):
-        """Set up and train the SVM classifier with a robust multi-class sample corpus."""
+        """Set up and train the SVM classifier with a robust sample corpus."""
         self.analyzer = SVMSentimentAnalyzer()
 
         train_texts = [
