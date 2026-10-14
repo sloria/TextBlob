@@ -150,6 +150,16 @@ WordLists
 
 A :class:`WordList <textblob.WordList>` is just a Python list with additional methods.
 
+Inserting strings or replacing a slice keeps the elements as :class:`Word
+<textblob.Word>` objects, so word operations remain available after editing::
+
+    >>> from textblob import WordList
+    >>> words = WordList(["cats", "dogs"])
+    >>> words.insert(0, "wolves")
+    >>> words[1:] = ["geese"]
+    >>> words.singularize()
+    WordList(['wolf', 'goose'])
+
 .. doctest::
 
     >>> animals = TextBlob("cat dog octopus")
