@@ -1,5 +1,7 @@
+import json
 import os
 import unittest
+from io import StringIO
 from unittest import mock
 
 import nltk
@@ -65,6 +67,32 @@ class TestNLTKClassifier(unittest.TestCase):
 
         with pytest.raises(ValueError):
             self.bad_classifier.update([("This is no good.", "negative")])
+
+
+class TestClassifierFormats(unittest.TestCase):
+    def setUp(self):
+        self.train_set = [(["good"], "pos"), (["bad"], "neg")]
+        self.json_data = json.dumps(
+            [{"text": text, "label": label} for text, label in self.train_set]
+        )
+
+    def test_init_with_compact_json(self):
+        for format in (None, "json"):
+            with self.subTest(format=format):
+                classifier = NaiveBayesClassifier(
+                    StringIO(self.json_data), format=format
+                )
+                assert classifier.train_set == self.train_set
+                assert classifier.classify(["good"]) == "pos"
+                assert classifier.classify(["bad"]) == "neg"
+
+    def test_accuracy_on_compact_json(self):
+        classifier = NaiveBayesClassifier(self.train_set)
+        for format in (None, "json"):
+            with self.subTest(format=format):
+                assert (
+                    classifier.accuracy(StringIO(self.json_data), format=format) == 1.0
+                )
 
 
 class TestNaiveBayesClassifier(unittest.TestCase):
