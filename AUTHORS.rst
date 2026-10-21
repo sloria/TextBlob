@@ -36,3 +36,4 @@ Contributors (chronological)
 - Karthikeyan Singaravelan `@tirkarthi <https://github.com/tirkarthi>`_
 - John Franey `@johnfraney <https://github.com/johnfraney>`_
 - rikka0612 `@ReinerBRO <https://github.com/ReinerBRO>`_
+- `@Afloat16 <https://github.com/Afloat16>`_
