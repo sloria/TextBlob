@@ -46,6 +46,13 @@ basestring = (str, bytes)
 ### Basic feature extractors ###
 
 
+def _materialize_training_data(dataset):
+    return [
+        (words if isinstance(words, basestring) else list(words), label)
+        for words, label in dataset
+    ]
+
+
 def _get_words_from_dataset(dataset):
     """Return a set of all words in a dataset.
 
@@ -120,7 +127,7 @@ class BaseClassifier:
     minimum, descendant classes must implement a ``classify`` method and have
     a ``classifier`` property.
 
-    :param train_set: The training set, either a list of tuples of the form
+    :param train_set: The training set, either an iterable of tuples of the form
         ``(text, classification)`` or a file-like object. ``text`` may be either
         a string or an iterable.
     :param callable feature_extractor: A feature extractor function that takes one or
@@ -145,6 +152,7 @@ class BaseClassifier:
             self.train_set = self._read_data(train_set, format)
         else:  # train_set is a list of tuples
             self.train_set = train_set
+        self.train_set = _materialize_training_data(self.train_set)
         self._word_set = _get_words_from_dataset(
             self.train_set
         )  # Keep a hidden set of unique words.
@@ -285,9 +293,10 @@ class NLTKClassifier(BaseClassifier):
         """Update the classifier with new training data and re-trains the
         classifier.
 
-        :param new_data: New data as a list of tuples of the form
+        :param new_data: New data as an iterable of tuples of the form
             ``(text, label)``.
         """
+        new_data = _materialize_training_data(new_data)
         self.train_set += new_data
         self._word_set.update(_get_words_from_dataset(new_data))
         self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
