@@ -1059,6 +1059,8 @@ class Sentiment(lazydict):
             # Only assess known words, preferably by part-of-speech tag.
             # Including unknown words (polarity 0.0 and subjectivity 0.0) lowers the average.
             if w is None:
+                m = None
+                n = None
                 continue
             if w in self and pos in self[w]:
                 p, s, i = self[w][pos]
