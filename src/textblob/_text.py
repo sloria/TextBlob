@@ -877,7 +877,7 @@ class Sentiment(lazydict):
         """
         self._path = path  # XML file path.
         self._language = None  # XML language attribute ("en", "fr", ...)
-        self._confidence = None  # XML confidence attribute threshold (>=).
+        self._confidence = confidence  # XML confidence attribute threshold (>=).
         self._synset = synset  # XML synset attribute ("wordnet_id", "cornetto_id", ...)
         self._synsets = {}  # {"a-01123879": (1.0, 1.0, 1.0)}
         self.labeler = {}  # {"dammit": "profanity"}
