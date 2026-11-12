@@ -36,8 +36,9 @@ class PatternAnalyzer(BaseSentimentAnalyzer):
             Sentiment = namedtuple(
                 "Sentiment", ["polarity", "subjectivity", "assessments"]
             )
-            assessments = pattern_sentiment(text).assessments
-            polarity, subjectivity = pattern_sentiment(text)
+            score = pattern_sentiment(text)
+            assessments = score.assessments
+            polarity, subjectivity = score
             return Sentiment(polarity, subjectivity, assessments)
 
         else:
