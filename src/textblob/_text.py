@@ -867,6 +867,9 @@ class Score(tuple):
             assessments = []
         self.assessments = assessments
 
+    def __getnewargs__(self):
+        return self[0], self[1]
+
 
 class Sentiment(lazydict):
     def __init__(self, path="", language=None, synset=None, confidence=None, **kwargs):
