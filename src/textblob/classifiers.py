@@ -478,7 +478,7 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
         self,
         new_positive_data=None,
         new_unlabeled_data=None,
-        positive_prob_prior=0.5,
+        positive_prob_prior=None,
         *args,
         **kwargs,
     ):
@@ -487,8 +487,11 @@ class PositiveNaiveBayesClassifier(NLTKClassifier):
 
         :param new_positive_data: List of new, labeled strings.
         :param new_unlabeled_data: List of new, unlabeled strings.
+        :param positive_prob_prior: A new prior probability for the positive label.
+            If ``None``, keep the classifier's current prior.
         """
-        self.positive_prob_prior = positive_prob_prior
+        if positive_prob_prior is not None:
+            self.positive_prob_prior = positive_prob_prior
         if new_positive_data:
             self.positive_set += new_positive_data
             self.positive_features += [
