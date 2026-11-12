@@ -1035,7 +1035,7 @@ class Sentiment(lazydict):
             kwargs.setdefault("weight", lambda w: s[w[0]])
         # A list of words.
         elif isinstance(s, list):
-            a = self.assessments(((w, None) for w in s), negation)
+            a = self.assessments(((w.lower(), None) for w in s), negation)
         else:
             a = []
         weight = kwargs.get("weight", lambda w: 1)  # [(w, p) for w, p, s, x in a]
