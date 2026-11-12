@@ -987,20 +987,19 @@ class Sentiment(lazydict):
         # Sentiment(synsets("horrible", "JJ")[0]) => (-0.6, 1.0)
         if hasattr(s, "gloss"):
             a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
-        # A synset id.
-        # Sentiment("a-00193480") => horrible => (-0.6, 1.0)   (English WordNet)
-        # Sentiment("c_267") => verschrikkelijk => (-0.9, 1.0) (Dutch Cornetto)
-        elif (
-            isinstance(s, basestring) and RE_SYNSET.match(s) and hasattr(s, "synonyms")
-        ):
-            a = [(s.synonyms[0],) + self.synset(s.id, pos=s.pos) + (None,)]
-        # A string of words.
+        # A known synset id or a string of words.
         # Sentiment("a horrible movie") => (-0.6, 1.0)
         elif isinstance(s, basestring):
-            a = self.assessments(
-                ((w.lower(), None) for w in " ".join(self.tokenizer(s)).split()),
-                negation,
-            )
+            is_synset_id = RE_SYNSET.match(s)
+            if is_synset_id and dict.__len__(self) == 0:
+                self.load()
+            if is_synset_id and s in self._synsets:
+                a = [([s],) + tuple(self._synsets[s][:2]) + (None,)]
+            else:
+                a = self.assessments(
+                    ((w.lower(), None) for w in " ".join(self.tokenizer(s)).split()),
+                    negation,
+                )
         # A pattern.en.Text.
         elif hasattr(s, "sentences"):
             a = self.assessments(
