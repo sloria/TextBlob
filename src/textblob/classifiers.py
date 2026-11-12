@@ -93,7 +93,6 @@ def basic_extractor(document, train_set):
         word_features = [w for w in chain([el_zero], train_set)]
     else:
         try:
-            assert isinstance(el_zero[0], basestring)
             word_features = _get_words_from_dataset(chain([el_zero], train_set))
         except Exception as error:
             raise ValueError("train_set is probably malformed.") from error
