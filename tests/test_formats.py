@@ -1,5 +1,7 @@
+import json
 import os
 import unittest
+from io import BytesIO, StringIO
 
 from textblob import formats
 
@@ -22,6 +24,43 @@ class TestFormats(unittest.TestCase):
         with open(JSON_FILE) as fp:
             format = formats.detect(fp)
         assert format == formats.JSON
+
+    def test_detect_json_without_indentation(self):
+        data = [
+            {"text": 'good, "really"', "label": "pos"},
+            {"text": "bad", "label": "neg"},
+        ]
+        for rows in (data[:1], data):
+            for separators in (None, (",", ":")):
+                with self.subTest(rows=rows, separators=separators):
+                    fp = StringIO(json.dumps(rows, separators=separators))
+                    format = formats.detect(fp)
+                    assert format is formats.JSON
+                    assert fp.tell() == 0
+                    assert format(fp).to_iterable() == [
+                        (row["text"], row["label"]) for row in rows
+                    ]
+
+    def test_detect_binary_json(self):
+        fp = BytesIO(b'[{"text": "good", "label": "pos"}]')
+        assert formats.detect(fp) is formats.JSON
+        assert fp.tell() == 0
+        assert formats.JSON(fp).to_iterable() == [("good", "pos")]
+
+    def test_detect_tsv(self):
+        with open(TSV_FILE) as fp:
+            assert formats.detect(fp) is formats.TSV
+            assert fp.tell() == 0
+
+    def test_detect_quoted_csv(self):
+        fp = StringIO('"good, really",pos\n"bad, really",neg\n')
+        format = formats.detect(fp)
+        assert format is formats.CSV
+        assert fp.tell() == 0
+        assert format(fp).to_iterable() == [
+            ["good, really", "pos"],
+            ["bad, really", "neg"],
+        ]
 
     def test_available(self):
         registry = formats.get_registry()

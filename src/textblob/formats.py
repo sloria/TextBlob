@@ -135,8 +135,8 @@ class JSON(BaseFormat):
 
 _registry = OrderedDict(
     [
-        ("csv", CSV),
         ("json", JSON),
+        ("csv", CSV),
         ("tsv", TSV),
     ]
 )
@@ -145,7 +145,8 @@ _registry = OrderedDict(
 def detect(fp, max_read=1024):
     """Attempt to detect a file's format, trying each of the supported
     formats. Return the format class that was detected. If no format is
-    detected, return ``None``.
+    detected, return ``None``. JSON is checked before delimited formats,
+    which can also accept JSON data.
     """
     if not is_filelike(fp):
         return None
